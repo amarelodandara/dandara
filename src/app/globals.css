@@ -10,9 +10,38 @@
   --color-ink-soft: #4a4744;
 }
 
+/* Inter 4.001 OpenType features applied to every glyph on the site.
+   Add or remove tags here; per-element exceptions get their own rule.
+
+   cv01 alt 1        cv06 simplified u   cv11 single-story a
+   cv02 open 4       cv07 alt ß          cv12 compact f
+   cv03 open 6       cv08 serifed I      cv13 compact t
+   cv04 open 9       cv09 flat-top 3     cv14 alt ẞ
+   cv05 tailed l     cv10 spurred G
+
+   ss01 open digits          ss05 circled characters
+   ss02 disambiguation       ss06 squared characters
+   ss03 round quotes/commas  ss07 square punctuation
+   ss04 disambiguation (no slashed zero)  ss08 square quotes
+
+   Also: zero (slashed 0), tnum, pnum, case, frac, ordn, sups, subs,
+   sinf, numr, dnom, dlig, salt, locl, aalt. */
+:root {
+  --font-features:
+    "calt" 1, /* contextual alternates (Inter default) */
+    "cv06" 1, /* simplified u */
+    "cv10" 1, /* capital G with spur */
+    "ss01" 1, /* open digits: 3 4 6 9 */
+    "ss02" 1, /* disambiguation: I l ß 0 */
+    "ss03" 1, /* round quotes & commas */
+    "zero" 1; /* slashed zero */
+}
+
 body {
   font-family: var(--font-sans);
   background: var(--color-paper);
   color: var(--color-ink);
   text-rendering: optimizeLegibility;
+  font-feature-settings: var(--font-features);
+  font-optical-sizing: auto;
 }
