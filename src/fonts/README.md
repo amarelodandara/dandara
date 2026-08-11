@@ -1,24 +1,14 @@
 # Fonts
 
-Drop the latest Inter files here from https://github.com/rsms/inter/releases:
+Inter 4.1 variable, `web/` build from https://github.com/rsms/inter/releases.
 
-- `InterVariable.woff2`
-- `InterVariable-Italic.woff2`
+- `InterVariable.woff2` — upright, weight axis 100–900
+- `InterVariable-Italic.woff2` — italic, same axis
+- `LICENSE.txt` — SIL Open Font License 1.1
 
-Then wire them up in `src/app/layout.tsx`:
+Wired via `next/font/local` in `src/app/layout.tsx`, exposed as `--font-inter`.
+`--font-sans` in `globals.css` consumes it, so Tailwind's `font-sans` and the
+`body` default both resolve to Inter.
 
-```ts
-import localFont from "next/font/local";
-
-const inter = localFont({
-  src: [
-    { path: "../fonts/InterVariable.woff2", style: "normal" },
-    { path: "../fonts/InterVariable-Italic.woff2", style: "italic" },
-  ],
-  variable: "--font-inter",
-  display: "swap",
-});
-```
-
-and add `inter.variable` to the `<html>` className. `--font-sans` in
-`globals.css` already consumes `--font-inter`.
+To upgrade: download a new release, replace both `.woff2` files and
+`LICENSE.txt` from the `web/` folder. No code change needed.
