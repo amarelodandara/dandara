@@ -4,10 +4,15 @@
   /* --font-inter is set by next/font/local in the root layout */
   --font-sans: var(--font-inter), system-ui, sans-serif;
 
-  /* Monochrome only: a warm gallery wall and near-black vinyl lettering. */
+  /* Monochrome type on a warm gallery wall, in near-black vinyl lettering. */
   --color-paper: #e9e6e1;
   --color-ink: #111111;
   --color-ink-soft: #4a4744;
+
+  /* The one place colour is allowed: the work sheets. One flat tint each,
+     so the colour is the whole legend — blue is a job, yellow is my own. */
+  --color-sheet-professional: #cfdcea;
+  --color-sheet-personal: #f2e6c2;
 }
 
 /* Inter 4.001 OpenType features applied to every glyph on the site.
@@ -44,4 +49,41 @@ body {
   text-rendering: optimizeLegibility;
   font-feature-settings: var(--font-features);
   font-optical-sizing: auto;
+}
+
+/* Focusing a sheet pushes the rest of the page back. The blur is per element,
+   never on a shared ancestor — a filter there would blur the focused sheet too
+   and turn itself into a containing block for its fixed positioning. */
+[data-dimmed],
+[data-dim-on-focus] {
+  transition:
+    filter 240ms ease,
+    opacity 240ms ease;
+}
+
+[data-dimmed],
+body[data-sheet-focused] [data-dim-on-focus] {
+  filter: blur(6px);
+  opacity: 0.5;
+}
+
+/* `html` is the scroller (it carries h-full), so the lock has to reach it. */
+html:has(> body[data-sheet-focused]),
+body[data-sheet-focused] {
+  overflow: hidden;
+}
+
+html {
+  scrollbar-gutter: stable;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  /* The FLIP animation is skipped in JS; this covers the rest. The card is
+     named explicitly because closing removes the body attribute in the same
+     commit, so an ancestor-based selector would miss the way back down. */
+  [data-dimmed],
+  [data-dim-on-focus],
+  [data-sheet-card] {
+    transition-duration: 0.01ms !important;
+  }
 }

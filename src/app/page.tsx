@@ -1,7 +1,13 @@
+import { Sheet } from "@/components/sheet";
+import { WorkPile } from "@/components/work-pile";
+
 export default function Home() {
   return (
-    <main className="flex-1 px-[7vw] py-[14vh] sm:py-[18vh]">
-      <div className="mx-auto grid max-w-[1400px] grid-cols-1 gap-y-16 md:grid-cols-12 md:gap-x-[6%] md:gap-y-0">
+    <main className="mx-auto w-full max-w-[1400px] flex-1 px-[7vw] py-[14vh] sm:py-[18vh]">
+      <div
+        data-dim-on-focus
+        className="grid grid-cols-1 gap-y-16 md:grid-cols-12 md:gap-x-[6%] md:gap-y-0"
+      >
         {/* Title block — the vinyl lettering on the left of the wall. */}
         <header className="md:col-span-5">
           <h1 className="text-[clamp(3.25rem,8vw,7.5rem)] font-bold leading-[0.95] tracking-[-0.035em]">
@@ -81,9 +87,9 @@ export default function Home() {
             <p>
               The work here spans product interfaces, design systems, and the
               occasional editorial piece. Recurring concerns: restraint over
-              decoration, typography carrying the hierarchy instead of colour,
-              and layouts that hold their composure from a phone to a wide
-              display.
+              decoration, typography carrying the hierarchy and colour kept for
+              the one job it does better than anything else, and layouts that
+              hold their composure from a phone to a wide display.
             </p>
             <p>
               Recently: a component library rebuilt around a single type scale,
@@ -97,6 +103,101 @@ export default function Home() {
           </div>
         </div>
       </div>
+
+      {/* Placeholder sheets. Replace the JSX inside each <Sheet> with the real
+          thing — the pile never needs to change when the content does. */}
+      <WorkPile>
+        <Sheet
+          id="serif-studio"
+          kind="professional"
+          title="Serif Studio"
+          size="wide"
+        >
+          <p className="text-[0.7rem] text-ink-soft">
+            Product Designer · 2023 — present
+          </p>
+          <h3 className="mt-1 text-[1.05rem] font-semibold">Serif Studio</h3>
+          <p className="mt-3">
+            Rebuilt the component library around a single type scale, which cut
+            the design system from four competing spacing rhythms to one. Led
+            the redesign of the onboarding flow — six screens down to three,
+            with completion up by a third.
+          </p>
+        </Sheet>
+
+        <Sheet id="northbound" kind="professional" title="Northbound">
+          <p className="text-[0.7rem] text-ink-soft">
+            Interface Designer · 2021 — 2023
+          </p>
+          <h3 className="mt-1 text-[1.05rem] font-semibold">Northbound</h3>
+          <p className="mt-3">
+            Design and front-end for the customer dashboard. Shipped a
+            data-density mode for power users, and a print stylesheet that
+            turned out to be the most-used feature nobody asked for.
+          </p>
+        </Sheet>
+
+        <Sheet
+          id="atelier-onze"
+          kind="professional"
+          title="Atelier Onze"
+          size="wide"
+        >
+          <p className="text-[0.7rem] text-ink-soft">
+            Junior Designer · 2019 — 2021
+          </p>
+          <h3 className="mt-1 text-[1.05rem] font-semibold">Atelier Onze</h3>
+          <p className="mt-3">
+            Editorial and identity work for cultural clients. Built the studio&rsquo;s
+            first shared type specimen, which is still the file everyone opens
+            before starting anything.
+          </p>
+        </Sheet>
+
+        <Sheet
+          id="in-service-of-museums"
+          kind="personal"
+          title="In Service of Museums"
+          size="wide"
+        >
+          <p className="text-[0.7rem] text-ink-soft">Academic research</p>
+          <h3 className="mt-1 text-[1.05rem] font-semibold">
+            In Service of Museums
+          </h3>
+          <p className="mt-3">
+            A study of how museum wall text decides what a visitor is allowed to
+            understand, and what happens to that contract when the label moves
+            to a screen.
+          </p>
+        </Sheet>
+
+        <Sheet id="links-amarelos" kind="personal" title="links amarelos">
+          <p className="text-[0.7rem] text-ink-soft">2024 — ongoing</p>
+          <h3 className="mt-1 text-[1.05rem] font-semibold">links amarelos</h3>
+          <p className="mt-3">
+            A slow, hand-kept index of things worth reading twice. No algorithm,
+            no feed, one yellow page.
+          </p>
+          <p className="mt-3">
+            <a
+              href="https://linksamarelos.com"
+              className="underline decoration-[0.06em] underline-offset-[0.25em] transition-opacity hover:opacity-50"
+            >
+              linksamarelos.com
+            </a>
+          </p>
+        </Sheet>
+
+        <Sheet id="ondas-amarelas" kind="personal" title="ondas amarelas">
+          <p className="text-[0.7rem] text-ink-soft">2025</p>
+          <h3 className="mt-1 text-[1.05rem] font-semibold">ondas amarelas</h3>
+          <p className="mt-3">
+            A sound piece and a page that listens to it. An excuse to find out
+            how little interface an experience can carry and still feel
+            deliberate.
+          </p>
+        </Sheet>
+      </WorkPile>
     </main>
   );
 }
