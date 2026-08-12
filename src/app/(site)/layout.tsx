@@ -3,12 +3,12 @@ import localFont from "next/font/local";
 import { Agentation } from "agentation";
 import { Colophon } from "@/components/colophon";
 import { GiftShop } from "@/components/gift-shop";
-import "./globals.css";
+import "../globals.css";
 
 const inter = localFont({
   src: [
-    { path: "../fonts/InterVariable.woff2", style: "normal" },
-    { path: "../fonts/InterVariable-Italic.woff2", style: "italic" },
+    { path: "../../fonts/InterVariable.woff2", style: "normal" },
+    { path: "../../fonts/InterVariable-Italic.woff2", style: "italic" },
   ],
   variable: "--font-inter",
   display: "swap",
@@ -19,6 +19,12 @@ export const metadata: Metadata = {
   description: "Portfolio",
 };
 
+/**
+ * The site's root layout. It sits in a route group so that `/cv` can have a
+ * root of its own — the résumé is printed to PDF and read by a machine, and
+ * everything here (Inter's variant glyphs, the yellow ground, the shop) is
+ * hostile to that. Groups leave the URLs alone: this is still `/`.
+ */
 export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
     <html lang="en" className={`${inter.variable} h-full antialiased`}>
