@@ -1,5 +1,6 @@
 "use client";
 
+import dynamic from "next/dynamic";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { giftShopSections } from "@/content/gift-shop";
 import { GiftShopRow } from "./gift-shop-row";
@@ -11,6 +12,19 @@ import {
 } from "@/lib/exclusive-overlay";
 
 const ID = "gift-shop";
+
+/**
+ * Résumés written for one job posting each. They exist only on the machine
+ * that generated them, so the shelf only exists there too — `NODE_ENV` is
+ * inlined as a literal at build time, which lets the branch be proved dead and
+ * removed from the production bundle. The stronger guarantee is simply that
+ * the files are git-ignored: there is nothing to serve on the deployed site
+ * even if the code went looking.
+ */
+const Tailored =
+  process.env.NODE_ENV === "development"
+    ? dynamic(() => import("./gift-shop-tailored"))
+    : null;
 
 /** One key, no modifier. No browser owns it, and it stands for the thing. */
 const SHORTCUT = "g";
@@ -149,6 +163,8 @@ export function GiftShop() {
             </ul>
           </section>
         ))}
+
+        {Tailored && <Tailored />}
       </aside>
 
       {/* Hidden whenever anything owns the screen — not just the shop. The page
