@@ -26,8 +26,7 @@ export function GiftShopPlaque({
       inert={!visible || undefined}
       className={[
         "group fixed top-[5vh] left-[3vw] z-20 flex items-center gap-2",
-        "rounded-sm border border-foreground/15 bg-white px-3 py-2",
-        "shadow-[0_2px_10px_-4px_rgb(0_0_0/0.18)]",
+        "rounded-sm bg-amber-100 px-3 py-2 shadow-card",
         "transition-[opacity,translate] duration-[280ms] ease-[cubic-bezier(0.2,0,0,1)]",
         /* Enters from above now that it lives at the top. */
         visible ? "opacity-100" : "-translate-y-3 opacity-0",

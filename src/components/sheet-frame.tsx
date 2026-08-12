@@ -16,6 +16,7 @@ import type { Placement } from "@/lib/scatter";
 const WIDTH: Record<SheetSize, string> = {
   narrow: "clamp(14rem, 20vw, 18rem)",
   wide: "clamp(18rem, 26vw, 24rem)",
+  feature: "clamp(22rem, 42vw, 38rem)",
 };
 
 const BACKGROUND: Record<SheetKind, string> = {
@@ -257,13 +258,17 @@ export function SheetFrame({
           type="button"
           onClick={() => (focused ? onClose() : onOpen(id))}
           className={[
-            "relative z-10 float-right -mr-1 -mt-1 ml-4 cursor-pointer",
+            "relative z-10 float-right -mr-2 -mt-2 ml-4 cursor-pointer",
+            "rounded-sm px-2 py-1",
             "text-[0.7rem] font-medium tracking-[0.01em]",
-            "underline decoration-[0.04em] underline-offset-[0.25em]",
-            "transition-opacity duration-200",
+            // A button, not a link: the hover state is a ground behind the
+            // label rather than a rule under it.
+            "hover:bg-foreground/10 focus-visible:bg-foreground/10",
+            "transition-[opacity,background-color] duration-200",
             // Web Interface Guidelines: hit target >= 24px, >= 44px on mobile.
-            // The label is ~13px tall, so the target grows instead of the type —
-            // a 44px box centred on the label, whatever the label measures. The
+            // Padding takes the painted button to ~26px, so the target still
+            // grows past it — a 44px box centred on the label, whatever the
+            // label and its padding measure. The
             // sheet body is a drag surface, so a near miss here starts a drag.
             "after:absolute after:left-1/2 after:top-1/2 after:content-['']",
             "after:h-11 after:w-[max(100%+1.5rem,2.75rem)]",

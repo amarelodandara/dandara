@@ -14,6 +14,16 @@
 
   --color-professional: #b6e4f2;
   --color-creative: #fff199;
+
+  /* Elevation, after Superlogical. Three notes only, and every one of them
+     starts with a hairline ring instead of a border: an object is separated
+     from its ground by its own edge plus the light it blocks, never by a drawn
+     line. `card` is a thing resting on the wall, `raised` the same thing picked
+     up, `chip` a small object where the wide blur would only smudge. */
+  --shadow-card: 0 0 0 1px #0000000f, 0 8px 28px #00000024, 0 1px 3px #0000001a;
+  --shadow-raised: 0 0 0 1px #0000000f, 0 18px 48px #00000029,
+    0 2px 6px #0000001f;
+  --shadow-chip: 0 0 0 1px #0000000f, 0 1px 3px #0000001a;
 }
 
 /* Inter 4.001 OpenType features applied to every glyph on the site.
@@ -120,7 +130,9 @@ body {
 
 @media (min-width: 768px) {
   :root {
-    --shop-w: clamp(17rem, 22vw, 22rem);
+    /* Fixed, not fluid: the shelf is set to the width its longest row needs, so
+       letting it shrink with the viewport only reintroduces the wrap. */
+    --shop-w: 23rem;
     --shop-gap: 1.25rem;
   }
 }
@@ -143,7 +155,7 @@ body {
   width: calc(var(--shop-w) - var(--shop-gap) * 2);
   border-radius: var(--shop-radius);
   background-color: var(--color-background-hard);
-  box-shadow: 0 4px 24px -4px rgb(0 0 0 / 0.14);
+  box-shadow: 0 0 0 1px #0000000f, 0 18px 48px #00000029, 0 2px 6px #0000001f;
   /* The shop scrolls; the bar just never shows. Hiding the bar is not the same
      as removing the scroller — the content still has to be reachable. */
   overflow-y: auto;
@@ -167,9 +179,12 @@ body[data-shop-open] [data-shop-panel] {
 
 /* The colophon is pressed into the wall rather than mounted on it: the shadow
    falls inward, and it carries the grain the shop panel used to have. Same
-   generated turbulence — an inline SVG, so no asset and no request. */
+   generated turbulence — an inline SVG, so no asset and no request.
+
+   The inset ring is the recessed counterpart of the card shadow, so the label
+   is the one thing on the page reading as a hollow rather than an object. */
 [data-colophon] {
-  box-shadow: inset 0 2px 6px -2px rgb(0 0 0 / 0.16);
+  box-shadow: inset 0 0 0 1px #00000009, inset 0 1px 4px #00000005;
   background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='160' height='160' filter='url(%23n)' opacity='0.03'/%3E%3C/svg%3E");
 }
 

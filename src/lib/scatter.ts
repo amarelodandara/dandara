@@ -16,6 +16,7 @@ export type Placement = {
 const X_RANGE: Record<SheetSize, readonly [number, number]> = {
   narrow: [16, 84],
   wide: [24, 76],
+  feature: [36, 64],
 };
 
 /** Sheets are anchored by their top edge and grow downward, so this stays high. */

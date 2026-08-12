@@ -52,13 +52,21 @@ export default function GiftShopTailored() {
 
   return (
     <section className="mt-8">
-      <h3 className="px-3 text-[0.7rem] font-medium tracking-[0.01em] text-foreground-hard">
-        Tailored — local only
-      </h3>
-      <ul className="mt-2 space-y-0.5">
+      <ul className="space-y-0.5">
         {items.map((item) => (
           <li key={item.id}>
-            <GiftShopRow item={{ kind: "file", ...item } satisfies GiftShopItem} />
+            {/* The manifest names the posting the CV was written for; the shelf
+                does not repeat it. A visitor takes a tailored résumé, and which
+                posting it was cut for is the one thing they already know. */}
+            <GiftShopRow
+              item={
+                {
+                  kind: "file",
+                  ...item,
+                  title: "Tailored resumé",
+                } satisfies GiftShopItem
+              }
+            />
           </li>
         ))}
       </ul>

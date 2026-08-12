@@ -1,3 +1,4 @@
+import Image from "next/image";
 import { Sheet } from "@/components/sheet";
 import { WorkPile } from "@/components/work-pile";
 
@@ -7,42 +8,68 @@ export default function Home() {
       <div
         data-dim-on-focus
         data-landing
-        className="grid grid-cols-1 gap-y-16 md:grid-cols-12 md:gap-x-[6%] md:gap-y-0"
+        className=""
       >
         {/* Title block — the vinyl lettering on the left of the wall. */}
-        <header className="md:col-span-5">
-          <h1 className="text-[clamp(3.25rem,8vw,7.5rem)] font-bold leading-[0.95] tracking-[-0.035em]">
-            Nicoly
-            <br />
-            Dandara
-          </h1>
-          <p className="mt-[0.35em] text-[clamp(1.5rem,3.2vw,3rem)] font-semibold leading-[1.05] tracking-[-0.02em]">
-            Product Designer
-          </p>
+        <header className="grid grid-cols-1 gap-12 md:grid-cols-2">
+          {/* Stacked below md, so the two blocks need their own gap; from md the
+              column stretches to the prose and pushes them to the edges. */}
+          <div className="flex flex-col gap-12 md:h-full md:justify-between md:gap-0">
+            <div className="h-fit">
+            {/* The D carries a left side bearing that scales with the type, so
+                at this size it reads as an indent against the line below. The
+                negative margin is in em, which cancels it at every step of the
+                clamp rather than only at the largest. */}
+            <h1 className="-ml-[0.025em] text-[clamp(3.25rem,8vw,7.5rem)] font-bold leading-[0.95] tracking-[-0.035em]">
+              Dandara
+            </h1>
+            <p className=" mt-[0.35em] text-[1.05rem] font-semibold leading-tight">
+              Product Designer
+              </p>
+            </div>
 
-          <div className="mt-16 md:mt-24">
+            <div className="h-fit">
             <p className="text-[0.7rem] font-medium tracking-[0.01em] text-foreground-soft">
               Personal work
             </p>
             <ul className="mt-2 text-[1.05rem] font-semibold leading-tight space-y-2">
-              <li>
-                In Service of Museums,{" "}
-                <span className="font-normal">an academic research</span>
-              </li>
-              <li>
-                <a
-                  href="https://linksamarelos.com"
-                  className="underline decoration-[0.04em] underline-offset-[0.25em] transition-opacity hover:opacity-50"
-                >
-                  links amarelos, ondas amarelas, hyperlinks
-                </a>
-              </li>
-              <li>
-                crayola,{" "}
-                <span className="font-normal">
-                  a remotion studio for links media assets
-                </span>
-              </li>
+              {[
+                {
+                  title: "In Service of Museums",
+                  href: "#",
+                  blurb: "academic thesis about service design in museology",
+                },
+                {
+                  title: "links amarelos",
+                  href: "https://linksamarelos.com",
+                  blurb: "a curated newsletter",
+                },
+                {
+                  title: "ondas amarelas",
+                  href: "https://open.spotify.com/show/043Gs7eyY2KOlotEWSTSxB",
+                  blurb: "a curated podcast",
+                },
+                {
+                  title: "hyperlinks amarelos",
+                  href: "#",
+                  blurb: "an essay podcast",
+                },
+                {
+                  title: "crayola",
+                  href: "#",
+                  blurb: "a remotion tool to create yellow assets",
+                },
+              ].map(({ title, href, blurb }) => (
+                <li key={title}>
+                  <a
+                    href={href}
+                    className="underline decoration-stone-400 decoration-[0.04em] underline-offset-[0.25em] transition-opacity hover:opacity-50"
+                  >
+                    {title}
+                  </a>
+                  , <span className="font-normal">{blurb}</span>
+                </li>
+              ))}
             </ul>
 
             <p className="mt-8 text-[0.7rem] font-medium tracking-[0.01em] text-foreground-soft">
@@ -62,98 +89,104 @@ export default function Home() {
                 <li key={label}>
                   <a
                     href={href}
-                    className="underline decoration-[0.04em] underline-offset-[0.25em] transition-opacity hover:opacity-50"
+                    className="underline decoration-stone-400 decoration-[0.04em] underline-offset-[0.25em] transition-opacity hover:opacity-50"
                   >
                     {label}
                   </a>
                 </li>
               ))}
             </ul>
+            </div>
+          </div>
+
+          <div className="">
+            <blockquote className="text-[clamp(0.95rem,1.15vw,1.0625rem)] leading-[1.32] tracking-[-0.01em] text-foreground-soft">
+              The role of the designer is that of a good, thoughtful host
+              anticipating the needs of his guests.
+            </blockquote>
+            <p className="mt-2 text-[0.85rem] text-foreground-soft">Charles Eames</p>
+
+            <div className="mt-10 space-y-5 text-[clamp(0.95rem,1.15vw,1.0625rem)] leading-[1.5]">
+              <p>
+                I am a designer with 5+ years of experience. I have designed for
+                companies, for myself, for other people. I have designed with
+                Figma, with code, with my bare hands and with very weird
+                materials during my Graphic Design degree.
+              </p>
+              <p>
+                Most of my professional experience has been designing software
+                for credit card machines. You probably have a lot of questions
+                about what that means — don&rsquo;t be afraid to ask, I enjoy
+                talking about it.
+              </p>
+              <p>
+                More than a designer, I am a human: a human who rides
+                motorcycles, models for friends&rsquo; brands and gets paid in
+                tattoos, desperately hopes to get a Pantone shade named after her
+                someday, and absolutely treasures her girlfriend, Jade.
+              </p>
+              <p className="text-[0.85rem] text-foreground-soft">
+                All work shown is my own unless stated otherwise.
+              </p>
+            </div>
           </div>
         </header>
 
-        {/* Wall text — quote, then the exhibition copy. */}
-        <div className="max-w-[46ch] md:col-span-6 md:col-start-7">
-          <blockquote className="text-[clamp(0.95rem,1.15vw,1.0625rem)] leading-[1.32] tracking-[-0.01em] text-foreground-soft">
-            The role of the designer is that of a good, thoughtful host
-            anticipating the needs of his guests.
-          </blockquote>
-          <p className="mt-2 text-[0.85rem] text-foreground-soft">Charles Eames</p>
-
-          <div className="mt-10 space-y-5 text-[clamp(0.95rem,1.15vw,1.0625rem)] leading-[1.5]">
-            <p>
-              I design and build interfaces. Most of my work sits in the seam
-              between the two disciplines — close enough to the type and the
-              spacing to be opinionated about them, close enough to the code to
-              ship the result myself rather than hand it over.
-            </p>
-            <p>
-              The work here spans product interfaces, design systems, and the
-              occasional editorial piece. Recurring concerns: restraint over
-              decoration, typography carrying the hierarchy and colour kept for
-              the one job it does better than anything else, and layouts that
-              hold their composure from a phone to a wide display.
-            </p>
-            <p>
-              Recently: a component library rebuilt around a single type scale,
-              a marketing site that loads in under a second on a cold cache, and
-              a long-running experiment in how little chrome an application can
-              survive with.
-            </p>
-            <p className="text-[0.85rem] text-foreground-soft">
-              All work shown is my own unless stated otherwise.
-            </p>
-          </div>
-        </div>
       </div>
 
-      {/* Placeholder sheets. Replace the JSX inside each <Sheet> with the real
-          thing — the pile never needs to change when the content does. */}
+      {/* The pile never needs to change when the content does: each <Sheet> is
+          read for its props and its children, nothing else. */}
       <WorkPile>
-        <Sheet
-          id="serif-studio"
-          kind="professional"
-          title="Serif Studio"
-          size="wide"
-        >
-          <p className="text-[0.7rem] text-foreground-soft">
-            Product Designer · 2023 — present
-          </p>
-          <h3 className="mt-1 text-[1.05rem] font-semibold">Serif Studio</h3>
-          <p className="mt-3">
-            Rebuilt the component library around a single type scale, which cut
-            the design system from four competing spacing rhythms to one. Led
-            the redesign of the onboarding flow — six screens down to three,
-            with completion up by a third.
-          </p>
-        </Sheet>
-
-        <Sheet id="northbound" kind="professional" title="Northbound">
-          <p className="text-[0.7rem] text-foreground-soft">
-            Interface Designer · 2021 — 2023
-          </p>
-          <h3 className="mt-1 text-[1.05rem] font-semibold">Northbound</h3>
-          <p className="mt-3">
-            Design and front-end for the customer dashboard. Shipped a
-            data-density mode for power users, and a print stylesheet that
-            turned out to be the most-used feature nobody asked for.
-          </p>
+        <Sheet id="stone" kind="professional" title="Stone Co." size="wide">
+          <p className="text-[0.7rem] text-foreground-soft">2022 — 2026</p>
+          <h3 className="mt-1 text-[1.05rem] font-semibold">Stone Co.</h3>
+          {/* The list is the argument, so it is set as one: a single column,
+              the card growing to hold it. */}
+          <ul className="mt-3 text-[0.9rem] font-semibold leading-[1.5]">
+            {[
+              "Activation Flow",
+              "Cancelation",
+              "Closing",
+              "News",
+              "Paper Roll Orders",
+              "Payment",
+              "Pix and Pix NFC",
+              "Pre-Authorization",
+              "Receipts",
+              "Sales Reports",
+              "Sales Simulation",
+              "Store",
+              "System Launcher",
+              "Tickets",
+            ].map((app) => (
+              <li key={app}>{app}</li>
+            ))}
+          </ul>
         </Sheet>
 
         <Sheet
-          id="atelier-onze"
+          id="stone-talk"
           kind="professional"
-          title="Atelier Onze"
+          title="Stone Co., on stage"
           size="wide"
         >
-          <p className="text-[0.7rem] text-foreground-soft">
-            Junior Designer · 2019 — 2021
-          </p>
-          <h3 className="mt-1 text-[1.05rem] font-semibold">Atelier Onze</h3>
-          <p className="mt-3">
-            Editorial and identity work for cultural clients. Built the studio&rsquo;s
-            first shared type specimen, which is still the file everyone opens
-            before starting anything.
+          {/* Intrinsic size is the file's own, so Next can reserve the box and
+              serve a width that suits the sheet rather than the original 3024.
+              `clear-right` drops it below the floated Open button instead of
+              letting the button's hover ground land on the photograph, and
+              `pointer-events-none` hands every press to the card underneath, so
+              the image never competes with the drag. */}
+          <Image
+            src="/work/stone-talk.jpg"
+            alt="Nicoly Dandara speaking into a microphone beside a projected slide of a Stone payment terminal running the app store."
+            width={3024}
+            height={4032}
+            sizes="(min-width: 768px) 24rem, 88vw"
+            draggable={false}
+            className="clear-right mt-6 h-auto w-full select-none pointer-events-none"
+          />
+          <p className="mt-3 text-[0.7rem] text-foreground-soft">
+            Presenting the Stone Terminal Store
           </p>
         </Sheet>
 
@@ -163,28 +196,55 @@ export default function Home() {
           title="In Service of Museums"
           size="wide"
         >
-          <p className="text-[0.7rem] text-foreground-soft">Academic research</p>
+          <p className="text-[0.7rem] text-foreground-soft">
+            Graphic Design thesis · UEMG
+          </p>
           <h3 className="mt-1 text-[1.05rem] font-semibold">
             In Service of Museums
           </h3>
+          <video
+            src="/work/in-service-of-museums.mp4"
+            aria-label="A screen recording of the In Service of Museums thesis work."
+            autoPlay
+            loop
+            muted
+            playsInline
+            preload="metadata"
+            className="clear-right mt-6 aspect-[1956/1322] h-auto w-full select-none pointer-events-none"
+          />
           <p className="mt-3">
-            A study of how museum wall text decides what a visitor is allowed to
-            understand, and what happens to that contract when the label moves
-            to a screen.
+            A service design framework for museum user experience: what the
+            visit asks of a visitor before, during and after the room, and where
+            the institution keeps dropping its half of the exchange.
           </p>
         </Sheet>
 
-        <Sheet id="links-amarelos" kind="personal" title="links amarelos">
-          <p className="text-[0.7rem] text-foreground-soft">2024 — ongoing</p>
+        <Sheet
+          id="links-amarelos"
+          kind="personal"
+          title="links amarelos"
+          size="feature"
+        >
+          <p className="text-[0.7rem] text-foreground-soft">Monthly newsletter</p>
           <h3 className="mt-1 text-[1.05rem] font-semibold">links amarelos</h3>
-          <p className="mt-3">
-            A slow, hand-kept index of things worth reading twice. No algorithm,
-            no feed, one yellow page.
-          </p>
+          {/* Decoration, not media: muted and looping with no controls, so it
+              needs no transport and takes no press. `playsInline` keeps iOS
+              from throwing it into the fullscreen player, and the aspect ratio
+              reserves the box before the first frame arrives. */}
+          <video
+            src="/work/links-amarelos.mp4"
+            aria-label="A screen recording of the links amarelos site: a yellow page promising monthly recommendations of texts, books, documentaries and things with no taxonomy yet."
+            autoPlay
+            loop
+            muted
+            playsInline
+            preload="metadata"
+            className="clear-right mt-6 aspect-[2166/1492] h-auto w-full select-none pointer-events-none"
+          />
           <p className="mt-3">
             <a
               href="https://linksamarelos.com"
-              className="underline decoration-[0.04em] underline-offset-[0.25em] transition-opacity hover:opacity-50"
+              className="underline decoration-stone-400 decoration-[0.04em] underline-offset-[0.25em] transition-opacity hover:opacity-50"
             >
               linksamarelos.com
             </a>
@@ -192,13 +252,62 @@ export default function Home() {
         </Sheet>
 
         <Sheet id="ondas-amarelas" kind="personal" title="ondas amarelas">
-          <p className="text-[0.7rem] text-foreground-soft">2025</p>
+          <p className="text-[0.7rem] text-foreground-soft">Podcast cover</p>
           <h3 className="mt-1 text-[1.05rem] font-semibold">ondas amarelas</h3>
+          <Image
+            src="/work/ondas-amarelas.png"
+            alt="Cover art for the ondas amarelas podcast: the title set in heavy type over a field of yellow ripples."
+            width={2000}
+            height={2000}
+            sizes="(min-width: 768px) 18rem, 88vw"
+            draggable={false}
+            className="clear-right mt-6 h-auto w-full select-none pointer-events-none"
+          />
           <p className="mt-3">
-            A sound piece and a page that listens to it. An excuse to find out
-            how little interface an experience can carry and still feel
-            deliberate.
+            <a
+              href="https://open.spotify.com/show/043Gs7eyY2KOlotEWSTSxB?si=651fe644a3234022"
+              className="underline decoration-stone-400 decoration-[0.04em] underline-offset-[0.25em] transition-opacity hover:opacity-50"
+            >
+              Listen on Spotify
+            </a>
           </p>
+        </Sheet>
+
+        <Sheet
+          id="ondas-amarelas-episode"
+          kind="personal"
+          title="ondas amarelas, episode cover"
+        >
+          <p className="text-[0.7rem] text-foreground-soft">Episode cover</p>
+          <h3 className="mt-1 text-[1.05rem] font-semibold">ondas amarelas</h3>
+          <Image
+            src="/work/ondas-amarelas-episode.png"
+            alt="Episode cover for ondas amarelas number three: a figure falling through a close-up of the sun, on yellow."
+            width={1000}
+            height={1000}
+            sizes="(min-width: 768px) 18rem, 88vw"
+            draggable={false}
+            className="clear-right mt-6 h-auto w-full select-none pointer-events-none"
+          />
+        </Sheet>
+
+        <Sheet
+          id="obsidian-graph"
+          kind="personal"
+          title="Obsidian graph"
+          size="wide"
+        >
+          <p className="text-[0.7rem] text-foreground-soft">Notes</p>
+          <h3 className="mt-1 text-[1.05rem] font-semibold">Obsidian graph</h3>
+          <Image
+            src="/work/obsidian-graph.png"
+            alt="The graph view of a personal Obsidian vault: thousands of notes as pale dots, linked into one dense sphere with a few bright hubs."
+            width={2000}
+            height={1446}
+            sizes="(min-width: 768px) 24rem, 88vw"
+            draggable={false}
+            className="clear-right mt-6 h-auto w-full select-none pointer-events-none"
+          />
         </Sheet>
       </WorkPile>
     </main>

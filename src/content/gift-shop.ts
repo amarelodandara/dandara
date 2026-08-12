@@ -47,7 +47,7 @@ export const giftShopSections: GiftShopSection[] = [
       {
         kind: "file",
         id: "cv-en",
-        title: "Curriculum vitae",
+        title: "Resumé",
         meta: "PDF · English",
         href: "/gift-shop/cv-en.pdf",
         download: "Nicoly_Dandara_ProductDesigner.pdf",
@@ -88,10 +88,20 @@ export const giftShopSections: GiftShopSection[] = [
           alt: "Nicoly Dandara, seated against a bare brick wall.",
         },
       },
-      // TODO: the talk photo goes here once the file lands. It wants the same
-      // shape as the portrait above — drop it at /gift-shop/talk.jpg and fill
-      // in the real dimensions, weight, and alt text.
-      //
+      {
+        kind: "file",
+        id: "talk",
+        title: "Speaking",
+        meta: "JPEG · 3024 × 4032",
+        href: "/gift-shop/talk-speaking.jpg",
+        download: "Nicoly_Dandara_Speaking.jpg",
+        preview: {
+          src: "/gift-shop/talk-speaking.jpg",
+          width: 3024,
+          height: 4032,
+          alt: "Nicoly Dandara mid-sentence with a microphone, in front of two projected screens.",
+        },
+      },
       // TODO: replace the two bios below with the real text.
       {
         kind: "copy",

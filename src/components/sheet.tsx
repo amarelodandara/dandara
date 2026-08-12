@@ -3,7 +3,7 @@
 import type { ReactNode } from "react";
 
 export type SheetKind = "professional" | "personal";
-export type SheetSize = "narrow" | "wide";
+export type SheetSize = "narrow" | "wide" | "feature";
 
 export type SheetProps = {
   /** Stable slug. Keys the scatter and the z-order — changing it moves the sheet. */
@@ -12,7 +12,8 @@ export type SheetProps = {
   kind: SheetKind;
   /** Accessible name for the open/close button and the focused dialog. */
   title: string;
-  /** Two width tiers, so the pile has some rhythm. */
+  /** Three width tiers, so the pile has some rhythm. `feature` is for a sheet
+   *  carrying an image that has to be read rather than glanced at. */
   size?: SheetSize;
   children: ReactNode;
 };

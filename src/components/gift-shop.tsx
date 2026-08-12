@@ -125,7 +125,7 @@ export function GiftShop() {
               type="button"
               onClick={close}
               aria-label="Close gift shop"
-              className="group -m-2 flex shrink-0 items-center gap-1.5 p-2"
+              className="group -m-2 flex shrink-0 items-center gap-1.5 rounded-lg p-2 transition-colors duration-150 hover:bg-white/45 focus-visible:bg-white/45"
             >
               <span
                 aria-hidden="true"
@@ -147,6 +147,10 @@ export function GiftShop() {
           </p>
         </header>
 
+        {/* First on the shelf: a tailored CV is the thing being looked for when
+            one exists, and it only exists on this machine. */}
+        {Tailored && <Tailored />}
+
         {giftShopSections.map((section) => (
           <section key={section.id} className="mt-8">
             {section.title && (
@@ -163,8 +167,6 @@ export function GiftShop() {
             </ul>
           </section>
         ))}
-
-        {Tailored && <Tailored />}
       </aside>
 
       {/* Hidden whenever anything owns the screen — not just the shop. The page

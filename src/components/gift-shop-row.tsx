@@ -15,7 +15,9 @@ const COPIED_FOR = 1500;
 const ROW = [
   "group flex w-full rounded-lg px-3 py-3 text-left",
   "transition-colors duration-150",
-  "hover:bg-foreground/[0.055] focus-visible:bg-foreground/[0.055]",
+  // Lighter than the shelf rather than darker: the row lifts towards the light
+  // on hover instead of being pressed into the yellow.
+  "hover:bg-white/45 focus-visible:bg-white/45",
   "focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-foreground/40",
 ].join(" ");
 
@@ -65,7 +67,7 @@ function Preview({
 }) {
   return (
     <span
-      className={`mx-auto block ${CHIP_W} bg-white p-1 shadow-[0_1px_3px_rgb(0_0_0/0.18)]`}
+      className={`mx-auto block ${CHIP_W} bg-white p-1 shadow-chip`}
     >
       <Image
         src={preview.src}
@@ -192,7 +194,7 @@ function SwatchChip({
       onClick={copy}
       className={[
         `group mx-auto flex aspect-[3/4] ${CHIP_W} flex-col bg-white p-1 text-left`,
-        "shadow-[0_1px_3px_rgb(0_0_0/0.18)] transition-opacity duration-150",
+        "shadow-chip transition-opacity duration-150",
         "hover:opacity-90 focus-visible:outline-2 focus-visible:outline-offset-2",
         "focus-visible:outline-foreground/40",
       ].join(" ")}

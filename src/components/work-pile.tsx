@@ -128,10 +128,22 @@ export function WorkPile({
   }, [focusedId]);
 
   return (
-    <section id="work" className="relative mt-[18vh] min-h-screen">
-      <h2 className="text-[0.7rem] font-medium tracking-[0.01em] text-foreground-soft">
-        {label}
-      </h2>
+    // No `min-h-screen` here: the canvas below already reserves the room the
+    // scattered sheets need, and stretching to the viewport on top of that left
+    // a dead band above the colophon. The bottom padding plus the colophon's
+    // own `pt-[6vh]` matches the 18vh the pile takes from the landing.
+    <section id="work" className="relative mt-[18vh] pb-[12vh]">
+      {/* `leading-none` on both halves is what makes the centring optical: with
+          body line-height the boxes would centre their leading rather than
+          their glyphs, and the two sizes carry different amounts of it. */}
+      <div className="flex items-center justify-between gap-6">
+        <h2 className="text-[0.7rem] font-medium leading-none tracking-[0.01em] text-foreground-soft">
+          {label}
+        </h2>
+        <p className="text-[0.85rem] leading-none text-foreground-soft">
+          it&rsquo;s art, please touch
+        </p>
+      </div>
 
       <div className="relative mt-10 flex flex-col md:mt-16 md:block md:min-h-[46rem]">
         {items.map((item, index) => (
