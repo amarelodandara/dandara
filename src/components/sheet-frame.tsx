@@ -19,8 +19,8 @@ const WIDTH: Record<SheetSize, string> = {
 };
 
 const BACKGROUND: Record<SheetKind, string> = {
-  professional: "bg-sheet-professional",
-  personal: "bg-sheet-personal",
+  professional: "bg-professional",
+  personal: "bg-creative",
 };
 
 /** Below this, the pile becomes a stacked column and drag is off. */
@@ -259,7 +259,7 @@ export function SheetFrame({
           className={[
             "relative z-10 float-right -mr-1 -mt-1 ml-4 cursor-pointer",
             "text-[0.7rem] font-medium tracking-[0.01em]",
-            "underline decoration-[0.06em] underline-offset-[0.25em]",
+            "underline decoration-[0.04em] underline-offset-[0.25em]",
             "transition-opacity duration-200",
             // Web Interface Guidelines: hit target >= 24px, >= 44px on mobile.
             // The label is ~13px tall, so the target grows instead of the type —

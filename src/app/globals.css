@@ -1,21 +1,19 @@
 @import "tailwindcss";
 
 @theme inline {
-  /* --font-inter is set by next/font/local in the root layout */
   --font-sans: var(--font-inter), system-ui, sans-serif;
 
-  /* Monochrome type on a warm gallery wall, in near-black vinyl lettering. */
-  --color-paper: #e9e6e1;
-  --color-ink: #111111;
-  --color-ink-soft: #4a4744;
+  --color-background: #fffce6;
+  --color-foreground: #111111;
+  --color-foreground-soft: #4a4744;
+  --color-background-hard: #ffcc00;
+  /* Secondary text for the hard background. `foreground-soft` is mixed for a
+     pale wall and goes muddy on saturated yellow; this is the same role, tuned
+     to that ground — 8.3:1 against it, where the wall version manages 6.1:1. */
+  --color-foreground-hard: #3f3200;
 
-  /* The one place colour is allowed: the work sheets. One flat tint each,
-     so the colour is the whole legend — blue is a job, yellow is my own. */
-  --color-sheet-professional: #cfdcea;
-  --color-sheet-personal: #f2e6c2;
-
-  /* The gift shop, one step deeper than the wall it hides behind. */
-  --color-shop: #dcd7ce;
+  --color-professional: #b6e4f2;
+  --color-creative: #fff199;
 }
 
 /* Inter 4.001 OpenType features applied to every glyph on the site.
@@ -47,8 +45,8 @@
 
 body {
   font-family: var(--font-sans);
-  background: var(--color-paper);
-  color: var(--color-ink);
+  background: var(--color-background);
+  color: var(--color-foreground);
   text-rendering: optimizeLegibility;
   font-feature-settings: var(--font-features);
   font-optical-sizing: auto;
@@ -76,12 +74,18 @@ body[data-sheet-focused] {
   overflow: hidden;
 }
 
+/* Elastic overscroll drags the page plane past the viewport edge. Nothing
+   leaks now that the shop floats above rather than below, but the plane sliding
+   against a fixed card still reads as slippage, so the bounce stays off. Must
+   sit on `html` — unlike `overflow`, this does not propagate up from `body`, so
+   declaring it there would do nothing. */
 html {
   scrollbar-gutter: stable;
+  overscroll-behavior-y: none;
 }
 
-/* The gift shop lives under the page. The page is an opaque plane; opening the
-   shop slides that plane aside rather than covering it with a panel.
+/* Opening the shop slides the page aside to make room; the shop itself floats
+   above the plane rather than hiding beneath it.
 
    The translate is declared ONLY in the open state, and that is load-bearing: a
    transform on an element makes it the containing block for every
@@ -92,10 +96,9 @@ body[data-shop-open] [data-page] {
   translate: var(--shop-w) 0;
 }
 
+/* No shadow here any more: the shop is the thing on top, so it does the
+   casting. A leading-edge shadow would land in the gap and read as two. */
 [data-page] {
-  /* The plane casts onto the shop, so the shadow is on its leading edge.
-     Always declared; invisible while the plane covers the viewport. */
-  box-shadow: -24px 0 60px -12px rgb(0 0 0 / 0.35);
   transition: translate 280ms cubic-bezier(0.2, 0, 0, 1);
 }
 
@@ -106,22 +109,68 @@ body {
   overflow-x: clip;
 }
 
+/* `--shop-w` is how far the page moves, not how wide the card is. The card is
+   narrower by one gap at each end, which is what leaves an even margin on the
+   window side and on the page side. */
 :root {
   --shop-w: 86vw;
+  --shop-gap: 0.9rem;
+  --shop-radius: 0.875rem;
 }
 
 @media (min-width: 768px) {
   :root {
     --shop-w: clamp(17rem, 22vw, 22rem);
+    --shop-gap: 1.25rem;
   }
 }
 
-/* Paper texture, and the only place on the site that has one — the grain is
-   what says this is a different material from the wall. Generated rather than
-   fetched: an inline SVG turbulence, so there is no asset and no request. */
+/* A card floating above the page, inset by the same gap on all four sides so
+   the site shows around it evenly.
+
+   It paints above the plane now, so nothing covers it at rest and it has to
+   hide itself. The translate has to clear its own width AND the left gap —
+   `-100%` alone would park the card's right edge one gap inside the viewport
+   and leave a sliver showing as the close settles. `visibility` is deliberately
+   in the transition — an endpoint of `visible` keeps it painted for the whole
+   slide and flips it only at rest, so the card never disappears mid-close. */
 [data-shop-panel] {
-  background-color: var(--color-shop);
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='160' height='160' filter='url(%23n)' opacity='0.035'/%3E%3C/svg%3E");
+  position: fixed;
+  z-index: 40;
+  top: var(--shop-gap);
+  bottom: var(--shop-gap);
+  left: var(--shop-gap);
+  width: calc(var(--shop-w) - var(--shop-gap) * 2);
+  border-radius: var(--shop-radius);
+  background-color: var(--color-background-hard);
+  box-shadow: 0 4px 24px -4px rgb(0 0 0 / 0.14);
+  /* The shop scrolls; the bar just never shows. Hiding the bar is not the same
+     as removing the scroller — the content still has to be reachable. */
+  overflow-y: auto;
+  scrollbar-width: none;
+  visibility: hidden;
+  translate: calc(-100% - var(--shop-gap)) 0;
+  transition:
+    translate 280ms cubic-bezier(0.2, 0, 0, 1),
+    visibility 280ms;
+}
+
+/* `scrollbar-width` covers Firefox and modern WebKit; this covers the rest. */
+[data-shop-panel]::-webkit-scrollbar {
+  display: none;
+}
+
+body[data-shop-open] [data-shop-panel] {
+  visibility: visible;
+  translate: 0 0;
+}
+
+/* The colophon is pressed into the wall rather than mounted on it: the shadow
+   falls inward, and it carries the grain the shop panel used to have. Same
+   generated turbulence — an inline SVG, so no asset and no request. */
+[data-colophon] {
+  box-shadow: inset 0 2px 6px -2px rgb(0 0 0 / 0.16);
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='160' height='160' filter='url(%23n)' opacity='0.03'/%3E%3C/svg%3E");
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -131,6 +180,7 @@ body {
   [data-dimmed],
   [data-dim-on-focus],
   [data-sheet-card],
+  [data-shop-panel],
   [data-page] {
     transition-duration: 0.01ms !important;
   }

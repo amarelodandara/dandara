@@ -129,7 +129,7 @@ export function WorkPile({
 
   return (
     <section id="work" className="relative mt-[18vh] min-h-screen">
-      <h2 className="text-[0.7rem] font-medium tracking-[0.01em] text-ink-soft">
+      <h2 className="text-[0.7rem] font-medium tracking-[0.01em] text-foreground-soft">
         {label}
       </h2>
 
@@ -159,7 +159,7 @@ export function WorkPile({
         <div
           aria-hidden="true"
           onClick={close}
-          className="fixed inset-0 z-50 bg-paper/40"
+          className="fixed inset-0 z-50 bg-background/40"
         />
       )}
     </section>

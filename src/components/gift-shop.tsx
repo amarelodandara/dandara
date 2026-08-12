@@ -1,7 +1,7 @@
 "use client";
 
 import { useCallback, useEffect, useRef, useState } from "react";
-import { giftShopItems } from "@/content/gift-shop";
+import { giftShopSections } from "@/content/gift-shop";
 import { GiftShopRow } from "./gift-shop-row";
 import { GiftShopPlaque } from "./gift-shop-plaque";
 import {
@@ -85,41 +85,70 @@ export function GiftShop() {
 
   return (
     <>
-      {/* Always mounted, always underneath the page plane, which is opaque —
-          so it needs no hiding logic, only `inert` to stay out of tab order. */}
+      {/* Always mounted. Position, the slide, and the hiding all live in CSS
+          keyed off `data-shop-open`, because the card floats above the plane
+          now and nothing covers it at rest. `inert` keeps it out of tab order
+          on top of that — visibility alone would, but this survives the
+          transition window where it is still painted. */}
       <aside
         ref={panelRef}
         aria-label="Gift shop"
         tabIndex={-1}
         inert={!open || undefined}
         data-shop-panel
-        className="fixed inset-y-0 left-0 z-0 flex w-[var(--shop-w)] flex-col overflow-y-auto px-5 py-8 outline-none"
+        className="flex flex-col px-5 py-8 outline-none"
       >
         <header className="px-3">
-          <div className="flex items-baseline justify-between gap-3">
-            <h2 className="text-[1.05rem] font-semibold tracking-[-0.01em]">
+          <div className="flex items-center justify-between gap-3">
+            <h2 className="text-[clamp(1.15rem,1.7vw,1.4rem)] font-semibold leading-tight tracking-[-0.01em]">
               Gift shop
             </h2>
+
+            {/* The same key that opened the shop closes it, so the shortcut is
+                taught where it is used. Clicking anywhere in the group works —
+                the key is a label, not a target to be hit. */}
             <button
               type="button"
               onClick={close}
-              className="-m-3 p-3 text-[0.7rem] font-medium tracking-[0.01em] text-ink-soft underline decoration-[0.06em] underline-offset-[0.25em] transition-opacity hover:opacity-50"
+              aria-label="Close gift shop"
+              className="group -m-2 flex shrink-0 items-center gap-1.5 p-2"
             >
-              Close
+              <span
+                aria-hidden="true"
+                className="text-[0.7rem] font-medium leading-none tracking-[0.01em] text-foreground-hard opacity-0 transition-opacity duration-150 group-hover:opacity-100 group-focus-visible:opacity-100"
+              >
+                Close
+              </span>
+              <kbd
+                aria-hidden="true"
+                className="inline-flex h-4 w-4 shrink-0 items-center justify-center rounded-sm border border-foreground-hard/35 font-sans text-[0.6rem] font-medium leading-none tracking-[0.04em] text-foreground-hard/75"
+              >
+                G
+              </kbd>
             </button>
           </div>
-          <p className="mt-2 text-[0.8rem] leading-[1.45] text-ink-soft">
-            Everything that is useful but not worth a wall. Take what you need.
+
+          <p className="mt-1 text-[0.8rem] leading-[1.45] text-foreground-hard">
+            Take what you need
           </p>
         </header>
 
-        <ul className="mt-6 space-y-0.5">
-          {giftShopItems.map((item) => (
-            <li key={item.id}>
-              <GiftShopRow item={item} />
-            </li>
-          ))}
-        </ul>
+        {giftShopSections.map((section) => (
+          <section key={section.id} className="mt-8">
+            {section.title && (
+              <h3 className="px-3 text-[0.7rem] font-medium tracking-[0.01em] text-foreground-hard">
+                {section.title}
+              </h3>
+            )}
+            <ul className={section.title ? "mt-2 space-y-0.5" : "space-y-0.5"}>
+              {section.items.map((item) => (
+                <li key={item.id}>
+                  <GiftShopRow item={item} />
+                </li>
+              ))}
+            </ul>
+          </section>
+        ))}
       </aside>
 
       {/* Hidden whenever anything owns the screen — not just the shop. The page

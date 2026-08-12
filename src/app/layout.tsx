@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import localFont from "next/font/local";
 import { Agentation } from "agentation";
+import { Colophon } from "@/components/colophon";
 import { GiftShop } from "@/components/gift-shop";
 import "./globals.css";
 
@@ -25,9 +26,13 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
         {/* Under the page, permanently. The plane above it is opaque. */}
         <GiftShop />
 
-        {/* The page plane. Opaque, and the thing that slides aside. */}
-        <div data-page className="relative z-10 flex min-h-full flex-col bg-paper">
+        {/* The page plane. Opaque, and the thing that slides aside. The
+            colophon lives here rather than in a route, so every page ends on
+            the same label. `main` carries flex-1, so it stays pinned to the
+            bottom on short pages. */}
+        <div data-page className="relative z-10 flex min-h-full flex-col bg-background">
           {children}
+          <Colophon />
         </div>
 
         {process.env.NODE_ENV === "development" && (
