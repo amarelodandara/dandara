@@ -6,6 +6,7 @@ export default function Home() {
     <main className="mx-auto w-full max-w-[1400px] flex-1 px-[7vw] py-[14vh] sm:py-[18vh]">
       <div
         data-dim-on-focus
+        data-landing
         className="grid grid-cols-1 gap-y-16 md:grid-cols-12 md:gap-x-[6%] md:gap-y-0"
       >
         {/* Title block — the vinyl lettering on the left of the wall. */}
@@ -50,8 +51,11 @@ export default function Home() {
             </p>
             <ul className="mt-2 flex flex-wrap gap-x-5 gap-y-1 text-[0.85rem]">
               {[
-                { label: "Email", href: "mailto:nicolysantos51@gmail.com" },
-                { label: "LinkedIn", href: "#" },
+                { label: "Email", href: "mailto:nicolydndr@gmail.com" },
+                {
+                  label: "LinkedIn",
+                  href: "https://linkedin.com/in/nicolydandara",
+                },
                 { label: "Twitter", href: "#" },
                 { label: "Bluesky", href: "#" },
                 { label: "GitHub", href: "https://github.com/amarelodandara" },

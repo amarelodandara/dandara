@@ -13,6 +13,9 @@
      so the colour is the whole legend — blue is a job, yellow is my own. */
   --color-sheet-professional: #cfdcea;
   --color-sheet-personal: #f2e6c2;
+
+  /* The gift shop, one step deeper than the wall it hides behind. */
+  --color-shop: #dcd7ce;
 }
 
 /* Inter 4.001 OpenType features applied to every glyph on the site.
@@ -77,13 +80,58 @@ html {
   scrollbar-gutter: stable;
 }
 
+/* The gift shop lives under the page. The page is an opaque plane; opening the
+   shop slides that plane aside rather than covering it with a panel.
+
+   The translate is declared ONLY in the open state, and that is load-bearing: a
+   transform on an element makes it the containing block for every
+   `position: fixed` descendant, and the work pile's focused sheet is one. A
+   `translate: 0` at rest would silently re-anchor it to the page instead of the
+   viewport. No transform at rest means no containing block at rest. */
+body[data-shop-open] [data-page] {
+  translate: var(--shop-w) 0;
+}
+
+[data-page] {
+  /* The plane casts onto the shop, so the shadow is on its leading edge.
+     Always declared; invisible while the plane covers the viewport. */
+  box-shadow: -24px 0 60px -12px rgb(0 0 0 / 0.35);
+  transition: translate 280ms cubic-bezier(0.2, 0, 0, 1);
+}
+
+/* The translated plane would otherwise open a horizontal scrollbar. `clip`
+   rather than `hidden` because it creates no scroll container, which leaves
+   `position: fixed` and `sticky` working. */
+body {
+  overflow-x: clip;
+}
+
+:root {
+  --shop-w: 86vw;
+}
+
+@media (min-width: 768px) {
+  :root {
+    --shop-w: clamp(17rem, 22vw, 22rem);
+  }
+}
+
+/* Paper texture, and the only place on the site that has one — the grain is
+   what says this is a different material from the wall. Generated rather than
+   fetched: an inline SVG turbulence, so there is no asset and no request. */
+[data-shop-panel] {
+  background-color: var(--color-shop);
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='160' height='160' filter='url(%23n)' opacity='0.035'/%3E%3C/svg%3E");
+}
+
 @media (prefers-reduced-motion: reduce) {
   /* The FLIP animation is skipped in JS; this covers the rest. The card is
      named explicitly because closing removes the body attribute in the same
      commit, so an ancestor-based selector would miss the way back down. */
   [data-dimmed],
   [data-dim-on-focus],
-  [data-sheet-card] {
+  [data-sheet-card],
+  [data-page] {
     transition-duration: 0.01ms !important;
   }
 }

@@ -13,6 +13,13 @@ import {
 import { SheetFrame } from "./sheet-frame";
 import type { SheetProps, SheetSize } from "./sheet";
 import { scatter } from "@/lib/scatter";
+import {
+  closeOverlay,
+  openOverlay,
+  useActiveOverlay,
+} from "@/lib/exclusive-overlay";
+
+const OVERLAY_ID = "work-pile";
 
 type Item = {
   id: string;
@@ -62,7 +69,13 @@ export function WorkPile({
     [items],
   );
 
-  const [focusedId, setFocusedId] = useState<string | null>(null);
+  // Which sheet is local; whether the pile owns the screen at all is shared.
+  // Gating one on the other is a derivation rather than an effect, so being
+  // evicted by the gift shop needs no synchronising.
+  const [requestedId, setRequestedId] = useState<string | null>(null);
+  const active = useActiveOverlay();
+  const focusedId = active === OVERLAY_ID ? requestedId : null;
+
   const [lifted, setLifted] = useState<Record<string, number>>({});
   const top = useRef(items.length);
 
@@ -77,12 +90,13 @@ export function WorkPile({
   const open = useCallback(
     (id: string) => {
       bringToFront(id);
-      setFocusedId(id);
+      setRequestedId(id);
+      openOverlay(OVERLAY_ID);
     },
     [bringToFront],
   );
 
-  const close = useCallback(() => setFocusedId(null), []);
+  const close = useCallback(() => closeOverlay(OVERLAY_ID), []);
 
   // Everything outside the pile dims and drops out of the tab order. The blur
   // is applied per element rather than to a shared ancestor, because a filter on
@@ -107,7 +121,7 @@ export function WorkPile({
   useEffect(() => {
     if (!focusedId) return;
     const onKeyDown = (event: KeyboardEvent) => {
-      if (event.key === "Escape") setFocusedId(null);
+      if (event.key === "Escape") closeOverlay(OVERLAY_ID);
     };
     window.addEventListener("keydown", onKeyDown);
     return () => window.removeEventListener("keydown", onKeyDown);
