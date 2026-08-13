@@ -19,9 +19,36 @@ const inter = localFont({
   display: "swap",
 });
 
+const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? "https://adandara.com";
+
+const NAME = "Nicoly Dandara";
+const TITLE = "Dandara";
+const DESCRIPTION = "Product design, design engineering and relentless taste.";
+
 export const metadata: Metadata = {
-  title: "Dandara",
-  description: "Portfolio",
+  metadataBase: new URL(SITE_URL),
+  title: { default: TITLE, template: `%s — ${NAME}` },
+  description: DESCRIPTION,
+  applicationName: NAME,
+  authors: [{ name: NAME, url: SITE_URL }],
+  creator: NAME,
+  alternates: { canonical: "/" },
+  openGraph: {
+    type: "profile",
+    firstName: "Nicoly",
+    lastName: "Dandara",
+    username: "amarelodandara",
+    url: SITE_URL,
+    siteName: NAME,
+    title: TITLE,
+    description: DESCRIPTION,
+    locale: "en_US",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: TITLE,
+    description: DESCRIPTION,
+  },
 };
 
 export default function RootLayout({ children }: LayoutProps<"/">) {
