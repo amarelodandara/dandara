@@ -1,6 +1,7 @@
 "use client";
 
 import {
+  memo,
   useCallback,
   useEffect,
   useLayoutEffect,
@@ -33,8 +34,17 @@ const MAX_ZOOM = 2.4;
 const useIsomorphicLayoutEffect =
   typeof window === "undefined" ? useEffect : useLayoutEffect;
 
-const matches = (query: string) =>
-  typeof window !== "undefined" && window.matchMedia(query).matches;
+const queries = new Map<string, MediaQueryList>();
+
+const matches = (query: string) => {
+  if (typeof window === "undefined") return false;
+  let list = queries.get(query);
+  if (!list) {
+    list = window.matchMedia(query);
+    queries.set(query, list);
+  }
+  return list.matches;
+};
 
 type DragSession = {
   pointerId: number;
@@ -61,7 +71,7 @@ export type SheetFrameProps = {
   children: ReactNode;
 };
 
-export function SheetFrame({
+function SheetFrameImpl({
   id,
   kind,
   title,
@@ -80,7 +90,7 @@ export function SheetFrame({
   const cardRef = useRef<HTMLDivElement>(null);
   const buttonRef = useRef<HTMLButtonElement>(null);
 
-  const [drag, setDrag] = useState({ x: 0, y: 0 });
+  const drag = useRef({ x: 0, y: 0 });
   const [dragging, setDragging] = useState(false);
   const session = useRef<DragSession | null>(null);
 
@@ -157,6 +167,9 @@ export function SheetFrame({
     if (!active || active.pointerId !== event.pointerId) return;
     event.currentTarget.releasePointerCapture?.(event.pointerId);
     session.current = null;
+    if (active.moved && frameRef.current) {
+      previousRect.current = frameRef.current.getBoundingClientRect();
+    }
     setDragging(false);
   }, []);
 
@@ -170,8 +183,8 @@ export function SheetFrame({
       pointerId: event.pointerId,
       startX: event.clientX,
       startY: event.clientY,
-      originX: drag.x,
-      originY: drag.y,
+      originX: drag.current.x,
+      originY: drag.current.y,
       moved: false,
     };
     event.currentTarget.setPointerCapture(event.pointerId);
@@ -187,7 +200,12 @@ export function SheetFrame({
     if (!active.moved && Math.hypot(dx, dy) < DRAG_THRESHOLD) return;
 
     active.moved = true;
-    setDrag({ x: active.originX + dx, y: active.originY + dy });
+    drag.current = { x: active.originX + dx, y: active.originY + dy };
+
+    const el = frameRef.current;
+    if (!el) return;
+    el.style.setProperty("--sheet-dx", `${drag.current.x}px`);
+    el.style.setProperty("--sheet-dy", `${drag.current.y}px`);
   }
 
   const frameClass = focused
@@ -197,7 +215,7 @@ export function SheetFrame({
         index > 0 ? "-mt-6 md:mt-0" : "",
         index % 2 ? "ml-[8%] md:ml-0" : "mr-[8%] md:mr-0",
         "md:absolute md:left-[var(--sheet-x)] md:top-[var(--sheet-y)] md:m-0 md:w-[var(--sheet-w)]",
-        "md:translate-x-[calc(-50%+var(--sheet-dx))] md:translate-y-[var(--sheet-dy)]",
+        "md:translate-x-[calc(-50%+var(--sheet-dx,0px))] md:translate-y-[var(--sheet-dy,0px)]",
         "md:touch-none",
         dragging ? "md:cursor-grabbing" : "md:cursor-grab",
       ].join(" ");
@@ -211,8 +229,6 @@ export function SheetFrame({
         {
           "--sheet-x": `${placement.xPct}%`,
           "--sheet-y": `${placement.yPct}%`,
-          "--sheet-dx": `${drag.x}px`,
-          "--sheet-dy": `${drag.y}px`,
           "--sheet-r": `${placement.rotate}deg`,
           "--sheet-w": WIDTH[size],
           zIndex: focused ? undefined : z,
@@ -264,3 +280,5 @@ export function SheetFrame({
     </div>
   );
 }
+
+export const SheetFrame = memo(SheetFrameImpl);
