@@ -13,16 +13,15 @@ Execution order was 001 → 002 → 003. 001 and 002 both touch
 `src/components/sheet-frame.tsx` and 001 changes the drag write path, so it went
 first; 003 is independent.
 
-## Still open
-
-**Blur cost on focus.** `globals.css:80-91` transitions `filter: blur(6px)` on up
-to eight elements at once when a sheet takes focus. It is inside the 20px budget
-from AUDIT.md §5, and blur is the point of the effect rather than decoration, so
-there is no plan for it yet. It needs a DevTools Performance recording of a sheet
-focus on a mid-range machine first — planning a fix for unproven jank would be
-churn.
-
 ## Considered and rejected
+
+- **Blur cost on focus.** `globals.css:80-91` transitions `filter: blur(6px)` on
+  up to eight elements at once when a sheet takes focus, which the audit raised
+  as a possible dropped-frame risk. Checked on the machine this is built on and
+  it does not jank. It is inside the 20px budget from AUDIT.md §5 and the blur is
+  the effect rather than decoration, so nothing changes. Worth re-checking only
+  if the pile grows well past seven sheets, or on hardware slower than a recent
+  Mac — one machine is one data point.
 
 Recorded so they are not re-audited later.
 
