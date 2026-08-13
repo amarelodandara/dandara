@@ -18,6 +18,7 @@ import {
   openOverlay,
   useActiveOverlay,
 } from "@/lib/exclusive-overlay";
+import { useKeydown } from "@/lib/keydown";
 
 const OVERLAY_ID = "work-pile";
 
@@ -108,14 +109,9 @@ export function WorkPile({
     return clear;
   }, [focusedId]);
 
-  useEffect(() => {
-    if (!focusedId) return;
-    const onKeyDown = (event: KeyboardEvent) => {
-      if (event.key === "Escape") closeOverlay(OVERLAY_ID);
-    };
-    window.addEventListener("keydown", onKeyDown);
-    return () => window.removeEventListener("keydown", onKeyDown);
-  }, [focusedId]);
+  useKeydown((event) => {
+    if (focusedId && event.key === "Escape") closeOverlay(OVERLAY_ID);
+  });
 
   return (
     <section id="work" className="relative mt-[18vh] pb-[12vh]">
@@ -150,13 +146,13 @@ export function WorkPile({
         ))}
       </div>
 
-      {focusedId && (
+      {focusedId ? (
         <div
           aria-hidden="true"
           onClick={close}
           className="fixed inset-0 z-50 bg-background/40"
         />
-      )}
+      ) : null}
     </section>
   );
 }

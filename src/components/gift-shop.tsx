@@ -10,6 +10,7 @@ import {
   openOverlay,
   useActiveOverlay,
 } from "@/lib/exclusive-overlay";
+import { useKeydown } from "@/lib/keydown";
 
 const ID = "gift-shop";
 
@@ -53,24 +54,19 @@ export function GiftShop() {
     return () => observer.disconnect();
   }, []);
 
-  useEffect(() => {
-    const onKeyDown = (event: KeyboardEvent) => {
-      if (event.key === "Escape") {
-        closeOverlay(ID);
-        return;
-      }
-      if (event.metaKey || event.ctrlKey || event.altKey) return;
-      if ((event.target as HTMLElement | null)?.closest(TYPING)) return;
-      if (event.key.toLowerCase() !== SHORTCUT) return;
+  useKeydown((event) => {
+    if (event.key === "Escape") {
+      closeOverlay(ID);
+      return;
+    }
+    if (event.metaKey || event.ctrlKey || event.altKey) return;
+    if ((event.target as HTMLElement | null)?.closest(TYPING)) return;
+    if (event.key.toLowerCase() !== SHORTCUT) return;
 
-      event.preventDefault();
-      if (open) closeOverlay(ID);
-      else openOverlay(ID);
-    };
-
-    window.addEventListener("keydown", onKeyDown);
-    return () => window.removeEventListener("keydown", onKeyDown);
-  }, [open]);
+    event.preventDefault();
+    if (open) closeOverlay(ID);
+    else openOverlay(ID);
+  });
 
   const heldFocus = useRef(false);
   useEffect(() => {
@@ -129,11 +125,11 @@ export function GiftShop() {
 
         {giftShopSections.map((section) => (
           <section key={section.id} className="mt-8">
-            {section.title && (
+            {section.title ? (
               <h3 className="px-3 text-[0.7rem] font-medium tracking-[0.01em] text-foreground-hard">
                 {section.title}
               </h3>
-            )}
+            ) : null}
             <ul className={section.title ? "mt-2 space-y-0.5" : "space-y-0.5"}>
               {section.items.map((item) => (
                 <li key={item.id}>
