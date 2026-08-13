@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import localFont from "next/font/local";
 import { Agentation } from "agentation";
 import { Analytics } from "@vercel/analytics/next";
+import { SpeedInsights } from "@vercel/speed-insights/next";
 import { Colophon } from "@/components/colophon";
 import { GiftShop } from "@/components/gift-shop";
 import "../globals.css";
@@ -46,6 +47,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
           <Agentation endpoint="http://localhost:4747" />
         )}
         <Analytics />
+        <SpeedInsights />
       </body>
     </html>
   );
