@@ -12,7 +12,8 @@
     "cv:pdf": "node scripts/cv-pdf.mts",
     "cv:verify": "node scripts/cv-verify.mts",
     "cv:score": "node scripts/cv-score.mts",
-    "cv:base": "node scripts/cv-pdf.mts --variant base --lang en --out public/gift-shop/cv-en.pdf && node scripts/cv-pdf.mts --variant base --lang pt --out public/gift-shop/cv-pt.pdf"
+    "cv:base": "node scripts/cv-pdf.mts --variant base --lang en --out public/gift-shop/cv-en.pdf && node scripts/cv-pdf.mts --variant base --lang pt --out public/gift-shop/cv-pt.pdf",
+    "og:image": "node scripts/og-image.mts"
   },
   "dependencies": {
     "agentation": "^3.0.2",

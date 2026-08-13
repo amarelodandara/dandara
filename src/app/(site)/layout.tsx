@@ -3,6 +3,7 @@ import dynamic from "next/dynamic";
 import localFont from "next/font/local";
 import { Colophon } from "@/components/colophon";
 import { GiftShop } from "@/components/gift-shop";
+import { DESCRIPTION, NAME, SITE_URL, TITLE } from "@/lib/site";
 import "../globals.css";
 
 const Agentation =
@@ -18,12 +19,6 @@ const inter = localFont({
   variable: "--font-inter",
   display: "swap",
 });
-
-const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? "https://adandara.com";
-
-const NAME = "Nicoly Dandara";
-const TITLE = "Dandara";
-const DESCRIPTION = "Product design, design engineering and relentless taste.";
 
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
