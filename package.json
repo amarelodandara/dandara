@@ -13,6 +13,7 @@
     "cv:base": "node scripts/cv-pdf.mts --variant base --lang en --out public/gift-shop/cv-en.pdf && node scripts/cv-pdf.mts --variant base --lang pt --out public/gift-shop/cv-pt.pdf"
   },
   "dependencies": {
+    "@vercel/analytics": "^2.0.1",
     "agentation": "^3.0.2",
     "next": "16.3.0",
     "react": "19.2.8",

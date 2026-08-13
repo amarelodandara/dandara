@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import localFont from "next/font/local";
 import { Agentation } from "agentation";
+import { Analytics } from "@vercel/analytics/next";
 import { Colophon } from "@/components/colophon";
 import { GiftShop } from "@/components/gift-shop";
 import "../globals.css";
@@ -44,6 +45,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
         {process.env.NODE_ENV === "development" && (
           <Agentation endpoint="http://localhost:4747" />
         )}
+        <Analytics />
       </body>
     </html>
   );
