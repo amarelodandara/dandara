@@ -15,6 +15,17 @@
   --color-professional: #b6e4f2;
   --color-creative: #fff199;
 
+  /* One curve for the whole product. Strong decelerate: it starts fast, so the
+     moment the user is watching is the moment that moves. The built-in `ease`
+     is too weak to read as deliberate at these durations. */
+  --ease-out-strong: cubic-bezier(0.2, 0, 0, 1);
+
+  /* Opening is the deliberate act and can take its time; dismissing is the
+     system getting out of the way, so it snaps. */
+  --motion-enter: 280ms;
+  --motion-exit: 200ms;
+  --press: 160ms;
+
   /* Elevation, after Superlogical. Three notes only, and every one of them
      starts with a hairline ring instead of a border: an object is separated
      from its ground by its own edge plus the light it blocks, never by a drawn
@@ -68,8 +79,8 @@ body {
 [data-dimmed],
 [data-dim-on-focus] {
   transition:
-    filter 240ms ease,
-    opacity 240ms ease;
+    filter 240ms var(--ease-out-strong),
+    opacity 240ms var(--ease-out-strong);
 }
 
 [data-dimmed],
@@ -104,12 +115,13 @@ html {
    viewport. No transform at rest means no containing block at rest. */
 body[data-shop-open] [data-page] {
   translate: var(--shop-w) 0;
+  transition-duration: var(--motion-enter);
 }
 
 /* No shadow here any more: the shop is the thing on top, so it does the
    casting. A leading-edge shadow would land in the gap and read as two. */
 [data-page] {
-  transition: translate 280ms cubic-bezier(0.2, 0, 0, 1);
+  transition: translate var(--motion-exit) var(--ease-out-strong);
 }
 
 /* The translated plane would otherwise open a horizontal scrollbar. `clip`
@@ -163,8 +175,8 @@ body {
   visibility: hidden;
   translate: calc(-100% - var(--shop-gap)) 0;
   transition:
-    translate 280ms cubic-bezier(0.2, 0, 0, 1),
-    visibility 280ms;
+    translate var(--motion-exit) var(--ease-out-strong),
+    visibility var(--motion-exit);
 }
 
 /* `scrollbar-width` covers Firefox and modern WebKit; this covers the rest. */
@@ -175,6 +187,7 @@ body {
 body[data-shop-open] [data-shop-panel] {
   visibility: visible;
   translate: 0 0;
+  transition-duration: var(--motion-enter);
 }
 
 /* The colophon is pressed into the wall rather than mounted on it: the shadow
@@ -189,14 +202,32 @@ body[data-shop-open] [data-shop-panel] {
 }
 
 @media (prefers-reduced-motion: reduce) {
-  /* The FLIP animation is skipped in JS; this covers the rest. The card is
-     named explicitly because closing removes the body attribute in the same
-     commit, so an ancestor-based selector would miss the way back down. */
-  [data-dimmed],
-  [data-dim-on-focus],
+  /* Reduced, not removed. Everything that moves through space snaps: the FLIP
+     animation is already skipped in JS, and these are the transitions that
+     travel. The card is named explicitly because closing removes the body
+     attribute in the same commit, so an ancestor-based selector would miss the
+     way back down. */
   [data-sheet-card],
   [data-shop-panel],
-  [data-page] {
+  [data-page],
+  [data-plaque] {
     transition-duration: 0.01ms !important;
+  }
+
+  /* The dim stays. It changes no position — it is opacity and blur telling you
+     which sheet you are in, and cutting it would remove the explanation rather
+     than the movement. */
+  [data-dimmed],
+  [data-dim-on-focus] {
+    transition-duration: 150ms !important;
+  }
+
+  /* Press feedback is a scale, so it goes entirely — killing only its
+     transition would leave the size jumping instantly, which is worse than the
+     animation was. The colour response underneath it stays and still confirms
+     the tap. */
+  [data-pressable]:active,
+  [data-plaque]:active {
+    scale: 1 !important;
   }
 }

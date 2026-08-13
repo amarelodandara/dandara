@@ -8,7 +8,8 @@ const COPIED_FOR = 1500;
 
 const ROW = [
   "group flex w-full rounded-lg px-3 py-3 text-left",
-  "transition-colors duration-150",
+  "transition-[background-color,scale] duration-150 ease-out-strong",
+  "active:scale-[0.99] active:duration-(--press)",
   "hover:bg-white/45 focus-visible:bg-white/45",
   "focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-foreground/40",
 ].join(" ");
@@ -84,6 +85,7 @@ export function GiftShopRow({ item }: { item: GiftShopItem }) {
         <a
           href={item.href}
           download={item.download}
+          data-pressable
           className={`${ROW} flex-col items-start gap-2`}
         >
           <Preview preview={item.preview} />
@@ -99,6 +101,7 @@ export function GiftShopRow({ item }: { item: GiftShopItem }) {
       <a
         href={item.href}
         download={item.download}
+        data-pressable
         className={`${ROW} items-center gap-3`}
       >
         <Label title={item.title} meta={item.meta} />
@@ -139,6 +142,7 @@ function CopyRow({
     <button
       type="button"
       onClick={copy}
+      data-pressable
       className={`${ROW} items-center gap-3`}
     >
       <Label title={title} meta={copied ? "Copied" : meta} />
@@ -178,9 +182,11 @@ function SwatchChip({
     <button
       type="button"
       onClick={copy}
+      data-pressable
       className={[
         `group mx-auto flex aspect-[3/4] ${CHIP_W} flex-col bg-white p-1 text-left`,
-        "shadow-chip transition-opacity duration-150",
+        "shadow-chip transition-[opacity,scale] duration-150 ease-out-strong",
+        "active:scale-[0.97] active:duration-(--press)",
         "hover:opacity-90 focus-visible:outline-2 focus-visible:outline-offset-2",
         "focus-visible:outline-foreground/40",
       ].join(" ")}

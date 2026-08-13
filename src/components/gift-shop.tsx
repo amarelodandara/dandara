@@ -99,7 +99,8 @@ export function GiftShop() {
               type="button"
               onClick={close}
               aria-label="Close gift shop"
-              className="group -m-2 flex shrink-0 items-center gap-1.5 rounded-lg p-2 transition-colors duration-150 hover:bg-white/45 focus-visible:bg-white/45"
+              data-pressable
+              className="group -m-2 flex shrink-0 items-center gap-1.5 rounded-lg p-2 transition-[background-color,scale] duration-150 ease-out-strong hover:bg-white/45 focus-visible:bg-white/45 active:scale-[0.97] active:duration-(--press)"
             >
               <span
                 aria-hidden="true"
@@ -121,7 +122,7 @@ export function GiftShop() {
           </p>
         </header>
 
-        {Tailored && <Tailored />}
+        {Tailored ? <Tailored /> : null}
 
         {giftShopSections.map((section) => (
           <section key={section.id} className="mt-8">

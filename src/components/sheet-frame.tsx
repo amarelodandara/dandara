@@ -29,6 +29,9 @@ const DRAGGABLE = "(min-width: 768px)";
 
 const DRAG_THRESHOLD = 4;
 
+const EASE_OUT_STRONG = "cubic-bezier(0.2, 0, 0, 1)";
+const FLIP_DURATION = 280;
+
 const MAX_ZOOM = 2.4;
 
 const useIsomorphicLayoutEffect =
@@ -119,7 +122,7 @@ function SheetFrameImpl({
         },
         { transformOrigin: "top left", transform: "none" },
       ],
-      { duration: 280, easing: "cubic-bezier(0.2, 0, 0, 1)" },
+      { duration: FLIP_DURATION, easing: EASE_OUT_STRONG },
     );
   });
 
@@ -250,20 +253,22 @@ function SheetFrameImpl({
         className={[
           "p-6 outline-none md:p-7",
           BACKGROUND[kind],
-          "transition-[rotate,scale] duration-[280ms] ease-[cubic-bezier(0.2,0,0,1)]",
+          "transition-[rotate,scale] duration-(--motion-enter) ease-out-strong",
           focused ? "rotate-0" : "md:rotate-[var(--sheet-r)]",
         ].join(" ")}
       >
         <button
           ref={buttonRef}
           type="button"
+          data-pressable
           onClick={() => (focused ? onClose() : onOpen(id))}
           className={[
             "relative z-10 float-right -mr-2 -mt-2 ml-4 cursor-pointer",
             "rounded-sm px-2 py-1",
             "text-[0.7rem] font-medium tracking-[0.01em]",
             "hover:bg-foreground/10 focus-visible:bg-foreground/10",
-            "transition-[opacity,background-color] duration-200",
+            "transition-[opacity,background-color,scale] duration-200 ease-out-strong",
+            "active:scale-[0.97] active:duration-(--press)",
             "after:absolute after:left-1/2 after:top-1/2 after:content-['']",
             "after:h-11 after:w-[max(100%+1.5rem,2.75rem)]",
             "after:-translate-x-1/2 after:-translate-y-1/2",
