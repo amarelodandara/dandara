@@ -1,3 +1,5 @@
+import { CvParseError } from "./error";
+import { parseInline } from "./inline";
 import type {
   CvDoc,
   CvEntry,
@@ -8,8 +10,13 @@ import type {
   PageSize,
 } from "./types";
 
+export { CvParseError } from "./error";
+
 const LANGS: CvLang[] = ["en", "pt"];
 const PAGE_SIZES: PageSize[] = ["letter", "a4"];
+
+const SECTION_LEVEL = 2;
+const ENTRY_LEVEL = 3;
 
 const BANNED_INLINE: [RegExp, string][] = [
   [/`/, "code spans"],
@@ -19,13 +26,6 @@ const BANNED_INLINE: [RegExp, string][] = [
   [/^\s*>/, "block quotes"],
   [/^\s*\d+\.\s/, "numbered lists"],
 ];
-
-export class CvParseError extends Error {
-  constructor(file: string, line: number, message: string) {
-    super(`${file}:${line} — ${message}`);
-    this.name = "CvParseError";
-  }
-}
 
 export function parseCv(source: string, file: string): CvDoc {
   const { meta, body, bodyOffset } = parseFrontmatter(source, file);
@@ -69,52 +69,71 @@ function parseFrontmatter(
   };
 }
 
-function validateMeta(value: unknown, file: string): CvMeta {
-  const fail = (message: string): never => {
-    throw new CvParseError(file, 2, `frontmatter ${message}`);
-  };
+type Frontmatter = { raw: Record<string, unknown>; file: string };
 
-  if (typeof value !== "object" || value === null || Array.isArray(value)) {
-    return fail("must be a JSON object");
+const FRONTMATTER_LINE = 2;
+
+const reject = (source: Frontmatter, message: string): never => {
+  throw new CvParseError(source.file, FRONTMATTER_LINE, `frontmatter ${message}`);
+};
+
+function readString(source: Frontmatter, key: string): string {
+  const value = source.raw[key];
+  if (typeof value !== "string" || value.trim() === "") {
+    return reject(source, `\`${key}\` must be a non-empty string`);
   }
-  const raw = value as Record<string, unknown>;
+  return value;
+}
 
-  const str = (key: string): string => {
-    const v = raw[key];
-    if (typeof v !== "string" || v.trim() === "") {
-      return fail(`\`${key}\` must be a non-empty string`);
-    }
-    return v;
-  };
-
-  const lang = raw.lang;
+function readLang(source: Frontmatter): CvLang {
+  const lang = source.raw.lang;
   if (typeof lang !== "string" || !LANGS.includes(lang as CvLang)) {
-    return fail(`\`lang\` must be one of ${LANGS.join(", ")}`);
+    return reject(source, `\`lang\` must be one of ${LANGS.join(", ")}`);
   }
+  return lang as CvLang;
+}
 
-  const pageSize = raw.pageSize;
-  if (
-    typeof pageSize !== "string" ||
-    !PAGE_SIZES.includes(pageSize as PageSize)
-  ) {
-    return fail(`\`pageSize\` must be one of ${PAGE_SIZES.join(", ")}`);
+function readPageSize(source: Frontmatter): PageSize {
+  const pageSize = source.raw.pageSize;
+  if (typeof pageSize !== "string" || !PAGE_SIZES.includes(pageSize as PageSize)) {
+    return reject(source, `\`pageSize\` must be one of ${PAGE_SIZES.join(", ")}`);
   }
+  return pageSize as PageSize;
+}
 
-  const contact = raw.contact;
+function readContact(source: Frontmatter): string[] {
+  const contact = source.raw.contact;
   if (
     !Array.isArray(contact) ||
     contact.length === 0 ||
-    contact.some((c) => typeof c !== "string" || c.trim() === "")
+    contact.some((entry) => typeof entry !== "string" || entry.trim() === "")
   ) {
-    return fail("`contact` must be a non-empty array of non-empty strings");
+    return reject(source, "`contact` must be a non-empty array of non-empty strings");
+  }
+  return contact as string[];
+}
+
+function validateMeta(value: unknown, file: string): CvMeta {
+  if (typeof value !== "object" || value === null || Array.isArray(value)) {
+    throw new CvParseError(
+      file,
+      FRONTMATTER_LINE,
+      "frontmatter must be a JSON object",
+    );
   }
 
+  const source: Frontmatter = { raw: value as Record<string, unknown>, file };
+
+  const lang = readLang(source);
+  const pageSize = readPageSize(source);
+  const contact = readContact(source);
+
   return {
-    lang: lang as CvLang,
-    name: str("name"),
-    title: str("title"),
-    contact: contact as string[],
-    pageSize: pageSize as PageSize,
+    lang,
+    name: readString(source, "name"),
+    title: readString(source, "title"),
+    contact,
+    pageSize,
   };
 }
 
@@ -144,7 +163,7 @@ function flushParagraph(body: Body) {
   if (!body.section) throw fail(body, "text before any `##` section");
   body.section.blocks.push({
     t: "paragraph",
-    content: parseInline(text, body.file, at(body)),
+    content: parseInline(text, { file: body.file, line: at(body) }),
   });
 }
 
@@ -185,7 +204,10 @@ function openEntry(body: Body, heading: string) {
   flushParagraph(body);
   flushEntry(body);
   if (heading === "") throw fail(body, "`###` entry has no heading");
-  body.entry = { heading: parseInline(heading, body.file, at(body)), bullets: [] };
+  body.entry = {
+    heading: parseInline(heading, { file: body.file, line: at(body) }),
+    bullets: [],
+  };
   body.expectMeta = true;
 }
 
@@ -193,8 +215,8 @@ function consumeHeading(body: Body) {
   const hashes = body.trimmed.match(/^#+/)![0].length;
   const heading = body.trimmed.slice(hashes).trim();
 
-  if (hashes === 2) return openSection(body, heading);
-  if (hashes === 3) return openEntry(body, heading);
+  if (hashes === SECTION_LEVEL) return openSection(body, heading);
+  if (hashes === ENTRY_LEVEL) return openEntry(body, heading);
 
   throw fail(
     body,
@@ -207,7 +229,7 @@ function consumeBullet(body: Body) {
     flushParagraph(body);
     const text = body.trimmed.slice(2).trim();
     if (text === "") throw fail(body, "empty bullet");
-    body.bullets.push(parseInline(text, body.file, at(body)));
+    body.bullets.push(parseInline(text, { file: body.file, line: at(body) }));
     return true;
   }
 
@@ -274,57 +296,4 @@ function parseBody(source: string, file: string, offset: number): CvSection[] {
   body.index = lines.length - 1;
   flushSection(body);
   return body.sections;
-}
-
-const URL = /https?:\/\/[^\s)]+/g;
-
-export function parseInline(text: string, file: string, line: number): Inline[] {
-  const out: Inline[] = [];
-
-  let rest = text;
-  while (rest.length > 0) {
-    const open = rest.indexOf("**");
-    if (open === -1) {
-      pushText(out, rest, file, line);
-      break;
-    }
-
-    const close = rest.indexOf("**", open + 2);
-    if (close === -1) {
-      throw new CvParseError(file, line, "unclosed `**`");
-    }
-
-    pushText(out, rest.slice(0, open), file, line);
-
-    const bold = rest.slice(open + 2, close);
-    if (bold.trim() === "") throw new CvParseError(file, line, "empty `**` pair");
-    out.push({ t: "bold", v: bold });
-
-    rest = rest.slice(close + 2);
-  }
-
-  return out;
-}
-
-function pushText(out: Inline[], text: string, file: string, line: number) {
-  if (text === "") return;
-
-  let last = 0;
-  for (const match of text.matchAll(URL)) {
-    const start = match.index;
-    const matched = match[0];
-    let end = matched.length;
-    while (end > 0 && ".,;:".includes(matched[end - 1])) end -= 1;
-    const href = matched.slice(0, end);
-
-    if (start > last) out.push({ t: "text", v: text.slice(last, start) });
-    out.push({ t: "link", v: href, href });
-    last = start + href.length;
-  }
-
-  if (last < text.length) {
-    const tail = text.slice(last);
-    if (tail.includes("**")) throw new CvParseError(file, line, "unclosed `**`");
-    out.push({ t: "text", v: tail });
-  }
 }
