@@ -1,15 +1,6 @@
-/**
- * Everything in the gift shop, grouped into the sections it is browsed by.
- * Three behaviours: a file you take away, a piece of text you take a copy of,
- * or a swatch that hands over its hex. Nothing here belongs in the main
- * content — it is the useful, unglamorous material a working designer is
- * asked for.
- */
-
 type Common = {
   id: string;
   title: string;
-  /** The quiet second line: format, size, language. */
   meta: string;
 };
 
@@ -17,24 +8,16 @@ export type GiftShopItem = Common &
   (
     | {
         kind: "file";
-        /** Short and stable in the URL... */
         href: string;
-        /** ...long and legible once it lands in someone's downloads folder. */
         download: string;
-        /** Only set where the file is worth seeing before taking. */
         preview?: { src: string; width: number; height: number; alt: string };
       }
     | { kind: "copy"; text: string }
-    /** Rendered as a chip rather than a row; the hex is both fill and payload. */
-    | { kind: "swatch"; hex: string }
+    | { kind: "swatch"; hex: string; fill: string }
   );
 
 export type GiftShopSection = {
   id: string;
-  /**
-   * Shown above the group, in the same small-label idiom as the page. Left off
-   * where the items already name themselves and a heading would only repeat.
-   */
   title?: string;
   items: GiftShopItem[];
 };
@@ -102,7 +85,6 @@ export const giftShopSections: GiftShopSection[] = [
           alt: "Nicoly Dandara mid-sentence with a microphone, in front of two projected screens.",
         },
       },
-      // TODO: replace the two bios below with the real text.
       {
         kind: "copy",
         id: "bio-line",
@@ -128,6 +110,7 @@ export const giftShopSections: GiftShopSection[] = [
         title: "Amarelo Dandara",
         meta: "Click to copy",
         hex: "#FFCC00",
+        fill: "bg-background-hard",
       },
     ],
   },

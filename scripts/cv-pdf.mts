@@ -1,16 +1,3 @@
-/**
- * Prints a résumé to PDF.
- *
- *   npm run cv:pdf -- --lang en --variant linear-product-designer \
- *                     --title "Linear — Senior Product Designer"
- *   npm run cv:pdf -- --lang en --variant base --out public/gift-shop/cv-en.pdf
- *
- * The page at /cv does the rendering and `cv.css` owns the geometry; this file
- * only drives Chrome, scores the result against the posting, and files the
- * output. Run with plain `node` — Node strips the types itself, so there is no
- * build step and no loader to install.
- */
-
 import { spawn, type ChildProcess } from "node:child_process";
 import { mkdir, readdir, readFile, writeFile } from "node:fs/promises";
 import path from "node:path";
@@ -28,18 +15,8 @@ import {
 const ROOT = process.cwd();
 const OUT_DIR = path.join(ROOT, "public", "gift-shop", "tailored");
 
-/**
- * Where a dev server is expected to already be. `localhost` rather than the
- * loopback address on purpose: Next's dev server refuses cross-origin requests
- * for its own chunks, and 127.0.0.1 counts as a different origin.
- */
 const DEFAULT_BASE = process.env.CV_BASE_URL ?? "http://localhost:3000";
 
-/**
- * The port we start one on if it is not. Fixed rather than left to Next: it
- * falls back to 3001, 3002 and upward when a port is taken, and a generator
- * that guessed wrong would wait out its whole timeout and then blame the page.
- */
 const SPAWN_PORT = 3999;
 
 type Args = Record<string, string | true>;
@@ -68,18 +45,12 @@ function required(args: Args, key: string): string {
   return value;
 }
 
-/* -------------------------------------------------------------------------- */
-/* The dev server                                                             */
-/* -------------------------------------------------------------------------- */
-
 async function reachable(baseUrl: string, timeoutMs = 1500): Promise<boolean> {
   try {
     const response = await fetch(`${baseUrl}/cv?lang=en&variant=base`, {
       signal: AbortSignal.timeout(timeoutMs),
     });
     if (response.ok) return true;
-    // Something is answering but not with the page. Say so rather than
-    // starting a second server that will not be able to bind either.
     throw new Error(
       `${baseUrl}/cv answered ${response.status}. If the site is running in production mode, /cv is a 404 by design — start \`npm run dev\`.`,
     );
@@ -89,14 +60,6 @@ async function reachable(baseUrl: string, timeoutMs = 1500): Promise<boolean> {
   }
 }
 
-/**
- * Starts a dev server and waits for it to answer.
- *
- * Next refuses to run two dev servers against the same directory, and says
- * where the first one is when it declines. That message is the useful case,
- * not an error: it means a server exists on a port we did not think to try, so
- * we take the port it names and reuse it.
- */
 async function startServer(): Promise<{ baseUrl: string; child?: ChildProcess }> {
   const child = spawn("npx", ["next", "dev", "--port", String(SPAWN_PORT)], {
     cwd: ROOT,
@@ -104,7 +67,6 @@ async function startServer(): Promise<{ baseUrl: string; child?: ChildProcess }>
   });
 
   let output = "";
-  /** A dev server Next has told us about, running somewhere we did not look. */
   let elsewhere: string | undefined;
 
   const REFUSED = "Another next dev server is already running";
@@ -112,8 +74,6 @@ async function startServer(): Promise<{ baseUrl: string; child?: ChildProcess }>
   const collect = (chunk: Buffer) => {
     output += chunk.toString();
     const marker = output.indexOf(REFUSED);
-    // Next prints its own `Local:` line before deciding it cannot start, and
-    // the existing server's line after — so only look past the refusal.
     if (marker !== -1) {
       elsewhere ??= output.slice(marker).match(/Local:\s+(http:\/\/\S+)/)?.[1];
     }
@@ -164,10 +124,6 @@ async function stopServer(child: ChildProcess) {
   });
 }
 
-/* -------------------------------------------------------------------------- */
-/* Sidecars and the manifest                                                  */
-/* -------------------------------------------------------------------------- */
-
 type Sidecar = {
   id: string;
   lang: string;
@@ -182,23 +138,17 @@ type Sidecar = {
 
 const LANG_LABEL: Record<string, string> = { en: "English", pt: "Português" };
 
-/** `Linear — Senior Product Designer` becomes `Linear_SeniorProductDesigner`. */
 function downloadName(title: string): string {
   const parts = title
     .split(/[—–-]/)
-    .map((part) => part.trim().replace(/[^\p{L}\p{N} ]/gu, ""))
+    .map((part) => part.trim().replaceAll(/[^\p{L}\p{N} ]/gu, ""))
     .filter(Boolean)
-    .map((part) => part.split(/\s+/).map(capitalise).join(""));
+    .map((part) => part.split(/\s+/).map((word) => capitalise(word)).join(""));
   return ["Nicoly_Dandara", ...parts].join("_") + ".pdf";
 }
 
 const capitalise = (word: string) => word.charAt(0).toUpperCase() + word.slice(1);
 
-/**
- * Rebuilt by scanning the directory rather than appended to. Deleting a stale
- * PDF by hand and running again then produces a manifest that tells the truth,
- * with no second copy of the state to fall out of step.
- */
 async function rebuildManifest() {
   const files = await readdir(OUT_DIR).catch(() => [] as string[]);
   const items: Sidecar[] = [];
@@ -206,7 +156,7 @@ async function rebuildManifest() {
   for (const file of files) {
     if (!file.endsWith(".json") || file === "manifest.json") continue;
     const pdf = file.replace(/\.json$/, ".pdf");
-    if (!files.includes(pdf)) continue; // sidecar outlived its PDF
+    if (!files.includes(pdf)) continue;
     items.push(JSON.parse(await readFile(path.join(OUT_DIR, file), "utf8")));
   }
 
@@ -218,10 +168,6 @@ async function rebuildManifest() {
   return items.length;
 }
 
-/* -------------------------------------------------------------------------- */
-/* Main                                                                       */
-/* -------------------------------------------------------------------------- */
-
 async function main() {
   const args = parseArgs(process.argv.slice(2));
 
@@ -229,8 +175,6 @@ async function main() {
   const variant = required(args, "variant");
   const title = typeof args.title === "string" ? args.title : undefined;
 
-  // `--out` is how the tracked base PDFs get written. Everything without it is
-  // a tailored version and goes to the git-ignored folder with a sidecar.
   const explicitOut = typeof args.out === "string" ? args.out : undefined;
   const outPath = explicitOut
     ? path.resolve(ROOT, explicitOut)
@@ -262,19 +206,18 @@ async function main() {
     const response = await page.goto(url, { waitUntil: "load", timeout: 30_000 });
 
     if (!response || !response.ok()) {
+      const sourceFile =
+        variant === "base" ? `base.${lang}.md` : `tailored/${variant}.${lang}.md`;
       throw new Error(
-        `${url} answered ${response?.status() ?? "nothing"} — is src/content/cv/${variant === "base" ? `base.${lang}.md` : `tailored/${variant}.${lang}.md`} there, and does it parse?`,
+        `${url} answered ${response?.status() ?? "nothing"} — is src/content/cv/${sourceFile} there, and does it parse?`,
       );
     }
 
-    // Printing before the webfont has resolved silently prints the fallback.
     await page.evaluate(() => document.fonts.ready);
 
     await mkdir(path.dirname(outPath), { recursive: true });
     await page.pdf({
       path: outPath,
-      // `@page` in cv.css is the authority on size and margins, which is why
-      // no format or margin is passed here — they would be ignored anyway.
       preferCSSPageSize: true,
       printBackground: false,
       displayHeaderFooter: false,
@@ -286,7 +229,8 @@ async function main() {
   }
 
   const bytes = await readFile(outPath);
-  const pages = (await getDocumentProxy(new Uint8Array(bytes))).numPages;
+  const doc = await getDocumentProxy(new Uint8Array(bytes));
+  const pages = doc.numPages;
 
   console.log(`✓ ${path.relative(ROOT, outPath)}  ${(bytes.byteLength / 1024).toFixed(1)} kB  ${pages} page${pages === 1 ? "" : "s"}`);
   if (pages > 1) {
@@ -295,10 +239,6 @@ async function main() {
 
   if (explicitOut) return;
 
-  // The ATS check runs on every generate rather than on request. A tailored CV
-  // whose score nobody looked at is the failure this whole pipeline exists to
-  // prevent, and the number is measured from the PDF's own text — never
-  // asserted by hand, which is how it would drift from the document.
   const keywords = await loadKeywords(keywordsPathFor(variant, lang));
   let matched: number | undefined;
 
@@ -318,7 +258,7 @@ async function main() {
     id: `${variant}-${lang}`,
     lang,
     title: title ?? variant,
-    meta: [`PDF · ${label}`, matched !== undefined ? `${matched}% match` : undefined]
+    meta: [`PDF · ${label}`, matched === undefined ? undefined : `${matched}% match`]
       .filter(Boolean)
       .join(" · "),
     href: `/gift-shop/tailored/${variant}.${lang}.pdf`,

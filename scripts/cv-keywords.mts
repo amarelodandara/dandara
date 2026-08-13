@@ -1,30 +1,15 @@
-/**
- * Scoring a résumé against the posting it was written for.
- *
- * Deciding *which* words matter in a job description is judgement, and it stays
- * with whoever read the posting: they write the keyword list to a JSON file
- * beside the tailored markdown. Counting them is not judgement, so it lives
- * here — measured against the text a parser actually extracts from the PDF,
- * never against the markdown, because the two can differ and only one of them
- * is what gets read.
- */
-
 import { readFile } from "node:fs/promises";
 import path from "node:path";
 import { extractText, getDocumentProxy } from "unpdf";
 
 export type Keyword = {
-  /** How it is written in the report. */
   label: string;
-  /** Case-insensitive regular expression source. Defaults to the label. */
   match?: string;
 };
 
 export type KeywordFile = {
   role: string;
-  /** Requirements the posting treats as non-negotiable. */
   critical: Keyword[];
-  /** Everything else worth carrying. */
   important: Keyword[];
 };
 
@@ -38,7 +23,6 @@ export type Report = {
   score: number;
 };
 
-/** `linear.en.pdf` and `linear.en.md` both look for `linear.en.keywords.json`. */
 export function keywordsPathFor(slug: string, lang: string): string {
   return path.join(
     process.cwd(),
@@ -57,16 +41,15 @@ export async function loadKeywords(file: string): Promise<KeywordFile | null> {
 
   const parsed = JSON.parse(raw) as KeywordFile;
   if (!Array.isArray(parsed.critical) || !Array.isArray(parsed.important)) {
-    throw new Error(`${file}: needs \`critical\` and \`important\` arrays`);
+    throw new TypeError(`${file}: needs \`critical\` and \`important\` arrays`);
   }
   return parsed;
 }
 
-/** Reads the PDF the way an applicant tracking system would. */
 export async function pdfText(file: string): Promise<{ text: string; pages: number }> {
   const doc = await getDocumentProxy(new Uint8Array(await readFile(file)));
   const { text } = await extractText(doc, { mergePages: true });
-  return { text: text.replace(/\s+/g, " "), pages: doc.numPages };
+  return { text: text.replaceAll(/\s+/g, " "), pages: doc.numPages };
 }
 
 export function score(text: string, keywords: KeywordFile): Report {
@@ -97,14 +80,12 @@ export function score(text: string, keywords: KeywordFile): Report {
     rows,
     critical,
     important,
-    // The formula `resume-ats-optimizer` specifies: matched over required, flat.
     score: total === 0 ? 0 : Math.round((hit / total) * 100),
   };
 }
 
-const escapeRegExp = (s: string) => s.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+const escapeRegExp = (s: string) => s.replaceAll(/[.*+?^${}()|[\]\\]/g, String.raw`\$&`);
 
-/** 80% is the threshold `resume-ats-optimizer` calls a strong match. */
 export const TARGET = 80;
 
 export function formatReport(report: Report): string {

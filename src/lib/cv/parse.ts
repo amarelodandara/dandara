@@ -1,16 +1,3 @@
-/**
- * A parser for the one document shape the résumé uses, and nothing else.
- *
- * The grammar is six constructs — a `##` section, a `###` entry, the bare meta
- * line under an entry, `-` bullets, paragraphs, and two inline forms. A general
- * markdown library would accept a great deal more and quietly render whatever
- * it was given; here, anything unrecognised throws with a file and a line.
- *
- * That strictness is the feature. These files are written by an agent working
- * unattended, and the failure it protects against is not a crash — it is a
- * stray `**` reaching a PDF that a recruiter opens.
- */
-
 import type {
   CvDoc,
   CvEntry,
@@ -24,7 +11,6 @@ import type {
 const LANGS: CvLang[] = ["en", "pt"];
 const PAGE_SIZES: PageSize[] = ["letter", "a4"];
 
-/** Markdown this grammar does not have, listed so the error can name it. */
 const BANNED_INLINE: [RegExp, string][] = [
   [/`/, "code spans"],
   [/!\[/, "images"],
@@ -41,10 +27,6 @@ export class CvParseError extends Error {
   }
 }
 
-/**
- * Parses a résumé document. `file` is only ever used to make errors locatable,
- * so callers pass whatever path the reader would recognise.
- */
 export function parseCv(source: string, file: string): CvDoc {
   const { meta, body, bodyOffset } = parseFrontmatter(source, file);
   const sections = parseBody(body, file, bodyOffset);
@@ -56,15 +38,6 @@ export function parseCv(source: string, file: string): CvDoc {
   return { meta, sections };
 }
 
-/* -------------------------------------------------------------------------- */
-/* Frontmatter                                                                */
-/* -------------------------------------------------------------------------- */
-
-/**
- * JSON rather than YAML, and deliberately. `JSON.parse` needs no dependency and
- * fails loudly on a malformed edit, where a hand-rolled YAML subset would
- * cheerfully mis-read a colon inside a job title and carry on.
- */
 function parseFrontmatter(
   source: string,
   file: string,
@@ -92,7 +65,6 @@ function parseFrontmatter(
   return {
     meta: validateMeta(parsed, file),
     body: lines.slice(close + 1).join("\n"),
-    // Every body line number is reported against the original file.
     bodyOffset: close + 1,
   };
 }
@@ -146,17 +118,12 @@ function validateMeta(value: unknown, file: string): CvMeta {
   };
 }
 
-/* -------------------------------------------------------------------------- */
-/* Body                                                                       */
-/* -------------------------------------------------------------------------- */
-
 function parseBody(body: string, file: string, offset: number): CvSection[] {
   const sections: CvSection[] = [];
   const lines = body.split("\n");
 
   let section: CvSection | undefined;
   let entry: CvEntry | undefined;
-  /** Set for exactly one line after a `###`, which is where meta may appear. */
   let expectMeta = false;
   let paragraph: string[] = [];
   let bullets: Inline[][] = [];
@@ -173,8 +140,6 @@ function parseBody(body: string, file: string, offset: number): CvSection[] {
 
   const flushBullets = () => {
     if (bullets.length === 0) return;
-    // Bullets belong to the entry they follow; a section can also carry a bare
-    // list, which is how Projects is written.
     if (entry) entry.bullets.push(...bullets);
     else section?.blocks.push({ t: "bullets", items: bullets });
     bullets = [];
@@ -193,13 +158,10 @@ function parseBody(body: string, file: string, offset: number): CvSection[] {
     section = undefined;
   };
 
-  for (let i = 0; i < lines.length; i++) {
-    const line = lines[i];
+  for (const [i, line] of lines.entries()) {
     const trimmed = line.trim();
     const at = lineNo(i);
 
-    // The meta line is positional: it is whatever sits on the line right after
-    // a `###`. Missing it is fine; anything else on that line is handled below.
     const metaSlot = expectMeta;
     expectMeta = false;
 
@@ -255,8 +217,6 @@ function parseBody(body: string, file: string, offset: number): CvSection[] {
       throw new CvParseError(file, at, "bullets are written `- ` with a space");
     }
 
-    // A plain line. Directly under a `###` it is the entry's place-and-dates;
-    // anywhere else it is prose.
     if (metaSlot && entry) {
       entry.meta = trimmed;
       continue;
@@ -277,11 +237,6 @@ function parseBody(body: string, file: string, offset: number): CvSection[] {
   return sections;
 }
 
-/* -------------------------------------------------------------------------- */
-/* Inline                                                                     */
-/* -------------------------------------------------------------------------- */
-
-/** Bare URLs only. Trailing sentence punctuation is not part of the address. */
 const URL = /https?:\/\/[^\s)]+/g;
 
 export function parseInline(text: string, file: string, line: number): Inline[] {
@@ -312,15 +267,16 @@ export function parseInline(text: string, file: string, line: number): Inline[] 
   return out;
 }
 
-/** Splits a run of plain text around any bare URLs it contains. */
 function pushText(out: Inline[], text: string, file: string, line: number) {
   if (text === "") return;
 
   let last = 0;
   for (const match of text.matchAll(URL)) {
     const start = match.index;
-    // Strip punctuation that ended the sentence rather than the address.
-    const href = match[0].replace(/[.,;:]+$/, "");
+    const matched = match[0];
+    let end = matched.length;
+    while (end > 0 && ".,;:".includes(matched[end - 1])) end -= 1;
+    const href = matched.slice(0, end);
 
     if (start > last) out.push({ t: "text", v: text.slice(last, start) });
     out.push({ t: "link", v: href, href });

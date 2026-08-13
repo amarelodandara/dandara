@@ -24,13 +24,10 @@ const BACKGROUND: Record<SheetKind, string> = {
   personal: "bg-creative",
 };
 
-/** Below this, the pile becomes a stacked column and drag is off. */
 const DRAGGABLE = "(min-width: 768px)";
 
-/** A press shorter than this is a click on the sheet, not a drag of it. */
 const DRAG_THRESHOLD = 4;
 
-/** How far a focused sheet is allowed to grow, however much room there is. */
 const MAX_ZOOM = 2.4;
 
 const useIsomorphicLayoutEffect =
@@ -87,9 +84,6 @@ export function SheetFrame({
   const [dragging, setDragging] = useState(false);
   const session = useRef<DragSession | null>(null);
 
-  // FLIP. The rect from the previous commit is still in the ref while this one
-  // runs, which is exactly the "before" geometry the animation needs. Rotation
-  // lives on the inner card, so this element's box is never a rotated one.
   const previousRect = useRef<DOMRect | null>(null);
   const wasFocused = useRef(focused);
 
@@ -119,11 +113,6 @@ export function SheetFrame({
     );
   });
 
-  // Focusing scales the sheet rather than laying it out again, so it keeps its
-  // exact proportions on the way up. The factor is whatever fits the viewport
-  // with a margin, measured from the live layout and written straight back to
-  // it — routing a measurement through state would cost a cascading render on
-  // every open, close and resize.
   useEffect(() => {
     const card = cardRef.current;
     const frame = frameRef.current;
@@ -136,8 +125,6 @@ export function SheetFrame({
         (window.innerHeight * 0.86) / card.offsetHeight,
       );
       card.style.scale = String(Math.min(MAX_ZOOM, Math.max(1, fit)));
-      // Scrolling a scaled box is horrible, so a sheet already too tall to grow
-      // stays at 1 and scrolls instead. The two never happen together.
       frame.style.maxHeight = fit < 1 ? "88vh" : "";
       frame.style.overflowY = fit < 1 ? "auto" : "";
     };
@@ -154,7 +141,6 @@ export function SheetFrame({
     return () => window.removeEventListener("resize", measure);
   }, [focused]);
 
-  // Focus follows the sheet: into the card on open, back to its button on close.
   const heldFocus = useRef(false);
   useEffect(() => {
     if (focused) {
@@ -176,7 +162,6 @@ export function SheetFrame({
 
   function handlePointerDown(event: ReactPointerEvent<HTMLDivElement>) {
     if (focused || event.button !== 0 || !matches(DRAGGABLE)) return;
-    // Let anything interactive inside the sheet have its own press.
     if ((event.target as HTMLElement).closest("a, button, input, textarea, select, video"))
       return;
 
@@ -261,20 +246,11 @@ export function SheetFrame({
             "relative z-10 float-right -mr-2 -mt-2 ml-4 cursor-pointer",
             "rounded-sm px-2 py-1",
             "text-[0.7rem] font-medium tracking-[0.01em]",
-            // A button, not a link: the hover state is a ground behind the
-            // label rather than a rule under it.
             "hover:bg-foreground/10 focus-visible:bg-foreground/10",
             "transition-[opacity,background-color] duration-200",
-            // Web Interface Guidelines: hit target >= 24px, >= 44px on mobile.
-            // Padding takes the painted button to ~26px, so the target still
-            // grows past it — a 44px box centred on the label, whatever the
-            // label and its padding measure. The
-            // sheet body is a drag surface, so a near miss here starts a drag.
             "after:absolute after:left-1/2 after:top-1/2 after:content-['']",
             "after:h-11 after:w-[max(100%+1.5rem,2.75rem)]",
             "after:-translate-x-1/2 after:-translate-y-1/2",
-            // On desktop the button is an affordance, not decoration: it waits for
-            // the pointer. `group-focus-within` keeps it reachable by keyboard.
             focused
               ? "opacity-100"
               : "md:opacity-0 md:group-hover:opacity-100 md:group-focus-within:opacity-100",
