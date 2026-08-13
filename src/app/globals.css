@@ -25,6 +25,7 @@
   --motion-enter: 280ms;
   --motion-exit: 200ms;
   --press: 160ms;
+  --motion-quick: 150ms;
 
   /* Elevation, after Superlogical. Three notes only, and every one of them
      starts with a hairline ring instead of a border: an object is separated

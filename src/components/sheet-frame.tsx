@@ -98,6 +98,7 @@ function SheetFrameImpl({
   const session = useRef<DragSession | null>(null);
 
   const previousRect = useRef<DOMRect | null>(null);
+  const flip = useRef<Animation | null>(null);
   const wasFocused = useRef(focused);
 
   useIsomorphicLayoutEffect(() => {
@@ -114,7 +115,8 @@ function SheetFrameImpl({
     if (!toggled || !from || matches("(prefers-reduced-motion: reduce)")) return;
     if (!to.width || !to.height) return;
 
-    el.animate(
+    flip.current?.cancel();
+    flip.current = el.animate(
       [
         {
           transformOrigin: "top left",
@@ -153,6 +155,19 @@ function SheetFrameImpl({
     window.addEventListener("resize", measure);
     return () => window.removeEventListener("resize", measure);
   }, [focused]);
+
+  useEffect(() => {
+    const list = window.matchMedia(DRAGGABLE);
+    const sync = () => {
+      const el = frameRef.current;
+      if (!el) return;
+      el.style.translate = list.matches
+        ? `calc(-50% + ${drag.current.x}px) ${drag.current.y}px`
+        : "";
+    };
+    list.addEventListener("change", sync);
+    return () => list.removeEventListener("change", sync);
+  }, []);
 
   const heldFocus = useRef(false);
   useEffect(() => {
@@ -207,8 +222,7 @@ function SheetFrameImpl({
 
     const el = frameRef.current;
     if (!el) return;
-    el.style.setProperty("--sheet-dx", `${drag.current.x}px`);
-    el.style.setProperty("--sheet-dy", `${drag.current.y}px`);
+    el.style.translate = `calc(-50% + ${drag.current.x}px) ${drag.current.y}px`;
   }
 
   const frameClass = focused
@@ -218,7 +232,7 @@ function SheetFrameImpl({
         index > 0 ? "-mt-6 md:mt-0" : "",
         index % 2 ? "ml-[8%] md:ml-0" : "mr-[8%] md:mr-0",
         "md:absolute md:left-[var(--sheet-x)] md:top-[var(--sheet-y)] md:m-0 md:w-[var(--sheet-w)]",
-        "md:translate-x-[calc(-50%+var(--sheet-dx,0px))] md:translate-y-[var(--sheet-dy,0px)]",
+        "md:-translate-x-1/2",
         "md:touch-none",
         dragging ? "md:cursor-grabbing" : "md:cursor-grab",
       ].join(" ");
@@ -267,7 +281,7 @@ function SheetFrameImpl({
             "rounded-sm px-2 py-1",
             "text-[0.7rem] font-medium tracking-[0.01em]",
             "hover:bg-foreground/10 focus-visible:bg-foreground/10",
-            "transition-[opacity,background-color,scale] duration-200 ease-out-strong",
+            "transition-[opacity,background-color,scale] duration-(--motion-quick) ease-out-strong",
             "active:scale-[0.97] active:duration-(--press)",
             "after:absolute after:left-1/2 after:top-1/2 after:content-['']",
             "after:h-11 after:w-[max(100%+1.5rem,2.75rem)]",

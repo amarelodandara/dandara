@@ -100,11 +100,11 @@ export function GiftShop() {
               onClick={close}
               aria-label="Close gift shop"
               data-pressable
-              className="group -m-2 flex shrink-0 items-center gap-1.5 rounded-lg p-2 transition-[background-color,scale] duration-150 ease-out-strong hover:bg-white/45 focus-visible:bg-white/45 active:scale-[0.97] active:duration-(--press)"
+              className="group -m-2 flex shrink-0 items-center gap-1.5 rounded-lg p-2 transition-[background-color,scale] duration-(--motion-quick) ease-out-strong hover:bg-white/45 focus-visible:bg-white/45 active:scale-[0.97] active:duration-(--press)"
             >
               <span
                 aria-hidden="true"
-                className="text-[0.7rem] leading-none font-medium tracking-[0.01em] text-foreground-hard opacity-0 transition-opacity duration-150 group-hover:opacity-100 group-focus-visible:opacity-100"
+                className="text-[0.7rem] leading-none font-medium tracking-[0.01em] text-foreground-hard opacity-0 transition-opacity duration-(--motion-quick) ease-out-strong group-hover:opacity-100 group-focus-visible:opacity-100"
               >
                 Close
               </span>

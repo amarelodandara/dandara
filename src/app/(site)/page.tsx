@@ -56,7 +56,7 @@ export default function Home() {
                 <li key={title}>
                   <a
                     href={href}
-                    className="underline decoration-stone-400 decoration-[0.04em] underline-offset-[0.25em] transition-opacity hover:opacity-50"
+                    className="underline decoration-stone-400 decoration-[0.04em] underline-offset-[0.25em] transition-opacity duration-(--motion-quick) ease-out-strong hover:opacity-50"
                   >
                     {title}
                   </a>
@@ -82,7 +82,7 @@ export default function Home() {
                 <li key={label}>
                   <a
                     href={href}
-                    className="underline decoration-stone-400 decoration-[0.04em] underline-offset-[0.25em] transition-opacity hover:opacity-50"
+                    className="underline decoration-stone-400 decoration-[0.04em] underline-offset-[0.25em] transition-opacity duration-(--motion-quick) ease-out-strong hover:opacity-50"
                   >
                     {label}
                   </a>
@@ -223,7 +223,7 @@ export default function Home() {
           <p className="mt-3">
             <a
               href="https://linksamarelos.com"
-              className="underline decoration-stone-400 decoration-[0.04em] underline-offset-[0.25em] transition-opacity hover:opacity-50"
+              className="underline decoration-stone-400 decoration-[0.04em] underline-offset-[0.25em] transition-opacity duration-(--motion-quick) ease-out-strong hover:opacity-50"
             >
               linksamarelos.com
             </a>
@@ -245,7 +245,7 @@ export default function Home() {
           <p className="mt-3">
             <a
               href="https://open.spotify.com/show/043Gs7eyY2KOlotEWSTSxB?si=651fe644a3234022"
-              className="underline decoration-stone-400 decoration-[0.04em] underline-offset-[0.25em] transition-opacity hover:opacity-50"
+              className="underline decoration-stone-400 decoration-[0.04em] underline-offset-[0.25em] transition-opacity duration-(--motion-quick) ease-out-strong hover:opacity-50"
             >
               Listen on Spotify
             </a>

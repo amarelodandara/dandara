@@ -8,7 +8,7 @@ const COPIED_FOR = 1500;
 
 const ROW = [
   "group flex w-full rounded-lg px-3 py-3 text-left",
-  "transition-[background-color,scale] duration-150 ease-out-strong",
+  "transition-[background-color,scale] duration-(--motion-quick) ease-out-strong",
   "active:scale-[0.99] active:duration-(--press)",
   "hover:bg-white/45 focus-visible:bg-white/45",
   "focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-foreground/40",
@@ -35,7 +35,7 @@ function Verb({ children, shown }: { children: string; shown?: boolean }) {
       aria-hidden="true"
       className={[
         "shrink-0 self-center text-[0.7rem] text-foreground-hard",
-        "transition-opacity duration-150",
+        "transition-opacity duration-(--motion-quick) ease-out-strong",
         shown
           ? "opacity-100"
           : "opacity-0 group-hover:opacity-100 group-focus-visible:opacity-100",
@@ -185,7 +185,7 @@ function SwatchChip({
       data-pressable
       className={[
         `group mx-auto flex aspect-[3/4] ${CHIP_W} flex-col bg-white p-1 text-left`,
-        "shadow-chip transition-[opacity,scale] duration-150 ease-out-strong",
+        "shadow-chip transition-[opacity,scale] duration-(--motion-quick) ease-out-strong",
         "active:scale-[0.97] active:duration-(--press)",
         "hover:opacity-90 focus-visible:outline-2 focus-visible:outline-offset-2",
         "focus-visible:outline-foreground/40",
