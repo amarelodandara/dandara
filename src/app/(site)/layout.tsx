@@ -1,9 +1,14 @@
 import type { Metadata } from "next";
+import dynamic from "next/dynamic";
 import localFont from "next/font/local";
-import { Agentation } from "agentation";
 import { Colophon } from "@/components/colophon";
 import { GiftShop } from "@/components/gift-shop";
 import "../globals.css";
+
+const Agentation =
+  process.env.NODE_ENV === "development"
+    ? dynamic(() => import("agentation").then((mod) => mod.Agentation))
+    : null;
 
 const inter = localFont({
   src: [
@@ -30,9 +35,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
           <Colophon />
         </div>
 
-        {process.env.NODE_ENV === "development" && (
-          <Agentation endpoint="http://localhost:4747" />
-        )}
+        {Agentation ? <Agentation endpoint="http://localhost:4747" /> : null}
       </body>
     </html>
   );
