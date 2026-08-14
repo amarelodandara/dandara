@@ -19,7 +19,7 @@ const SUN_EDGE = "#ffcc00";
 const FEATURES = `"calt" 1, "cv06" 1, "cv10" 1, "ss01" 1, "ss02" 1, "ss03" 1, "zero" 1`;
 
 const CARD = { left: 33, top: 40, width: 293, height: 550, radius: 14 };
-const TEXT_LEFT = 364;
+const TEXT_LEFT = 378;
 
 const escape = (value: string) =>
   value.replaceAll("&", "&amp;").replaceAll("<", "&lt;").replaceAll(">", "&gt;");
@@ -63,21 +63,21 @@ function markup(font: string) {
       .text {
         position: absolute;
         left: ${TEXT_LEFT}px;
-        right: 64px;
-        bottom: 86px;
+        right: 120px;
+        bottom: 77px;
       }
       .title {
-        font-size: 88px;
+        font-size: 123px;
         font-weight: 700;
         line-height: 0.95;
-        letter-spacing: -0.035em;
+        letter-spacing: -0.03em;
         margin-left: -0.025em;
       }
       .role {
         margin-top: 0.35em;
-        font-size: 30px;
+        font-size: 44px;
         font-weight: 600;
-        line-height: 1.25;
+        line-height: 1.364;
         letter-spacing: -0.01em;
       }
     </style>
