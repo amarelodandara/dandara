@@ -20,9 +20,20 @@ const FEATURES = `"calt" 1, "cv06" 1, "cv10" 1, "ss01" 1, "ss02" 1, "ss03" 1, "z
 
 const CARD = { left: 33, top: 40, width: 293, height: 550, radius: 14 };
 const TEXT_LEFT = 378;
+const ROLE_SECOND_LINE = "and relentless taste";
 
 const escape = (value: string) =>
   value.replaceAll("&", "&amp;").replaceAll("<", "&lt;").replaceAll(">", "&gt;");
+
+function roleMarkup(description: string) {
+  if (!description.endsWith(ROLE_SECOND_LINE)) {
+    throw new Error(
+      `The role no longer ends with "${ROLE_SECOND_LINE}", so the card cannot place its line break. Update ROLE_SECOND_LINE to match src/lib/site.ts.`,
+    );
+  }
+  const first = description.slice(0, -ROLE_SECOND_LINE.length).trimEnd();
+  return `${escape(first)}<br />${escape(ROLE_SECOND_LINE)}`;
+}
 
 function markup(font: string) {
   return `<!doctype html>
@@ -63,7 +74,7 @@ function markup(font: string) {
       .text {
         position: absolute;
         left: ${TEXT_LEFT}px;
-        right: 120px;
+        right: 64px;
         bottom: 77px;
       }
       .title {
@@ -86,7 +97,7 @@ function markup(font: string) {
     <div class="card"></div>
     <div class="text">
       <div class="title">${escape(TITLE)}</div>
-      <div class="role">${escape(DESCRIPTION)}</div>
+      <div class="role">${roleMarkup(DESCRIPTION)}</div>
     </div>
   </body>
 </html>`;
