@@ -1,7 +1,6 @@
 import type { Metadata } from "next";
 import dynamic from "next/dynamic";
 import localFont from "next/font/local";
-import { Agentation } from "agentation";
 import { Analytics } from "@vercel/analytics/next";
 import { SpeedInsights } from "@vercel/speed-insights/next";
 import { Colophon } from "@/components/colophon";
@@ -60,9 +59,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
           <Colophon />
         </div>
 
-        {process.env.NODE_ENV === "development" && (
-          <Agentation endpoint="http://localhost:4747" />
-        )}
+        {Agentation ? <Agentation endpoint="http://localhost:4747" /> : null}
         <Analytics />
         <SpeedInsights />
       </body>
