@@ -10,20 +10,13 @@ export default function Home() {
         data-landing
         className=""
       >
-        {/* Title block — the vinyl lettering on the left of the wall. */}
         <header className="grid grid-cols-1 gap-12 md:grid-cols-2">
-          {/* Stacked below md, so the two blocks need their own gap; from md the
-              column stretches to the prose and pushes them to the edges. */}
           <div className="flex flex-col gap-12 md:h-full md:justify-between md:gap-0">
             <div className="h-fit">
-            {/* The D carries a left side bearing that scales with the type, so
-                at this size it reads as an indent against the line below. The
-                negative margin is in em, which cancels it at every step of the
-                clamp rather than only at the largest. */}
-            <h1 className="-ml-[0.025em] text-[clamp(3.25rem,8vw,7.5rem)] font-bold leading-[0.95] tracking-[-0.035em]">
+            <h1 className="ml-[-0.025em] text-[clamp(3.25rem,8vw,7.5rem)] leading-[0.95] font-bold tracking-[-0.035em]">
               Dandara
             </h1>
-            <p className=" mt-[0.35em] text-[1.05rem] font-semibold leading-tight">
+            <p className="mt-[0.35em] text-[1.05rem] leading-tight font-semibold">
               Product Designer
               </p>
             </div>
@@ -32,7 +25,7 @@ export default function Home() {
             <p className="text-[0.7rem] font-medium tracking-[0.01em] text-foreground-soft">
               Personal work
             </p>
-            <ul className="mt-2 text-[1.05rem] font-semibold leading-tight space-y-2">
+            <ul className="mt-2 space-y-2 text-[1.05rem] leading-tight font-semibold">
               {[
                 {
                   title: "In Service of Museums",
@@ -63,7 +56,7 @@ export default function Home() {
                 <li key={title}>
                   <a
                     href={href}
-                    className="underline decoration-stone-400 decoration-[0.04em] underline-offset-[0.25em] transition-opacity hover:opacity-50"
+                    className="underline decoration-stone-400 decoration-[0.04em] underline-offset-[0.25em] transition-opacity duration-(--motion-quick) ease-out-strong hover:opacity-50"
                   >
                     {title}
                   </a>
@@ -89,7 +82,7 @@ export default function Home() {
                 <li key={label}>
                   <a
                     href={href}
-                    className="underline decoration-stone-400 decoration-[0.04em] underline-offset-[0.25em] transition-opacity hover:opacity-50"
+                    className="underline decoration-stone-400 decoration-[0.04em] underline-offset-[0.25em] transition-opacity duration-(--motion-quick) ease-out-strong hover:opacity-50"
                   >
                     {label}
                   </a>
@@ -106,7 +99,7 @@ export default function Home() {
             </blockquote>
             <p className="mt-2 text-[0.85rem] text-foreground-soft">Charles Eames</p>
 
-            <div className="mt-10 space-y-5 text-[clamp(0.95rem,1.15vw,1.0625rem)] leading-[1.5]">
+            <div className="mt-10 space-y-5 text-[clamp(0.95rem,1.15vw,1.0625rem)] leading-normal">
               <p>
                 I am a designer with 5+ years of experience. I have designed for
                 companies, for myself, for other people. I have designed with
@@ -134,15 +127,11 @@ export default function Home() {
 
       </div>
 
-      {/* The pile never needs to change when the content does: each <Sheet> is
-          read for its props and its children, nothing else. */}
       <WorkPile>
         <Sheet id="stone" kind="professional" title="Stone Co." size="wide">
           <p className="text-[0.7rem] text-foreground-soft">2022 — 2026</p>
           <h3 className="mt-1 text-[1.05rem] font-semibold">Stone Co.</h3>
-          {/* The list is the argument, so it is set as one: a single column,
-              the card growing to hold it. */}
-          <ul className="mt-3 text-[0.9rem] font-semibold leading-[1.5]">
+          <ul className="mt-3 text-[0.9rem] leading-normal font-semibold">
             {[
               "Activation Flow",
               "Cancelation",
@@ -170,12 +159,6 @@ export default function Home() {
           title="Stone Co., on stage"
           size="wide"
         >
-          {/* Intrinsic size is the file's own, so Next can reserve the box and
-              serve a width that suits the sheet rather than the original 3024.
-              `clear-right` drops it below the floated Open button instead of
-              letting the button's hover ground land on the photograph, and
-              `pointer-events-none` hands every press to the card underneath, so
-              the image never competes with the drag. */}
           <Image
             src="/work/stone-talk.jpg"
             alt="Nicoly Dandara speaking into a microphone beside a projected slide of a Stone payment terminal running the app store."
@@ -183,7 +166,7 @@ export default function Home() {
             height={4032}
             sizes="(min-width: 768px) 24rem, 88vw"
             draggable={false}
-            className="clear-right mt-6 h-auto w-full select-none pointer-events-none"
+            className="pointer-events-none clear-right mt-6 h-auto w-full select-none"
           />
           <p className="mt-3 text-[0.7rem] text-foreground-soft">
             Presenting the Stone Terminal Store
@@ -210,7 +193,7 @@ export default function Home() {
             muted
             playsInline
             preload="metadata"
-            className="clear-right mt-6 aspect-[1956/1322] h-auto w-full select-none pointer-events-none"
+            className="pointer-events-none clear-right mt-6 aspect-1956/1322 h-auto w-full select-none"
           />
           <p className="mt-3">
             A service design framework for museum user experience: what the
@@ -227,10 +210,6 @@ export default function Home() {
         >
           <p className="text-[0.7rem] text-foreground-soft">Monthly newsletter</p>
           <h3 className="mt-1 text-[1.05rem] font-semibold">links amarelos</h3>
-          {/* Decoration, not media: muted and looping with no controls, so it
-              needs no transport and takes no press. `playsInline` keeps iOS
-              from throwing it into the fullscreen player, and the aspect ratio
-              reserves the box before the first frame arrives. */}
           <video
             src="/work/links-amarelos.mp4"
             aria-label="A screen recording of the links amarelos site: a yellow page promising monthly recommendations of texts, books, documentaries and things with no taxonomy yet."
@@ -239,12 +218,12 @@ export default function Home() {
             muted
             playsInline
             preload="metadata"
-            className="clear-right mt-6 aspect-[2166/1492] h-auto w-full select-none pointer-events-none"
+            className="pointer-events-none clear-right mt-6 aspect-2166/1492 h-auto w-full select-none"
           />
           <p className="mt-3">
             <a
               href="https://linksamarelos.com"
-              className="underline decoration-stone-400 decoration-[0.04em] underline-offset-[0.25em] transition-opacity hover:opacity-50"
+              className="underline decoration-stone-400 decoration-[0.04em] underline-offset-[0.25em] transition-opacity duration-(--motion-quick) ease-out-strong hover:opacity-50"
             >
               linksamarelos.com
             </a>
@@ -261,12 +240,12 @@ export default function Home() {
             height={2000}
             sizes="(min-width: 768px) 18rem, 88vw"
             draggable={false}
-            className="clear-right mt-6 h-auto w-full select-none pointer-events-none"
+            className="pointer-events-none clear-right mt-6 h-auto w-full select-none"
           />
           <p className="mt-3">
             <a
               href="https://open.spotify.com/show/043Gs7eyY2KOlotEWSTSxB?si=651fe644a3234022"
-              className="underline decoration-stone-400 decoration-[0.04em] underline-offset-[0.25em] transition-opacity hover:opacity-50"
+              className="underline decoration-stone-400 decoration-[0.04em] underline-offset-[0.25em] transition-opacity duration-(--motion-quick) ease-out-strong hover:opacity-50"
             >
               Listen on Spotify
             </a>
@@ -287,7 +266,7 @@ export default function Home() {
             height={1000}
             sizes="(min-width: 768px) 18rem, 88vw"
             draggable={false}
-            className="clear-right mt-6 h-auto w-full select-none pointer-events-none"
+            className="pointer-events-none clear-right mt-6 h-auto w-full select-none"
           />
         </Sheet>
 
@@ -306,7 +285,7 @@ export default function Home() {
             height={1446}
             sizes="(min-width: 768px) 24rem, 88vw"
             draggable={false}
-            className="clear-right mt-6 h-auto w-full select-none pointer-events-none"
+            className="pointer-events-none clear-right mt-6 h-auto w-full select-none"
           />
         </Sheet>
       </WorkPile>

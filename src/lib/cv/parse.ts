@@ -1,16 +1,5 @@
-/**
- * A parser for the one document shape the résumé uses, and nothing else.
- *
- * The grammar is six constructs — a `##` section, a `###` entry, the bare meta
- * line under an entry, `-` bullets, paragraphs, and two inline forms. A general
- * markdown library would accept a great deal more and quietly render whatever
- * it was given; here, anything unrecognised throws with a file and a line.
- *
- * That strictness is the feature. These files are written by an agent working
- * unattended, and the failure it protects against is not a crash — it is a
- * stray `**` reaching a PDF that a recruiter opens.
- */
-
+import { CvParseError } from "./error";
+import { parseInline } from "./inline";
 import type {
   CvDoc,
   CvEntry,
@@ -21,10 +10,14 @@ import type {
   PageSize,
 } from "./types";
 
+export { CvParseError } from "./error";
+
 const LANGS: CvLang[] = ["en", "pt"];
 const PAGE_SIZES: PageSize[] = ["letter", "a4"];
 
-/** Markdown this grammar does not have, listed so the error can name it. */
+const SECTION_LEVEL = 2;
+const ENTRY_LEVEL = 3;
+
 const BANNED_INLINE: [RegExp, string][] = [
   [/`/, "code spans"],
   [/!\[/, "images"],
@@ -34,17 +27,6 @@ const BANNED_INLINE: [RegExp, string][] = [
   [/^\s*\d+\.\s/, "numbered lists"],
 ];
 
-export class CvParseError extends Error {
-  constructor(file: string, line: number, message: string) {
-    super(`${file}:${line} — ${message}`);
-    this.name = "CvParseError";
-  }
-}
-
-/**
- * Parses a résumé document. `file` is only ever used to make errors locatable,
- * so callers pass whatever path the reader would recognise.
- */
 export function parseCv(source: string, file: string): CvDoc {
   const { meta, body, bodyOffset } = parseFrontmatter(source, file);
   const sections = parseBody(body, file, bodyOffset);
@@ -56,15 +38,6 @@ export function parseCv(source: string, file: string): CvDoc {
   return { meta, sections };
 }
 
-/* -------------------------------------------------------------------------- */
-/* Frontmatter                                                                */
-/* -------------------------------------------------------------------------- */
-
-/**
- * JSON rather than YAML, and deliberately. `JSON.parse` needs no dependency and
- * fails loudly on a malformed edit, where a hand-rolled YAML subset would
- * cheerfully mis-read a colon inside a job title and carry on.
- */
 function parseFrontmatter(
   source: string,
   file: string,
@@ -92,244 +65,235 @@ function parseFrontmatter(
   return {
     meta: validateMeta(parsed, file),
     body: lines.slice(close + 1).join("\n"),
-    // Every body line number is reported against the original file.
     bodyOffset: close + 1,
   };
 }
 
-function validateMeta(value: unknown, file: string): CvMeta {
-  const fail = (message: string): never => {
-    throw new CvParseError(file, 2, `frontmatter ${message}`);
-  };
+type Frontmatter = { raw: Record<string, unknown>; file: string };
 
-  if (typeof value !== "object" || value === null || Array.isArray(value)) {
-    return fail("must be a JSON object");
+const FRONTMATTER_LINE = 2;
+
+const reject = (source: Frontmatter, message: string): never => {
+  throw new CvParseError(source.file, FRONTMATTER_LINE, `frontmatter ${message}`);
+};
+
+function readString(source: Frontmatter, key: string): string {
+  const value = source.raw[key];
+  if (typeof value !== "string" || value.trim() === "") {
+    return reject(source, `\`${key}\` must be a non-empty string`);
   }
-  const raw = value as Record<string, unknown>;
+  return value;
+}
 
-  const str = (key: string): string => {
-    const v = raw[key];
-    if (typeof v !== "string" || v.trim() === "") {
-      return fail(`\`${key}\` must be a non-empty string`);
-    }
-    return v;
-  };
-
-  const lang = raw.lang;
+function readLang(source: Frontmatter): CvLang {
+  const lang = source.raw.lang;
   if (typeof lang !== "string" || !LANGS.includes(lang as CvLang)) {
-    return fail(`\`lang\` must be one of ${LANGS.join(", ")}`);
+    return reject(source, `\`lang\` must be one of ${LANGS.join(", ")}`);
   }
+  return lang as CvLang;
+}
 
-  const pageSize = raw.pageSize;
-  if (
-    typeof pageSize !== "string" ||
-    !PAGE_SIZES.includes(pageSize as PageSize)
-  ) {
-    return fail(`\`pageSize\` must be one of ${PAGE_SIZES.join(", ")}`);
+function readPageSize(source: Frontmatter): PageSize {
+  const pageSize = source.raw.pageSize;
+  if (typeof pageSize !== "string" || !PAGE_SIZES.includes(pageSize as PageSize)) {
+    return reject(source, `\`pageSize\` must be one of ${PAGE_SIZES.join(", ")}`);
   }
+  return pageSize as PageSize;
+}
 
-  const contact = raw.contact;
+function readContact(source: Frontmatter): string[] {
+  const contact = source.raw.contact;
   if (
     !Array.isArray(contact) ||
     contact.length === 0 ||
-    contact.some((c) => typeof c !== "string" || c.trim() === "")
+    contact.some((entry) => typeof entry !== "string" || entry.trim() === "")
   ) {
-    return fail("`contact` must be a non-empty array of non-empty strings");
+    return reject(source, "`contact` must be a non-empty array of non-empty strings");
   }
+  return contact as string[];
+}
+
+function validateMeta(value: unknown, file: string): CvMeta {
+  if (typeof value !== "object" || value === null || Array.isArray(value)) {
+    throw new CvParseError(
+      file,
+      FRONTMATTER_LINE,
+      "frontmatter must be a JSON object",
+    );
+  }
+
+  const source: Frontmatter = { raw: value as Record<string, unknown>, file };
+
+  const lang = readLang(source);
+  const pageSize = readPageSize(source);
+  const contact = readContact(source);
 
   return {
-    lang: lang as CvLang,
-    name: str("name"),
-    title: str("title"),
-    contact: contact as string[],
-    pageSize: pageSize as PageSize,
+    lang,
+    name: readString(source, "name"),
+    title: readString(source, "title"),
+    contact,
+    pageSize,
   };
 }
 
-/* -------------------------------------------------------------------------- */
-/* Body                                                                       */
-/* -------------------------------------------------------------------------- */
+type Body = {
+  file: string;
+  offset: number;
+  sections: CvSection[];
+  section?: CvSection;
+  entry?: CvEntry;
+  expectMeta: boolean;
+  metaSlot: boolean;
+  paragraph: string[];
+  bullets: Inline[][];
+  index: number;
+  trimmed: string;
+};
 
-function parseBody(body: string, file: string, offset: number): CvSection[] {
-  const sections: CvSection[] = [];
-  const lines = body.split("\n");
+const at = (body: Body) => body.offset + body.index + 1;
 
-  let section: CvSection | undefined;
-  let entry: CvEntry | undefined;
-  /** Set for exactly one line after a `###`, which is where meta may appear. */
-  let expectMeta = false;
-  let paragraph: string[] = [];
-  let bullets: Inline[][] = [];
+const fail = (body: Body, message: string) =>
+  new CvParseError(body.file, at(body), message);
 
-  const lineNo = (i: number) => offset + i + 1;
-
-  const flushParagraph = (i: number) => {
-    if (paragraph.length === 0) return;
-    const text = paragraph.join(" ");
-    paragraph = [];
-    if (!section) throw new CvParseError(file, lineNo(i), "text before any `##` section");
-    section.blocks.push({ t: "paragraph", content: parseInline(text, file, lineNo(i)) });
-  };
-
-  const flushBullets = () => {
-    if (bullets.length === 0) return;
-    // Bullets belong to the entry they follow; a section can also carry a bare
-    // list, which is how Projects is written.
-    if (entry) entry.bullets.push(...bullets);
-    else section?.blocks.push({ t: "bullets", items: bullets });
-    bullets = [];
-  };
-
-  const flushEntry = () => {
-    flushBullets();
-    if (entry && section) section.entries.push(entry);
-    entry = undefined;
-  };
-
-  const flushSection = (i: number) => {
-    flushParagraph(i);
-    flushEntry();
-    if (section) sections.push(section);
-    section = undefined;
-  };
-
-  for (let i = 0; i < lines.length; i++) {
-    const line = lines[i];
-    const trimmed = line.trim();
-    const at = lineNo(i);
-
-    // The meta line is positional: it is whatever sits on the line right after
-    // a `###`. Missing it is fine; anything else on that line is handled below.
-    const metaSlot = expectMeta;
-    expectMeta = false;
-
-    if (trimmed === "") {
-      flushParagraph(i);
-      flushBullets();
-      continue;
-    }
-
-    for (const [pattern, name] of BANNED_INLINE) {
-      if (pattern.test(trimmed)) {
-        throw new CvParseError(file, at, `this grammar has no ${name}`);
-      }
-    }
-
-    if (trimmed.startsWith("#")) {
-      const hashes = trimmed.match(/^#+/)![0].length;
-      const rest = trimmed.slice(hashes).trim();
-
-      if (hashes === 2) {
-        flushSection(i);
-        if (rest === "") throw new CvParseError(file, at, "`##` section has no heading");
-        section = { heading: rest, blocks: [], entries: [] };
-        continue;
-      }
-
-      if (hashes === 3) {
-        if (!section) throw new CvParseError(file, at, "`###` entry outside any `##` section");
-        flushParagraph(i);
-        flushEntry();
-        if (rest === "") throw new CvParseError(file, at, "`###` entry has no heading");
-        entry = { heading: parseInline(rest, file, at), bullets: [] };
-        expectMeta = true;
-        continue;
-      }
-
-      throw new CvParseError(
-        file,
-        at,
-        `only \`##\` and \`###\` headings exist here, found \`${"#".repeat(hashes)}\``,
-      );
-    }
-
-    if (trimmed.startsWith("- ")) {
-      flushParagraph(i);
-      const text = trimmed.slice(2).trim();
-      if (text === "") throw new CvParseError(file, at, "empty bullet");
-      bullets.push(parseInline(text, file, at));
-      continue;
-    }
-
-    if (trimmed === "-" || trimmed.startsWith("-\t")) {
-      throw new CvParseError(file, at, "bullets are written `- ` with a space");
-    }
-
-    // A plain line. Directly under a `###` it is the entry's place-and-dates;
-    // anywhere else it is prose.
-    if (metaSlot && entry) {
-      entry.meta = trimmed;
-      continue;
-    }
-
-    if (entry) {
-      throw new CvParseError(
-        file,
-        at,
-        "an entry takes one meta line and then bullets — prose here would not be rendered",
-      );
-    }
-
-    paragraph.push(trimmed);
-  }
-
-  flushSection(lines.length - 1);
-  return sections;
+function flushParagraph(body: Body) {
+  if (body.paragraph.length === 0) return;
+  const text = body.paragraph.join(" ");
+  body.paragraph = [];
+  if (!body.section) throw fail(body, "text before any `##` section");
+  body.section.blocks.push({
+    t: "paragraph",
+    content: parseInline(text, { file: body.file, line: at(body) }),
+  });
 }
 
-/* -------------------------------------------------------------------------- */
-/* Inline                                                                     */
-/* -------------------------------------------------------------------------- */
-
-/** Bare URLs only. Trailing sentence punctuation is not part of the address. */
-const URL = /https?:\/\/[^\s)]+/g;
-
-export function parseInline(text: string, file: string, line: number): Inline[] {
-  const out: Inline[] = [];
-
-  let rest = text;
-  while (rest.length > 0) {
-    const open = rest.indexOf("**");
-    if (open === -1) {
-      pushText(out, rest, file, line);
-      break;
-    }
-
-    const close = rest.indexOf("**", open + 2);
-    if (close === -1) {
-      throw new CvParseError(file, line, "unclosed `**`");
-    }
-
-    pushText(out, rest.slice(0, open), file, line);
-
-    const bold = rest.slice(open + 2, close);
-    if (bold.trim() === "") throw new CvParseError(file, line, "empty `**` pair");
-    out.push({ t: "bold", v: bold });
-
-    rest = rest.slice(close + 2);
-  }
-
-  return out;
+function flushBullets(body: Body) {
+  if (body.bullets.length === 0) return;
+  if (body.entry) body.entry.bullets.push(...body.bullets);
+  else body.section?.blocks.push({ t: "bullets", items: body.bullets });
+  body.bullets = [];
 }
 
-/** Splits a run of plain text around any bare URLs it contains. */
-function pushText(out: Inline[], text: string, file: string, line: number) {
-  if (text === "") return;
+function flushEntry(body: Body) {
+  flushBullets(body);
+  if (body.entry && body.section) body.section.entries.push(body.entry);
+  body.entry = undefined;
+}
 
-  let last = 0;
-  for (const match of text.matchAll(URL)) {
-    const start = match.index;
-    // Strip punctuation that ended the sentence rather than the address.
-    const href = match[0].replace(/[.,;:]+$/, "");
+function flushSection(body: Body) {
+  flushParagraph(body);
+  flushEntry(body);
+  if (body.section) body.sections.push(body.section);
+  body.section = undefined;
+}
 
-    if (start > last) out.push({ t: "text", v: text.slice(last, start) });
-    out.push({ t: "link", v: href, href });
-    last = start + href.length;
+function rejectBanned(body: Body) {
+  for (const [pattern, name] of BANNED_INLINE) {
+    if (pattern.test(body.trimmed)) throw fail(body, `this grammar has no ${name}`);
+  }
+}
+
+function openSection(body: Body, heading: string) {
+  flushSection(body);
+  if (heading === "") throw fail(body, "`##` section has no heading");
+  body.section = { heading, blocks: [], entries: [] };
+}
+
+function openEntry(body: Body, heading: string) {
+  if (!body.section) throw fail(body, "`###` entry outside any `##` section");
+  flushParagraph(body);
+  flushEntry(body);
+  if (heading === "") throw fail(body, "`###` entry has no heading");
+  body.entry = {
+    heading: parseInline(heading, { file: body.file, line: at(body) }),
+    bullets: [],
+  };
+  body.expectMeta = true;
+}
+
+function consumeHeading(body: Body) {
+  const hashes = body.trimmed.match(/^#+/)![0].length;
+  const heading = body.trimmed.slice(hashes).trim();
+
+  if (hashes === SECTION_LEVEL) return openSection(body, heading);
+  if (hashes === ENTRY_LEVEL) return openEntry(body, heading);
+
+  throw fail(
+    body,
+    `only \`##\` and \`###\` headings exist here, found \`${"#".repeat(hashes)}\``,
+  );
+}
+
+function consumeBullet(body: Body) {
+  if (body.trimmed.startsWith("- ")) {
+    flushParagraph(body);
+    const text = body.trimmed.slice(2).trim();
+    if (text === "") throw fail(body, "empty bullet");
+    body.bullets.push(parseInline(text, { file: body.file, line: at(body) }));
+    return true;
   }
 
-  if (last < text.length) {
-    const tail = text.slice(last);
-    if (tail.includes("**")) throw new CvParseError(file, line, "unclosed `**`");
-    out.push({ t: "text", v: tail });
+  if (body.trimmed === "-" || body.trimmed.startsWith("-\t")) {
+    throw fail(body, "bullets are written `- ` with a space");
   }
+
+  return false;
+}
+
+function consumeProse(body: Body) {
+  if (body.metaSlot && body.entry) {
+    body.entry.meta = body.trimmed;
+    return;
+  }
+
+  if (body.entry) {
+    throw fail(
+      body,
+      "an entry takes one meta line and then bullets — prose here would not be rendered",
+    );
+  }
+
+  body.paragraph.push(body.trimmed);
+}
+
+function consumeLine(body: Body) {
+  if (body.trimmed === "") {
+    flushParagraph(body);
+    flushBullets(body);
+    return;
+  }
+
+  rejectBanned(body);
+
+  if (body.trimmed.startsWith("#")) return consumeHeading(body);
+  if (consumeBullet(body)) return;
+
+  consumeProse(body);
+}
+
+function parseBody(source: string, file: string, offset: number): CvSection[] {
+  const lines = source.split("\n");
+  const body: Body = {
+    file,
+    offset,
+    sections: [],
+    expectMeta: false,
+    metaSlot: false,
+    paragraph: [],
+    bullets: [],
+    index: 0,
+    trimmed: "",
+  };
+
+  for (const [index, line] of lines.entries()) {
+    body.index = index;
+    body.trimmed = line.trim();
+    body.metaSlot = body.expectMeta;
+    body.expectMeta = false;
+    consumeLine(body);
+  }
+
+  body.index = lines.length - 1;
+  flushSection(body);
+  return body.sections;
 }

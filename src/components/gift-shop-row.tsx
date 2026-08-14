@@ -4,30 +4,22 @@ import Image from "next/image";
 import { useEffect, useRef, useState } from "react";
 import type { GiftShopItem } from "@/content/gift-shop";
 
-/** How long the copy button admits to having worked. */
 const COPIED_FOR = 1500;
 
-/**
- * A rounded well that fills on hover, after Arc's Library. No borders anywhere —
- * the fill is the state. Hit targets clear 44px through padding alone, so
- * nothing here needs the expanded-target treatment the work sheets use.
- */
 const ROW = [
   "group flex w-full rounded-lg px-3 py-3 text-left",
-  "transition-colors duration-150",
-  // Lighter than the shelf rather than darker: the row lifts towards the light
-  // on hover instead of being pressed into the yellow.
+  "transition-[background-color,scale] duration-(--motion-quick) ease-out-strong",
+  "active:scale-[0.99] active:duration-(--press)",
   "hover:bg-white/45 focus-visible:bg-white/45",
   "focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-foreground/40",
 ].join(" ");
 
-/** Every item with a preview is a portrait crop, so the frames all agree. */
 const CHIP_W = "w-[9.5rem]";
 
 function Label({ title, meta }: { title: string; meta: string }) {
   return (
     <span className="min-w-0 flex-1">
-      <span className="block text-[0.9rem] font-semibold leading-tight">
+      <span className="block text-[0.9rem] leading-tight font-semibold">
         {title}
       </span>
       <span className="mt-0.5 block text-[0.7rem] leading-tight text-foreground-hard">
@@ -37,18 +29,13 @@ function Label({ title, meta }: { title: string; meta: string }) {
   );
 }
 
-/**
- * Names the outcome rather than the gesture, so the row says what it will do
- * before it is pressed. Centred against the label instead of pinned to its
- * first line — the label is two lines and the verb belongs to both.
- */
 function Verb({ children, shown }: { children: string; shown?: boolean }) {
   return (
     <span
       aria-hidden="true"
       className={[
         "shrink-0 self-center text-[0.7rem] text-foreground-hard",
-        "transition-opacity duration-150",
+        "transition-opacity duration-(--motion-quick) ease-out-strong",
         shown
           ? "opacity-100"
           : "opacity-0 group-hover:opacity-100 group-focus-visible:opacity-100",
@@ -59,7 +46,6 @@ function Verb({ children, shown }: { children: string; shown?: boolean }) {
   );
 }
 
-/** The white frame is what turns a file into an object rather than a list row. */
 function Preview({
   preview,
 }: {
@@ -75,7 +61,7 @@ function Preview({
         width={preview.width}
         height={preview.height}
         sizes="152px"
-        className="block aspect-[3/4] w-full object-cover"
+        className="block aspect-3/4 w-full object-cover"
       />
     </span>
   );
@@ -83,17 +69,23 @@ function Preview({
 
 export function GiftShopRow({ item }: { item: GiftShopItem }) {
   if (item.kind === "swatch") {
-    return <SwatchChip title={item.title} meta={item.meta} hex={item.hex} />;
+    return (
+      <SwatchChip
+        title={item.title}
+        meta={item.meta}
+        hex={item.hex}
+        fill={item.fill}
+      />
+    );
   }
 
   if (item.kind === "file") {
-    /* With a preview the row turns vertical: the image leads at a size worth
-       looking at, and the naming follows underneath it. */
     if (item.preview) {
       return (
         <a
           href={item.href}
           download={item.download}
+          data-pressable
           className={`${ROW} flex-col items-start gap-2`}
         >
           <Preview preview={item.preview} />
@@ -109,6 +101,7 @@ export function GiftShopRow({ item }: { item: GiftShopItem }) {
       <a
         href={item.href}
         download={item.download}
+        data-pressable
         className={`${ROW} items-center gap-3`}
       >
         <Label title={item.title} meta={item.meta} />
@@ -138,7 +131,6 @@ function CopyRow({
     try {
       await navigator.clipboard.writeText(text);
     } catch {
-      // Denied permission or an insecure origin. Say nothing rather than lie.
       return;
     }
     setCopied(true);
@@ -150,6 +142,7 @@ function CopyRow({
     <button
       type="button"
       onClick={copy}
+      data-pressable
       className={`${ROW} items-center gap-3`}
     >
       <Label title={title} meta={copied ? "Copied" : meta} />
@@ -158,19 +151,16 @@ function CopyRow({
   );
 }
 
-/**
- * A Pantone chip: the colour on top, the code on the card below it. The white
- * card is doing real work rather than decoration — the swatch is the same
- * yellow as the panel it sits on, so without a frame there is nothing to see.
- */
 function SwatchChip({
   title,
   meta,
   hex,
+  fill,
 }: {
   title: string;
   meta: string;
   hex: string;
+  fill: string;
 }) {
   const [copied, setCopied] = useState(false);
   const timer = useRef<ReturnType<typeof setTimeout> | undefined>(undefined);
@@ -192,20 +182,18 @@ function SwatchChip({
     <button
       type="button"
       onClick={copy}
+      data-pressable
       className={[
         `group mx-auto flex aspect-[3/4] ${CHIP_W} flex-col bg-white p-1 text-left`,
-        "shadow-chip transition-opacity duration-150",
+        "shadow-chip transition-[opacity,scale] duration-(--motion-quick) ease-out-strong",
+        "active:scale-[0.97] active:duration-(--press)",
         "hover:opacity-90 focus-visible:outline-2 focus-visible:outline-offset-2",
         "focus-visible:outline-foreground/40",
       ].join(" ")}
     >
-      <span
-        aria-hidden="true"
-        className="block w-full flex-1"
-        style={{ backgroundColor: hex }}
-      />
-      <span className="block px-2 pb-1 pt-2">
-        <span className="block text-[0.7rem] font-semibold leading-tight">
+      <span aria-hidden="true" className={`block w-full flex-1 ${fill}`} />
+      <span className="block px-2 pt-2 pb-1">
+        <span className="block text-[0.7rem] leading-tight font-semibold">
           {title}
         </span>
         <span className="mt-0.5 block text-[0.7rem] leading-tight text-foreground-soft">

@@ -7,10 +7,13 @@
     "build": "next build",
     "start": "next start",
     "lint": "eslint",
+    "lint:strict": "eslint --max-warnings 0",
+    "typecheck": "tsc --noEmit",
     "cv:pdf": "node scripts/cv-pdf.mts",
     "cv:verify": "node scripts/cv-verify.mts",
     "cv:score": "node scripts/cv-score.mts",
-    "cv:base": "node scripts/cv-pdf.mts --variant base --lang en --out public/gift-shop/cv-en.pdf && node scripts/cv-pdf.mts --variant base --lang pt --out public/gift-shop/cv-pt.pdf"
+    "cv:base": "node scripts/cv-pdf.mts --variant base --lang en --out public/gift-shop/cv-en.pdf && node scripts/cv-pdf.mts --variant base --lang pt --out public/gift-shop/cv-pt.pdf",
+    "og:image": "node scripts/og-image.mts"
   },
   "dependencies": {
     "@vercel/analytics": "^2.0.1",
@@ -27,6 +30,10 @@
     "@types/react-dom": "^19",
     "eslint": "^9",
     "eslint-config-next": "16.3.0",
+    "eslint-plugin-better-tailwindcss": "^4.7.0",
+    "eslint-plugin-security": "^4.0.1",
+    "eslint-plugin-sonarjs": "^4.2.0",
+    "eslint-plugin-unicorn": "^65.0.1",
     "playwright": "^1.62.1",
     "tailwindcss": "^4",
     "typescript": "^5",

@@ -1,11 +1,17 @@
 import type { Metadata } from "next";
+import dynamic from "next/dynamic";
 import localFont from "next/font/local";
-import { Agentation } from "agentation";
 import { Analytics } from "@vercel/analytics/next";
 import { SpeedInsights } from "@vercel/speed-insights/next";
 import { Colophon } from "@/components/colophon";
 import { GiftShop } from "@/components/gift-shop";
+import { DESCRIPTION, NAME, SITE_URL, TITLE } from "@/lib/site";
 import "../globals.css";
+
+const Agentation =
+  process.env.NODE_ENV === "development"
+    ? dynamic(() => import("agentation").then((mod) => mod.Agentation))
+    : null;
 
 const inter = localFont({
   src: [
@@ -17,35 +23,43 @@ const inter = localFont({
 });
 
 export const metadata: Metadata = {
-  title: "Dandara",
-  description: "Portfolio",
+  metadataBase: new URL(SITE_URL),
+  title: { default: TITLE, template: `%s — ${NAME}` },
+  description: DESCRIPTION,
+  applicationName: NAME,
+  authors: [{ name: NAME, url: SITE_URL }],
+  creator: NAME,
+  alternates: { canonical: "/" },
+  openGraph: {
+    type: "profile",
+    firstName: "Nicoly",
+    lastName: "Dandara",
+    username: "amarelodandara",
+    url: SITE_URL,
+    siteName: NAME,
+    title: TITLE,
+    description: DESCRIPTION,
+    locale: "en_US",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: TITLE,
+    description: DESCRIPTION,
+  },
 };
 
-/**
- * The site's root layout. It sits in a route group so that `/cv` can have a
- * root of its own — the résumé is printed to PDF and read by a machine, and
- * everything here (Inter's variant glyphs, the yellow ground, the shop) is
- * hostile to that. Groups leave the URLs alone: this is still `/`.
- */
 export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
     <html lang="en" className={`${inter.variable} h-full antialiased`}>
       <body className="min-h-full">
-        {/* Under the page, permanently. The plane above it is opaque. */}
         <GiftShop />
 
-        {/* The page plane. Opaque, and the thing that slides aside. The
-            colophon lives here rather than in a route, so every page ends on
-            the same label. `main` carries flex-1, so it stays pinned to the
-            bottom on short pages. */}
         <div data-page className="relative z-10 flex min-h-full flex-col bg-background">
           {children}
           <Colophon />
         </div>
 
-        {process.env.NODE_ENV === "development" && (
-          <Agentation endpoint="http://localhost:4747" />
-        )}
+        {Agentation ? <Agentation endpoint="http://localhost:4747" /> : null}
         <Analytics />
         <SpeedInsights />
       </body>

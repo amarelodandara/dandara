@@ -1,28 +1,15 @@
 import type { CvBlock, CvDoc, CvEntry, Inline } from "@/lib/cv/types";
 
-/** Chrome's paginator reads this, and `preferCSSPageSize` makes it authoritative. */
 const PAGE_SIZE: Record<CvDoc["meta"]["pageSize"], string> = {
   letter: "Letter",
   a4: "A4",
 };
 
-/**
- * The résumé, rendered as the plainest document that can carry it.
- *
- * Every choice here is made for the machine that reads it first. A single
- * column, because Chrome emits PDF text in layout order and anything that
- * reorders visually reorders the extracted text too. Real headings and a real
- * list, because a parser looks for them. No table, no image, no rule, no
- * colour.
- */
 export function CvDocument({ doc }: { doc: CvDoc }) {
   const { meta, sections } = doc;
 
   return (
     <>
-      {/* Page geometry belongs to the document, not the generator: the English
-          CV is Letter and the Portuguese one A4, and `@page` is the only place
-          that can be said. Emitted inline because it varies per document. */}
       <style
         dangerouslySetInnerHTML={{
           __html: `@page { size: ${PAGE_SIZE[meta.pageSize]}; margin: 12mm 14mm; }`,
@@ -33,9 +20,6 @@ export function CvDocument({ doc }: { doc: CvDoc }) {
         <header className="cv-head">
           <h1 className="cv-name">{meta.name}</h1>
           <p className="cv-role">{meta.title}</p>
-          {/* Joined with a pipe rather than a middot: the separator ends up in
-              the extracted text, and a non-ASCII one can be glued to the token
-              beside it by a less careful parser. */}
           <p className="cv-contact">{meta.contact.join(" | ")}</p>
         </header>
 
@@ -95,8 +79,6 @@ function Runs({ runs }: { runs: Inline[] }) {
     <>
       {runs.map((run, i) => {
         if (run.t === "bold") return <strong key={i}>{run.v}</strong>;
-        // Rendered as a link so the PDF is clickable, but styled as plain text
-        // and printed in full — the address is the useful part on paper.
         if (run.t === "link")
           return (
             <a key={i} href={run.href}>

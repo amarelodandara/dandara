@@ -18,6 +18,7 @@ import {
   openOverlay,
   useActiveOverlay,
 } from "@/lib/exclusive-overlay";
+import { useKeydown } from "@/lib/keydown";
 
 const OVERLAY_ID = "work-pile";
 
@@ -29,10 +30,6 @@ type Item = {
   content: ReactNode;
 };
 
-/**
- * Reads `<Sheet>` props off the children rather than owning any content. A child
- * without the props a sheet needs is skipped, so nothing renders half-formed.
- */
 function readSheets(children: ReactNode): Item[] {
   return Children.toArray(children).flatMap((child) => {
     if (!isValidElement(child)) return [];
@@ -69,9 +66,6 @@ export function WorkPile({
     [items],
   );
 
-  // Which sheet is local; whether the pile owns the screen at all is shared.
-  // Gating one on the other is a derivation rather than an effect, so being
-  // evicted by the gift shop needs no synchronising.
   const [requestedId, setRequestedId] = useState<string | null>(null);
   const active = useActiveOverlay();
   const focusedId = active === OVERLAY_ID ? requestedId : null;
@@ -98,19 +92,16 @@ export function WorkPile({
 
   const close = useCallback(() => closeOverlay(OVERLAY_ID), []);
 
-  // Everything outside the pile dims and drops out of the tab order. The blur
-  // is applied per element rather than to a shared ancestor, because a filter on
-  // an ancestor would blur the focused sheet too and trap its fixed positioning.
   useEffect(() => {
     const outside = document.querySelectorAll<HTMLElement>("[data-dim-on-focus]");
     const clear = () => {
-      document.body.removeAttribute("data-sheet-focused");
-      outside.forEach((el) => el.removeAttribute("inert"));
+      delete document.body.dataset.sheetFocused;
+      for (const el of outside) el.removeAttribute("inert");
     };
 
     if (focusedId) {
-      document.body.setAttribute("data-sheet-focused", "");
-      outside.forEach((el) => el.setAttribute("inert", ""));
+      document.body.dataset.sheetFocused = "";
+      for (const el of outside) el.setAttribute("inert", "");
     } else {
       clear();
     }
@@ -118,26 +109,14 @@ export function WorkPile({
     return clear;
   }, [focusedId]);
 
-  useEffect(() => {
-    if (!focusedId) return;
-    const onKeyDown = (event: KeyboardEvent) => {
-      if (event.key === "Escape") closeOverlay(OVERLAY_ID);
-    };
-    window.addEventListener("keydown", onKeyDown);
-    return () => window.removeEventListener("keydown", onKeyDown);
-  }, [focusedId]);
+  useKeydown((event) => {
+    if (focusedId && event.key === "Escape") closeOverlay(OVERLAY_ID);
+  });
 
   return (
-    // No `min-h-screen` here: the canvas below already reserves the room the
-    // scattered sheets need, and stretching to the viewport on top of that left
-    // a dead band above the colophon. The bottom padding plus the colophon's
-    // own `pt-[6vh]` matches the 18vh the pile takes from the landing.
     <section id="work" className="relative mt-[18vh] pb-[12vh]">
-      {/* `leading-none` on both halves is what makes the centring optical: with
-          body line-height the boxes would centre their leading rather than
-          their glyphs, and the two sizes carry different amounts of it. */}
       <div className="flex items-center justify-between gap-6">
-        <h2 className="text-[0.7rem] font-medium leading-none tracking-[0.01em] text-foreground-soft">
+        <h2 className="text-[0.7rem] leading-none font-medium tracking-[0.01em] text-foreground-soft">
           {label}
         </h2>
         <p className="text-[0.85rem] leading-none text-foreground-soft">
@@ -145,7 +124,7 @@ export function WorkPile({
         </p>
       </div>
 
-      <div className="relative mt-10 flex flex-col md:mt-16 md:block md:min-h-[46rem]">
+      <div className="relative mt-10 flex flex-col md:mt-16 md:block md:min-h-184">
         {items.map((item, index) => (
           <SheetFrame
             key={item.id}
@@ -167,13 +146,13 @@ export function WorkPile({
         ))}
       </div>
 
-      {focusedId && (
+      {focusedId ? (
         <div
           aria-hidden="true"
           onClick={close}
           className="fixed inset-0 z-50 bg-background/40"
         />
-      )}
+      ) : null}
     </section>
   );
 }
