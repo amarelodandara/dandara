@@ -1,10 +1,10 @@
 "use client";
 
 import Image from "next/image";
-import { useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import type { GiftShopItem } from "@/content/gift-shop";
 
-const COPIED_FOR = 1500;
+const CONFIRMED_FOR = 1500;
 
 const ROW = [
   "group flex w-full rounded-lg px-3 py-3 text-left",
@@ -38,7 +38,12 @@ function Verb({ children, shown }: { children: string; shown?: boolean }) {
         "transition-opacity duration-(--motion-quick) ease-out-strong",
         shown
           ? "opacity-100"
-          : "opacity-0 group-hover:opacity-100 group-focus-visible:opacity-100",
+          : [
+              "opacity-100",
+              "can-hover:opacity-0",
+              "can-hover:group-hover:opacity-100",
+              "can-hover:group-focus-visible:opacity-100",
+            ].join(" "),
       ].join(" ")}
     >
       {children}
@@ -80,37 +85,59 @@ export function GiftShopRow({ item }: { item: GiftShopItem }) {
   }
 
   if (item.kind === "file") {
-    if (item.preview) {
-      return (
-        <a
-          href={item.href}
-          download={item.download}
-          data-pressable
-          className={`${ROW} flex-col items-start gap-2`}
-        >
-          <Preview preview={item.preview} />
-          <span className="flex w-full items-center gap-3">
-            <Label title={item.title} meta={item.meta} />
-            <Verb>Download</Verb>
-          </span>
-        </a>
-      );
-    }
-
-    return (
-      <a
-        href={item.href}
-        download={item.download}
-        data-pressable
-        className={`${ROW} items-center gap-3`}
-      >
-        <Label title={item.title} meta={item.meta} />
-        <Verb>Download</Verb>
-      </a>
-    );
+    return <FileRow item={item} />;
   }
 
   return <CopyRow title={item.title} meta={item.meta} text={item.text} />;
+}
+
+function useConfirmation() {
+  const [confirmed, setConfirmed] = useState(false);
+  const timer = useRef<ReturnType<typeof setTimeout> | undefined>(undefined);
+
+  useEffect(() => () => clearTimeout(timer.current), []);
+
+  const confirm = useCallback(() => {
+    setConfirmed(true);
+    clearTimeout(timer.current);
+    timer.current = setTimeout(() => setConfirmed(false), CONFIRMED_FOR);
+  }, []);
+
+  return [confirmed, confirm] as const;
+}
+
+function FileRow({ item }: { item: Extract<GiftShopItem, { kind: "file" }> }) {
+  const [saved, confirm] = useConfirmation();
+
+  const label = (
+    <>
+      <Label title={item.title} meta={saved ? "Saved" : item.meta} />
+      <Verb shown={saved}>{saved ? "✓" : "Download"}</Verb>
+    </>
+  );
+
+  return (
+    <a
+      href={item.href}
+      download={item.download}
+      onClick={confirm}
+      data-pressable
+      className={
+        item.preview
+          ? `${ROW} flex-col items-start gap-2`
+          : `${ROW} items-center gap-3`
+      }
+    >
+      {item.preview ? (
+        <>
+          <Preview preview={item.preview} />
+          <span className="flex w-full items-center gap-3">{label}</span>
+        </>
+      ) : (
+        label
+      )}
+    </a>
+  );
 }
 
 function CopyRow({
@@ -122,10 +149,7 @@ function CopyRow({
   meta: string;
   text: string;
 }) {
-  const [copied, setCopied] = useState(false);
-  const timer = useRef<ReturnType<typeof setTimeout> | undefined>(undefined);
-
-  useEffect(() => () => clearTimeout(timer.current), []);
+  const [copied, confirm] = useConfirmation();
 
   async function copy() {
     try {
@@ -133,9 +157,7 @@ function CopyRow({
     } catch {
       return;
     }
-    setCopied(true);
-    clearTimeout(timer.current);
-    timer.current = setTimeout(() => setCopied(false), COPIED_FOR);
+    confirm();
   }
 
   return (
@@ -162,10 +184,7 @@ function SwatchChip({
   hex: string;
   fill: string;
 }) {
-  const [copied, setCopied] = useState(false);
-  const timer = useRef<ReturnType<typeof setTimeout> | undefined>(undefined);
-
-  useEffect(() => () => clearTimeout(timer.current), []);
+  const [copied, confirm] = useConfirmation();
 
   async function copy() {
     try {
@@ -173,9 +192,7 @@ function SwatchChip({
     } catch {
       return;
     }
-    setCopied(true);
-    clearTimeout(timer.current);
-    timer.current = setTimeout(() => setCopied(false), COPIED_FOR);
+    confirm();
   }
 
   return (

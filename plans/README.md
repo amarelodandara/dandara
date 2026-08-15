@@ -30,8 +30,9 @@ Recorded so they are not re-audited later.
   contents risks reading as the panel disagreeing with itself.
 - **Momentum on drag release.** Sheets stop dead. For paper on a desk that is
   correct — paper does not glide.
-- **Animation on the `g` shortcut.** On the escalation list, but that rule
-  targets actions repeated hundreds of times a day. This drawer opens about once
-  a visit.
 - **Ungated hover motion.** Tailwind v4 already wraps every hover utility in
-  `@media (hover: hover)`; confirmed against all four compiled rules.
+  `@media (hover: hover)`; confirmed against all four compiled rules. What it
+  cannot wrap is the resting state the hover was written to reveal: a bare
+  `opacity-0` applies everywhere, so on a touch device the reveal never fires
+  and the control is simply gone. Anything hidden until hover pairs its resting
+  state with the `can-hover` variant.

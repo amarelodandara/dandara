@@ -1,5 +1,11 @@
 @import "tailwindcss";
 
+/* Hover is a capability, not a screen width. Anything that only appears on
+   hover has to ask for this rather than for a breakpoint: a phone is `md` in
+   landscape and still has no pointer to hover with, so a reveal hung off `md`
+   is a control that simply never appears. */
+@custom-variant can-hover (@media (hover: hover) and (pointer: fine));
+
 @theme inline {
   --font-sans: var(--font-inter), system-ui, sans-serif;
 
@@ -127,25 +133,38 @@ body[data-shop-open] [data-page] {
 
 /* The translated plane would otherwise open a horizontal scrollbar. `clip`
    rather than `hidden` because it creates no scroll container, which leaves
-   `position: fixed` and `sticky` working. */
+   `position: fixed` and `sticky` working.
+
+   Both elements are named on purpose. `body` alone is not enough: with `html`
+   at `overflow: visible` the body's value propagates to the viewport and the
+   body box itself goes back to `visible`, so nothing is left clipping the
+   translated plane and the page can be panned sideways to the parked shop.
+   Declaring it on `html` makes the propagated value the root's own, and lets
+   the body's clip finally apply to the body's own box. Neither clips the shop
+   panel or a focused sheet — `overflow` only clips a fixed descendant when the
+   element is also its containing block, and no transform makes one here. */
+html,
 body {
   overflow-x: clip;
 }
 
 /* `--shop-w` is how far the page moves, not how wide the card is. The card is
    narrower by one gap at each end, which is what leaves an even margin on the
-   window side and on the page side. */
+   window side and on the page side.
+
+   The `min()` is the whole mobile story: 86vw is the right share of a phone,
+   and on any window wider than a phone it is a shelf pretending to be a page.
+   Past ~27rem of viewport the shelf stops growing and simply is the width its
+   longest row needs — fixed, not fluid, because letting it shrink with the
+   viewport is what reintroduced the wrap in the first place. */
 :root {
-  --shop-w: 86vw;
+  --shop-w: min(86vw, 23rem);
   --shop-gap: 0.9rem;
   --shop-radius: 0.875rem;
 }
 
 @media (min-width: 768px) {
   :root {
-    /* Fixed, not fluid: the shelf is set to the width its longest row needs, so
-       letting it shrink with the viewport only reintroduces the wrap. */
-    --shop-w: 23rem;
     --shop-gap: 1.25rem;
   }
 }

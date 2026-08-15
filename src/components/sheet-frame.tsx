@@ -34,6 +34,10 @@ const FLIP_DURATION = 280;
 
 const MAX_ZOOM = 2.4;
 
+const ZOOM_WIDTH_SHARE = 0.9;
+const ZOOM_HEIGHT_SHARE = 0.86;
+const SCROLLING_HEIGHT_SHARE = 0.88;
+
 const useIsomorphicLayoutEffect =
   typeof window === "undefined" ? useEffect : useLayoutEffect;
 
@@ -105,6 +109,23 @@ function SheetFrameImpl({
     const el = frameRef.current;
     if (!el) return;
 
+    const sync = () => {
+      el.style.translate =
+        !focused && matches(DRAGGABLE)
+          ? `calc(-50% + ${drag.current.x}px) ${drag.current.y}px`
+          : "";
+    };
+
+    sync();
+    const list = window.matchMedia(DRAGGABLE);
+    list.addEventListener("change", sync);
+    return () => list.removeEventListener("change", sync);
+  }, [focused]);
+
+  useIsomorphicLayoutEffect(() => {
+    const el = frameRef.current;
+    if (!el) return;
+
     const from = previousRect.current;
     const to = el.getBoundingClientRect();
     previousRect.current = to;
@@ -133,41 +154,45 @@ function SheetFrameImpl({
     const frame = frameRef.current;
     if (!card || !frame) return;
 
-    const measure = () => {
-      if (!card.offsetWidth || !card.offsetHeight) return;
-      const fit = Math.min(
-        (window.innerWidth * 0.9) / card.offsetWidth,
-        (window.innerHeight * 0.86) / card.offsetHeight,
-      );
-      card.style.scale = String(Math.min(MAX_ZOOM, Math.max(1, fit)));
-      frame.style.maxHeight = fit < 1 ? "88vh" : "";
-      frame.style.overflowY = fit < 1 ? "auto" : "";
-    };
-
     if (!focused) {
-      card.style.scale = "1";
+      card.style.scale = "";
       frame.style.maxHeight = "";
       frame.style.overflowY = "";
       return;
     }
 
-    measure();
-    window.addEventListener("resize", measure);
-    return () => window.removeEventListener("resize", measure);
-  }, [focused]);
+    const measure = () => {
+      if (!card.offsetWidth || !card.offsetHeight) return;
 
-  useEffect(() => {
-    const list = window.matchMedia(DRAGGABLE);
-    const sync = () => {
-      const el = frameRef.current;
-      if (!el) return;
-      el.style.translate = list.matches
-        ? `calc(-50% + ${drag.current.x}px) ${drag.current.y}px`
+      const width = window.visualViewport?.width ?? window.innerWidth;
+      const height = window.visualViewport?.height ?? window.innerHeight;
+
+      const fit = Math.min(
+        (width * ZOOM_WIDTH_SHARE) / card.offsetWidth,
+        (height * ZOOM_HEIGHT_SHARE) / card.offsetHeight,
+      );
+
+      const tallerThanScreen = fit < 1;
+      card.style.scale = tallerThanScreen ? "1" : String(Math.min(MAX_ZOOM, fit));
+      frame.style.maxHeight = tallerThanScreen
+        ? `${Math.round(height * SCROLLING_HEIGHT_SHARE)}px`
         : "";
+      frame.style.overflowY = tallerThanScreen ? "auto" : "";
     };
-    list.addEventListener("change", sync);
-    return () => list.removeEventListener("change", sync);
-  }, []);
+
+    measure();
+
+    const observer = new ResizeObserver(measure);
+    observer.observe(card);
+
+    window.addEventListener("resize", measure);
+    window.visualViewport?.addEventListener("resize", measure);
+    return () => {
+      observer.disconnect();
+      window.removeEventListener("resize", measure);
+      window.visualViewport?.removeEventListener("resize", measure);
+    };
+  }, [focused]);
 
   const heldFocus = useRef(false);
   useEffect(() => {
@@ -228,10 +253,12 @@ function SheetFrameImpl({
   const frameClass = focused
     ? "fixed left-1/2 top-1/2 z-[60] w-[88vw] -translate-x-1/2 -translate-y-1/2 md:w-[var(--sheet-w)]"
     : [
-        "group relative w-full",
-        index > 0 ? "-mt-6 md:mt-0" : "",
-        index % 2 ? "ml-[8%] md:ml-0" : "mr-[8%] md:mr-0",
-        "md:absolute md:left-[var(--sheet-x)] md:top-[var(--sheet-y)] md:m-0 md:w-[var(--sheet-w)]",
+        "group relative w-[66%] max-w-[17rem]",
+        index > 0 ? "-mt-4 md:mt-0" : "",
+        index % 2
+          ? "mr-[4%] ml-auto md:mr-0 md:ml-0"
+          : "mr-auto ml-[4%] md:mr-0 md:ml-0",
+        "md:absolute md:left-[var(--sheet-x)] md:top-[var(--sheet-y)] md:w-[var(--sheet-w)] md:max-w-none",
         "md:-translate-x-1/2",
         "md:touch-none",
         dragging ? "md:cursor-grabbing" : "md:cursor-grab",
@@ -265,7 +292,8 @@ function SheetFrameImpl({
         tabIndex={focused ? -1 : undefined}
         data-sheet-card
         className={[
-          "p-6 outline-none md:p-7",
+          focused ? "p-6 md:p-7" : "p-4 md:p-7",
+          "outline-none",
           BACKGROUND[kind],
           "transition-[rotate,scale] duration-(--motion-enter) ease-out-strong",
           focused ? "rotate-0" : "md:rotate-[var(--sheet-r)]",
@@ -288,7 +316,7 @@ function SheetFrameImpl({
             "after:-translate-x-1/2 after:-translate-y-1/2",
             focused
               ? "opacity-100"
-              : "md:opacity-0 md:group-hover:opacity-100 md:group-focus-within:opacity-100",
+              : "can-hover:opacity-0 can-hover:group-hover:opacity-100 can-hover:group-focus-within:opacity-100",
           ].join(" ")}
         >
           {focused ? "Close" : "Open"}

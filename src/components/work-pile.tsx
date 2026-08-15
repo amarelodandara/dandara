@@ -115,11 +115,11 @@ export function WorkPile({
 
   return (
     <section id="work" className="relative mt-[18vh] pb-[12vh]">
-      <div className="flex items-center justify-between gap-6">
+      <div className="flex items-baseline justify-between gap-6">
         <h2 className="text-[0.7rem] leading-none font-medium tracking-[0.01em] text-foreground-soft">
           {label}
         </h2>
-        <p className="text-[0.85rem] leading-none text-foreground-soft">
+        <p className="text-[0.7rem] leading-none tracking-[0.01em] text-foreground-soft/60">
           it&rsquo;s art, please touch
         </p>
       </div>

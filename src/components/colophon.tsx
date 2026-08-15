@@ -6,7 +6,7 @@ export function Colophon() {
     >
       <div
         data-colophon
-        className="ml-auto max-w-120 rounded-sm bg-amber-100 px-6 py-10 md:px-8 md:py-12"
+        className="ml-auto max-w-120 rounded-sm bg-white px-6 py-10 md:px-8 md:py-12"
       >
         <p className="text-[clamp(1.15rem,2.2vw,1.5rem)] leading-[0.95] font-bold tracking-[-0.03em]">
           Amarelo Dandara

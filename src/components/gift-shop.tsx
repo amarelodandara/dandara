@@ -1,7 +1,7 @@
 "use client";
 
 import dynamic from "next/dynamic";
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef } from "react";
 import { giftShopSections } from "@/content/gift-shop";
 import { GiftShopRow } from "./gift-shop-row";
 import { GiftShopPlaque } from "./gift-shop-plaque";
@@ -19,13 +19,7 @@ const Tailored =
     ? dynamic(() => import("./gift-shop-tailored"))
     : null;
 
-const SHORTCUT = "g";
-
-const TYPING = "input, textarea, select, [contenteditable]";
-
 export function GiftShop() {
-  const [pastLanding, setPastLanding] = useState(false);
-
   const active = useActiveOverlay();
   const open = active === ID;
 
@@ -43,29 +37,8 @@ export function GiftShop() {
     };
   }, [open]);
 
-  useEffect(() => {
-    const landing = document.querySelector("[data-landing]");
-    if (!landing) return;
-    const observer = new IntersectionObserver(
-      ([entry]) => setPastLanding(!entry.isIntersecting),
-      { threshold: 0 },
-    );
-    observer.observe(landing);
-    return () => observer.disconnect();
-  }, []);
-
   useKeydown((event) => {
-    if (event.key === "Escape") {
-      closeOverlay(ID);
-      return;
-    }
-    if (event.metaKey || event.ctrlKey || event.altKey) return;
-    if ((event.target as HTMLElement | null)?.closest(TYPING)) return;
-    if (event.key.toLowerCase() !== SHORTCUT) return;
-
-    event.preventDefault();
-    if (open) closeOverlay(ID);
-    else openOverlay(ID);
+    if (event.key === "Escape") closeOverlay(ID);
   });
 
   const heldFocus = useRef(false);
@@ -98,22 +71,13 @@ export function GiftShop() {
             <button
               type="button"
               onClick={close}
-              aria-label="Close gift shop"
               data-pressable
-              className="group -m-2 flex shrink-0 items-center gap-1.5 rounded-lg p-2 transition-[background-color,scale] duration-(--motion-quick) ease-out-strong hover:bg-white/45 focus-visible:bg-white/45 active:scale-[0.97] active:duration-(--press)"
+              className="-m-2 flex shrink-0 items-center rounded-lg px-2.5 py-2 transition-[background-color,scale] duration-(--motion-quick) ease-out-strong hover:bg-white/45 focus-visible:bg-white/45 active:scale-[0.97] active:duration-(--press)"
             >
-              <span
-                aria-hidden="true"
-                className="text-[0.7rem] leading-none font-medium tracking-[0.01em] text-foreground-hard opacity-0 transition-opacity duration-(--motion-quick) ease-out-strong group-hover:opacity-100 group-focus-visible:opacity-100"
-              >
+              <span className="text-[0.7rem] leading-none font-medium tracking-[0.01em] text-foreground-hard">
                 Close
               </span>
-              <kbd
-                aria-hidden="true"
-                className="inline-flex size-4 shrink-0 items-center justify-center rounded-sm border border-foreground-hard/35 font-sans text-[0.6rem] leading-none font-medium tracking-[0.04em] text-foreground-hard/75"
-              >
-                G
-              </kbd>
+              <span className="sr-only"> gift shop</span>
             </button>
           </div>
 
@@ -144,7 +108,7 @@ export function GiftShop() {
 
       <GiftShopPlaque
         ref={plaqueRef}
-        visible={pastLanding && active === null}
+        visible={active === null}
         onOpen={openShop}
       />
     </>

@@ -2,6 +2,47 @@ import Image from "next/image";
 import { Sheet } from "@/components/sheet";
 import { WorkPile } from "@/components/work-pile";
 
+const LINK = [
+  "decoration-stone-400 decoration-[0.04em] underline-offset-[0.25em]",
+  "transition-opacity duration-(--motion-quick) ease-out-strong",
+  "hover:underline hover:opacity-50",
+  "focus-visible:underline active:underline",
+].join(" ");
+
+const PERSONAL_WORK: { title: string; href?: string; blurb: string }[] = [
+  {
+    title: "In Service of Museums",
+    blurb: "academic thesis about service design in museology",
+  },
+  {
+    title: "links amarelos",
+    href: "https://linksamarelos.com",
+    blurb: "a curated newsletter",
+  },
+  {
+    title: "ondas amarelas",
+    href: "https://open.spotify.com/show/043Gs7eyY2KOlotEWSTSxB",
+    blurb: "a curated podcast",
+  },
+  {
+    title: "hyperlinks amarelos",
+    href: "#",
+    blurb: "an essay podcast",
+  },
+  {
+    title: "crayola",
+    blurb: "a remotion tool to create yellow assets",
+  },
+];
+
+const FIND_ME: { label: string; href: string }[] = [
+  { label: "Email", href: "mailto:nicolydndr@gmail.com" },
+  { label: "LinkedIn", href: "https://linkedin.com/in/nicolydandara" },
+  { label: "Twitter", href: "#" },
+  { label: "Bluesky", href: "#" },
+  { label: "GitHub", href: "https://github.com/amarelodandara" },
+];
+
 export default function Home() {
   return (
     <main className="mx-auto w-full max-w-[1400px] flex-1 px-[7vw] py-[14vh] sm:py-[18vh]">
@@ -26,40 +67,15 @@ export default function Home() {
               Personal work
             </p>
             <ul className="mt-2 space-y-2 text-[1.05rem] leading-tight font-semibold">
-              {[
-                {
-                  title: "In Service of Museums",
-                  href: "#",
-                  blurb: "academic thesis about service design in museology",
-                },
-                {
-                  title: "links amarelos",
-                  href: "https://linksamarelos.com",
-                  blurb: "a curated newsletter",
-                },
-                {
-                  title: "ondas amarelas",
-                  href: "https://open.spotify.com/show/043Gs7eyY2KOlotEWSTSxB",
-                  blurb: "a curated podcast",
-                },
-                {
-                  title: "hyperlinks amarelos",
-                  href: "#",
-                  blurb: "an essay podcast",
-                },
-                {
-                  title: "crayola",
-                  href: "#",
-                  blurb: "a remotion tool to create yellow assets",
-                },
-              ].map(({ title, href, blurb }) => (
+              {PERSONAL_WORK.map(({ title, href, blurb }) => (
                 <li key={title}>
-                  <a
-                    href={href}
-                    className="underline decoration-stone-400 decoration-[0.04em] underline-offset-[0.25em] transition-opacity duration-(--motion-quick) ease-out-strong hover:opacity-50"
-                  >
-                    {title}
-                  </a>
+                  {href ? (
+                    <a href={href} className={LINK}>
+                      {title}
+                    </a>
+                  ) : (
+                    title
+                  )}
                   , <span className="font-normal">{blurb}</span>
                 </li>
               ))}
@@ -69,21 +85,9 @@ export default function Home() {
               Find me
             </p>
             <ul className="mt-2 flex flex-wrap gap-x-5 gap-y-1 text-[0.85rem]">
-              {[
-                { label: "Email", href: "mailto:nicolydndr@gmail.com" },
-                {
-                  label: "LinkedIn",
-                  href: "https://linkedin.com/in/nicolydandara",
-                },
-                { label: "Twitter", href: "#" },
-                { label: "Bluesky", href: "#" },
-                { label: "GitHub", href: "https://github.com/amarelodandara" },
-              ].map(({ label, href }) => (
+              {FIND_ME.map(({ label, href }) => (
                 <li key={label}>
-                  <a
-                    href={href}
-                    className="underline decoration-stone-400 decoration-[0.04em] underline-offset-[0.25em] transition-opacity duration-(--motion-quick) ease-out-strong hover:opacity-50"
-                  >
+                  <a href={href} className={LINK}>
                     {label}
                   </a>
                 </li>
@@ -93,7 +97,7 @@ export default function Home() {
           </div>
 
           <div className="">
-            <blockquote className="text-[clamp(0.95rem,1.15vw,1.0625rem)] leading-[1.32] tracking-[-0.01em] text-foreground-soft">
+            <blockquote className="text-[clamp(0.95rem,1.15vw,1.0625rem)] leading-[1.32] tracking-[-0.01em] text-balance text-foreground-soft">
               The role of the designer is that of a good, thoughtful host
               anticipating the needs of his guests.
             </blockquote>
