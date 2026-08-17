@@ -1,6 +1,7 @@
 "use client";
 
 import type { Ref } from "react";
+import { Kbd } from "./kbd";
 
 export function GiftShopPlaque({
   visible,
@@ -30,6 +31,7 @@ export function GiftShopPlaque({
       <span className="text-[0.7rem] leading-none font-medium tracking-[0.01em]">
         Visit the gift shop
       </span>
+      <Kbd>G</Kbd>
     </button>
   );
 }

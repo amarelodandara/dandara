@@ -119,10 +119,7 @@ export default function Home() {
               <p>
                 Most of my professional experience has been designing software
                 for credit card machines, at{" "}
-                <a
-                  href="https://www.stone.com.br/"
-                  className={LINK}
-                >
+                <a href="https://www.stone.com.br/" className={LINK_UNDERLINED}>
                   Stone
                 </a>
                 . You probably have a lot of questions about what that means —

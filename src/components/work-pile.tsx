@@ -62,7 +62,7 @@ export function WorkPile({
 }) {
   const items = useMemo(() => readSheets(children), [children]);
   const placements = useMemo(
-    () => scatter(items.map(({ id, size }) => ({ id, size }))),
+    () => scatter(items.map(({ id, size, kind }) => ({ id, size, kind }))),
     [items],
   );
 

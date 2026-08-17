@@ -5,6 +5,7 @@ import { useCallback, useEffect, useRef } from "react";
 import { giftShopSections } from "@/content/gift-shop";
 import { GiftShopRow } from "./gift-shop-row";
 import { GiftShopPlaque } from "./gift-shop-plaque";
+import { Kbd } from "./kbd";
 import {
   closeOverlay,
   openOverlay,
@@ -102,6 +103,7 @@ export function GiftShop() {
             <button
               type="button"
               onClick={close}
+              aria-keyshortcuts="g Escape"
               data-pressable
               className="-m-2 flex shrink-0 items-center rounded-lg px-2.5 py-2 transition-[background-color,scale] duration-(--motion-quick) ease-out-strong hover:bg-white/45 focus-visible:bg-white/45 active:scale-[0.97] active:duration-(--press)"
             >
@@ -109,6 +111,7 @@ export function GiftShop() {
                 Close
               </span>
               <span className="sr-only"> gift shop</span>
+              <Kbd>G</Kbd>
             </button>
           </div>
 

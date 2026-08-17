@@ -1,4 +1,4 @@
-import type { SheetSize } from "@/components/sheet";
+import type { SheetKind, SheetSize } from "@/components/sheet";
 
 export const SCATTER_SEED = 20_260_812;
 
@@ -36,7 +36,7 @@ const lerp = (range: readonly [number, number], t: number) =>
   range[0] + t * (range[1] - range[0]);
 
 export function scatter(
-  items: readonly { id: string; size: SheetSize }[],
+  items: readonly { id: string; size: SheetSize; kind: SheetKind }[],
   seed: number = SCATTER_SEED,
 ): Record<string, Placement> {
   const rand = mulberry32(seed);
@@ -64,6 +64,11 @@ export function scatter(
     const j = Math.floor(rand() * (i + 1));
     [order[i], order[j]] = [order[j], order[i]];
   }
+  order.sort(
+    (a, b) =>
+      Number(items[a].kind === "professional") -
+      Number(items[b].kind === "professional"),
+  );
   for (const [rank, itemIndex] of order.entries()) {
     placements[itemIndex].z = rank + 1;
   }
