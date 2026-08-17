@@ -190,14 +190,14 @@ export default function Home() {
             In Service of Museums
           </h3>
           <video
-            src="/work/in-service-of-museums.mp4"
+            src="/work/servico-museu.mp4"
             aria-label="A screen recording of the In Service of Museums thesis work."
             autoPlay
             loop
             muted
             playsInline
             preload="metadata"
-            className="pointer-events-none clear-right mt-6 aspect-1956/1322 h-auto w-full select-none"
+            className="pointer-events-none clear-right mt-6 aspect-16/9 h-auto w-full select-none"
           />
           <p className="mt-3">
             A service design framework for museum user experience: what the
