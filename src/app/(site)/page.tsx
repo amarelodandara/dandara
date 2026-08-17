@@ -222,7 +222,7 @@ export default function Home() {
             muted
             playsInline
             preload="metadata"
-            className="pointer-events-none clear-right mt-6 aspect-2166/1492 h-auto w-full select-none"
+            className="pointer-events-none clear-right mt-6 aspect-16/9 h-auto w-full select-none"
           />
           <p className="mt-3">
             <a
