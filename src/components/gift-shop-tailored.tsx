@@ -6,6 +6,8 @@ import { GiftShopRow } from "./gift-shop-row";
 
 const MANIFEST = "/gift-shop/tailored/manifest.json";
 
+const companyName = (title: string) => title.split(" — ", 1)[0];
+
 type TailoredItem = {
   id: string;
   title: string;
@@ -44,6 +46,7 @@ export default function GiftShopTailored() {
                 {
                   kind: "file",
                   ...item,
+                  title: companyName(item.title),
                 } satisfies GiftShopItem
               }
             />
