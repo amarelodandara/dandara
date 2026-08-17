@@ -33,6 +33,7 @@ Some possible roadmap items for the future. Will be implemented as necessity ari
 - **Ticket desk**. Remember this exhibition forever. Don't we all miss when we used to have proper tickets for events?
 - **Temporary exhibition**. A frame of whatever is being made right now, maybe gets an specific tweet of mine sharing work in public.
 - **Closed for maintenance**. A 404 that admits the room is shut.
+- **A Museum for AI agents**. See (tweet)[https://x.com/zenorocha/status/2087547759083901252?s=20]
 
 ## Acknowledgements
 
