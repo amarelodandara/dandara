@@ -44,7 +44,6 @@ export default function GiftShopTailored() {
                 {
                   kind: "file",
                   ...item,
-                  title: "Tailored resumé",
                 } satisfies GiftShopItem
               }
             />
