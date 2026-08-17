@@ -2,12 +2,15 @@ import Image from "next/image";
 import { Sheet } from "@/components/sheet";
 import { WorkPile } from "@/components/work-pile";
 
-const LINK = [
+const LINK_BASE = [
   "decoration-stone-400 decoration-[0.04em] underline-offset-[0.25em]",
   "transition-opacity duration-(--motion-quick) ease-out-strong",
-  "hover:underline hover:opacity-50",
-  "focus-visible:underline active:underline",
+  "hover:opacity-50",
 ].join(" ");
+
+const LINK = `${LINK_BASE} hover:underline focus-visible:underline active:underline`;
+
+const LINK_UNDERLINED = `${LINK_BASE} underline`;
 
 const PERSONAL_WORK: { title: string; href?: string; blurb: string }[] = [
   {
@@ -37,9 +40,12 @@ const PERSONAL_WORK: { title: string; href?: string; blurb: string }[] = [
 
 const FIND_ME: { label: string; href: string }[] = [
   { label: "Email", href: "mailto:nicolydndr@gmail.com" },
-  { label: "LinkedIn", href: "https://linkedin.com/in/nicolydandara" },
-  { label: "Twitter", href: "#" },
-  { label: "Bluesky", href: "#" },
+  { label: "LinkedIn", href: "https://www.linkedin.com/in/nicolydandara/" },
+  { label: "Twitter", href: "https://x.com/amarelodandara" },
+  {
+    label: "Bluesky",
+    href: "https://bsky.app/profile/amarelodandara.bsky.social",
+  },
   { label: "GitHub", href: "https://github.com/amarelodandara" },
 ];
 
@@ -70,7 +76,7 @@ export default function Home() {
               {PERSONAL_WORK.map(({ title, href, blurb }) => (
                 <li key={title}>
                   {href ? (
-                    <a href={href} className={LINK}>
+                    <a href={href} className={LINK_UNDERLINED}>
                       {title}
                     </a>
                   ) : (
@@ -112,9 +118,15 @@ export default function Home() {
               </p>
               <p>
                 Most of my professional experience has been designing software
-                for credit card machines. You probably have a lot of questions
-                about what that means — don&rsquo;t be afraid to ask, I enjoy
-                talking about it.
+                for credit card machines, at{" "}
+                <a
+                  href="https://www.stone.com.br/"
+                  className={LINK}
+                >
+                  Stone
+                </a>
+                . You probably have a lot of questions about what that means —
+                don&rsquo;t be afraid to ask, I enjoy talking about it.
               </p>
               <p>
                 More than a designer, I am a human: a human who rides
@@ -197,7 +209,7 @@ export default function Home() {
             muted
             playsInline
             preload="metadata"
-            className="pointer-events-none clear-right mt-6 aspect-16/9 h-auto w-full select-none"
+            className="pointer-events-none clear-right mt-6 aspect-video h-auto w-full select-none"
           />
           <p className="mt-3">
             A service design framework for museum user experience: what the
@@ -222,7 +234,7 @@ export default function Home() {
             muted
             playsInline
             preload="metadata"
-            className="pointer-events-none clear-right mt-6 aspect-16/9 h-auto w-full select-none"
+            className="pointer-events-none clear-right mt-6 aspect-video h-auto w-full select-none"
           />
           <p className="mt-3">
             <a

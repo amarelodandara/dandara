@@ -11,8 +11,18 @@ import {
   useActiveOverlay,
 } from "@/lib/exclusive-overlay";
 import { useKeydown } from "@/lib/keydown";
+import { usePastLanding } from "@/lib/past-landing";
 
 const ID = "gift-shop";
+
+const isBrowserChord = (event: KeyboardEvent) =>
+  event.metaKey || event.ctrlKey || event.altKey;
+
+const isTypingTarget = (target: EventTarget | null) => {
+  if (!(target instanceof HTMLElement)) return false;
+  if (target.isContentEditable) return true;
+  return /^(input|textarea|select)$/i.test(target.tagName);
+};
 
 const Tailored =
   process.env.NODE_ENV === "development"
@@ -22,6 +32,8 @@ const Tailored =
 export function GiftShop() {
   const active = useActiveOverlay();
   const open = active === ID;
+  const pastLanding = usePastLanding();
+  const plaqueVisible = active === null && pastLanding;
 
   const panelRef = useRef<HTMLElement>(null);
   const plaqueRef = useRef<HTMLButtonElement>(null);
@@ -38,7 +50,26 @@ export function GiftShop() {
   }, [open]);
 
   useKeydown((event) => {
-    if (event.key === "Escape") closeOverlay(ID);
+    if (event.key === "Escape") {
+      closeOverlay(ID);
+      return;
+    }
+
+    if (event.key !== "g" && event.key !== "G") return;
+    if (isBrowserChord(event)) return;
+    if (isTypingTarget(event.target)) return;
+
+    if (open) {
+      event.preventDefault();
+      closeOverlay(ID);
+      return;
+    }
+
+    const somethingElseHoldsTheScreen = active !== null;
+    if (somethingElseHoldsTheScreen) return;
+
+    event.preventDefault();
+    openOverlay(ID);
   });
 
   const heldFocus = useRef(false);
@@ -47,10 +78,10 @@ export function GiftShop() {
       panelRef.current?.focus();
       heldFocus.current = true;
     } else if (heldFocus.current) {
-      plaqueRef.current?.focus();
+      if (plaqueVisible) plaqueRef.current?.focus();
       heldFocus.current = false;
     }
-  }, [open]);
+  }, [open, plaqueVisible]);
 
   return (
     <>
@@ -108,7 +139,7 @@ export function GiftShop() {
 
       <GiftShopPlaque
         ref={plaqueRef}
-        visible={active === null}
+        visible={plaqueVisible}
         onOpen={openShop}
       />
     </>

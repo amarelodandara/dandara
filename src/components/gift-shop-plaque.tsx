@@ -17,6 +17,7 @@ export function GiftShopPlaque({
       type="button"
       onClick={onOpen}
       inert={!visible || undefined}
+      aria-keyshortcuts="g"
       data-plaque
       className={[
         "group fixed top-[5vh] left-[3vw] z-20 flex items-center",
