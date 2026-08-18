@@ -9,17 +9,17 @@
 @theme inline {
   --font-sans: var(--font-inter), system-ui, sans-serif;
 
-  --color-background: #fffce6;
-  --color-foreground: #111111;
-  --color-foreground-soft: #4a4744;
-  --color-background-hard: #ffcc00;
+  --color-background: oklch(0.988 0.029 100.564);
+  --color-foreground: oklch(0.178 0 0);
+  --color-foreground-soft: oklch(0.4 0.006 67.643);
+  --color-background-hard: oklch(0.865 0.177 90.382);
   /* Secondary text for the hard background. `foreground-soft` is mixed for a
      pale wall and goes muddy on saturated yellow; this is the same role, tuned
      to that ground — 8.3:1 against it, where the wall version manages 6.1:1. */
-  --color-foreground-hard: #3f3200;
+  --color-foreground-hard: oklch(0.322 0.066 92.948);
 
-  --color-professional: #b6e4f2;
-  --color-creative: #fff199;
+  --color-professional: oklch(0.891 0.078 218.299);
+  --color-creative: oklch(0.95 0.11 100.35);
 
   /* One curve for the whole product. Strong decelerate: it starts fast, so the
      moment the user is watching is the moment that moves. The built-in `ease`
@@ -38,10 +38,11 @@
      from its ground by its own edge plus the light it blocks, never by a drawn
      line. `card` is a thing resting on the wall, `raised` the same thing picked
      up, `chip` a small object where the wide blur would only smudge. */
-  --shadow-card: 0 0 0 1px #0000000f, 0 8px 28px #00000024, 0 1px 3px #0000001a;
-  --shadow-raised: 0 0 0 1px #0000000f, 0 18px 48px #00000029,
-    0 2px 6px #0000001f;
-  --shadow-chip: 0 0 0 1px #0000000f, 0 1px 3px #0000001a;
+  --shadow-card: 0 0 0 1px oklch(0 0 0 / 0.059), 0 8px 28px oklch(0 0 0 / 0.141),
+    0 1px 3px oklch(0 0 0 / 0.102);
+  --shadow-raised: 0 0 0 1px oklch(0 0 0 / 0.059), 0 18px 48px oklch(0 0 0 / 0.161),
+    0 2px 6px oklch(0 0 0 / 0.122);
+  --shadow-chip: 0 0 0 1px oklch(0 0 0 / 0.059), 0 1px 3px oklch(0 0 0 / 0.102);
 }
 
 /* Inter 4.001 OpenType features applied to every glyph on the site.
@@ -187,7 +188,10 @@ body {
   width: calc(var(--shop-w) - var(--shop-gap) * 2);
   border-radius: var(--shop-radius);
   background-color: var(--color-background-hard);
-  box-shadow: 0 0 0 1px #0000000f, 0 18px 48px #00000029, 0 2px 6px #0000001f;
+  box-shadow:
+    0 0 0 1px oklch(0 0 0 / 0.059),
+    0 18px 48px oklch(0 0 0 / 0.161),
+    0 2px 6px oklch(0 0 0 / 0.122);
   /* The shop scrolls; the bar just never shows. Hiding the bar is not the same
      as removing the scroller — the content still has to be reachable. */
   overflow-y: auto;
@@ -217,7 +221,9 @@ body[data-shop-open] [data-shop-panel] {
    The inset ring is the recessed counterpart of the card shadow, so the label
    is the one thing on the page reading as a hollow rather than an object. */
 [data-colophon] {
-  box-shadow: inset 0 0 0 1px #00000009, inset 0 1px 4px #00000005;
+  box-shadow:
+    inset 0 0 0 1px oklch(0 0 0 / 0.035),
+    inset 0 1px 4px oklch(0 0 0 / 0.02);
   background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='160' height='160' filter='url(%23n)' opacity='0.03'/%3E%3C/svg%3E");
 }
 
