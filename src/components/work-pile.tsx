@@ -124,15 +124,14 @@ export function WorkPile({
         </p>
       </div>
 
-      <div className="relative mt-10 flex flex-col md:mt-16 md:block md:min-h-184">
-        {items.map((item, index) => (
+      <div data-pile className="relative mt-10 md:mt-16">
+        {items.map((item) => (
           <SheetFrame
             key={item.id}
             id={item.id}
             kind={item.kind}
             title={item.title}
             size={item.size}
-            index={index}
             placement={placements[item.id]}
             z={lifted[item.id] ?? placements[item.id].z}
             focused={focusedId === item.id}
