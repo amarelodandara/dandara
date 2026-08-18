@@ -18,6 +18,23 @@
      to that ground — 8.3:1 against it, where the wall version manages 6.1:1. */
   --color-foreground-hard: oklch(0.322 0.066 92.948);
 
+  /* The surface a cutout in the shop panel reveals. Not `background`, though
+     that was the obvious first guess: the wall is 0.029 chroma and the panel it
+     sits inside is 0.177, and against that much saturation a near-white pale
+     yellow simply reads as white. Honest for a hole punched through to the
+     page, wrong for what a hollow in a yellow object looks like — a recess is
+     lit by light bouncing off its own yellow walls, so it stays yellow.
+
+     35% of the way from `background` to `background-hard`, mixed in oklch, and
+     50% for the hover step: 2.8x the chroma of the wall, still a clear step
+     lighter than the panel. Written out rather than left as a `color-mix()` so
+     the values are visible here; recompute if either end of the mix moves.
+
+     The fill is the whole effect now — there is no inset shadow under it, so
+     hover has to move the colour rather than deepen a hollow. */
+  --color-cutout: oklch(0.945 0.081 97);
+  --color-cutout-deep: oklch(0.927 0.103 95.473);
+
   --color-professional: oklch(0.891 0.078 218.299);
   --color-creative: oklch(0.95 0.11 100.35);
 
@@ -147,6 +164,60 @@ body[data-shop-open] [data-page] {
 html,
 body {
   overflow-x: clip;
+}
+
+/* The work pile is one scattered heap at every width, never a column and never
+   a grid. It used to switch to an alternating flex column below `md`, and at
+   half a desktop screen that alternation reads as two columns of cards — a
+   layout nobody asked for and the opposite of a pile.
+
+   So the scatter is unconditional now, and the narrowing happens inside it.
+   `--pile-spread` is how much of each sheet's horizontal offset from centre
+   actually gets used: at 1 the heap is as wide as it was designed, at 0.34 the
+   sheets collapse toward the middle and stack almost straight down. The result
+   gets more vertical as the screen narrows because the horizontal component is
+   scaled away, not because a different layout took over. */
+[data-pile] {
+  --pile-spread: 0.34;
+  position: relative;
+  min-height: 40rem;
+}
+
+@media (min-width: 480px) {
+  [data-pile] {
+    --pile-spread: 0.52;
+    min-height: 42rem;
+  }
+}
+
+@media (min-width: 640px) {
+  [data-pile] {
+    --pile-spread: 0.74;
+    min-height: 44rem;
+  }
+}
+
+@media (min-width: 768px) {
+  [data-pile] {
+    --pile-spread: 1;
+    min-height: 46rem;
+  }
+}
+
+/* `translate` is left to the drag handler, which writes it inline on every
+   frame and already carries the -50% that centres the sheet on its point.
+
+   `pan-y` rather than `none` is the whole of the touch story: the page still
+   scrolls under a finger moving up or down, and the sheet only claims the
+   gesture once the movement is more sideways than vertical. `none` here would
+   make the pile a dead zone that swallows every scroll that started on a card,
+   which on a phone is most of them. */
+[data-sheet-frame] {
+  position: absolute;
+  top: var(--sheet-y);
+  left: calc(50% + (var(--sheet-x) - 50%) * var(--pile-spread));
+  width: var(--sheet-w);
+  touch-action: pan-y;
 }
 
 /* `--shop-w` is how far the page moves, not how wide the card is. The card is
