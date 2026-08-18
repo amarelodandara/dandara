@@ -94,36 +94,35 @@ export function GiftShop() {
         data-shop-panel
         className="flex flex-col px-5 py-8 outline-none"
       >
-        <header className="px-3">
-          <div className="flex items-center justify-between gap-3">
+        <header className="flex items-start justify-between gap-3 px-3">
+          <div className="flex flex-col gap-1">
             <h2 className="text-[clamp(1.15rem,1.7vw,1.4rem)] leading-tight font-semibold tracking-[-0.01em]">
               Gift shop
             </h2>
-
-            <button
-              type="button"
-              onClick={close}
-              aria-keyshortcuts="g Escape"
-              data-pressable
-              className="-m-2 flex shrink-0 items-center rounded-lg px-2.5 py-2 transition-[background-color,scale] duration-(--motion-quick) ease-out-strong hover:bg-white/45 focus-visible:bg-white/45 active:scale-[0.97] active:duration-(--press)"
-            >
-              <span className="text-[0.7rem] leading-none font-medium tracking-[0.01em] text-foreground-hard">
-                Close
-              </span>
-              <span className="sr-only"> gift shop</span>
-              <Kbd>G</Kbd>
-            </button>
+            <p className="text-[0.7rem] leading-tight text-foreground-hard">
+              Take what you need
+            </p>
           </div>
 
-          <p className="mt-1 text-[0.8rem] leading-[1.45] text-foreground-hard">
-            Take what you need
-          </p>
+          <button
+            type="button"
+            onClick={close}
+            aria-keyshortcuts="g Escape"
+            data-pressable
+            className="-mt-0.5 -mr-2 -mb-2 flex shrink-0 items-center rounded-lg bg-cutout px-2.5 py-2 transition-[background-color,scale] duration-(--motion-quick) ease-out-strong hover:bg-cutout-deep focus-visible:bg-cutout-deep active:scale-[0.97] active:duration-(--press)"
+          >
+            <span className="text-[0.7rem] leading-none font-medium tracking-[0.01em] text-foreground-soft">
+              Close
+            </span>
+            <span className="sr-only"> gift shop</span>
+            <Kbd>G</Kbd>
+          </button>
         </header>
 
         {Tailored ? <Tailored /> : null}
 
         {giftShopSections.map((section) => (
-          <section key={section.id} className="mt-8">
+          <section key={section.id} className={section.title ? "mt-8" : "mt-14"}>
             {section.title ? (
               <h3 className="px-3 text-[0.7rem] font-medium tracking-[0.01em] text-foreground-hard">
                 {section.title}

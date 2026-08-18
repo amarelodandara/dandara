@@ -3,6 +3,7 @@
 import Image from "next/image";
 import { useCallback, useEffect, useRef, useState } from "react";
 import type { GiftShopItem } from "@/content/gift-shop";
+import { useSpringDrag } from "@/lib/spring-drag";
 
 const CONFIRMED_FOR = 1500;
 
@@ -74,14 +75,7 @@ function Preview({
 
 export function GiftShopRow({ item }: { item: GiftShopItem }) {
   if (item.kind === "swatch") {
-    return (
-      <SwatchChip
-        title={item.title}
-        meta={item.meta}
-        hex={item.hex}
-        fill={item.fill}
-      />
-    );
+    return <SwatchChip title={item.title} hex={item.hex} fill={item.fill} />;
   }
 
   if (item.kind === "file") {
@@ -175,37 +169,27 @@ function CopyRow({
 
 function SwatchChip({
   title,
-  meta,
   hex,
   fill,
 }: {
   title: string;
-  meta: string;
   hex: string;
   fill: string;
 }) {
-  const [copied, confirm] = useConfirmation();
-
-  async function copy() {
-    try {
-      await navigator.clipboard.writeText(hex);
-    } catch {
-      return;
-    }
-    confirm();
-  }
+  const { ref, lifted, onPointerDown, onPointerMove } = useSpringDrag();
 
   return (
-    <button
-      type="button"
-      onClick={copy}
-      data-pressable
+    <div
+      ref={ref}
+      onPointerDown={onPointerDown}
+      onPointerMove={onPointerMove}
       className={[
-        `group mx-auto flex aspect-[3/4] ${CHIP_W} flex-col bg-white p-1 text-left`,
-        "shadow-chip transition-[opacity,scale] duration-(--motion-quick) ease-out-strong",
-        "active:scale-[0.97] active:duration-(--press)",
-        "hover:opacity-90 focus-visible:outline-2 focus-visible:outline-offset-2",
-        "focus-visible:outline-foreground/40",
+        `mx-auto flex aspect-[3/4] ${CHIP_W} touch-none flex-col select-none`,
+        "bg-white p-1 text-left",
+        "transition-[scale,box-shadow] duration-(--motion-quick) ease-out-strong",
+        lifted
+          ? "scale-[1.04] cursor-grabbing shadow-card"
+          : "cursor-grab shadow-chip",
       ].join(" ")}
     >
       <span aria-hidden="true" className={`block w-full flex-1 ${fill}`} />
@@ -214,10 +198,9 @@ function SwatchChip({
           {title}
         </span>
         <span className="mt-0.5 block text-[0.7rem] leading-tight text-foreground-soft">
-          {copied ? "Copied" : hex}
+          {hex}
         </span>
-        <span className="sr-only">{meta}</span>
       </span>
-    </button>
+    </div>
   );
 }

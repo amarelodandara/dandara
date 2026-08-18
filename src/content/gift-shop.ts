@@ -1,18 +1,18 @@
 type Common = {
   id: string;
   title: string;
-  meta: string;
 };
 
 export type GiftShopItem = Common &
   (
     | {
         kind: "file";
+        meta: string;
         href: string;
         download: string;
         preview?: { src: string; width: number; height: number; alt: string };
       }
-    | { kind: "copy"; text: string }
+    | { kind: "copy"; meta: string; text: string }
     | { kind: "swatch"; hex: string; fill: string }
   );
 
@@ -61,7 +61,7 @@ export const giftShopSections: GiftShopSection[] = [
         kind: "file",
         id: "portrait",
         title: "Portrait",
-        meta: "JPEG · 723 × 885",
+        meta: "JPEG",
         href: "/gift-shop/portrait.jpg",
         download: "Nicoly_Dandara_Portrait.jpg",
         preview: {
@@ -75,7 +75,7 @@ export const giftShopSections: GiftShopSection[] = [
         kind: "file",
         id: "talk",
         title: "Speaking",
-        meta: "JPEG · 3024 × 4032",
+        meta: "JPEG",
         href: "/gift-shop/talk-speaking.jpg",
         download: "Nicoly_Dandara_Speaking.jpg",
         preview: {
@@ -88,15 +88,15 @@ export const giftShopSections: GiftShopSection[] = [
       {
         kind: "copy",
         id: "bio-line",
-        title: "Bio — one line",
-        meta: "Copy to clipboard",
+        title: "Bio in one line",
+        meta: "Plain text",
         text: "Nicoly Dandara is a Product Designer with 5+ years of experience, mostly spent building software for Stone's credit card machines.",
       },
       {
         kind: "copy",
         id: "bio-paragraph",
-        title: "Bio — one paragraph",
-        meta: "Copy to clipboard",
+        title: "Bio in one paragraph",
+        meta: "Plain text",
         text: "Nicoly Dandara is a Product Designer with 5+ years of experience designing for companies, for herself, and for other people. Most of her professional work has been building software for Stone's credit card machines. She holds a degree in Graphic Design, where her thesis explored service design in museums, and outside of client work she publishes links amarelos, a curated newsletter, and ondas amarelas, a curated podcast.",
       },
     ],
@@ -108,7 +108,6 @@ export const giftShopSections: GiftShopSection[] = [
         kind: "swatch",
         id: "amarelo",
         title: "Amarelo Dandara",
-        meta: "Click to copy",
         hex: "#FFCC00",
         fill: "bg-background-hard",
       },
