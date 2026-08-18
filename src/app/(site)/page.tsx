@@ -74,7 +74,7 @@ export default function Home() {
             </p>
             <ul className="mt-2 space-y-2 text-[1.05rem] leading-tight font-semibold">
               {PERSONAL_WORK.map(({ title, href, blurb }) => (
-                <li key={title}>
+                <li key={title} className="text-balance">
                   {href ? (
                     <a href={href} className={LINK_UNDERLINED}>
                       {title}
