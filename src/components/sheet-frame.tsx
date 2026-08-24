@@ -8,6 +8,7 @@ import {
   useRef,
   useState,
   type CSSProperties,
+  type RefObject,
   type PointerEvent as ReactPointerEvent,
   type ReactNode,
 } from "react";
@@ -26,6 +27,7 @@ const BACKGROUND: Record<SheetKind, string> = {
 };
 
 const DRAG_THRESHOLD = 4;
+const KEPT_ON_SCREEN_PX = 72;
 
 const EASE_OUT_STRONG = "cubic-bezier(0.2, 0, 0, 1)";
 const FLIP_DURATION = 280;
@@ -51,14 +53,74 @@ const matches = (query: string) => {
   return list.matches;
 };
 
+type Offset = { x: number; y: number };
+
+type RestingRect = {
+  left: number;
+  top: number;
+  right: number;
+  bottom: number;
+};
+
 type DragSession = {
   pointerId: number;
   startX: number;
   startY: number;
   originX: number;
   originY: number;
+  resting: RestingRect;
   moved: boolean;
 };
+
+const between = (value: number, edges: [number, number]) =>
+  Math.min(Math.max(value, Math.min(...edges)), Math.max(...edges));
+
+const restingRect = (frame: HTMLElement, offset: Offset): RestingRect => {
+  const rect = frame.getBoundingClientRect();
+  return {
+    left: rect.left - offset.x,
+    top: rect.top - offset.y,
+    right: rect.right - offset.x,
+    bottom: rect.bottom - offset.y,
+  };
+};
+
+const keptWithinReach = (resting: RestingRect, offset: Offset): Offset => ({
+  x: between(offset.x, [
+    KEPT_ON_SCREEN_PX - resting.right,
+    window.innerWidth - KEPT_ON_SCREEN_PX - resting.left,
+  ]),
+  y: between(offset.y, [
+    KEPT_ON_SCREEN_PX - resting.bottom,
+    window.innerHeight - KEPT_ON_SCREEN_PX - resting.top,
+  ]),
+});
+
+function useKeptWithinReach({
+  frameRef,
+  drag,
+  focused,
+}: {
+  frameRef: RefObject<HTMLDivElement | null>;
+  drag: RefObject<Offset>;
+  focused: boolean;
+}) {
+  useEffect(() => {
+    if (focused) return;
+
+    const haulBackIntoReach = () => {
+      const frame = frameRef.current;
+      if (!frame) return;
+      const next = keptWithinReach(restingRect(frame, drag.current), drag.current);
+      if (next.x === drag.current.x && next.y === drag.current.y) return;
+      drag.current = next;
+      frame.style.translate = `calc(-50% + ${next.x}px) ${next.y}px`;
+    };
+
+    window.addEventListener("resize", haulBackIntoReach);
+    return () => window.removeEventListener("resize", haulBackIntoReach);
+  }, [drag, focused, frameRef]);
+}
 
 export type SheetFrameProps = {
   id: string;
@@ -74,6 +136,20 @@ export type SheetFrameProps = {
   onBringToFront: (id: string) => void;
   children: ReactNode;
 };
+
+function useBailOutOfALostPointer(endDrag: (pointerId?: number) => void) {
+  useEffect(() => {
+    const bail = () => endDrag();
+    window.addEventListener("blur", bail);
+    document.addEventListener("pointerup", bail);
+    document.addEventListener("pointercancel", bail);
+    return () => {
+      window.removeEventListener("blur", bail);
+      document.removeEventListener("pointerup", bail);
+      document.removeEventListener("pointercancel", bail);
+    };
+  }, [endDrag]);
+}
 
 function SheetFrameImpl({
   id,
@@ -192,16 +268,24 @@ function SheetFrameImpl({
     }
   }, [focused]);
 
-  const endDrag = useCallback((event: ReactPointerEvent<HTMLDivElement>) => {
+  const endDrag = useCallback((pointerId?: number) => {
     const active = session.current;
-    if (!active || active.pointerId !== event.pointerId) return;
-    event.currentTarget.releasePointerCapture?.(event.pointerId);
+    if (!active) return;
+    if (pointerId !== undefined && active.pointerId !== pointerId) return;
+    const frame = frameRef.current;
+    if (frame?.hasPointerCapture(active.pointerId)) {
+      frame.releasePointerCapture(active.pointerId);
+    }
     session.current = null;
     if (active.moved && frameRef.current) {
       previousRect.current = frameRef.current.getBoundingClientRect();
     }
     setDragging(false);
   }, []);
+
+  useBailOutOfALostPointer(endDrag);
+
+  useKeptWithinReach({ frameRef, drag, focused });
 
   function handlePointerDown(event: ReactPointerEvent<HTMLDivElement>) {
     if (focused || event.button !== 0) return;
@@ -215,6 +299,7 @@ function SheetFrameImpl({
       startY: event.clientY,
       originX: drag.current.x,
       originY: drag.current.y,
+      resting: restingRect(event.currentTarget, drag.current),
       moved: false,
     };
     event.currentTarget.setPointerCapture(event.pointerId);
@@ -240,7 +325,10 @@ function SheetFrameImpl({
     }
 
     active.moved = true;
-    drag.current = { x: active.originX + dx, y: active.originY + dy };
+    drag.current = keptWithinReach(active.resting, {
+      x: active.originX + dx,
+      y: active.originY + dy,
+    });
 
     const el = frameRef.current;
     if (!el) return;
@@ -269,8 +357,8 @@ function SheetFrameImpl({
       className={frameClass}
       onPointerDown={handlePointerDown}
       onPointerMove={handlePointerMove}
-      onPointerUp={endDrag}
-      onPointerCancel={endDrag}
+      onPointerUp={(event) => endDrag(event.pointerId)}
+      onPointerCancel={(event) => endDrag(event.pointerId)}
     >
       <div
         ref={cardRef}

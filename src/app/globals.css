@@ -259,10 +259,7 @@ body {
   width: calc(var(--shop-w) - var(--shop-gap) * 2);
   border-radius: var(--shop-radius);
   background-color: var(--color-background-hard);
-  box-shadow:
-    0 0 0 1px oklch(0 0 0 / 0.059),
-    0 18px 48px oklch(0 0 0 / 0.161),
-    0 2px 6px oklch(0 0 0 / 0.122);
+  box-shadow: var(--shadow-raised);
   /* The shop scrolls; the bar just never shows. Hiding the bar is not the same
      as removing the scroller — the content still has to be reachable. */
   overflow-y: auto;

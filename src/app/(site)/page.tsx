@@ -29,7 +29,6 @@ const PERSONAL_WORK: { title: string; href?: string; blurb: string }[] = [
   },
   {
     title: "hyperlinks amarelos",
-    href: "#",
     blurb: "an essay podcast",
   },
   {
@@ -69,9 +68,9 @@ export default function Home() {
             </div>
 
             <div className="h-fit">
-            <p className="text-[0.7rem] font-medium tracking-[0.01em] text-foreground-soft">
+            <h2 className="text-[0.7rem] font-medium tracking-[0.01em] text-foreground-soft">
               Personal work
-            </p>
+            </h2>
             <ul className="mt-2 space-y-2 text-[1.05rem] leading-tight font-semibold">
               {PERSONAL_WORK.map(({ title, href, blurb }) => (
                 <li key={title} className="text-balance">
@@ -87,9 +86,9 @@ export default function Home() {
               ))}
             </ul>
 
-            <p className="mt-8 text-[0.7rem] font-medium tracking-[0.01em] text-foreground-soft">
+            <h2 className="mt-8 text-[0.7rem] font-medium tracking-[0.01em] text-foreground-soft">
               Find me
-            </p>
+            </h2>
             <ul className="mt-2 flex flex-wrap gap-x-5 gap-y-1 text-[0.85rem]">
               {FIND_ME.map(({ label, href }) => (
                 <li key={label}>

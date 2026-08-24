@@ -54,7 +54,11 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
       <body className="min-h-full">
         <GiftShop />
 
-        <div data-page className="relative z-10 flex min-h-full flex-col bg-background">
+        <div
+          data-page
+          tabIndex={-1}
+          className="relative z-10 flex min-h-full flex-col bg-background outline-none"
+        >
           {children}
           <Colophon />
         </div>

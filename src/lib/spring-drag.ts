@@ -14,7 +14,7 @@ const TETHER_LIMIT_SHARE = 0.999;
 const DRAG_START_THRESHOLD_PX = 4;
 
 const TILT_DEGREES_PER_PX = 0.06;
-const MAX_TILT_DEGREES = 7;
+const MAX_TILT_DEGREES = TETHER_LENGTH_PX * TILT_DEGREES_PER_PX;
 
 const SPRING_RESPONSE_SECONDS = 0.4;
 const SPRING_DAMPING_RATIO = 0.8;
@@ -112,8 +112,8 @@ type Grab = {
   travelled: boolean;
 };
 
-export function useSpringDrag() {
-  const ref = useRef<HTMLDivElement>(null);
+export function useSpringDrag<Held extends HTMLElement = HTMLElement>() {
+  const ref = useRef<Held>(null);
   const grab = useRef<Grab | null>(null);
   const travel = useRef<Offset>({ x: 0, y: 0 });
   const stopSpring = useRef<(() => void) | null>(null);
@@ -183,7 +183,7 @@ export function useSpringDrag() {
   }, [letGo]);
 
   const onPointerDown = useCallback(
-    (event: ReactPointerEvent<HTMLDivElement>) => {
+    (event: ReactPointerEvent<HTMLElement>) => {
       if (event.button !== 0) return;
       if (window.matchMedia(REDUCED_MOTION).matches) return;
 
@@ -209,7 +209,7 @@ export function useSpringDrag() {
   );
 
   const onPointerMove = useCallback(
-    (event: ReactPointerEvent<HTMLDivElement>) => {
+    (event: ReactPointerEvent<HTMLElement>) => {
       const held = grab.current;
       if (!held || held.pointerId !== event.pointerId) return;
 

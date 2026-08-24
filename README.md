@@ -10,7 +10,7 @@ My personal website, which is built like a small museum exhibition. The landing 
 
 - **Take a better look**. You can open a card and this zooms it in and blurs the background. Animation is very tricky, the Web Animations API makes it easier. The animations are cancellable and the zoomed-in cards are interpreted as aria modals, you interact with one at a time, double clicking doesn't start animation on top of others and the background remains inert.
 
-- **Exit through the gift shop**. One plaque, one door, on every device. It used to also answer to a `g` key and to appear only once you had left the landing — both charming on a laptop and both useless on a phone, which has no `g` to press and every reason to want the shop from where it already is. The whole interaction is still inspired by the Arc Browser side menu; the shelf now caps its width so a narrow window gets a shelf rather than a second page.
+- **Exit through the gift shop**. One plaque, one door, on every device. The whole interaction is still inspired by the Arc Browser side menu; the shelf now caps its width so a narrow window gets a shelf rather than a second page.
 
 - **Take what you need**. Every non-sexy thing a personal website needs lives at the gift shop. A fun way of doing bureaucracy.
 

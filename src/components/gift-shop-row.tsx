@@ -3,9 +3,10 @@
 import Image from "next/image";
 import { useCallback, useEffect, useRef, useState } from "react";
 import type { GiftShopItem } from "@/content/gift-shop";
-import { useSpringDrag } from "@/lib/spring-drag";
+import { GiftShopSwatch } from "./gift-shop-swatch";
 
 const CONFIRMED_FOR = 1500;
+const REPORTED_FOR = 4000;
 
 const ROW = [
   "group flex w-full rounded-lg px-3 py-3 text-left",
@@ -15,7 +16,7 @@ const ROW = [
   "focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-foreground/40",
 ].join(" ");
 
-const CHIP_W = "w-[9.5rem]";
+export const CHIP_W = "w-[9.5rem]";
 
 function Label({ title, meta }: { title: string; meta: string }) {
   return (
@@ -52,6 +53,14 @@ function Verb({ children, shown }: { children: string; shown?: boolean }) {
   );
 }
 
+export function Announcement({ children }: { children: string }) {
+  return (
+    <span role="status" className="sr-only">
+      {children}
+    </span>
+  );
+}
+
 function Preview({
   preview,
 }: {
@@ -75,7 +84,7 @@ function Preview({
 
 export function GiftShopRow({ item }: { item: GiftShopItem }) {
   if (item.kind === "swatch") {
-    return <SwatchChip title={item.title} hex={item.hex} fill={item.fill} />;
+    return <GiftShopSwatch title={item.title} hex={item.hex} fill={item.fill} />;
   }
 
   if (item.kind === "file") {
@@ -85,52 +94,114 @@ export function GiftShopRow({ item }: { item: GiftShopItem }) {
   return <CopyRow title={item.title} meta={item.meta} text={item.text} />;
 }
 
-function useConfirmation() {
-  const [confirmed, setConfirmed] = useState(false);
+type Outcome = "done" | "failed" | null;
+type Settled = Exclude<Outcome, null>;
+
+const SAVED_NOTE: Record<Settled, string> = {
+  done: "Saved",
+  failed: "Not saved",
+};
+
+const SAVED_ANNOUNCEMENT: Record<Settled, (title: string) => string> = {
+  done: (title) => `${title} saved.`,
+  failed: (title) => `${title} could not be saved.`,
+};
+
+export const COPIED_NOTE: Record<Settled, string> = {
+  done: "Copied",
+  failed: "Not copied",
+};
+
+export const COPIED_ANNOUNCEMENT: Record<Settled, (title: string) => string> = {
+  done: (title) => `${title} copied.`,
+  failed: (title) => `${title} could not be copied, the browser refused the clipboard.`,
+};
+
+function useOutcome() {
+  const [outcome, setOutcome] = useState<Outcome>(null);
   const timer = useRef<ReturnType<typeof setTimeout> | undefined>(undefined);
 
   useEffect(() => () => clearTimeout(timer.current), []);
 
-  const confirm = useCallback(() => {
-    setConfirmed(true);
+  const report = useCallback((next: Settled) => {
+    setOutcome(next);
     clearTimeout(timer.current);
-    timer.current = setTimeout(() => setConfirmed(false), CONFIRMED_FOR);
+    timer.current = setTimeout(
+      () => setOutcome(null),
+      next === "done" ? CONFIRMED_FOR : REPORTED_FOR,
+    );
   }, []);
 
-  return [confirmed, confirm] as const;
+  return [outcome, report] as const;
+}
+
+export function useCopy(text: string) {
+  const [outcome, report] = useOutcome();
+
+  const copy = useCallback(async () => {
+    try {
+      await navigator.clipboard.writeText(text);
+    } catch {
+      report("failed");
+      return;
+    }
+    report("done");
+  }, [report, text]);
+
+  return [outcome, copy] as const;
+}
+
+async function fileIsThere(href: string) {
+  try {
+    const response = await fetch(href, { method: "HEAD" });
+    return response.ok;
+  } catch {
+    return false;
+  }
 }
 
 function FileRow({ item }: { item: Extract<GiftShopItem, { kind: "file" }> }) {
-  const [saved, confirm] = useConfirmation();
+  const [outcome, report] = useOutcome();
+  const saved = outcome === "done";
+
+  async function save() {
+    report((await fileIsThere(item.href)) ? "done" : "failed");
+  }
+
+  const note = outcome ? SAVED_NOTE[outcome] : item.meta;
+  const announcement = outcome ? SAVED_ANNOUNCEMENT[outcome](item.title) : "";
 
   const label = (
     <>
-      <Label title={item.title} meta={saved ? "Saved" : item.meta} />
+      <Label title={item.title} meta={note} />
       <Verb shown={saved}>{saved ? "✓" : "Download"}</Verb>
     </>
   );
 
   return (
-    <a
-      href={item.href}
-      download={item.download}
-      onClick={confirm}
-      data-pressable
-      className={
-        item.preview
-          ? `${ROW} flex-col items-start gap-2`
-          : `${ROW} items-center gap-3`
-      }
-    >
-      {item.preview ? (
-        <>
-          <Preview preview={item.preview} />
-          <span className="flex w-full items-center gap-3">{label}</span>
-        </>
-      ) : (
-        label
-      )}
-    </a>
+    <>
+      <a
+        href={item.href}
+        download={item.download}
+        onClick={save}
+        data-pressable
+        className={
+          item.preview
+            ? `${ROW} flex-col items-start gap-2`
+            : `${ROW} items-center gap-3`
+        }
+      >
+        {item.preview ? (
+          <>
+            <Preview preview={item.preview} />
+            <span className="flex w-full items-center gap-3">{label}</span>
+          </>
+        ) : (
+          label
+        )}
+      </a>
+      <Announcement>{announcement}</Announcement>
+    </>
   );
 }
 
@@ -143,64 +214,24 @@ function CopyRow({
   meta: string;
   text: string;
 }) {
-  const [copied, confirm] = useConfirmation();
+  const [outcome, copy] = useCopy(text);
+  const copied = outcome === "done";
 
-  async function copy() {
-    try {
-      await navigator.clipboard.writeText(text);
-    } catch {
-      return;
-    }
-    confirm();
-  }
+  const note = outcome ? COPIED_NOTE[outcome] : meta;
+  const announcement = outcome ? COPIED_ANNOUNCEMENT[outcome](title) : "";
 
   return (
-    <button
-      type="button"
-      onClick={copy}
-      data-pressable
-      className={`${ROW} items-center gap-3`}
-    >
-      <Label title={title} meta={copied ? "Copied" : meta} />
-      <Verb shown={copied}>{copied ? "✓" : "Copy"}</Verb>
-    </button>
-  );
-}
-
-function SwatchChip({
-  title,
-  hex,
-  fill,
-}: {
-  title: string;
-  hex: string;
-  fill: string;
-}) {
-  const { ref, lifted, onPointerDown, onPointerMove } = useSpringDrag();
-
-  return (
-    <div
-      ref={ref}
-      onPointerDown={onPointerDown}
-      onPointerMove={onPointerMove}
-      className={[
-        `mx-auto flex aspect-[3/4] ${CHIP_W} touch-none flex-col select-none`,
-        "bg-white p-1 text-left",
-        "transition-[scale,box-shadow] duration-(--motion-quick) ease-out-strong",
-        lifted
-          ? "scale-[1.04] cursor-grabbing shadow-card"
-          : "cursor-grab shadow-chip",
-      ].join(" ")}
-    >
-      <span aria-hidden="true" className={`block w-full flex-1 ${fill}`} />
-      <span className="block px-2 pt-2 pb-1">
-        <span className="block text-[0.7rem] leading-tight font-semibold">
-          {title}
-        </span>
-        <span className="mt-0.5 block text-[0.7rem] leading-tight text-foreground-soft">
-          {hex}
-        </span>
-      </span>
-    </div>
+    <>
+      <button
+        type="button"
+        onClick={copy}
+        data-pressable
+        className={`${ROW} items-center gap-3`}
+      >
+        <Label title={title} meta={note} />
+        <Verb shown={copied}>{copied ? "✓" : "Copy"}</Verb>
+      </button>
+      <Announcement>{announcement}</Announcement>
+    </>
   );
 }

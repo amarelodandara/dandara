@@ -25,6 +25,44 @@ const isTypingTarget = (target: EventTarget | null) => {
   return /^(input|textarea|select)$/i.test(target.tagName);
 };
 
+const FRAMES_WAITED_FOR_THE_PANEL = 30;
+
+const onceThePanelIsVisible = (panel: HTMLElement | null, act: () => void) => {
+  let abandoned = false;
+  let framesLeft = FRAMES_WAITED_FOR_THE_PANEL;
+  let frame = 0;
+
+  const look = () => {
+    if (abandoned || !panel) return;
+    if (getComputedStyle(panel).visibility === "visible") {
+      act();
+      return;
+    }
+    framesLeft -= 1;
+    if (framesLeft > 0) frame = requestAnimationFrame(look);
+  };
+
+  frame = requestAnimationFrame(look);
+  return () => {
+    abandoned = true;
+    cancelAnimationFrame(frame);
+  };
+};
+
+const focusIsStillInside = (panel: HTMLElement | null) => {
+  const focused = document.activeElement;
+  return (
+    focused === null ||
+    focused === document.body ||
+    panel?.contains(focused) === true
+  );
+};
+
+const focusThePageItself = () =>
+  document
+    .querySelector<HTMLElement>("[data-page]")
+    ?.focus({ preventScroll: true });
+
 const Tailored =
   process.env.NODE_ENV === "development"
     ? dynamic(() => import("./gift-shop-tailored"))
@@ -39,15 +77,34 @@ export function GiftShop() {
   const panelRef = useRef<HTMLElement>(null);
   const plaqueRef = useRef<HTMLButtonElement>(null);
 
+  const focusBefore = useRef<HTMLElement | null>(null);
+  const rememberFocus = () => {
+    const active = document.activeElement;
+    focusBefore.current =
+      active instanceof HTMLElement && active !== document.body ? active : null;
+  };
+
   const close = useCallback(() => closeOverlay(ID), []);
-  const openShop = useCallback(() => openOverlay(ID), []);
+  const openShop = useCallback(() => {
+    rememberFocus();
+    openOverlay(ID);
+  }, []);
 
   useEffect(() => {
-    if (open) document.body.dataset.shopOpen = "";
-    else delete document.body.dataset.shopOpen;
-    return () => {
+    const page = document.querySelector("[data-page]");
+    const release = () => {
       delete document.body.dataset.shopOpen;
+      page?.removeAttribute("inert");
     };
+
+    if (open) {
+      document.body.dataset.shopOpen = "";
+      page?.setAttribute("inert", "");
+    } else {
+      release();
+    }
+
+    return release;
   }, [open]);
 
   useKeydown((event) => {
@@ -70,18 +127,33 @@ export function GiftShop() {
     if (somethingElseHoldsTheScreen) return;
 
     event.preventDefault();
+    rememberFocus();
     openOverlay(ID);
   });
 
   const heldFocus = useRef(false);
   useEffect(() => {
     if (open) {
-      panelRef.current?.focus();
-      heldFocus.current = true;
-    } else if (heldFocus.current) {
-      if (plaqueVisible) plaqueRef.current?.focus();
-      heldFocus.current = false;
+      return onceThePanelIsVisible(panelRef.current, () => {
+        panelRef.current?.focus();
+        heldFocus.current = document.activeElement === panelRef.current;
+      });
     }
+
+    if (!heldFocus.current) return;
+    heldFocus.current = false;
+
+    if (!focusIsStillInside(panelRef.current)) return;
+
+    if (plaqueVisible) {
+      plaqueRef.current?.focus();
+      return;
+    }
+    if (focusBefore.current?.isConnected) {
+      focusBefore.current.focus();
+      return;
+    }
+    focusThePageItself();
   }, [open, plaqueVisible]);
 
   return (
