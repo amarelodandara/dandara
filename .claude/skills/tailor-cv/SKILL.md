@@ -33,8 +33,30 @@ browser is missing, the generator fails with a download instruction — run
    `pt`. If the posting is genuinely bilingual, ask which to write — do not
    produce both.
 
-3. **Read `src/content/cv/base.<lang>.md`.** The other language is a mirror of
-   it, so nothing is lost by leaving it closed. Do not edit either base file.
+3. **Read `src/content/cv/full.en.md` first, then `base.<lang>.md`.**
+
+   `full.en.md` is the master: every true thing about Nicoly's career, written
+   in résumé-ready language, so that tailoring is an act of *selection* rather
+   than invention. It carries several summaries at different angles, bullets
+   grouped by the theme they argue, the full project detail, and — load-bearing
+   — a **Fixed facts** section and a **What Nicoly cannot claim** section.
+   Read both of those before writing a single line.
+
+   `base.<lang>.md` is one already-tuned selection from that pool. Read it for
+   shape and for canonical wording, and do not edit it.
+
+   For a Portuguese posting, read `full.en.md` **and** `full.pt.md`. All the
+   guidance lives in the English master and is not duplicated; `full.pt.md`
+   holds only the Portuguese prose to draw from.
+
+   Never render, generate, or send a `full` file. It sits at the CV root, where
+   `loadCv` only ever resolves `base.<lang>.md`, so `/cv?variant=full` and
+   `npm run cv:pdf --variant full` cannot reach it. Do not move it into
+   `tailored/`, which would make it reachable.
+
+   If the posting wants something the master does not cover, that is a gap in
+   the master, not licence to invent. Say so in the report so it can be added
+   from life rather than from guesswork.
 
 4. **Derive a slug** of `<company>-<role>`, kebab-cased and ASCII-folded, e.g.
    `linear-senior-product-designer`. It must match `^[a-z0-9][a-z0-9-]{0,63}$`
@@ -74,21 +96,34 @@ browser is missing, the generator fails with a download instruction — run
      --keywords src/content/cv/tailored/<slug>.<lang>.keywords.json
    ```
 
-6. **Write `src/content/cv/tailored/<slug>.<lang>.md`.** Start from an exact
-   copy of the base, then:
-   - rewrite the **Summary** so it carries the five to eight highest-priority
-     keywords as natural prose;
-   - **reorder and reword the bullets** so the most relevant land first within
-     each role;
-   - rewrite the **Skills** section in the posting's own terminology;
+6. **Write `src/content/cv/tailored/<slug>.<lang>.md`.** Start from the base's
+   shape, then select against the master:
+   - take the **Summary** whose angle matches the posting and bend it toward the
+     posting's vocabulary, so it carries the five to eight highest-priority
+     keywords as natural prose — do not stack two summaries together;
+   - **choose the bullets from the master** whose theme the posting rewards, and
+     order them so the most relevant land first within each role. The master
+     holds far more bullets than fit; picking is the job. Rewording a chosen
+     bullet toward the posting's language is expected;
+   - decide how to present **03/2026 – Present** using the master's *The current
+     period* section, and say in the report which of the three framings you
+     chose and why;
+   - build the **Skills** section from the master's skills pool, in the
+     posting's own terminology, and leave out what the posting has no use for;
+   - keep the **Projects** the posting gives a reason to read. adandara.com and
+     *In Service of Museums* usually earn their place for engineering-adjacent
+     and research-adjacent roles; the newsletter and podcast earn theirs where
+     writing or a published body of work is rewarded;
    - leave the frontmatter's `name`, `contact`, and `pageSize` alone.
 
    **Never invent or alter an employer, job title, date, degree, metric, or
-   URL.** Tailoring re-emphasises what is already true; it does not add
-   experience. If the posting asks for something Nicoly does not have — a
-   number of years, a named tool — say so plainly in the report and lead with
-   the strengths that are real. A résumé that wins a screen it cannot survive
-   is worse than one that does not.
+   URL.** Every number must be copied from the master's *Fixed facts* exactly as
+   written there. Tailoring re-emphasises what is already true; it does not add
+   experience. If the posting asks for something Nicoly does not have — a number
+   of years, a seniority title, a named tool — the master's *What Nicoly cannot
+   claim* section almost certainly names it. Say so plainly in the report and
+   lead with the strengths that are real. A résumé that wins a screen it cannot
+   survive is worse than one that does not.
 
    Stay inside the document grammar: `## Section`, `### Entry`, one bare meta
    line under an entry, `- ` bullets, paragraphs, `**bold**`, and bare URLs.
@@ -132,7 +167,9 @@ browser is missing, the generator fails with a download instruction — run
     - the full keyword table from step 7, both tiers;
     - match score before → after;
     - which keywords were added, and where they landed;
-    - which bullets were reordered or reworded, and why;
+    - which bullets were selected from the master, reordered or reworded, and why;
+    - which framing of 03/2026 – Present was used, and why;
+    - anything the posting wanted that the master does not yet cover;
     - any requirement the résumé genuinely cannot meet;
     - the output path and page count;
     - "press `g` on the local site to take it from the gift shop."
@@ -140,6 +177,11 @@ browser is missing, the generator fails with a download instruction — run
 ## What this never does
 
 - Edit `src/content/cv/base.en.md` or `base.pt.md`.
+- Edit `src/content/cv/full.en.md` or `full.pt.md` as part of a tailoring run.
+  The master changes when Nicoly's career changes, in a deliberate conversation
+  with her — never as a side effect of fitting one posting. Report the gap and
+  let her decide.
+- Render, generate, or send a `full` file, or move one into `tailored/`.
 - Run `npm run cv:base`. That regenerates the two committed PDFs the public
   site serves, and it is a deliberate, separately reviewed act.
 - Commit anything.
