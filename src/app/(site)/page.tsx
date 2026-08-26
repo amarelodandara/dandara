@@ -198,7 +198,6 @@ export default function Home() {
             In Service of Museums
           </h3>
           <video
-            src="/work/servico-museu.mp4"
             aria-label="A screen recording of the In Service of Museums site: the research summary, its reading timeline, and the search that tells a museum whether it falls inside the study."
             autoPlay
             loop
@@ -206,7 +205,10 @@ export default function Home() {
             playsInline
             preload="metadata"
             className="pointer-events-none clear-right mt-6 aspect-video h-auto w-full select-none"
-          />
+          >
+            <source src="/work/servico-museu.av1.mp4" type='video/mp4; codecs="av01.0.09M.08"' />
+            <source src="/work/servico-museu.mp4" type="video/mp4" />
+          </video>
           <p className="mt-3">
             A service design framework for museum user experience: what the
             visit asks of a visitor before, during and after the room, and where
@@ -233,7 +235,6 @@ export default function Home() {
           <p className="text-[0.7rem] text-foreground-soft">Monthly newsletter</p>
           <h3 className="mt-1 text-[1.05rem] font-semibold">links amarelos</h3>
           <video
-            src="/work/links-amarelos.mp4"
             aria-label="A screen recording of the links amarelos site: a yellow page promising monthly recommendations of texts, books, documentaries and things with no taxonomy yet."
             autoPlay
             loop
@@ -241,7 +242,10 @@ export default function Home() {
             playsInline
             preload="metadata"
             className="pointer-events-none clear-right mt-6 aspect-video h-auto w-full select-none"
-          />
+          >
+            <source src="/work/links-amarelos.av1.mp4" type='video/mp4; codecs="av01.0.12M.08"' />
+            <source src="/work/links-amarelos.mp4" type="video/mp4" />
+          </video>
           <p className="mt-3">
             <a
               href="https://linksamarelos.com"
