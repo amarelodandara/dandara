@@ -199,7 +199,7 @@ export default function Home() {
           </h3>
           <video
             src="/work/servico-museu.mp4"
-            aria-label="A screen recording of the In Service of Museums thesis work."
+            aria-label="A screen recording of the In Service of Museums site: the research summary, its reading timeline, and the search that tells a museum whether it falls inside the study."
             autoPlay
             loop
             muted
@@ -210,7 +210,17 @@ export default function Home() {
           <p className="mt-3">
             A service design framework for museum user experience: what the
             visit asks of a visitor before, during and after the room, and where
-            the institution keeps dropping its half of the exchange.
+            the institution keeps dropping its half of the exchange. Published
+            as a site rather than a PDF, so the research reads the way it argues
+            things should be read.
+          </p>
+          <p className="mt-3">
+            <a
+              href="https://servico-museu.vercel.app"
+              className="underline decoration-stone-400 decoration-[0.04em] underline-offset-[0.25em] transition-opacity duration-(--motion-quick) ease-out-strong hover:opacity-50"
+            >
+              servico-museu.vercel.app
+            </a>
           </p>
         </Sheet>
 
