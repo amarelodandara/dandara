@@ -35,9 +35,6 @@
   --color-cutout: oklch(0.945 0.081 97);
   --color-cutout-deep: oklch(0.927 0.103 95.473);
 
-  --color-professional: oklch(0.891 0.078 218.299);
-  --color-creative: oklch(0.95 0.11 100.35);
-
   /* One curve for the whole product. Strong decelerate: it starts fast, so the
      moment the user is watching is the moment that moves. The built-in `ease`
      is too weak to read as deliberate at these durations. */
@@ -60,6 +57,15 @@
   --shadow-raised: 0 0 0 1px oklch(0 0 0 / 0.059), 0 18px 48px oklch(0 0 0 / 0.161),
     0 2px 6px oklch(0 0 0 / 0.122);
   --shadow-chip: 0 0 0 1px oklch(0 0 0 / 0.059), 0 1px 3px oklch(0 0 0 / 0.102);
+
+  /* The fourth note, and the only one that is not an object above the wall.
+     Nothing on the exhibition wall floats: a picture is printed straight onto
+     the page and a block of words is printed inside a drawn boundary. So this
+     is the hairline from `card` with the light taken away — no blur, no lift,
+     just the edge. It is a little darker than the ring inside `card` because
+     there it sits on top of a shadow doing half the work, and here it is doing
+     all of it. */
+  --shadow-label: 0 0 0 1px oklch(0 0 0 / 0.09);
 }
 
 /* Inter 4.001 OpenType features applied to every glyph on the site.
@@ -166,17 +172,36 @@ body {
   overflow-x: clip;
 }
 
-/* The work pile is one scattered heap at every width, never a column and never
-   a grid. It used to switch to an alternating flex column below `md`, and at
-   half a desktop screen that alternation reads as two columns of cards — a
-   layout nobody asked for and the opposite of a pile.
+/* The work is shown two ways, and the visitor picks: hung on a wall, or tipped
+   into a pile. They are separate layouts for the same DOM — the same seven
+   frames, re-placed — which is what lets one FLIP carry every card between them.
 
-   So the scatter is unconditional now, and the narrowing happens inside it.
+   THE PILE is one scattered heap at every width, never a column and never a
+   grid. It used to switch to an alternating flex column below `md`, and at half
+   a desktop screen that alternation reads as two columns of cards — a layout
+   nobody asked for and the opposite of a pile.
+
+   So the scatter is unconditional, and the narrowing happens inside it.
    `--pile-spread` is how much of each sheet's horizontal offset from centre
    actually gets used: at 1 the heap is as wide as it was designed, at 0.34 the
    sheets collapse toward the middle and stack almost straight down. The result
    gets more vertical as the screen narrows because the horizontal component is
-   scaled away, not because a different layout took over. */
+   scaled away, not because a different layout took over.
+
+   On THE WALL a card is treated by what it holds, which is where the rhythm
+   comes from: a picture hangs directly on the page — no ground, no border, no
+   padding, its title a caption underneath — while a card that is only words
+   gets a boundary drawn around it, because type with nothing behind it is not
+   hung, it is spilled. Six plates and one label, in this set. The rule is the
+   wall's alone: tipped into the pile, every card is the same sheet of paper
+   again.
+
+   THE WALL is CSS multi-column, not a grid and not a measured masonry. The
+   cards are different heights because the work is, and `columns` is the one
+   layout that packs uneven heights without anyone measuring anything — which
+   matters here, because the morph animates a transform on each card and a JS
+   masonry would be re-measuring mid-flight. The cost is column-major reading
+   order; for seven pieces with no ranking, there is no order to lose. */
 [data-pile] {
   --pile-spread: 0.34;
   position: relative;
@@ -212,12 +237,48 @@ body {
    gesture once the movement is more sideways than vertical. `none` here would
    make the pile a dead zone that swallows every scroll that started on a card,
    which on a phone is most of them. */
-[data-sheet-frame] {
+[data-pile] > [data-sheet-frame] {
   position: absolute;
   top: var(--sheet-y);
   left: calc(50% + (var(--sheet-x) - 50%) * var(--pile-spread));
   width: var(--sheet-w);
   touch-action: pan-y;
+}
+
+/* A card on the wall is placed by the column, not by the scatter: no absolute
+   position, no `--sheet-w`, and its width is whatever the column is. Nothing
+   here is media-gated except the column count — the card is the same object it
+   was in the pile, only put down straight. */
+[data-wall] {
+  columns: 1;
+  column-gap: var(--wall-gap);
+}
+
+@media (min-width: 480px) {
+  [data-wall] {
+    columns: 2;
+  }
+}
+
+@media (min-width: 1024px) {
+  [data-wall] {
+    columns: 3;
+  }
+}
+
+[data-wall] > [data-sheet-frame] {
+  break-inside: avoid;
+  margin-bottom: var(--wall-gap);
+}
+
+:root {
+  --wall-gap: 1.25rem;
+}
+
+@media (min-width: 768px) {
+  :root {
+    --wall-gap: 1.75rem;
+  }
 }
 
 /* `--shop-w` is how far the page moves, not how wide the card is. The card is
@@ -304,8 +365,15 @@ body[data-shop-open] [data-shop-panel] {
   [data-sheet-card],
   [data-shop-panel],
   [data-page],
-  [data-plaque] {
+  [data-plaque],
+  [data-flavour] {
     transition-duration: 0.01ms !important;
+  }
+
+  /* The peek wash is opacity and stays; only the pill's arrival scale goes. */
+  [data-peek] span {
+    transition-duration: 0.01ms !important;
+    scale: 1;
   }
 
   /* The dim stays. It changes no position — it is opacity and blur telling you

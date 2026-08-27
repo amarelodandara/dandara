@@ -13,6 +13,8 @@ import {
 import { SheetFrame } from "./sheet-frame";
 import type { SheetProps, SheetSize } from "./sheet";
 import { scatter } from "@/lib/scatter";
+import type { WorkView } from "@/lib/work-view";
+import { PileIcon, WallIcon } from "./work-view-icons";
 import {
   closeOverlay,
   openOverlay,
@@ -27,6 +29,10 @@ type Item = {
   kind: SheetProps["kind"];
   title: string;
   size: SheetSize;
+  eyebrow?: string;
+  front: ReactNode;
+  frontKind: SheetProps["frontKind"];
+  link: SheetProps["link"];
   content: ReactNode;
 };
 
@@ -47,10 +53,50 @@ function readSheets(children: ReactNode): Item[] {
         kind: props.kind,
         title: props.title,
         size: props.size ?? "narrow",
+        eyebrow: props.eyebrow,
+        front: props.front,
+        frontKind: props.frontKind,
+        link: props.link,
         content: props.children,
       },
     ];
   });
+}
+
+function ViewButton({
+  active,
+  label,
+  onClick,
+  children,
+}: {
+  active: boolean;
+  label: string;
+  onClick: () => void;
+  children: ReactNode;
+}) {
+  return (
+    <button
+      type="button"
+      data-pressable
+      aria-pressed={active}
+      title={label}
+      onClick={onClick}
+      className={[
+        "relative cursor-pointer",
+        "transition-[color,scale] duration-(--motion-quick) ease-out-strong",
+        "active:scale-[0.97] active:duration-(--press)",
+        "after:absolute after:left-1/2 after:top-1/2 after:h-11 after:w-11 after:content-['']",
+        "after:-translate-x-1/2 after:-translate-y-1/2",
+        "outline-offset-4 focus-visible:outline-2 focus-visible:outline-foreground",
+        active
+          ? "text-foreground-soft"
+          : "text-foreground-soft/35 hover:text-foreground-soft/70",
+      ].join(" ")}
+    >
+      {children}
+      <span className="sr-only">{label}</span>
+    </button>
+  );
 }
 
 export function WorkPile({
@@ -66,6 +112,7 @@ export function WorkPile({
     [items],
   );
 
+  const [view, setView] = useState<WorkView>("wall");
   const [requestedId, setRequestedId] = useState<string | null>(null);
   const active = useActiveOverlay();
   const focusedId = active === OVERLAY_ID ? requestedId : null;
@@ -92,6 +139,11 @@ export function WorkPile({
 
   const close = useCallback(() => closeOverlay(OVERLAY_ID), []);
 
+  const show = useCallback((next: WorkView) => {
+    closeOverlay(OVERLAY_ID);
+    setView(next);
+  }, []);
+
   useEffect(() => {
     const outside = document.querySelectorAll<HTMLElement>("[data-dim-on-focus]");
     const clear = () => {
@@ -115,23 +167,69 @@ export function WorkPile({
 
   return (
     <section id="work" className="relative mt-[18vh] pb-[12vh]">
-      <div className="flex items-baseline justify-between gap-6">
+      <div className="flex items-center justify-between gap-6">
         <h2 className="text-[0.7rem] leading-none font-medium tracking-[0.01em] text-foreground-soft">
           {label}
         </h2>
-        <p className="text-[0.7rem] leading-none tracking-[0.01em] text-foreground-soft/60">
-          it&rsquo;s art, please touch
-        </p>
+
+        <div className="flex items-center gap-1.5">
+          <ViewButton
+            active={view === "wall"}
+            label="Hang the work on a wall"
+            onClick={() => show("wall")}
+          >
+            <WallIcon />
+          </ViewButton>
+
+          <div
+            data-flavour
+            className={[
+              "grid transition-[grid-template-columns]",
+              "duration-(--motion-enter) ease-out-strong",
+              view === "pile"
+                ? "grid-cols-[minmax(0,1fr)]"
+                : "grid-cols-[minmax(0,0fr)]",
+            ].join(" ")}
+          >
+            <p
+              aria-hidden={view === "wall" || undefined}
+              className={[
+                "min-w-0 overflow-hidden px-2 whitespace-nowrap",
+                "text-[0.7rem] leading-none tracking-[0.01em] text-foreground-soft/60",
+                "transition-opacity duration-(--motion-quick) ease-out-strong",
+                view === "pile" ? "opacity-100" : "opacity-0",
+              ].join(" ")}
+            >
+              it&rsquo;s art, please touch
+            </p>
+          </div>
+
+          <ViewButton
+            active={view === "pile"}
+            label="Tip the work into a pile"
+            onClick={() => show("pile")}
+          >
+            <PileIcon />
+          </ViewButton>
+        </div>
       </div>
 
-      <div data-pile className="relative mt-10 md:mt-16">
+      <div
+        data-pile={view === "pile" ? "" : undefined}
+        data-wall={view === "wall" ? "" : undefined}
+        className="relative mt-10 md:mt-16"
+      >
         {items.map((item) => (
           <SheetFrame
             key={item.id}
             id={item.id}
-            kind={item.kind}
             title={item.title}
             size={item.size}
+            view={view}
+            eyebrow={item.eyebrow}
+            front={item.front}
+            frontKind={item.frontKind}
+            link={item.link}
             placement={placements[item.id]}
             z={lifted[item.id] ?? placements[item.id].z}
             focused={focusedId === item.id}

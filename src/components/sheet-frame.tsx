@@ -12,18 +12,14 @@ import {
   type PointerEvent as ReactPointerEvent,
   type ReactNode,
 } from "react";
-import type { SheetKind, SheetSize } from "./sheet";
+import type { SheetFront, SheetLink, SheetSize } from "./sheet";
+import type { WorkView } from "@/lib/work-view";
 import type { Placement } from "@/lib/scatter";
 
 const WIDTH: Record<SheetSize, string> = {
   narrow: "clamp(9.5rem, 42vw, 18rem)",
   wide: "clamp(11rem, 52vw, 24rem)",
   feature: "clamp(13rem, 66vw, 38rem)",
-};
-
-const BACKGROUND: Record<SheetKind, string> = {
-  professional: "bg-professional",
-  personal: "bg-creative",
 };
 
 const DRAG_THRESHOLD = 4;
@@ -99,14 +95,14 @@ const keptWithinReach = (resting: RestingRect, offset: Offset): Offset => ({
 function useKeptWithinReach({
   frameRef,
   drag,
-  focused,
+  placedByDrag,
 }: {
   frameRef: RefObject<HTMLDivElement | null>;
   drag: RefObject<Offset>;
-  focused: boolean;
+  placedByDrag: boolean;
 }) {
   useEffect(() => {
-    if (focused) return;
+    if (!placedByDrag) return;
 
     const haulBackIntoReach = () => {
       const frame = frameRef.current;
@@ -119,14 +115,18 @@ function useKeptWithinReach({
 
     window.addEventListener("resize", haulBackIntoReach);
     return () => window.removeEventListener("resize", haulBackIntoReach);
-  }, [drag, focused, frameRef]);
+  }, [drag, placedByDrag, frameRef]);
 }
 
 export type SheetFrameProps = {
   id: string;
-  kind: SheetKind;
   title: string;
   size: SheetSize;
+  view: WorkView;
+  eyebrow?: string;
+  front?: ReactNode;
+  frontKind?: SheetFront;
+  link?: SheetLink;
   placement: Placement;
   z: number;
   focused: boolean;
@@ -151,11 +151,201 @@ function useBailOutOfALostPointer(endDrag: (pointerId?: number) => void) {
   }, [endDrag]);
 }
 
+type Look = {
+  focused: boolean;
+  onWall: boolean;
+  dragging: boolean;
+  bare: boolean;
+};
+
+const FOCUSED_FRAME =
+  "fixed left-1/2 top-1/2 z-[60] w-[88vw] -translate-x-1/2 -translate-y-1/2 md:w-[var(--sheet-w)]";
+
+const frameClass = ({ focused, onWall, dragging }: Look) => {
+  if (focused) return FOCUSED_FRAME;
+  if (onWall) return "group";
+  return `group ${dragging ? "cursor-grabbing" : "cursor-grab"}`;
+};
+
+const DETAIL_LINK = [
+  "underline decoration-stone-400 decoration-[0.04em] underline-offset-[0.25em]",
+  "transition-opacity duration-(--motion-quick) ease-out-strong hover:opacity-50",
+].join(" ");
+
+const MOTION =
+  "transition-[rotate,scale,box-shadow] duration-(--motion-enter) ease-out-strong";
+
+const surface = ({ focused, onWall, dragging, bare }: Look) => {
+  if (bare) return "";
+  if (onWall) return "bg-background p-4 shadow-label md:p-7";
+  const lift = dragging || focused ? "shadow-raised" : "shadow-card";
+  return `bg-background ${focused ? "p-6 md:p-7" : "p-4 md:p-7"} ${lift}`;
+};
+
+const cardClass = (look: Look) =>
+  [
+    "relative outline-none",
+    surface(look),
+    MOTION,
+    look.focused || look.onWall ? "rotate-0" : "rotate-[var(--sheet-r)]",
+  ].join(" ");
+
+const WALL_BUTTON = [
+  "absolute inset-0 z-10 cursor-pointer",
+  "outline-offset-4 focus-visible:outline-2 focus-visible:outline-foreground",
+].join(" ");
+
+const PILE_BUTTON = [
+  "relative z-10 float-right -mr-2 -mt-2 ml-4 cursor-pointer",
+  "rounded-sm px-2 py-1",
+  "text-[0.7rem] font-medium tracking-[0.01em]",
+  "hover:bg-foreground/10 focus-visible:bg-foreground/10",
+  "transition-[opacity,background-color,scale] duration-(--motion-quick) ease-out-strong",
+  "active:scale-[0.97] active:duration-(--press)",
+  "after:absolute after:left-1/2 after:top-1/2 after:content-['']",
+  "after:h-11 after:w-[max(100%+1.5rem,2.75rem)]",
+  "after:-translate-x-1/2 after:-translate-y-1/2",
+].join(" ");
+
+function SheetButton({
+  ref,
+  title,
+  focused,
+  onWall,
+  onClick,
+}: {
+  ref: RefObject<HTMLButtonElement | null>;
+  title: string;
+  focused: boolean;
+  onWall: boolean;
+  onClick: () => void;
+}) {
+  const pileClass = `${PILE_BUTTON} ${focused ? "opacity-100" : REVEALED_ON_HOVER}`;
+  return (
+    <button
+      ref={ref}
+      type="button"
+      data-pressable
+      onClick={onClick}
+      className={onWall ? WALL_BUTTON : pileClass}
+    >
+      {onWall ? null : (focused && "Close") || "Open"}
+      <span className="sr-only">
+        {onWall ? "Open " : " "}
+        {title}
+      </span>
+    </button>
+  );
+}
+
+const REVEALED_ON_HOVER =
+  "can-hover:opacity-0 can-hover:group-hover:opacity-100 can-hover:group-focus-within:opacity-100";
+
+const CAPTION_LINK = [
+  "relative z-20 shrink-0",
+  "text-[0.7rem] text-foreground-soft",
+  "underline decoration-stone-400 decoration-[0.04em] underline-offset-[0.25em]",
+  "transition-[opacity,color] duration-(--motion-quick) ease-out-strong",
+  "hover:text-foreground focus-visible:text-foreground",
+  REVEALED_ON_HOVER,
+].join(" ");
+
+const PEEK_WASH = [
+  "pointer-events-none absolute inset-0 grid place-items-center",
+  "bg-background/55 opacity-0",
+  "transition-opacity duration-(--motion-quick) ease-out-strong",
+  "group-hover:opacity-100 group-focus-within:opacity-100",
+].join(" ");
+
+const PEEK_PILL = [
+  "rounded-full bg-background px-3 py-1.5 shadow-chip",
+  "text-[0.7rem] font-medium tracking-[0.01em] text-foreground",
+  "scale-[0.96] transition-transform duration-(--motion-quick) ease-out-strong",
+  "group-hover:scale-100 group-focus-within:scale-100",
+].join(" ");
+
+function Peek() {
+  return (
+    <div aria-hidden="true" data-peek className={PEEK_WASH}>
+      <span className={PEEK_PILL}>Take a closer look</span>
+    </div>
+  );
+}
+
+function Plate({
+  title,
+  front,
+  link,
+}: {
+  title: string;
+  front?: ReactNode;
+  link?: SheetLink;
+}) {
+  return (
+    <>
+      <div className="relative">
+        {front}
+        <Peek />
+      </div>
+      <div className="mt-3 flex items-baseline justify-between gap-4">
+        <h3 className="text-[1.05rem]">{title}</h3>
+        {link ? (
+          <a href={link.href} className={CAPTION_LINK}>
+            {link.label}
+          </a>
+        ) : null}
+      </div>
+    </>
+  );
+}
+
+function Card({
+  onWall,
+  eyebrow,
+  title,
+  front,
+  link,
+  showsDetail,
+  children,
+}: {
+  onWall: boolean;
+  eyebrow?: string;
+  title: string;
+  front?: ReactNode;
+  link?: SheetLink;
+  showsDetail: boolean;
+  children: ReactNode;
+}) {
+  return (
+    <>
+      {showsDetail && eyebrow ? (
+        <p className="text-[0.7rem] text-foreground-soft">{eyebrow}</p>
+      ) : null}
+      <h3 className={`text-[1.05rem] ${onWall ? "" : "mt-1 font-semibold"}`}>
+        {title}
+      </h3>
+      {front ? <div className="clear-right mt-6">{front}</div> : null}
+      {showsDetail ? children : null}
+      {showsDetail && link ? (
+        <p className="mt-3">
+          <a href={link.href} className={DETAIL_LINK}>
+            {link.label}
+          </a>
+        </p>
+      ) : null}
+    </>
+  );
+}
+
 function SheetFrameImpl({
   id,
-  kind,
   title,
   size,
+  view,
+  eyebrow,
+  front,
+  frontKind = "picture",
+  link,
   placement,
   z,
   focused,
@@ -176,14 +366,16 @@ function SheetFrameImpl({
   const previousRect = useRef<DOMRect | null>(null);
   const flip = useRef<Animation | null>(null);
   const wasFocused = useRef(focused);
+  const wasView = useRef(view);
 
+  const placedByDrag = !focused && view === "pile";
   useIsomorphicLayoutEffect(() => {
     const el = frameRef.current;
     if (!el) return;
-    el.style.translate = focused
-      ? ""
-      : `calc(-50% + ${drag.current.x}px) ${drag.current.y}px`;
-  }, [focused]);
+    el.style.translate = placedByDrag
+      ? `calc(-50% + ${drag.current.x}px) ${drag.current.y}px`
+      : "";
+  }, [placedByDrag]);
 
   useIsomorphicLayoutEffect(() => {
     const el = frameRef.current;
@@ -193,8 +385,9 @@ function SheetFrameImpl({
     const to = el.getBoundingClientRect();
     previousRect.current = to;
 
-    const toggled = wasFocused.current !== focused;
+    const toggled = wasFocused.current !== focused || wasView.current !== view;
     wasFocused.current = focused;
+    wasView.current = view;
 
     if (!toggled || !from || matches("(prefers-reduced-motion: reduce)")) return;
     if (!to.width || !to.height) return;
@@ -285,10 +478,10 @@ function SheetFrameImpl({
 
   useBailOutOfALostPointer(endDrag);
 
-  useKeptWithinReach({ frameRef, drag, focused });
+  useKeptWithinReach({ frameRef, drag, placedByDrag });
 
   function handlePointerDown(event: ReactPointerEvent<HTMLDivElement>) {
-    if (focused || event.button !== 0) return;
+    if (!placedByDrag || event.button !== 0) return;
     if ((event.target as HTMLElement).closest("a, button, input, textarea, select, video"))
       return;
 
@@ -335,9 +528,10 @@ function SheetFrameImpl({
     el.style.translate = `calc(-50% + ${drag.current.x}px) ${drag.current.y}px`;
   }
 
-  const frameClass = focused
-    ? "fixed left-1/2 top-1/2 z-[60] w-[88vw] -translate-x-1/2 -translate-y-1/2 md:w-[var(--sheet-w)]"
-    : ["group", dragging ? "cursor-grabbing" : "cursor-grab"].join(" ");
+  const onWall = view === "wall" && !focused;
+  const showsDetail = focused || view === "pile";
+  const bare = onWall && frontKind === "picture" && Boolean(front);
+  const look = { focused, onWall, dragging, bare };
 
   return (
     <div
@@ -354,7 +548,7 @@ function SheetFrameImpl({
           zIndex: focused ? undefined : z,
         } as CSSProperties
       }
-      className={frameClass}
+      className={frameClass(look)}
       onPointerDown={handlePointerDown}
       onPointerMove={handlePointerMove}
       onPointerUp={(event) => endDrag(event.pointerId)}
@@ -367,38 +561,29 @@ function SheetFrameImpl({
         aria-label={focused ? title : undefined}
         tabIndex={focused ? -1 : undefined}
         data-sheet-card
-        className={[
-          focused ? "p-6 md:p-7" : "p-4 md:p-7",
-          "outline-none",
-          BACKGROUND[kind],
-          "transition-[rotate,scale] duration-(--motion-enter) ease-out-strong",
-          focused ? "rotate-0" : "rotate-[var(--sheet-r)]",
-        ].join(" ")}
+        className={cardClass(look)}
       >
-        <button
+        <SheetButton
           ref={buttonRef}
-          type="button"
-          data-pressable
+          title={title}
+          focused={focused}
+          onWall={onWall}
           onClick={() => (focused ? onClose() : onOpen(id))}
-          className={[
-            "relative z-10 float-right -mr-2 -mt-2 ml-4 cursor-pointer",
-            "rounded-sm px-2 py-1",
-            "text-[0.7rem] font-medium tracking-[0.01em]",
-            "hover:bg-foreground/10 focus-visible:bg-foreground/10",
-            "transition-[opacity,background-color,scale] duration-(--motion-quick) ease-out-strong",
-            "active:scale-[0.97] active:duration-(--press)",
-            "after:absolute after:left-1/2 after:top-1/2 after:content-['']",
-            "after:h-11 after:w-[max(100%+1.5rem,2.75rem)]",
-            "after:-translate-x-1/2 after:-translate-y-1/2",
-            focused
-              ? "opacity-100"
-              : "can-hover:opacity-0 can-hover:group-hover:opacity-100 can-hover:group-focus-within:opacity-100",
-          ].join(" ")}
-        >
-          {focused ? "Close" : "Open"}
-          <span className="sr-only"> {title}</span>
-        </button>
-        {children}
+        />
+        {bare ? (
+          <Plate title={title} front={front} link={link} />
+        ) : (
+          <Card
+            onWall={onWall}
+            eyebrow={eyebrow}
+            title={title}
+            front={front}
+            link={link}
+            showsDetail={showsDetail}
+          >
+            {children}
+          </Card>
+        )}
       </div>
     </div>
   );
