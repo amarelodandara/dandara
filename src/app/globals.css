@@ -407,7 +407,12 @@ body[data-shop-open] [data-shop-panel] {
   grid-column: text;
 }
 
-figure[data-measure="three-quarters"] > :first-child {
-  width: 75%;
-  margin-inline: auto;
+/* The narrowing only makes sense where there is width to give away. On a phone
+   the text column already is the screen, so three quarters of it is just a
+   small picture, and a phone screenshot shown small is a picture of nothing. */
+@media (min-width: 40rem) {
+  figure[data-measure="three-quarters"] > :first-child {
+    width: 75%;
+    margin-inline: auto;
+  }
 }

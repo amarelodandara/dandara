@@ -23,11 +23,12 @@ export function GiftShopPlaque({
       aria-keyshortcuts="g"
       data-plaque
       className={[
-        "group fixed top-[5vh] left-[3vw] z-20 flex items-center",
+        "group fixed left-[3vw] z-20 flex items-center",
+        "bottom-[4vh] sm:top-[5vh] sm:bottom-auto",
         "rounded-sm bg-amber-100 px-3 py-2 shadow-card",
         "transition-[opacity,translate,scale] duration-(--motion-enter) ease-out-strong",
         "active:scale-[0.97] active:duration-(--press)",
-        visible ? "opacity-100" : "-translate-y-3 opacity-0",
+        visible ? "opacity-100" : "translate-y-3 opacity-0 sm:-translate-y-3",
       ].join(" ")}
     >
       <span className="text-[0.7rem] leading-none font-medium tracking-[0.01em]">
