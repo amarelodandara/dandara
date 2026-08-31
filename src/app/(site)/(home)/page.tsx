@@ -4,7 +4,8 @@ import { LINK, LINK_UNDERLINED } from "@/components/link";
 import { Sheet } from "@/components/sheet";
 import { WorkPile } from "@/components/work-pile";
 import { FIND_ME } from "@/content/socials";
-import { formatPostDate, loadPostList } from "@/lib/writing/posts";
+import { UPCOMING } from "@/content/upcoming";
+import { loadPostList } from "@/lib/writing/posts";
 
 const PERSONAL_WORK: { title: string; href?: string; blurb: string }[] = [
   {
@@ -124,28 +125,38 @@ export default async function Home() {
 
       </div>
 
-      <section data-dim-on-focus className="mt-[18vh]">
-        <h2 className="text-[0.7rem] leading-none font-medium tracking-[0.01em] text-foreground-soft">
-          Writing
-        </h2>
+      <section
+        data-dim-on-focus
+        className="mt-[18vh] grid grid-cols-1 gap-12 md:grid-cols-2"
+      >
+        <div className="md:col-start-2">
+          <h2 className="text-[0.7rem] leading-none font-medium tracking-[0.01em] text-foreground-soft">
+            Writing
+          </h2>
 
-        <ul className="mt-6 space-y-10 md:mt-8">
-          {writing.map(({ slug, meta }) => (
-            <li key={slug} className="max-w-xl">
-              <p className="text-[0.7rem] leading-none text-foreground-soft">
-                <time dateTime={meta.date}>{formatPostDate(meta.date)}</time>
-              </p>
-              <h3 className="mt-2 text-[clamp(1.15rem,1.7vw,1.4rem)] leading-tight font-semibold tracking-[-0.01em] text-balance">
-                <Link href={`/writing/${slug}`} className={LINK}>
-                  {meta.title}
-                </Link>
-              </h3>
-              <p className="mt-2 text-[clamp(0.95rem,1.15vw,1.0625rem)] leading-normal text-balance text-foreground-soft">
-                {meta.deck}
-              </p>
-            </li>
-          ))}
-        </ul>
+          <ul className="mt-6 space-y-2 md:mt-8">
+            {writing.map(({ slug, meta }) => (
+              <li key={slug}>
+                <h3 className="text-[clamp(1.15rem,1.7vw,1.4rem)] leading-tight font-semibold tracking-[-0.01em] text-balance">
+                  <Link href={`/writing/${slug}`} className={LINK}>
+                    {meta.title}
+                  </Link>
+                </h3>
+              </li>
+            ))}
+
+            {UPCOMING.map(({ title }) => (
+              <li key={title}>
+                <h3 className="flex items-baseline gap-2.5 text-[clamp(1.15rem,1.7vw,1.4rem)] leading-tight font-semibold tracking-[-0.01em] text-balance text-foreground-soft/60">
+                  {title}
+                  <span className="shrink-0 text-[0.7rem] font-medium tracking-[0.01em] text-foreground-soft/60">
+                    soon
+                  </span>
+                </h3>
+              </li>
+            ))}
+          </ul>
+        </div>
       </section>
 
       <WorkPile>

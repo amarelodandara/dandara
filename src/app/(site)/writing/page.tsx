@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { LINK } from "@/components/link";
+import { UPCOMING } from "@/content/upcoming";
 import { WritingNav } from "@/components/writing/writing-nav";
 import { formatPostDate, loadPostList } from "@/lib/writing/posts";
 
@@ -39,6 +40,20 @@ export default async function WritingIndex() {
                 <p className="mt-1.5 text-[clamp(0.95rem,1.15vw,1.0625rem)] leading-normal text-foreground-soft">
                   {meta.deck}
                 </p>
+              </li>
+            ))}
+
+            {UPCOMING.map(({ title }) => (
+              <li key={title}>
+                <p
+                  data-quiet
+                  className="text-[0.7rem] font-medium tracking-[0.01em] text-foreground/35"
+                >
+                  Coming soon
+                </p>
+                <h2 className="mt-1.5 text-[1.05rem] leading-tight font-semibold text-balance text-foreground-soft/60">
+                  {title}
+                </h2>
               </li>
             ))}
           </ul>
