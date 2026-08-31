@@ -1,4 +1,4 @@
-import { mkdir, readFile, writeFile } from "node:fs/promises";
+import { access, mkdir, readFile, writeFile } from "node:fs/promises";
 import path from "node:path";
 import process from "node:process";
 import { chromium } from "playwright";
@@ -148,12 +148,31 @@ async function shoot(page: Page, card: { markup: string; out: string }) {
   console.log(`✓ ${path.relative(ROOT, card.out)}  ${WIDTH}x${HEIGHT}  ${kb} kB`);
 }
 
-async function main() {
-  const fontFile = await readFile(FONT);
-  const font = fontFile.toString("base64");
-  const posts = await readPosts();
-  await mkdir(POST_DIR, { recursive: true });
+const there = async (file: string) => {
+  try {
+    await access(file);
+    return true;
+  } catch {
+    return false;
+  }
+};
 
+async function verify(cards: string[]) {
+  const missing: string[] = [];
+  for (const card of cards) {
+    if (!(await there(card))) missing.push(path.relative(ROOT, card));
+  }
+
+  if (missing.length > 0) {
+    throw new Error(
+      `No browser to render with, and these cards are not committed: ${missing.join(", ")}. Run "npm run og:image" where Chromium is installed and commit the result.`,
+    );
+  }
+
+  console.log(`· no browser here — keeping ${cards.length} committed cards`);
+}
+
+async function render(cards: Map<string, string>) {
   const browser = await chromium.launch();
   try {
     const page = await browser.newPage({
@@ -161,17 +180,27 @@ async function main() {
       deviceScaleFactor: 1,
     });
 
-    await shoot(page, { markup: homeCard(font), out: OUT });
-
-    for (const { slug, meta } of posts) {
-      await shoot(page, {
-        markup: postCard(font, meta),
-        out: path.join(POST_DIR, `${slug}.png`),
-      });
+    for (const [out, markup] of cards) {
+      await shoot(page, { markup, out });
     }
   } finally {
     await browser.close();
   }
+}
+
+async function main() {
+  const fontFile = await readFile(FONT);
+  const font = fontFile.toString("base64");
+  const posts = await readPosts();
+  await mkdir(POST_DIR, { recursive: true });
+
+  const cards = new Map<string, string>([[OUT, homeCard(font)]]);
+  for (const { slug, meta } of posts) {
+    cards.set(path.join(POST_DIR, `${slug}.png`), postCard(font, meta));
+  }
+
+  const browserIsThere = await there(chromium.executablePath());
+  await (browserIsThere ? render(cards) : verify([...cards.keys()]));
 }
 
 main().catch((error) => {
