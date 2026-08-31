@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import { CAPTION } from "./figure";
+import { Frame, type Measure } from "./figure";
 
 const STILLNESS = "(prefers-reduced-motion: reduce)";
 
@@ -12,6 +12,8 @@ export function Clip({
   height,
   caption,
   codec,
+  measure,
+  mat,
 }: {
   src: string;
   alt: string;
@@ -19,6 +21,8 @@ export function Clip({
   height: number;
   caption?: string;
   codec?: string;
+  measure?: Measure;
+  mat?: boolean;
 }) {
   const video = useRef<HTMLVideoElement>(null);
   const [held, setHeld] = useState(false);
@@ -39,7 +43,7 @@ export function Clip({
   }, []);
 
   return (
-    <figure className="my-12">
+    <Frame measure={measure} mat={mat} caption={caption}>
       <video
         ref={video}
         aria-label={alt}
@@ -58,7 +62,6 @@ export function Clip({
         ) : null}
         <source src={`${src}.mp4`} type="video/mp4" />
       </video>
-      {caption ? <figcaption className={CAPTION}>{caption}</figcaption> : null}
-    </figure>
+    </Frame>
   );
 }

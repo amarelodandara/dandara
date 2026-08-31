@@ -1,18 +1,23 @@
-import { readFile, writeFile } from "node:fs/promises";
+import { mkdir, readFile, writeFile } from "node:fs/promises";
 import path from "node:path";
 import process from "node:process";
 import { chromium } from "playwright";
+import type { Page } from "playwright";
 import { DESCRIPTION, TITLE } from "../src/lib/site.ts";
+import { readPosts } from "../src/lib/writing/meta-source.ts";
 
 const ROOT = process.cwd();
 const OUT = path.join(ROOT, "src", "app", "(site)", "opengraph-image.png");
+const POST_DIR = path.join(ROOT, "public", "writing", "og");
 const FONT = path.join(ROOT, "src", "fonts", "InterVariable.woff2");
 
+const KB = 1024;
 const WIDTH = 1200;
 const HEIGHT = 630;
 
 const CREAM = "#fef3c7";
 const INK = "#111111";
+const SOFT = "#5c5751";
 const SUN_CORE = "#ff8e00";
 const SUN_EDGE = "#ffcc00";
 
@@ -35,7 +40,7 @@ function roleMarkup(description: string) {
   return `${escape(first)}<br />${escape(ROLE_SECOND_LINE)}`;
 }
 
-function markup(font: string) {
+function shell(font: string, sizes: string, text: string) {
   return `<!doctype html>
 <html>
   <head>
@@ -78,34 +83,76 @@ function markup(font: string) {
         bottom: 77px;
       }
       .title {
-        font-size: 123px;
         font-weight: 700;
-        line-height: 0.95;
         letter-spacing: -0.03em;
         margin-left: -0.025em;
       }
-      .role {
-        margin-top: 0.35em;
-        font-size: 44px;
-        font-weight: 600;
-        line-height: 1.364;
-        letter-spacing: -0.01em;
-      }
+      ${sizes}
     </style>
   </head>
   <body>
     <div class="card"></div>
-    <div class="text">
-      <div class="title">${escape(TITLE)}</div>
-      <div class="role">${roleMarkup(DESCRIPTION)}</div>
-    </div>
+    <div class="text">${text}</div>
   </body>
 </html>`;
+}
+
+const homeCard = (font: string) =>
+  shell(
+    font,
+    `.title { font-size: 123px; line-height: 0.95; }
+     .role {
+       margin-top: 0.35em;
+       font-size: 44px;
+       font-weight: 600;
+       line-height: 1.364;
+       letter-spacing: -0.01em;
+     }`,
+    `<div class="title">${escape(TITLE)}</div>
+     <div class="role">${roleMarkup(DESCRIPTION)}</div>`,
+  );
+
+const postCard = (font: string, meta: { title: string; deck: string }) =>
+  shell(
+    font,
+    `.title { font-size: 76px; line-height: 1.02; }
+     .deck {
+       margin-top: 0.5em;
+       font-size: 34px;
+       line-height: 1.3;
+       letter-spacing: -0.01em;
+       color: ${SOFT};
+     }`,
+    `<div class="title">${escape(meta.title)}</div>
+     <div class="deck">${escape(meta.deck)}</div>`,
+  );
+
+async function shoot(page: Page, card: { markup: string; out: string }) {
+  await page.setContent(card.markup, { waitUntil: "load" });
+  await page.evaluate(() => document.fonts.ready);
+
+  const loaded = await page.evaluate(() => ({
+    inter: document.fonts.check('700 88px "Inter"'),
+    families: [...document.fonts].map((one) => one.family),
+  }));
+  if (!loaded.inter) {
+    throw new Error(
+      `Inter did not load — the card would render in a fallback face. Registered: ${loaded.families.join(", ") || "none"}`,
+    );
+  }
+
+  const shot = await page.screenshot({ type: "png" });
+  await writeFile(card.out, shot);
+
+  const kb = (shot.byteLength / KB).toFixed(1);
+  console.log(`✓ ${path.relative(ROOT, card.out)}  ${WIDTH}x${HEIGHT}  ${kb} kB`);
 }
 
 async function main() {
   const fontFile = await readFile(FONT);
   const font = fontFile.toString("base64");
+  const posts = await readPosts();
+  await mkdir(POST_DIR, { recursive: true });
 
   const browser = await chromium.launch();
   try {
@@ -113,23 +160,15 @@ async function main() {
       viewport: { width: WIDTH, height: HEIGHT },
       deviceScaleFactor: 1,
     });
-    await page.setContent(markup(font), { waitUntil: "load" });
-    await page.evaluate(() => document.fonts.ready);
 
-    const loaded = await page.evaluate(() => ({
-      inter: document.fonts.check('700 88px "Inter"'),
-      families: [...document.fonts].map((f) => f.family),
-    }));
-    if (!loaded.inter) {
-      throw new Error(
-        `Inter did not load — the card would render in a fallback face. Registered: ${loaded.families.join(", ") || "none"}`,
-      );
+    await shoot(page, { markup: homeCard(font), out: OUT });
+
+    for (const { slug, meta } of posts) {
+      await shoot(page, {
+        markup: postCard(font, meta),
+        out: path.join(POST_DIR, `${slug}.png`),
+      });
     }
-    const shot = await page.screenshot({ type: "png" });
-    await writeFile(OUT, shot);
-
-    const kb = (shot.byteLength / 1024).toFixed(1);
-    console.log(`✓ ${path.relative(ROOT, OUT)}  ${WIDTH}x${HEIGHT}  ${kb} kB`);
   } finally {
     await browser.close();
   }

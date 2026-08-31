@@ -3,6 +3,7 @@ import Link from "next/link";
 import { LINK, LINK_UNDERLINED } from "@/components/link";
 import { Sheet } from "@/components/sheet";
 import { WorkPile } from "@/components/work-pile";
+import { FIND_ME } from "@/content/socials";
 import { formatPostDate, loadPostList } from "@/lib/writing/posts";
 
 const PERSONAL_WORK: { title: string; href?: string; blurb: string }[] = [
@@ -28,17 +29,6 @@ const PERSONAL_WORK: { title: string; href?: string; blurb: string }[] = [
     title: "crayola",
     blurb: "a remotion tool to create yellow assets",
   },
-];
-
-const FIND_ME: { label: string; href: string }[] = [
-  { label: "Email", href: "mailto:nicolydndr@gmail.com" },
-  { label: "LinkedIn", href: "https://www.linkedin.com/in/nicolydandara/" },
-  { label: "Twitter", href: "https://x.com/amarelodandara" },
-  {
-    label: "Bluesky",
-    href: "https://bsky.app/profile/amarelodandara.bsky.social",
-  },
-  { label: "GitHub", href: "https://github.com/amarelodandara" },
 ];
 
 export default async function Home() {

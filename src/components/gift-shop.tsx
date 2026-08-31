@@ -2,12 +2,16 @@
 
 import dynamic from "next/dynamic";
 import { useCallback, useEffect, useRef } from "react";
-import { giftShopSections } from "@/content/gift-shop";
 import { GiftShopNotes } from "./gift-shop-notes";
+import { GiftShopSign, shelfSeat, shopContents } from "./gift-shop-sign";
 import { GiftShopRow } from "./gift-shop-row";
 import { GiftShopPlaque } from "./gift-shop-plaque";
-import { Kbd } from "./kbd";
-import { forgetRequestedNote, useRequestedNote } from "@/lib/article-notes";
+import {
+  forgetRequestedNote,
+  useArticle,
+  useRequestedNote,
+} from "@/lib/article-notes";
+import { usePlaqueWanted } from "@/lib/plaque";
 import {
   closeOverlay,
   openOverlay,
@@ -15,7 +19,6 @@ import {
   useActiveOverlay,
 } from "@/lib/exclusive-overlay";
 import { useKeydown } from "@/lib/keydown";
-import { usePastLanding } from "@/lib/past-landing";
 
 const ID = SHOP_OVERLAY;
 
@@ -84,6 +87,7 @@ const focusThePageItself = () =>
     .querySelector<HTMLElement>("[data-page]")
     ?.focus({ preventScroll: true });
 
+
 const Tailored =
   process.env.NODE_ENV === "development"
     ? dynamic(() => import("./gift-shop-tailored"))
@@ -93,9 +97,10 @@ export function GiftShop() {
   const active = useActiveOverlay();
   const open = active === ID;
   const requested = useRequestedNote();
-  const readingANote = requested !== null;
-  const pastLanding = usePastLanding();
-  const plaqueVisible = active === null && pastLanding;
+  const article = useArticle();
+  const plaqueWanted = usePlaqueWanted(article !== null);
+  const plaqueVisible = active === null && plaqueWanted;
+  const { sign, shelves } = shopContents(article);
 
   const panelRef = useRef<HTMLElement>(null);
   const plaqueRef = useRef<HTMLButtonElement>(null);
@@ -128,19 +133,19 @@ export function GiftShop() {
     }
 
     document.body.dataset.shopOpen = "";
-    if (readingANote) page?.removeAttribute("inert");
-    else page?.setAttribute("inert", "");
+    if (requested === null) page?.setAttribute("inert", "");
+    else page?.removeAttribute("inert");
 
     return release;
-  }, [open, readingANote]);
+  }, [open, requested]);
 
   useEffect(() => {
     if (!open) forgetRequestedNote();
   }, [open]);
 
   useEffect(() => {
-    if (readingANote) rememberFocus();
-  }, [readingANote, requested, rememberFocus]);
+    if (requested !== null) rememberFocus();
+  }, [requested, rememberFocus]);
 
   useKeydown((event) => {
     if (event.key === "Escape") {
@@ -166,30 +171,28 @@ export function GiftShop() {
     openOverlay(ID);
   });
 
-  const heldFocus = useRef(false);
-  const cameFromTheText = useRef(false);
+  const restoring = useRef({ held: false, fromTheText: false });
   useEffect(() => {
     if (open) {
       return onceThePanelIsVisible(panelRef.current, () => {
         focusTheRequestedRow(panelRef.current, requested);
-        heldFocus.current =
-          panelRef.current?.contains(document.activeElement) === true;
-        cameFromTheText.current = requested !== null;
+        restoring.current = {
+          held: panelRef.current?.contains(document.activeElement) === true,
+          fromTheText: requested !== null,
+        };
       });
     }
 
-    if (!heldFocus.current) return;
-    heldFocus.current = false;
+    const { held, fromTheText } = restoring.current;
+    if (!held) return;
+    restoring.current = { held: false, fromTheText: false };
 
     if (!focusIsStillInside(panelRef.current)) return;
-
-    const wasReading = cameFromTheText.current;
-    cameFromTheText.current = false;
 
     const marker =
       focusBefore.current?.isConnected === true ? focusBefore.current : null;
     const plaque = plaqueVisible ? plaqueRef.current : null;
-    const next = wasReading ? (marker ?? plaque) : (plaque ?? marker);
+    const next = fromTheText ? (marker ?? plaque) : (plaque ?? marker);
 
     if (next) next.focus();
     else focusThePageItself();
@@ -199,43 +202,20 @@ export function GiftShop() {
     <>
       <aside
         ref={panelRef}
-        aria-label="Gift shop"
+        aria-label={sign.name}
         tabIndex={-1}
         inert={!open || undefined}
         data-shop-panel
         className="flex flex-col px-5 py-8 outline-none"
       >
-        <header className="flex items-start justify-between gap-3 px-3">
-          <div className="flex flex-col gap-1">
-            <h2 className="text-[clamp(1.15rem,1.7vw,1.4rem)] leading-tight font-semibold tracking-[-0.01em]">
-              Gift shop
-            </h2>
-            <p className="text-[0.7rem] leading-tight text-foreground-hard">
-              Take what you need
-            </p>
-          </div>
+        <GiftShopSign sign={sign} onClose={close} />
 
-          <button
-            type="button"
-            onClick={close}
-            aria-keyshortcuts="g Escape"
-            data-pressable
-            className="-mt-0.5 -mr-2 -mb-2 flex shrink-0 items-center rounded-lg bg-cutout px-2.5 py-2 transition-[background-color,scale] duration-(--motion-quick) ease-out-strong hover:bg-cutout-deep focus-visible:bg-cutout-deep active:scale-[0.97] active:duration-(--press)"
-          >
-            <span className="text-[0.7rem] leading-none font-medium tracking-[0.01em] text-foreground-soft">
-              Close
-            </span>
-            <span className="sr-only"> gift shop</span>
-            <Kbd>G</Kbd>
-          </button>
-        </header>
+        <GiftShopNotes titled={!article} />
 
-        <GiftShopNotes />
+        {Tailored && !article ? <Tailored /> : null}
 
-        {Tailored ? <Tailored /> : null}
-
-        {giftShopSections.map((section) => (
-          <section key={section.id} className={section.title ? "mt-8" : "mt-14"}>
+        {shelves.map((section) => (
+          <section key={section.id} className={shelfSeat(section, article)}>
             {section.title ? (
               <h3 className="px-3 text-[0.7rem] font-medium tracking-[0.01em] text-foreground-hard">
                 {section.title}
@@ -255,6 +235,7 @@ export function GiftShop() {
       <GiftShopPlaque
         ref={plaqueRef}
         visible={plaqueVisible}
+        label={article ? sign.name : "Visit the gift shop"}
         onOpen={openShop}
       />
     </>

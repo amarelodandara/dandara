@@ -22,6 +22,19 @@ export type GiftShopSection = {
   items: GiftShopItem[];
 };
 
+export const amareloSection: GiftShopSection = {
+  id: "amarelo",
+  items: [
+    {
+      kind: "swatch",
+      id: "amarelo",
+      title: "Amarelo Dandara",
+      hex: "#FFCC00",
+      fill: "bg-background-hard",
+    },
+  ],
+};
+
 export const giftShopSections: GiftShopSection[] = [
   {
     id: "documents",
@@ -101,16 +114,5 @@ export const giftShopSections: GiftShopSection[] = [
       },
     ],
   },
-  {
-    id: "amarelo",
-    items: [
-      {
-        kind: "swatch",
-        id: "amarelo",
-        title: "Amarelo Dandara",
-        hex: "#FFCC00",
-        fill: "bg-background-hard",
-      },
-    ],
-  },
+  amareloSection,
 ];

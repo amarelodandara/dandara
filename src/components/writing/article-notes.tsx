@@ -2,16 +2,22 @@
 
 import { useEffect } from "react";
 import {
-  publishArticleNotes,
-  withdrawArticleNotes,
+  publishArticle,
+  withdrawArticle,
   type ArticleNote,
 } from "@/lib/article-notes";
 
-export function ArticleNotes({ notes }: { notes: ArticleNote[] }) {
+export function ArticleNotes({
+  title,
+  notes,
+}: {
+  title: string;
+  notes: ArticleNote[];
+}) {
   useEffect(() => {
-    publishArticleNotes(notes);
-    return withdrawArticleNotes;
-  }, [notes]);
+    publishArticle({ title, notes });
+    return withdrawArticle;
+  }, [title, notes]);
 
   return null;
 }

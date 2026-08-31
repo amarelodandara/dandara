@@ -7,10 +7,17 @@ export type ArticleNote = {
   body?: string;
 };
 
+export type Article = {
+  title: string;
+  notes: ArticleNote[];
+};
+
 const NONE: ArticleNote[] = [];
 
-let notes: ArticleNote[] = NONE;
+let article: Article | null = null;
 let requested: number | null = null;
+
+let asked = false;
 
 const listeners = new Set<() => void>();
 
@@ -25,18 +32,20 @@ const subscribe = (listener: () => void) => {
   };
 };
 
-export function publishArticleNotes(next: ArticleNote[]) {
-  notes = next;
+export function publishArticle(next: Article) {
+  article = next;
   emit();
 }
 
-export function withdrawArticleNotes() {
-  notes = NONE;
+export function withdrawArticle() {
+  article = null;
   requested = null;
+  asked = false;
   emit();
 }
 
 export function requestNote(n: number) {
+  asked = true;
   if (requested === n) return;
   requested = n;
   emit();
@@ -48,10 +57,18 @@ export function forgetRequestedNote() {
   emit();
 }
 
+export function useArticle() {
+  return useSyncExternalStore(
+    subscribe,
+    () => article,
+    () => null,
+  );
+}
+
 export function useArticleNotes() {
   return useSyncExternalStore(
     subscribe,
-    () => notes,
+    () => article?.notes ?? NONE,
     () => NONE,
   );
 }
@@ -61,5 +78,13 @@ export function useRequestedNote() {
     subscribe,
     () => requested,
     () => null,
+  );
+}
+
+export function useNoteEverRequested() {
+  return useSyncExternalStore(
+    subscribe,
+    () => asked,
+    () => false,
   );
 }

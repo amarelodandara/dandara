@@ -8,7 +8,7 @@ import { Note } from "@/components/writing/note-ref";
 const PROSE = "mt-5 text-[clamp(1rem,1.2vw,1.125rem)] leading-[1.6]";
 
 const HEADING =
-  "mt-14 text-[clamp(1.15rem,1.7vw,1.4rem)] leading-tight font-semibold tracking-[-0.01em]";
+  "mt-12 text-[clamp(1.15rem,1.7vw,1.4rem)] leading-tight font-semibold tracking-[-0.01em]";
 
 function Heading({ children, ...rest }: ComponentPropsWithoutRef<"h2">) {
   return (

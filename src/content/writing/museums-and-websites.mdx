@@ -1,6 +1,6 @@
 export const meta = {
-  title: "Museums and websites: anticipating visitors needs",
-  deck: "Curating the optimal reading experience of our research thesis",
+  title: "Museums and websites: anticipating visitors’ needs",
+  deck: "Curating the optimal reading experience for our research thesis",
   blurb: "on cutting 7,000 words to 500, and the interactions that survived",
   date: "2026-08-31",
 };
@@ -24,14 +24,16 @@ export const notes = [
   {
     n: 4,
     title: "The Making of Fizzy, Told by Git",
+    href: "https://www.zolkos.com/2025/12/02/the-making-of-fizzy-told-by-git",
   },
   {
     n: 5,
     title: "Be a curator",
+    href: "https://youtu.be/p_gIjDEuO2A?si=xKU64F0gDFzaMDd9",
   },
 ];
 
-There are plenty of positives in coming up with a research thesis with 7000 words spanning 30 pages but approachability is not one of them.
+There are plenty of positives in coming up with a research thesis with 7,000 words spanning 30 pages but approachability is not one of them.
 
 So when it came time to contact museums with our thesis, we quickly realized no one was gonna read anything that long — ain’t nobody got time for that. So, to help our prospects (and our friends), I built a digest.
 
@@ -43,33 +45,35 @@ Would you let two beautiful designers enter your museum in the middle of the wor
 
 But the real idea is way simpler and more professional than that. We needed the vehicle carrying that message to convey that same simplicity and professionalism.
 
-One of the easiest ways to prove to someone you are serious about something is through aesthetics. Having a defined color palette and a simple icon can go miles for helping to cement an idea into people’s brains.
+**One of the easiest ways to prove to someone you are serious about something is through aesthetics.** Having a defined color palette and a simple icon can go miles for helping to cement an idea into people’s brains.
 
-Our research icon uses a couple of visual metaphors to tell what our research is and at what level we are operating: a museum frame (for, well, museums) exhibiting mountains (symbol of the city we are researching in) with an upgraded look provided by <Note n={1} />shaders.
+Our research icon uses a couple of visual metaphors to tell what our research is and at what level we are operating: **a museum frame (for, well, museums) exhibiting mountains (symbol of the city we are researching in) with an upgraded look provided by <Note n={1}>shaders</Note>.**
 
 <Figure
   src="/writing/museums-and-websites/icon-parts.png"
   width={2400}
   height={1350}
   alt="Three source frames beside the finished mark: a photograph of Belo Horizonte against its mountains labelled Horizon, a black-and-sand wave labelled Wave Shader, and an ornate gold picture frame labelled Art Frame. The result is a thin silver frame holding a blue and yellow wave."
-  caption="Horizon, Wave Shader and Art Frame, and the mark they add up to."
+  caption="How the framed shaded mountain came to be."
+  mat
 />
 
 ## Offering the right content
 
 Every time we open a blog post, article or essay on our devices, instantly, our need to understand that content starts fighting with our need to get something else done. That’s why the best editing tool in the world has always been and will always be: cutting.
 
-To come up with the right content for this website, I sat down with the 30-page document we handed to the examination board in one hand and a red pen in the other. I was determined to cross out everything I wouldn’t tell a person in a casual conversation about the project. The goal here was to come up with content someone would read, and understand, while waiting for their plate to arrive at a restaurant table.
+To come up with the right content for this website, I sat down with the 30-page document we handed to the examination board in one hand and a red pen in the other. I was determined to cross out everything I wouldn’t tell a person in a casual conversation about the project. **The goal here was to come up with content someone would read, and understand, while waiting for their plate to arrive at a restaurant table.**
 
 <Clip
   src="/writing/museums-and-websites/thesis-marked"
   width={1920}
   height={1920}
   alt="A recording of the thesis cover page being marked up: blue handwritten annotations arrive one at a time — the title boxed, the authors’ names circled, three frames sketched below them, and a note beside the year reading put this at the top right corner."
-  caption="The 30-page document, read with a pen in hand."
+  caption="Annotations in the document to trim down content."
+  measure="body"
 />
 
-None of the cuts were made with the assumption of that something was too complicated for a layman to understand. To put it more bluntly, the idea never to “dumb it down”. Every time we felt the need to provide further explanations, a glossary and some sidenotes were introduced to aid in understanding.
+None of the cuts were made with the assumption that something was too complicated for a layman to understand. To put it more bluntly, the idea was never to “dumb it down”. Every time we felt the need to provide further explanations, a glossary and some sidenotes were introduced to aid in understanding.
 
 <Figure
   src="/writing/museums-and-websites/sidenotes-desktop.png"
@@ -79,21 +83,22 @@ None of the cuts were made with the assumption of that something was too complic
   caption="On a wide screen the notes sit in the margin, beside the sentence that needs them."
 />
 
-We made sure all these interactions would still work on mobile without breaking visitors’ reading flow by using <Note n={2} />[Vaul](https://vaul.emilkowal.ski/), by Emil Kowalski.
+We made sure all these interactions would still work on mobile without breaking visitors’ reading flow by using [Vaul](https://vaul.emilkowal.ski/)<Note n={2} />, by Emil Kowalski.
 
 <Figure
   src="/writing/museums-and-websites/sidenotes-mobile.png"
   width={2160}
   height={2160}
   alt="The same site on a phone: the article dimmed behind a drawer that has slid up from the bottom, carrying a back link and the full text of note two."
-  caption="On a phone the same note arrives as a drawer, and the article stays where you left it."
+  caption="On a phone the same note arrives as a drawer, and the reader never loses context."
+  measure="three-quarters"
 />
 
 ## Reiterating that you’re welcome
 
 Regardless of how you landed on the reach out section, there is one thing that can stop you from actually making the move to contact us: not knowing if you really match our filter. It can be confusing to understand what museum profile we are actively looking for, whether you’re welcome at the party.
 
-To end that doubt we added a search mechanism. It uses a fuzzy search method that updates at every keystroke.
+To end that doubt we added a search mechanism. **It uses a fuzzy search method that updates at every keystroke.**
 
 <Clip
   src="/writing/museums-and-websites/fuzzy-search"
@@ -105,14 +110,14 @@ To end that doubt we added a search mechanism. It uses a fuzzy search method tha
 
 Being a fuzzy search means we get “CCBB” out of “Centro Cultural do Banco do Brasil” without having to index all the variants of the museum in the list. Updating at every keystroke only works here because the list has dozens of museums, but not hundreds or thousands, so the constant update doesn’t cost us much.
 
-This ends up being helpful for both the visitors and our inboxes: if you are not part of the research filter, we tell you right away instead of wasting your time and our space with dead-end messages.
+This ends up being helpful for both the visitors and our inboxes: **if you are not part of the research filter, we tell you right away instead of wasting your time and our space with dead-end messages.**
 
 Because we got our list of museums from open data provided by the government, there is always the risk of inclusions in the database being delayed or faulty. If the person is sure the museum can be a fit even if they don’t find themselves on the list, they get an alternate route to talk to us.
 
 ---
 
-To write this piece I used an agent<Note n={3} /> to summarize the whole history of my git commits as a story.<Note n={4} /> The agent walks through everything that happened in the repository from day one and highlights the major shifts and eureka moments.
+To write this piece I used an agent<Note n={3} /> to summarize the whole history of my git commits as a story<Note n={4} />. The agent walks through everything that happened in the repository from day one and highlights the major shifts and eureka moments.
 
-When summarizing the work done on the website in as few words as possible he said: subtraction was the main activity. The website was the largest around July 31 and from then on it only got smaller. Plenty of data visualizations were cut, bonus routes didn’t see the light of day and the most starkly of all: 7000 words of the academic document became 1739 words in the final document and in the end approximately 500 words.
+When summarizing the work done on the website in as few words as possible it said: **subtraction was the main activity**. The website was the largest around July 31 and from then on it only got smaller. Plenty of data visualizations were cut, bonus routes didn’t see the light of day and the most stark of all: 7,000 words of the academic document became 1,739 words in the final document and in the end approximately 500 words.
 
-All of these deletions were made in favor of the visitor, to aid the reading experience of whoever came in, regardless of my enthusiasm or ego about some part of the research. It didn’t feel quite like designing or developing; it felt precisely like <Note n={5} />curating.
+All of these deletions were made in favor of the visitor, to aid the reading experience of whoever came in, regardless of my enthusiasm or ego about some part of the research. It didn’t feel quite like designing or developing; **it felt precisely like <Note n={5}>curating</Note>.**

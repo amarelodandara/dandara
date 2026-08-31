@@ -35,6 +35,15 @@
   --color-cutout: oklch(0.945 0.081 97);
   --color-cutout-deep: oklch(0.927 0.103 95.473);
 
+  /* The hot spot at the middle of the site's own mark, the same orange as
+     `icon.svg` converted out of #ff8e00. Same chroma as the yellow it sits in,
+     30 degrees round the wheel: one light source, not a second colour. */
+  --color-sun-core: oklch(0.755 0.178 59.8);
+
+  /* The same orange taken down to where it can carry text on the pale wall:
+     5.6:1 against `background`, against the 2.3:1 the mark itself manages. */
+  --color-sun-ink: oklch(0.52 0.16 55);
+
   --color-professional: oklch(0.891 0.078 218.299);
   --color-creative: oklch(0.95 0.11 100.35);
 
@@ -282,13 +291,14 @@ body[data-shop-open] [data-shop-panel] {
   transition-duration: var(--motion-enter);
 }
 
-/* The colophon is pressed into the wall rather than mounted on it: the shadow
-   falls inward, and it carries the grain the shop panel used to have. Same
-   generated turbulence — an inline SVG, so no asset and no request.
+/* Recessed: pressed into the wall rather than mounted on it. The shadow falls
+   inward, and the surface carries the grain the shop panel used to have — same
+   generated turbulence, an inline SVG, so no asset and no request.
 
-   The inset ring is the recessed counterpart of the card shadow, so the label
-   is the one thing on the page reading as a hollow rather than an object. */
-[data-colophon] {
+   The inset ring is the recessed counterpart of the card shadow. The colophon
+   downstairs is one hollow; an article's figures are the others, each picture
+   sitting on its own mat with a margin of wall left showing around it. */
+[data-recessed] {
   box-shadow:
     inset 0 0 0 1px oklch(0 0 0 / 0.035),
     inset 0 1px 4px oklch(0 0 0 / 0.02);
@@ -326,6 +336,38 @@ body[data-shop-open] [data-shop-panel] {
   }
 }
 
+/* Quiet text is a choice about emphasis, not about legibility, so it holds only
+   while the reader has not asked for more contrast. The date, the resting state
+   of the nav link and the note markers all sit well under the ratio a body of
+   text would need; asked for contrast, they come back up to full strength. */
+@media (prefers-contrast: more) {
+  [data-quiet] {
+    color: var(--color-foreground);
+  }
+
+  [data-note-ref] [data-marker] {
+    border-color: var(--color-sun-ink);
+    color: var(--color-sun-ink);
+  }
+}
+
+/* The site's mark, rebuilt as a gradient so the sun inside it can move. The
+   two custom properties are where the hot spot sits; JS writes them from the
+   pointer's position, and the rest position here is what `icon.svg` draws, so
+   the mark is identical to the favicon until a pointer exists to pull it.
+
+   No transition: the pointer is already moving smoothly and the handler runs
+   on a frame, so easing on top of that would only add lag. */
+[data-sun] {
+  --sun-x: 50%;
+  --sun-y: 44%;
+  background: radial-gradient(
+    circle at var(--sun-x) var(--sun-y),
+    var(--color-sun-core) 0%,
+    var(--color-background-hard) 100%
+  );
+}
+
 /* The reading measure and the breakout, as one grid rather than as negative
    margins on the wide things. Prose sits in the middle column and stops at a
    line length you can actually track; a figure claims all three columns and
@@ -336,14 +378,14 @@ body[data-shop-open] [data-shop-panel] {
    means a figure never has to know how wide its container is, so the measure
    can move here and nothing downstream needs editing.
 
-   `min()` on the text column rather than a bare `36rem`: below that width the
+   `min()` on the text column rather than a bare `42rem`: below that width the
    column would otherwise overflow the two `1fr` gutters instead of collapsing
    them, and the article would scroll sideways on a phone. */
 [data-article] {
   display: grid;
   grid-template-columns:
     [wide-start] minmax(0, 1fr)
-    [text-start] min(100%, 36rem) [text-end]
+    [text-start] min(100%, 42rem) [text-end]
     minmax(0, 1fr) [wide-end];
 }
 
@@ -353,4 +395,19 @@ body[data-shop-open] [data-shop-panel] {
 
 [data-article] > figure {
   grid-column: wide;
+}
+
+/* A figure that has no business being wider than the sentence that introduced
+   it — a tall crop, a phone screenshot, anything where the breakout only makes
+   the thing enormous — stays in the text column instead, and can go narrower
+   still. The width lands on the media rather than on the figure so the caption
+   keeps the full measure and stays where the eye already is. */
+[data-article] > figure[data-measure="body"],
+[data-article] > figure[data-measure="three-quarters"] {
+  grid-column: text;
+}
+
+figure[data-measure="three-quarters"] > :first-child {
+  width: 75%;
+  margin-inline: auto;
 }

@@ -45,5 +45,16 @@ const READABLE_DATE = new Intl.DateTimeFormat("en-GB", {
   timeZone: "UTC",
 });
 
+const READABLE_MONTH = new Intl.DateTimeFormat("en-GB", {
+  month: "long",
+  year: "numeric",
+  timeZone: "UTC",
+});
+
+const asDate = (date: string) => new Date(`${date}T00:00:00Z`);
+
 export const formatPostDate = (date: string) =>
-  READABLE_DATE.format(new Date(`${date}T00:00:00Z`));
+  READABLE_DATE.format(asDate(date));
+
+export const formatPostMonth = (date: string) =>
+  READABLE_MONTH.format(asDate(date));

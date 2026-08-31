@@ -5,10 +5,12 @@ import { Kbd } from "./kbd";
 
 export function GiftShopPlaque({
   visible,
+  label,
   onOpen,
   ref,
 }: {
   visible: boolean;
+  label: string;
   onOpen: () => void;
   ref?: Ref<HTMLButtonElement>;
 }) {
@@ -29,7 +31,7 @@ export function GiftShopPlaque({
       ].join(" ")}
     >
       <span className="text-[0.7rem] leading-none font-medium tracking-[0.01em]">
-        Visit the gift shop
+        {label}
       </span>
       <Kbd>G</Kbd>
     </button>

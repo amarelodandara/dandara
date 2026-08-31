@@ -5,7 +5,7 @@ export function Colophon() {
       className="mx-auto w-full max-w-[1400px] px-[7vw] pt-[6vh] pb-[10vh]"
     >
       <div
-        data-colophon
+        data-recessed
         className="space-y-4 ml-auto max-w-120 rounded-md bg-background px-6 py-10 md:px-8 md:py-12"
       >
         <div>

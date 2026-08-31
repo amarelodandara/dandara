@@ -3,7 +3,6 @@ import dynamic from "next/dynamic";
 import localFont from "next/font/local";
 import { Analytics } from "@vercel/analytics/next";
 import { SpeedInsights } from "@vercel/speed-insights/next";
-import { Colophon } from "@/components/colophon";
 import { GiftShop } from "@/components/gift-shop";
 import { DESCRIPTION, NAME, SITE_URL, TITLE } from "@/lib/site";
 import "../globals.css";
@@ -29,7 +28,10 @@ export const metadata: Metadata = {
   applicationName: NAME,
   authors: [{ name: NAME, url: SITE_URL }],
   creator: NAME,
-  alternates: { canonical: "/" },
+  alternates: {
+    canonical: "/",
+    types: { "application/rss+xml": "/feed.xml" },
+  },
   openGraph: {
     type: "profile",
     firstName: "Nicoly",
@@ -60,7 +62,6 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
           className="relative z-10 flex min-h-full flex-col bg-background outline-none"
         >
           {children}
-          <Colophon />
         </div>
 
         {Agentation ? <Agentation endpoint="http://localhost:4747" /> : null}
