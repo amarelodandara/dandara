@@ -325,3 +325,32 @@ body[data-shop-open] [data-shop-panel] {
     scale: 1 !important;
   }
 }
+
+/* The reading measure and the breakout, as one grid rather than as negative
+   margins on the wide things. Prose sits in the middle column and stops at a
+   line length you can actually track; a figure claims all three columns and
+   hangs wider than the text that introduces it.
+
+   That is the same rule as the wall upstairs: the talking is narrow, the work
+   being shown is not. Doing it with grid columns rather than `margin-inline`
+   means a figure never has to know how wide its container is, so the measure
+   can move here and nothing downstream needs editing.
+
+   `min()` on the text column rather than a bare `36rem`: below that width the
+   column would otherwise overflow the two `1fr` gutters instead of collapsing
+   them, and the article would scroll sideways on a phone. */
+[data-article] {
+  display: grid;
+  grid-template-columns:
+    [wide-start] minmax(0, 1fr)
+    [text-start] min(100%, 36rem) [text-end]
+    minmax(0, 1fr) [wide-end];
+}
+
+[data-article] > * {
+  grid-column: text;
+}
+
+[data-article] > figure {
+  grid-column: wide;
+}

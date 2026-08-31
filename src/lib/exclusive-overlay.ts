@@ -1,5 +1,7 @@
 import { useSyncExternalStore } from "react";
 
+export const SHOP_OVERLAY = "gift-shop";
+
 let active: string | null = null;
 const listeners = new Set<() => void>();
 

@@ -3,18 +3,21 @@
 import dynamic from "next/dynamic";
 import { useCallback, useEffect, useRef } from "react";
 import { giftShopSections } from "@/content/gift-shop";
+import { GiftShopNotes } from "./gift-shop-notes";
 import { GiftShopRow } from "./gift-shop-row";
 import { GiftShopPlaque } from "./gift-shop-plaque";
 import { Kbd } from "./kbd";
+import { forgetRequestedNote, useRequestedNote } from "@/lib/article-notes";
 import {
   closeOverlay,
   openOverlay,
+  SHOP_OVERLAY,
   useActiveOverlay,
 } from "@/lib/exclusive-overlay";
 import { useKeydown } from "@/lib/keydown";
 import { usePastLanding } from "@/lib/past-landing";
 
-const ID = "gift-shop";
+const ID = SHOP_OVERLAY;
 
 const isBrowserChord = (event: KeyboardEvent) =>
   event.metaKey || event.ctrlKey || event.altKey;
@@ -58,6 +61,24 @@ const focusIsStillInside = (panel: HTMLElement | null) => {
   );
 };
 
+const focusTheRequestedRow = (panel: HTMLElement | null, n: number | null) => {
+  const row =
+    n === null
+      ? null
+      : panel?.querySelector<HTMLElement>(
+          `[data-note-row="${CSS.escape(String(n))}"]`,
+        );
+
+  if (!row) {
+    panel?.focus();
+    return;
+  }
+
+  const held = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  row.scrollIntoView({ block: "nearest", behavior: held ? "auto" : "smooth" });
+  row.focus({ preventScroll: true });
+};
+
 const focusThePageItself = () =>
   document
     .querySelector<HTMLElement>("[data-page]")
@@ -71,6 +92,8 @@ const Tailored =
 export function GiftShop() {
   const active = useActiveOverlay();
   const open = active === ID;
+  const requested = useRequestedNote();
+  const readingANote = requested !== null;
   const pastLanding = usePastLanding();
   const plaqueVisible = active === null && pastLanding;
 
@@ -78,17 +101,19 @@ export function GiftShop() {
   const plaqueRef = useRef<HTMLButtonElement>(null);
 
   const focusBefore = useRef<HTMLElement | null>(null);
-  const rememberFocus = () => {
-    const active = document.activeElement;
+  const rememberFocus = useCallback(() => {
+    const focused = document.activeElement;
     focusBefore.current =
-      active instanceof HTMLElement && active !== document.body ? active : null;
-  };
+      focused instanceof HTMLElement && focused !== document.body
+        ? focused
+        : null;
+  }, []);
 
   const close = useCallback(() => closeOverlay(ID), []);
   const openShop = useCallback(() => {
     rememberFocus();
     openOverlay(ID);
-  }, []);
+  }, [rememberFocus]);
 
   useEffect(() => {
     const page = document.querySelector("[data-page]");
@@ -97,15 +122,25 @@ export function GiftShop() {
       page?.removeAttribute("inert");
     };
 
-    if (open) {
-      document.body.dataset.shopOpen = "";
-      page?.setAttribute("inert", "");
-    } else {
+    if (!open) {
       release();
+      return release;
     }
 
+    document.body.dataset.shopOpen = "";
+    if (readingANote) page?.removeAttribute("inert");
+    else page?.setAttribute("inert", "");
+
     return release;
+  }, [open, readingANote]);
+
+  useEffect(() => {
+    if (!open) forgetRequestedNote();
   }, [open]);
+
+  useEffect(() => {
+    if (readingANote) rememberFocus();
+  }, [readingANote, requested, rememberFocus]);
 
   useKeydown((event) => {
     if (event.key === "Escape") {
@@ -132,11 +167,14 @@ export function GiftShop() {
   });
 
   const heldFocus = useRef(false);
+  const cameFromTheText = useRef(false);
   useEffect(() => {
     if (open) {
       return onceThePanelIsVisible(panelRef.current, () => {
-        panelRef.current?.focus();
-        heldFocus.current = document.activeElement === panelRef.current;
+        focusTheRequestedRow(panelRef.current, requested);
+        heldFocus.current =
+          panelRef.current?.contains(document.activeElement) === true;
+        cameFromTheText.current = requested !== null;
       });
     }
 
@@ -145,16 +183,17 @@ export function GiftShop() {
 
     if (!focusIsStillInside(panelRef.current)) return;
 
-    if (plaqueVisible) {
-      plaqueRef.current?.focus();
-      return;
-    }
-    if (focusBefore.current?.isConnected) {
-      focusBefore.current.focus();
-      return;
-    }
-    focusThePageItself();
-  }, [open, plaqueVisible]);
+    const wasReading = cameFromTheText.current;
+    cameFromTheText.current = false;
+
+    const marker =
+      focusBefore.current?.isConnected === true ? focusBefore.current : null;
+    const plaque = plaqueVisible ? plaqueRef.current : null;
+    const next = wasReading ? (marker ?? plaque) : (plaque ?? marker);
+
+    if (next) next.focus();
+    else focusThePageItself();
+  }, [open, plaqueVisible, requested]);
 
   return (
     <>
@@ -190,6 +229,8 @@ export function GiftShop() {
             <Kbd>G</Kbd>
           </button>
         </header>
+
+        <GiftShopNotes />
 
         {Tailored ? <Tailored /> : null}
 

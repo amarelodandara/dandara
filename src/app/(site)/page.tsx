@@ -1,16 +1,9 @@
 import Image from "next/image";
+import Link from "next/link";
+import { LINK, LINK_UNDERLINED } from "@/components/link";
 import { Sheet } from "@/components/sheet";
 import { WorkPile } from "@/components/work-pile";
-
-const LINK_BASE = [
-  "decoration-stone-400 decoration-[0.04em] underline-offset-[0.25em]",
-  "transition-opacity duration-(--motion-quick) ease-out-strong",
-  "hover:opacity-50",
-].join(" ");
-
-const LINK = `${LINK_BASE} hover:underline focus-visible:underline active:underline`;
-
-const LINK_UNDERLINED = `${LINK_BASE} underline`;
+import { formatPostDate, loadPostList } from "@/lib/writing/posts";
 
 const PERSONAL_WORK: { title: string; href?: string; blurb: string }[] = [
   {
@@ -48,7 +41,9 @@ const FIND_ME: { label: string; href: string }[] = [
   { label: "GitHub", href: "https://github.com/amarelodandara" },
 ];
 
-export default function Home() {
+export default async function Home() {
+  const writing = await loadPostList();
+
   return (
     <main className="mx-auto w-full max-w-[1400px] flex-1 px-[7vw] py-[14vh] sm:py-[18vh]">
       <div
@@ -138,6 +133,30 @@ export default function Home() {
         </header>
 
       </div>
+
+      <section data-dim-on-focus className="mt-[18vh]">
+        <h2 className="text-[0.7rem] leading-none font-medium tracking-[0.01em] text-foreground-soft">
+          Writing
+        </h2>
+
+        <ul className="mt-6 space-y-10 md:mt-8">
+          {writing.map(({ slug, meta }) => (
+            <li key={slug} className="max-w-xl">
+              <p className="text-[0.7rem] leading-none text-foreground-soft">
+                <time dateTime={meta.date}>{formatPostDate(meta.date)}</time>
+              </p>
+              <h3 className="mt-2 text-[clamp(1.15rem,1.7vw,1.4rem)] leading-tight font-semibold tracking-[-0.01em] text-balance">
+                <Link href={`/writing/${slug}`} className={LINK}>
+                  {meta.title}
+                </Link>
+              </h3>
+              <p className="mt-2 text-[clamp(0.95rem,1.15vw,1.0625rem)] leading-normal text-balance text-foreground-soft">
+                {meta.deck}
+              </p>
+            </li>
+          ))}
+        </ul>
+      </section>
 
       <WorkPile>
         <Sheet id="stone" kind="professional" title="Stone Co." size="wide">

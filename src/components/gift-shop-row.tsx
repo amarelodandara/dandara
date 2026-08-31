@@ -8,7 +8,7 @@ import { GiftShopSwatch } from "./gift-shop-swatch";
 const CONFIRMED_FOR = 1500;
 const REPORTED_FOR = 4000;
 
-const ROW = [
+export const ROW = [
   "group flex w-full rounded-lg px-3 py-3 text-left",
   "transition-[background-color,scale] duration-(--motion-quick) ease-out-strong",
   "active:scale-[0.99] active:duration-(--press)",
@@ -31,7 +31,7 @@ function Label({ title, meta }: { title: string; meta: string }) {
   );
 }
 
-function Verb({ children, shown }: { children: string; shown?: boolean }) {
+export function Verb({ children, shown }: { children: string; shown?: boolean }) {
   return (
     <span
       aria-hidden="true"
