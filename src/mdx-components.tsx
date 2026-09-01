@@ -46,7 +46,7 @@ function Quote({ children, ...rest }: ComponentPropsWithoutRef<"blockquote">) {
   return (
     <blockquote
       {...rest}
-      className="mt-8 border-l border-foreground/15 pl-5 text-foreground-soft"
+      className="mt-8 border-l border-foreground/15 pl-5 text-foreground-soft [&>*:first-child]:mt-0"
     >
       {children}
     </blockquote>
