@@ -156,12 +156,20 @@ type Look = {
   onWall: boolean;
   dragging: boolean;
   bare: boolean;
+  words: boolean;
+  lightbox: boolean;
 };
 
 const FOCUSED_FRAME =
   "fixed left-1/2 top-1/2 z-[60] w-[88vw] -translate-x-1/2 -translate-y-1/2 md:w-[var(--sheet-w)]";
 
-const frameClass = ({ focused, onWall, dragging }: Look) => {
+const LIGHTBOX_FRAME = [
+  "fixed left-1/2 top-1/2 z-[60] w-max max-w-[92vw] -translate-x-1/2 -translate-y-1/2",
+  "max-h-[92vh] overflow-y-auto md:top-1/3 md:max-h-none md:overflow-visible",
+].join(" ");
+
+const frameClass = ({ focused, onWall, dragging, lightbox }: Look) => {
+  if (lightbox) return LIGHTBOX_FRAME;
   if (focused) return FOCUSED_FRAME;
   if (onWall) return "group";
   return `group ${dragging ? "cursor-grabbing" : "cursor-grab"}`;
@@ -175,8 +183,8 @@ const DETAIL_LINK = [
 const MOTION =
   "transition-[rotate,scale,box-shadow] duration-(--motion-enter) ease-out-strong";
 
-const surface = ({ focused, onWall, dragging, bare }: Look) => {
-  if (bare) return "";
+const surface = ({ focused, onWall, dragging, bare, lightbox }: Look) => {
+  if (lightbox || bare) return "";
   if (onWall) return "bg-background p-4 shadow-label md:p-7";
   const lift = dragging || focused ? "shadow-raised" : "shadow-card";
   return `bg-background ${focused ? "p-6 md:p-7" : "p-4 md:p-7"} ${lift}`;
@@ -185,10 +193,16 @@ const surface = ({ focused, onWall, dragging, bare }: Look) => {
 const cardClass = (look: Look) =>
   [
     "relative outline-none",
+    look.lightbox ? "w-full" : "",
+    look.words ? "text-right" : "",
     surface(look),
     MOTION,
-    look.focused || look.onWall ? "rotate-0" : "rotate-[var(--sheet-r)]",
-  ].join(" ");
+    look.focused || look.onWall || look.lightbox
+      ? "rotate-0"
+      : "rotate-[var(--sheet-r)]",
+  ]
+    .filter(Boolean)
+    .join(" ");
 
 const WALL_BUTTON = [
   "absolute inset-0 z-10 cursor-pointer",
@@ -241,32 +255,37 @@ function SheetButton({
 const REVEALED_ON_HOVER =
   "can-hover:opacity-0 can-hover:group-hover:opacity-100 can-hover:group-focus-within:opacity-100";
 
-const CAPTION_LINK = [
-  "relative z-20 shrink-0",
-  "text-[0.7rem] text-foreground-soft",
-  "underline decoration-stone-400 decoration-[0.04em] underline-offset-[0.25em]",
+const CAPTION_VISIT = [
+  "relative z-20 shrink-0 cursor-pointer",
+  "text-[0.7rem] font-medium tracking-[0.01em] text-foreground-soft",
   "transition-[opacity,color] duration-(--motion-quick) ease-out-strong",
   "hover:text-foreground focus-visible:text-foreground",
+  "after:absolute after:left-1/2 after:top-1/2 after:content-['']",
+  "after:h-11 after:w-[max(100%+1.5rem,2.75rem)]",
+  "after:-translate-x-1/2 after:-translate-y-1/2",
   REVEALED_ON_HOVER,
 ].join(" ");
 
-const PEEK_WASH = [
+// No wash under it. The pill is opaque and carries its own shadow, so it
+// reads against the picture on its own — and veiling the whole plate to
+// announce a closer look was hiding the thing it was offering to show.
+const PEEK_LAYER = [
   "pointer-events-none absolute inset-0 grid place-items-center",
-  "bg-background/55 opacity-0",
+  "opacity-0",
   "transition-opacity duration-(--motion-quick) ease-out-strong",
   "group-hover:opacity-100 group-focus-within:opacity-100",
 ].join(" ");
 
 const PEEK_PILL = [
   "rounded-full bg-background px-3 py-1.5 shadow-chip",
-  "text-[0.7rem] font-medium tracking-[0.01em] text-foreground",
+  "text-[0.7rem] font-medium tracking-[0.01em] text-foreground-soft",
   "scale-[0.96] transition-transform duration-(--motion-quick) ease-out-strong",
   "group-hover:scale-100 group-focus-within:scale-100",
 ].join(" ");
 
 function Peek() {
   return (
-    <div aria-hidden="true" data-peek className={PEEK_WASH}>
+    <div aria-hidden="true" data-peek className={PEEK_LAYER}>
       <span className={PEEK_PILL}>Take a closer look</span>
     </div>
   );
@@ -288,14 +307,68 @@ function Plate({
         <Peek />
       </div>
       <div className="mt-3 flex items-baseline justify-between gap-4">
-        <h3 className="text-[1.05rem]">{title}</h3>
+        <h3 className="text-[0.9rem]">{title}</h3>
         {link ? (
-          <a href={link.href} className={CAPTION_LINK}>
-            {link.label}
+          <a href={link.href} className={CAPTION_VISIT}>
+            Visit
+            <span className="sr-only">
+              {" "}
+              {title} at {link.label}
+            </span>
           </a>
         ) : null}
       </div>
     </>
+  );
+}
+
+const LIGHTBOX_MEDIA = [
+  "flex min-h-0 w-full items-center justify-center md:w-auto",
+  "[&>*]:max-h-[46vh] [&>*]:w-auto [&>*]:max-w-full [&>*]:object-contain",
+  "md:[&>*]:max-h-[62vh]",
+].join(" ");
+
+const LIGHTBOX_LABEL = [
+  "w-full shrink-0 self-center bg-background p-5 shadow-raised",
+  "md:max-h-[62vh] md:w-[17rem] md:overflow-y-auto md:p-6",
+].join(" ");
+
+function Lightbox({
+  title,
+  eyebrow,
+  front,
+  link,
+  button,
+  children,
+}: {
+  title: string;
+  eyebrow?: string;
+  front?: ReactNode;
+  link?: SheetLink;
+  button: ReactNode;
+  children: ReactNode;
+}) {
+  return (
+    <div className="flex w-full flex-col items-center gap-5 md:flex-row md:items-start md:justify-center md:gap-8">
+      <div className={LIGHTBOX_MEDIA}>{front}</div>
+      <aside className={LIGHTBOX_LABEL}>
+        {button}
+        {eyebrow ? (
+          <p className="text-[0.7rem] text-foreground-soft">{eyebrow}</p>
+        ) : null}
+        <h3 className="clear-right mt-5 text-[1.05rem] text-foreground-soft">
+          {title}
+        </h3>
+        <div className="font-medium">{children}</div>
+        {link ? (
+          <p className="mt-3">
+            <a href={link.href} className={DETAIL_LINK}>
+              {link.label}
+            </a>
+          </p>
+        ) : null}
+      </aside>
+    </div>
   );
 }
 
@@ -369,6 +442,8 @@ function SheetFrameImpl({
   const wasView = useRef(view);
 
   const placedByDrag = !focused && view === "pile";
+  const lightbox =
+    focused && view === "wall" && frontKind === "picture" && Boolean(front);
   useIsomorphicLayoutEffect(() => {
     const el = frameRef.current;
     if (!el) return;
@@ -410,7 +485,7 @@ function SheetFrameImpl({
     const frame = frameRef.current;
     if (!card || !frame) return;
 
-    if (!focused) {
+    if (!focused || lightbox) {
       card.style.scale = "";
       frame.style.maxHeight = "";
       frame.style.overflowY = "";
@@ -448,7 +523,7 @@ function SheetFrameImpl({
       window.removeEventListener("resize", measure);
       window.visualViewport?.removeEventListener("resize", measure);
     };
-  }, [focused]);
+  }, [focused, lightbox]);
 
   const heldFocus = useRef(false);
   useEffect(() => {
@@ -531,7 +606,54 @@ function SheetFrameImpl({
   const onWall = view === "wall" && !focused;
   const showsDetail = focused || view === "pile";
   const bare = onWall && frontKind === "picture" && Boolean(front);
-  const look = { focused, onWall, dragging, bare };
+  const look = {
+    focused,
+    onWall,
+    dragging,
+    bare,
+    words: frontKind === "words",
+    lightbox,
+  };
+
+  const button = (
+    <SheetButton
+      ref={buttonRef}
+      title={title}
+      focused={focused}
+      onWall={onWall && !lightbox}
+      onClick={() => (focused ? onClose() : onOpen(id))}
+    />
+  );
+
+  let body;
+  if (lightbox) {
+    body = (
+      <Lightbox
+        title={title}
+        eyebrow={eyebrow}
+        front={front}
+        link={link}
+        button={button}
+      >
+        {children}
+      </Lightbox>
+    );
+  } else if (bare) {
+    body = <Plate title={title} front={front} link={link} />;
+  } else {
+    body = (
+      <Card
+        onWall={onWall}
+        eyebrow={eyebrow}
+        title={title}
+        front={front}
+        link={link}
+        showsDetail={showsDetail}
+      >
+        {children}
+      </Card>
+    );
+  }
 
   return (
     <div
@@ -563,27 +685,8 @@ function SheetFrameImpl({
         data-sheet-card
         className={cardClass(look)}
       >
-        <SheetButton
-          ref={buttonRef}
-          title={title}
-          focused={focused}
-          onWall={onWall}
-          onClick={() => (focused ? onClose() : onOpen(id))}
-        />
-        {bare ? (
-          <Plate title={title} front={front} link={link} />
-        ) : (
-          <Card
-            onWall={onWall}
-            eyebrow={eyebrow}
-            title={title}
-            front={front}
-            link={link}
-            showsDetail={showsDetail}
-          >
-            {children}
-          </Card>
-        )}
+        {lightbox ? null : button}
+        {body}
       </div>
     </div>
   );

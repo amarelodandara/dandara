@@ -144,59 +144,6 @@ export default function Home() {
 
       <WorkPile>
         <Sheet
-          id="stone"
-          kind="professional"
-          title="Stone Co."
-          size="wide"
-          eyebrow="2022 — 2026"
-          frontKind="words"
-          front={
-            <ul className="text-[0.9rem] leading-normal font-semibold">
-              {[
-                "Activation Flow",
-                "Cancelation",
-                "Closing",
-                "News",
-                "Paper Roll Orders",
-                "Payment",
-                "Pix and Pix NFC",
-                "Pre-Authorization",
-                "Receipts",
-                "Sales Reports",
-                "Sales Simulation",
-                "Store",
-                "System Launcher",
-                "Tickets",
-              ].map((app) => (
-                <li key={app}>{app}</li>
-              ))}
-            </ul>
-          }
-        />
-
-        <Sheet
-          id="stone-talk"
-          kind="professional"
-          title="Stone Co., on stage"
-          size="wide"
-          front={
-            <Image
-              src="/work/stone-talk.jpg"
-              alt="Nicoly Dandara speaking into a microphone beside a projected slide of a Stone payment terminal running the app store."
-              width={3024}
-              height={4032}
-              sizes={WORK_SIZES}
-              draggable={false}
-              className={WORK_MEDIA}
-            />
-          }
-        >
-          <p className="mt-3 text-[0.7rem] text-foreground-soft">
-            Presenting the Stone Terminal Store
-          </p>
-        </Sheet>
-
-        <Sheet
           id="in-service-of-museums"
           kind="personal"
           title="In Service of Museums"
@@ -231,11 +178,86 @@ export default function Home() {
         </Sheet>
 
         <Sheet
+          id="museu-mark"
+          kind="personal"
+          title="Museum mark"
+          eyebrow="Research icon"
+          link={{
+            href: "https://servico-museu.vercel.app",
+            label: "servico-museu.vercel.app",
+          }}
+          front={
+            <video
+              aria-label="The mark for In Service of Museums: a white gallery frame holding a grainy field of blue and yellow that rises and settles like a slow wave."
+              autoPlay
+              loop
+              muted
+              playsInline
+              preload="metadata"
+              className={`${WORK_MEDIA} aspect-square`}
+            >
+              <source src="/work/museu-mark.mp4" type="video/mp4" />
+            </video>
+          }
+        />
+
+        <Sheet
+          id="stone"
+          kind="professional"
+          title="Stone Co. Product Designer"
+          size="wide"
+          eyebrow="2022 — 2026"
+          frontKind="words"
+          front={
+            <ul className="text-[0.9rem] leading-normal font-semibold">
+              {[
+                "Improvement of Activation flow",
+                "Improvement of Cancelation application",
+                "Improvement of Reports application",
+                "Automation structure of News app",
+                "Self-servic of supplies",
+                "Pix NFC launch",
+                "Homolog and design of new devices",
+                "Redesign of Pre-Authorization app",
+                "Launch of the App Store",
+                "System updates to devices",
+                "Launch of the Ticketing app",
+              ].map((app) => (
+                <li key={app}>{app}</li>
+              ))}
+            </ul>
+          }
+        />
+
+        <Sheet
+          id="stone-talk"
+          kind="professional"
+          title="Stone Co., on stage"
+          eyebrow="Presenting the Store on stage"
+          size="wide"
+          front={
+            <Image
+              src="/work/stone-talk.jpg"
+              alt="Nicoly Dandara speaking into a microphone beside a projected slide of a Stone payment terminal running the app store."
+              width={3024}
+              height={4032}
+              sizes={WORK_SIZES}
+              draggable={false}
+              className={WORK_MEDIA}
+            />
+          }
+        >
+          <p className="mt-3 text-[0.7rem] text-foreground-soft">
+            Presenting the Stone Terminal Store
+          </p>
+        </Sheet>
+
+        <Sheet
           id="links-amarelos"
           kind="personal"
           title="links amarelos"
           size="feature"
-          eyebrow="Monthly newsletter"
+          eyebrow="linksamarelos.com"
           link={{ href: "https://linksamarelos.com", label: "linksamarelos.com" }}
           front={
             <video
@@ -257,7 +279,7 @@ export default function Home() {
           id="ondas-amarelas"
           kind="personal"
           title="ondas amarelas"
-          eyebrow="Podcast cover"
+          eyebrow="Monthly curated podcast"
           link={{
             href: "https://open.spotify.com/show/043Gs7eyY2KOlotEWSTSxB?si=651fe644a3234022",
             label: "Listen on Spotify",
@@ -279,7 +301,7 @@ export default function Home() {
           id="ondas-amarelas-episode"
           kind="personal"
           title="ondas amarelas, episode three"
-          eyebrow="Episode cover"
+          eyebrow="Monthly curated podcast"
           front={
             <Image
               src="/work/ondas-amarelas-episode.png"
@@ -298,7 +320,7 @@ export default function Home() {
           kind="personal"
           title="Obsidian graph"
           size="wide"
-          eyebrow="Notes"
+          eyebrow="Personal Obsidian graph"
           front={
             <Image
               src="/work/obsidian-graph.png"
@@ -311,6 +333,7 @@ export default function Home() {
             />
           }
         />
+
       </WorkPile>
     </main>
   );

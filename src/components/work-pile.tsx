@@ -63,38 +63,57 @@ function readSheets(children: ReactNode): Item[] {
   });
 }
 
-function ViewButton({
+function ViewIcon({
   active,
-  label,
-  onClick,
+  lit,
   children,
 }: {
   active: boolean;
-  label: string;
-  onClick: () => void;
+  lit: string;
   children: ReactNode;
 }) {
   return (
-    <button
-      type="button"
-      data-pressable
-      aria-pressed={active}
-      title={label}
-      onClick={onClick}
+    <span
+      aria-hidden="true"
       className={[
-        "relative cursor-pointer",
-        "transition-[color,scale] duration-(--motion-quick) ease-out-strong",
-        "active:scale-[0.97] active:duration-(--press)",
-        "after:absolute after:left-1/2 after:top-1/2 after:h-11 after:w-11 after:content-['']",
-        "after:-translate-x-1/2 after:-translate-y-1/2",
-        "outline-offset-4 focus-visible:outline-2 focus-visible:outline-foreground",
-        active
-          ? "text-foreground-soft"
-          : "text-foreground-soft/35 hover:text-foreground-soft/70",
+        "transition-colors duration-(--motion-quick) ease-out-strong",
+        active ? lit : "text-foreground-faint",
       ].join(" ")}
     >
       {children}
-      <span className="sr-only">{label}</span>
+    </span>
+  );
+}
+
+function ViewToggle({ view, onToggle }: { view: WorkView; onToggle: () => void }) {
+  const piled = view === "pile";
+  return (
+    <button
+      type="button"
+      role="switch"
+      aria-checked={piled}
+      data-pressable
+      onClick={onToggle}
+      className={[
+        "relative h-5 w-9 shrink-0 cursor-pointer rounded-full",
+        "transition-[background-color,scale] duration-(--motion-quick) ease-out-strong",
+        "active:scale-[0.97] active:duration-(--press)",
+        "outline-offset-4 focus-visible:outline-2 focus-visible:outline-foreground",
+        "after:absolute after:left-1/2 after:top-1/2 after:h-11 after:w-11 after:content-['']",
+        "after:-translate-x-1/2 after:-translate-y-1/2",
+        "shadow-hollow",
+        piled ? "bg-background-hard" : "bg-foreground/10",
+      ].join(" ")}
+    >
+      <span
+        aria-hidden="true"
+        className={[
+          "absolute top-0.5 left-0.5 h-4 w-4 rounded-full bg-background shadow-chip",
+          "transition-transform duration-(--motion-quick) ease-out-strong",
+          piled ? "translate-x-0" : "translate-x-4",
+        ].join(" ")}
+      />
+      <span className="sr-only">Tip the work into a pile</span>
     </button>
   );
 }
@@ -172,45 +191,32 @@ export function WorkPile({
           {label}
         </h2>
 
-        <div className="flex items-center gap-1.5">
-          <ViewButton
-            active={view === "wall"}
-            label="Hang the work on a wall"
-            onClick={() => show("wall")}
-          >
-            <WallIcon />
-          </ViewButton>
-
-          <div
+        <div className="relative flex items-center gap-2">
+          <p
             data-flavour
+            aria-hidden={view === "wall" || undefined}
             className={[
-              "grid transition-[grid-template-columns]",
-              "duration-(--motion-enter) ease-out-strong",
-              view === "pile"
-                ? "grid-cols-[minmax(0,1fr)]"
-                : "grid-cols-[minmax(0,0fr)]",
+              "pointer-events-none absolute right-full mr-3 whitespace-nowrap",
+              "text-[0.7rem] leading-none tracking-[0.01em] text-foreground-hard",
+              "transition-opacity duration-(--motion-quick) ease-out-strong",
+              view === "pile" ? "opacity-100" : "opacity-0",
             ].join(" ")}
           >
-            <p
-              aria-hidden={view === "wall" || undefined}
-              className={[
-                "min-w-0 overflow-hidden px-2 whitespace-nowrap",
-                "text-[0.7rem] leading-none tracking-[0.01em] text-foreground-soft/60",
-                "transition-opacity duration-(--motion-quick) ease-out-strong",
-                view === "pile" ? "opacity-100" : "opacity-0",
-              ].join(" ")}
-            >
-              it&rsquo;s art, please touch
-            </p>
-          </div>
+            it&rsquo;s art, please touch
+          </p>
 
-          <ViewButton
-            active={view === "pile"}
-            label="Tip the work into a pile"
-            onClick={() => show("pile")}
-          >
+          <ViewIcon active={view === "pile"} lit="text-foreground-hard">
             <PileIcon />
-          </ViewButton>
+          </ViewIcon>
+
+          <ViewToggle
+            view={view}
+            onToggle={() => show(view === "pile" ? "wall" : "pile")}
+          />
+
+          <ViewIcon active={view === "wall"} lit="text-foreground-soft">
+            <WallIcon />
+          </ViewIcon>
         </div>
       </div>
 
