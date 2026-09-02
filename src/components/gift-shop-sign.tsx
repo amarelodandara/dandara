@@ -41,30 +41,33 @@ export function GiftShopSign({
   onClose: () => void;
 }) {
   return (
-    <header className="px-3">
-      <div className="flex items-start justify-between gap-3">
-        <h2 className="text-[clamp(1.15rem,1.7vw,1.4rem)] leading-tight font-semibold tracking-[-0.01em]">
+    // The header runs the full width of the panel: negative margins cancel the
+    // aside's padding and put it back inside, so it sits on the panel's own
+    // yellow edge to edge rather than in a column with the shelves below it.
+    <header className="-mx-5 -mt-8 flex items-center justify-between gap-3 px-5 pt-7 pb-6">
+      <div className="flex min-w-0 flex-col gap-2">
+        <h2 className="text-[clamp(1.15rem,1.7vw,1.4rem)] leading-tight font-semibold tracking-[-0.01em] text-balance">
           {sign.name}
         </h2>
 
-        <button
-          type="button"
-          onClick={onClose}
-          aria-keyshortcuts="g Escape"
-          data-pressable
-          className="-mt-0.5 -mr-2 -mb-2 flex shrink-0 items-center rounded-lg bg-cutout px-2.5 py-2 transition-[background-color,scale] duration-(--motion-quick) ease-out-strong hover:bg-cutout-deep focus-visible:bg-cutout-deep active:scale-[0.97] active:duration-(--press)"
-        >
-          <span className="text-[0.7rem] leading-none font-medium tracking-[0.01em] text-foreground-soft">
-            Close
-          </span>
-          <span className="sr-only">{sign.closes}</span>
-          <Kbd>G</Kbd>
-        </button>
+        <p className="text-[0.9rem] leading-snug text-foreground-hard">
+          {sign.blurb}
+        </p>
       </div>
 
-      <p className="mt-4 text-[0.9rem] leading-snug text-foreground-hard">
-        {sign.blurb}
-      </p>
+      <button
+        type="button"
+        onClick={onClose}
+        aria-keyshortcuts="g Escape"
+        data-pressable
+        className="-mr-2 flex shrink-0 items-center rounded-lg bg-background px-2.5 py-2 shadow-cutout transition-[background-color,scale] duration-(--motion-quick) ease-out-strong hover:bg-cutout focus-visible:bg-cutout active:scale-[0.97] active:duration-(--press)"
+      >
+        <span className="text-[0.7rem] leading-none font-medium tracking-[0.01em] text-foreground-soft">
+          Close
+        </span>
+        <span className="sr-only">{sign.closes}</span>
+        <Kbd>G</Kbd>
+      </button>
     </header>
   );
 }

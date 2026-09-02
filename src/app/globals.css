@@ -26,22 +26,19 @@
      unchanged and only the seams are gone. */
   --color-foreground-faint: oklch(0.796 0.021 98.285);
 
-  /* The surface a cutout in the shop panel reveals. Not `background`, though
-     that was the obvious first guess: the wall is 0.029 chroma and the panel it
-     sits inside is 0.177, and against that much saturation a near-white pale
-     yellow simply reads as white. Honest for a hole punched through to the
-     page, wrong for what a hollow in a yellow object looks like — a recess is
-     lit by light bouncing off its own yellow walls, so it stays yellow.
+  /* Bounce light in a cutout, not the cutout itself. The close button reads as
+     a hole punched clean through the panel, so at rest it is `background` —
+     literally the page showing through — with `shadow-cutout` for the cut edge.
+     These two are what the hole warms to when a pointer approaches, which is
+     what a recess lit by its own yellow walls actually does.
 
      35% of the way from `background` to `background-hard`, mixed in oklch, and
-     50% for the hover step: 2.8x the chroma of the wall, still a clear step
+     50% for the deeper step: 2.8x the chroma of the wall, still a clear step
      lighter than the panel. Written out rather than left as a `color-mix()` so
-     the values are visible here; recompute if either end of the mix moves.
-
-     The fill is the whole effect now — there is no inset shadow under it, so
-     hover has to move the colour rather than deepen a hollow. */
+     the values are visible here; recompute if either end of the mix moves. */
   --color-cutout: oklch(0.945 0.081 97);
   --color-cutout-deep: oklch(0.927 0.103 95.473);
+
 
   /* The hot spot at the middle of the site's own mark, the same orange as
      `icon.svg` converted out of #ff8e00. Same chroma as the yellow it sits in,
@@ -94,6 +91,15 @@
      knob sits in. */
   --shadow-hollow: inset 0 0 0 1px oklch(0 0 0 / 0.035),
     inset 0 1px 4px oklch(0 0 0 / 0.02);
+
+  /* The sixth, and `hollow` cut through something saturated rather than pressed
+     into the wall. Two differences, both forced by the ground: it is roughly
+     four times the strength, because a 3.5% ring vanishes on yellow and leaves
+     the fill reading as a sticker; and it is thrown in the panel's own hue
+     rather than in neutral black, so the edge reads as the thickness of the
+     yellow being cut through instead of a grey line drawn on it. */
+  --shadow-cutout: inset 0 0 0 1px oklch(0.55 0.12 92 / 0.18),
+    inset 0 2px 5px oklch(0.45 0.1 92 / 0.16);
 }
 
 /* Inter 4.001 OpenType features applied to every glyph on the site.
