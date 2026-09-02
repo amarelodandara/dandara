@@ -36,16 +36,6 @@ const SCROLLING_HEIGHT_SHARE = 0.88;
 
 type Box = { left: number; top: number; width: number; height: number };
 
-// A viewport rect is only worth as much as the scroll position it was read at,
-// and the two views are wildly different heights: the wall is a tall stack of
-// columns, the pile a fixed heap a few screens shorter. Tipping one into the
-// other shortens the page under the visitor, the browser clamps the scroll to
-// the new bottom, and every rect taken before that clamp is now measured from
-// somewhere the page no longer is. Read in page coordinates the two
-// measurements share an origin again, and the drift — which read on screen as
-// the whole wall flinging itself up out of the section before dropping back —
-// simply is not there. Nothing to correct for a fixed sheet either: the scroll
-// does not move while one is open, so the term falls out.
 const pageBox = (el: HTMLElement): Box => {
   const rect = el.getBoundingClientRect();
   return {
@@ -241,11 +231,6 @@ const cardClass = (look: Look) =>
     .filter(Boolean)
     .join(" ");
 
-// Lifting a picture off the wall used to leave a hole: the frame goes
-// `position: fixed`, drops out of the column flow, and the six pieces behind it
-// repack around the gap — a shuffle of the whole room to look at one thing.
-// So the wall keeps the slot. An empty frame of the exact height the card had,
-// hung in its place until the card comes back down.
 const VACATED = "bg-foreground/[0.02] shadow-hollow";
 
 const WALL_BUTTON = [
@@ -310,9 +295,6 @@ const CAPTION_VISIT = [
   REVEALED_ON_HOVER,
 ].join(" ");
 
-// No wash under it. The pill is opaque and carries its own shadow, so it
-// reads against the picture on its own — and veiling the whole plate to
-// announce a closer look was hiding the thing it was offering to show.
 const PEEK_LAYER = [
   "pointer-events-none absolute inset-0 grid place-items-center",
   "opacity-0",
@@ -335,9 +317,6 @@ function Peek() {
   );
 }
 
-// The setting a quote's attribution gets on the landing: 0.85rem, soft, no
-// weight. On the wall it does the same job — naming the thing next to it
-// without asking to be read first.
 const WALL_LABEL = "text-[0.85rem] text-foreground-soft";
 
 function Plate({
@@ -380,9 +359,6 @@ const LIGHTBOX_MEDIA = [
   "md:[&>*]:max-h-[62vh]",
 ].join(" ");
 
-// The picture is the thing being looked at, so it keeps the middle of the
-// screen. The label sits on the picture's baseline — a caption beside the
-// work rather than a second column competing with it.
 const LIGHTBOX_LABEL = [
   "w-full shrink-0 bg-background p-5 shadow-raised",
   "md:max-h-[62vh] md:w-[17rem] md:self-end md:overflow-y-auto md:p-6",
@@ -528,10 +504,6 @@ function SheetFrameImpl({
     wasView.current = view;
     wasLightbox.current = lightbox;
 
-    // A rect measured mid-flight is the animated rect, not the resting one, so
-    // a stray re-render during a morph would poison the next one's start frame.
-    // Nothing to re-measure until this one lands, or until a new toggle
-    // cancels it — and cancelling drops the transform before anything is read.
     const inFlight = flip.current.some((it) => it.playState === "running");
     if (!toggled && inFlight) return;
 
@@ -549,17 +521,6 @@ function SheetFrameImpl({
 
     if (!toggled || matches("(prefers-reduced-motion: reduce)")) return;
 
-    // Opening a picture rebuilds the card into something a different shape:
-    // a caption under a plate becomes a label beside a blown-up picture. The
-    // frame's own box therefore has no honest before-and-after — scaling it
-    // squashes whatever is inside, and the squash is worst where the two
-    // aspect ratios are furthest apart, which is why some pieces looked fine
-    // and the rest did not.
-    //
-    // The picture is the one thing that is genuinely the same object in both
-    // states, so it is what gets the FLIP: same image, same aspect, so the
-    // scale comes out uniform and nothing distorts. The label and the caption
-    // are not the same object at all, so they cross-fade rather than travel.
     if (openedOrClosedALightbox) {
       if (media && mediaFrom && mediaTo && mediaTo.width && mediaTo.height) {
         flip.current.push(
@@ -722,9 +683,6 @@ function SheetFrameImpl({
     lightbox,
   };
 
-  // Measured on the way out, while the card is still in the column and its
-  // height is still its own. A layout effect would arrive too late — by then
-  // the frame is already fixed and the slot has already closed.
   const take = () => {
     const frame = frameRef.current;
     if (frame && view === "wall") {

@@ -41,14 +41,6 @@ export function GiftShopSign({
   onClose: () => void;
 }) {
   return (
-    // The header runs the full width of the panel: negative margins cancel the
-    // aside's padding and put it back inside, so it sits on the panel's own
-    // yellow edge to edge rather than in a column with the shelves below it.
-    //
-    // px-8 is the aside's px-5 plus the px-3 every shelf heading and row adds
-    // on top of it, which is where the content edge actually is. Matching the
-    // aside alone would have left the header a notch to the left of everything
-    // under it.
     <header data-paper data-perforated className="-mx-5 -mt-8 bg-shop-band">
       <div
         data-perforated
