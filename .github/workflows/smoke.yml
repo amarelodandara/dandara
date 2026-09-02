@@ -21,7 +21,5 @@ jobs:
 
       - run: npx playwright install --with-deps chromium
 
-      - name: Smoke the deployment
-        env:
-          SMOKE_BASE_URL: ${{ github.event.deployment_status.environment_url }}
+      - name: Smoke the live site
         run: npm run smoke

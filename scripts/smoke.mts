@@ -2,10 +2,10 @@ import process from "node:process";
 import { chromium } from "playwright";
 import type { Browser } from "playwright";
 import { giftShopSections } from "../src/content/gift-shop.ts";
-import { TITLE } from "../src/lib/site.ts";
+import { SITE_URL, TITLE } from "../src/lib/site.ts";
 import { readPosts } from "../src/lib/writing/meta-source.ts";
 
-const DEFAULT_BASE = "https://adandara.com";
+const LOGIN_WALL = "vercel.com/login";
 const OK = 200;
 const GONE = 404;
 const SETTLE_MS = 600;
@@ -24,10 +24,22 @@ const check = (ok: boolean, message: string) => {
 
 const parseBase = (argv: string[]) => {
   const flag = argv.indexOf("--base");
-  const given =
-    flag === -1 ? process.env.SMOKE_BASE_URL : argv[flag + 1];
-  return (given ?? DEFAULT_BASE).replace(/\/$/, "");
+  const given = flag === -1 ? process.env.SMOKE_BASE_URL : argv[flag + 1];
+  return (given || SITE_URL).replace(/\/$/, "");
 };
+
+async function refuseLoginWall(base: string) {
+  const response = await fetch(`${base}${MISSING_PATH}`);
+  if (!response.url.includes(LOGIN_WALL)) return;
+
+  console.error(
+    `✗ ${base} is behind Vercel Deployment Protection — every path redirects to the Vercel login,`,
+  );
+  console.error(
+    "  so every check would fail for the same uninteresting reason. Smoke the public domain instead.",
+  );
+  process.exit(1);
+}
 
 const noisy = (text: string) =>
   IGNORED_CONSOLE.some((pattern) => pattern.test(text));
@@ -177,6 +189,7 @@ async function fetchEverythingElse(base: string, posts: Posts) {
 
 async function main() {
   const base = parseBase(process.argv);
+  await refuseLoginWall(base);
   const posts = await readPosts();
 
   notes.push(

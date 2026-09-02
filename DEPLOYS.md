@@ -13,6 +13,7 @@ than into pretending it can be prevented.
 | `.github/workflows/ci.yml` | every push and pull request | the same, plus a real `next build` |
 | Vercel's own build | every push to `main` | anything that fails `next build` — the deploy never promotes and the last good one stays live |
 | `.github/workflows/smoke.yml` | when a production deployment reports success | pages that build clean and serve broken |
+
 | `.github/workflows/uptime.yml` | every 30 minutes | the site going down between deploys |
 
 Nothing guards content judgement, copy, or layout. Those are still on you.
@@ -80,6 +81,18 @@ loudly if they ever stop holding:
 - `/robots.txt`, `/sitemap.xml` and `/feed.xml` must answer, and the sitemap and
   the feed must list every post the repo has. A silently empty sitemap is the
   kind of regression nobody notices for a month.
+
+## Why smoke checks the domain, not the deployment
+
+Deployment Protection is on, so every `*.vercel.app` deployment URL redirects to
+the Vercel login. The smoke workflow therefore checks `adandara.com` — the
+alias production traffic actually lands on — rather than the deployment URL
+GitHub hands it. That is the better target anyway: it is what a visitor gets.
+
+The cost is that a preview cannot be smoked without a protection bypass token.
+If that becomes worth having, the script refuses an auth-walled base with one
+clear line instead of failing seventeen checks for the same reason, which is
+where to hook the bypass header in.
 
 ## Running the checks by hand
 
