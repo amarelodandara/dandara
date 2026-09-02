@@ -34,6 +34,40 @@ const ZOOM_WIDTH_SHARE = 0.9;
 const ZOOM_HEIGHT_SHARE = 0.86;
 const SCROLLING_HEIGHT_SHARE = 0.88;
 
+type Box = { left: number; top: number; width: number; height: number };
+
+// A viewport rect is only worth as much as the scroll position it was read at,
+// and the two views are wildly different heights: the wall is a tall stack of
+// columns, the pile a fixed heap a few screens shorter. Tipping one into the
+// other shortens the page under the visitor, the browser clamps the scroll to
+// the new bottom, and every rect taken before that clamp is now measured from
+// somewhere the page no longer is. Read in page coordinates the two
+// measurements share an origin again, and the drift — which read on screen as
+// the whole wall flinging itself up out of the section before dropping back —
+// simply is not there. Nothing to correct for a fixed sheet either: the scroll
+// does not move while one is open, so the term falls out.
+const pageBox = (el: HTMLElement): Box => {
+  const rect = el.getBoundingClientRect();
+  return {
+    left: rect.left + window.scrollX,
+    top: rect.top + window.scrollY,
+    width: rect.width,
+    height: rect.height,
+  };
+};
+
+const slide = (el: HTMLElement, from: Box, to: Box) =>
+  el.animate(
+    [
+      {
+        transformOrigin: "top left",
+        transform: `translate(${from.left - to.left}px, ${from.top - to.top}px) scale(${from.width / to.width}, ${from.height / to.height})`,
+      },
+      { transformOrigin: "top left", transform: "none" },
+    ],
+    { duration: FLIP_DURATION, easing: EASE_OUT_STRONG },
+  );
+
 const useIsomorphicLayoutEffect =
   typeof window === "undefined" ? useEffect : useLayoutEffect;
 
@@ -165,7 +199,7 @@ const FOCUSED_FRAME =
 
 const LIGHTBOX_FRAME = [
   "fixed left-1/2 top-1/2 z-[60] w-max max-w-[92vw] -translate-x-1/2 -translate-y-1/2",
-  "max-h-[92vh] overflow-y-auto md:top-1/3 md:max-h-none md:overflow-visible",
+  "max-h-[92vh] overflow-y-auto md:max-h-none md:overflow-visible",
 ].join(" ");
 
 const frameClass = ({ focused, onWall, dragging, lightbox }: Look) => {
@@ -203,6 +237,13 @@ const cardClass = (look: Look) =>
   ]
     .filter(Boolean)
     .join(" ");
+
+// Lifting a picture off the wall used to leave a hole: the frame goes
+// `position: fixed`, drops out of the column flow, and the six pieces behind it
+// repack around the gap — a shuffle of the whole room to look at one thing.
+// So the wall keeps the slot. An empty frame of the exact height the card had,
+// hung in its place until the card comes back down.
+const VACATED = "bg-foreground/[0.02] shadow-hollow";
 
 const WALL_BUTTON = [
   "absolute inset-0 z-10 cursor-pointer",
@@ -302,11 +343,14 @@ function Plate({
 }) {
   return (
     <>
-      <div className="relative">
+      <div data-sheet-media className="relative">
         {front}
         <Peek />
       </div>
-      <div className="mt-3 flex items-baseline justify-between gap-4">
+      <div
+        data-sheet-chrome
+        className="mt-3 flex items-baseline justify-between gap-4"
+      >
         <h3 className="text-[0.9rem]">{title}</h3>
         {link ? (
           <a href={link.href} className={CAPTION_VISIT}>
@@ -323,14 +367,17 @@ function Plate({
 }
 
 const LIGHTBOX_MEDIA = [
-  "flex min-h-0 w-full items-center justify-center md:w-auto",
+  "flex min-h-0 w-auto items-center justify-center",
   "[&>*]:max-h-[46vh] [&>*]:w-auto [&>*]:max-w-full [&>*]:object-contain",
   "md:[&>*]:max-h-[62vh]",
 ].join(" ");
 
+// The picture is the thing being looked at, so it keeps the middle of the
+// screen. The label sits on the picture's baseline — a caption beside the
+// work rather than a second column competing with it.
 const LIGHTBOX_LABEL = [
-  "w-full shrink-0 self-center bg-background p-5 shadow-raised",
-  "md:max-h-[62vh] md:w-[17rem] md:overflow-y-auto md:p-6",
+  "w-full shrink-0 bg-background p-5 shadow-raised",
+  "md:max-h-[62vh] md:w-[17rem] md:self-end md:overflow-y-auto md:p-6",
 ].join(" ");
 
 function Lightbox({
@@ -349,9 +396,11 @@ function Lightbox({
   children: ReactNode;
 }) {
   return (
-    <div className="flex w-full flex-col items-center gap-5 md:flex-row md:items-start md:justify-center md:gap-8">
-      <div className={LIGHTBOX_MEDIA}>{front}</div>
-      <aside className={LIGHTBOX_LABEL}>
+    <div className="flex w-full flex-col items-center gap-5 md:flex-row md:items-center md:justify-center md:gap-8">
+      <div data-sheet-media className={LIGHTBOX_MEDIA}>
+        {front}
+      </div>
+      <aside data-sheet-chrome className={LIGHTBOX_LABEL}>
         {button}
         {eyebrow ? (
           <p className="text-[0.7rem] text-foreground-soft">{eyebrow}</p>
@@ -434,12 +483,15 @@ function SheetFrameImpl({
 
   const drag = useRef({ x: 0, y: 0 });
   const [dragging, setDragging] = useState(false);
+  const [vacated, setVacated] = useState<number | null>(null);
   const session = useRef<DragSession | null>(null);
 
-  const previousRect = useRef<DOMRect | null>(null);
-  const flip = useRef<Animation | null>(null);
+  const previousRect = useRef<Box | null>(null);
+  const previousMediaRect = useRef<Box | null>(null);
+  const flip = useRef<Animation[]>([]);
   const wasFocused = useRef(focused);
   const wasView = useRef(view);
+  const wasLightbox = useRef(false);
 
   const placedByDrag = !focused && view === "pile";
   const lightbox =
@@ -456,28 +508,63 @@ function SheetFrameImpl({
     const el = frameRef.current;
     if (!el) return;
 
-    const from = previousRect.current;
-    const to = el.getBoundingClientRect();
-    previousRect.current = to;
-
     const toggled = wasFocused.current !== focused || wasView.current !== view;
+    const openedOrClosedALightbox = wasLightbox.current !== lightbox;
     wasFocused.current = focused;
     wasView.current = view;
+    wasLightbox.current = lightbox;
 
-    if (!toggled || !from || matches("(prefers-reduced-motion: reduce)")) return;
-    if (!to.width || !to.height) return;
+    // A rect measured mid-flight is the animated rect, not the resting one, so
+    // a stray re-render during a morph would poison the next one's start frame.
+    // Nothing to re-measure until this one lands, or until a new toggle
+    // cancels it — and cancelling drops the transform before anything is read.
+    const inFlight = flip.current.some((it) => it.playState === "running");
+    if (!toggled && inFlight) return;
 
-    flip.current?.cancel();
-    flip.current = el.animate(
-      [
-        {
-          transformOrigin: "top left",
-          transform: `translate(${from.left - to.left}px, ${from.top - to.top}px) scale(${from.width / to.width}, ${from.height / to.height})`,
-        },
-        { transformOrigin: "top left", transform: "none" },
-      ],
-      { duration: FLIP_DURATION, easing: EASE_OUT_STRONG },
-    );
+    for (const animation of flip.current) animation.cancel();
+    flip.current = [];
+
+    const media = el.querySelector<HTMLElement>("[data-sheet-media]");
+
+    const from = previousRect.current;
+    const mediaFrom = previousMediaRect.current;
+    const to = pageBox(el);
+    const mediaTo = media ? pageBox(media) : null;
+    previousRect.current = to;
+    previousMediaRect.current = mediaTo;
+
+    if (!toggled || matches("(prefers-reduced-motion: reduce)")) return;
+
+    // Opening a picture rebuilds the card into something a different shape:
+    // a caption under a plate becomes a label beside a blown-up picture. The
+    // frame's own box therefore has no honest before-and-after — scaling it
+    // squashes whatever is inside, and the squash is worst where the two
+    // aspect ratios are furthest apart, which is why some pieces looked fine
+    // and the rest did not.
+    //
+    // The picture is the one thing that is genuinely the same object in both
+    // states, so it is what gets the FLIP: same image, same aspect, so the
+    // scale comes out uniform and nothing distorts. The label and the caption
+    // are not the same object at all, so they cross-fade rather than travel.
+    if (openedOrClosedALightbox) {
+      if (media && mediaFrom && mediaTo && mediaTo.width && mediaTo.height) {
+        flip.current.push(
+          slide(media, mediaFrom, mediaTo),
+          ...Array.from(
+            el.querySelectorAll<HTMLElement>("[data-sheet-chrome]"),
+            (node) =>
+              node.animate([{ opacity: 0 }, { opacity: 1 }], {
+                duration: FLIP_DURATION,
+                easing: EASE_OUT_STRONG,
+              }),
+          ),
+        );
+      }
+      return;
+    }
+
+    if (!from || !to.width || !to.height) return;
+    flip.current.push(slide(el, from, to));
   });
 
   useEffect(() => {
@@ -504,7 +591,9 @@ function SheetFrameImpl({
       );
 
       const tallerThanScreen = fit < 1;
-      card.style.scale = tallerThanScreen ? "1" : String(Math.min(MAX_ZOOM, fit));
+      card.style.scale = tallerThanScreen
+        ? "1"
+        : String(Math.min(MAX_ZOOM, fit));
       frame.style.maxHeight = tallerThanScreen
         ? `${Math.round(height * SCROLLING_HEIGHT_SHARE)}px`
         : "";
@@ -546,7 +635,7 @@ function SheetFrameImpl({
     }
     session.current = null;
     if (active.moved && frameRef.current) {
-      previousRect.current = frameRef.current.getBoundingClientRect();
+      previousRect.current = pageBox(frameRef.current);
     }
     setDragging(false);
   }, []);
@@ -557,7 +646,11 @@ function SheetFrameImpl({
 
   function handlePointerDown(event: ReactPointerEvent<HTMLDivElement>) {
     if (!placedByDrag || event.button !== 0) return;
-    if ((event.target as HTMLElement).closest("a, button, input, textarea, select, video"))
+    if (
+      (event.target as HTMLElement).closest(
+        "a, button, input, textarea, select, video",
+      )
+    )
       return;
 
     onBringToFront(id);
@@ -615,13 +708,24 @@ function SheetFrameImpl({
     lightbox,
   };
 
+  // Measured on the way out, while the card is still in the column and its
+  // height is still its own. A layout effect would arrive too late — by then
+  // the frame is already fixed and the slot has already closed.
+  const take = () => {
+    const frame = frameRef.current;
+    if (frame && view === "wall") {
+      setVacated(frame.getBoundingClientRect().height);
+    }
+    onOpen(id);
+  };
+
   const button = (
     <SheetButton
       ref={buttonRef}
       title={title}
       focused={focused}
       onWall={onWall && !lightbox}
-      onClick={() => (focused ? onClose() : onOpen(id))}
+      onClick={() => (focused ? onClose() : take())}
     />
   );
 
@@ -656,39 +760,49 @@ function SheetFrameImpl({
   }
 
   return (
-    <div
-      ref={frameRef}
-      data-sheet-frame={focused ? undefined : ""}
-      data-dimmed={dimmed ? "" : undefined}
-      inert={dimmed || undefined}
-      style={
-        {
-          "--sheet-x": `${placement.xPct}%`,
-          "--sheet-y": `${placement.yPct}%`,
-          "--sheet-r": `${placement.rotate}deg`,
-          "--sheet-w": WIDTH[size],
-          zIndex: focused ? undefined : z,
-        } as CSSProperties
-      }
-      className={frameClass(look)}
-      onPointerDown={handlePointerDown}
-      onPointerMove={handlePointerMove}
-      onPointerUp={(event) => endDrag(event.pointerId)}
-      onPointerCancel={(event) => endDrag(event.pointerId)}
-    >
+    <>
+      {focused && view === "wall" && vacated !== null ? (
+        <div
+          aria-hidden="true"
+          data-sheet-frame=""
+          style={{ height: vacated }}
+          className={VACATED}
+        />
+      ) : null}
       <div
-        ref={cardRef}
-        role={focused ? "dialog" : undefined}
-        aria-modal={focused ? true : undefined}
-        aria-label={focused ? title : undefined}
-        tabIndex={focused ? -1 : undefined}
-        data-sheet-card
-        className={cardClass(look)}
+        ref={frameRef}
+        data-sheet-frame={focused ? undefined : ""}
+        data-dimmed={dimmed ? "" : undefined}
+        inert={dimmed || undefined}
+        style={
+          {
+            "--sheet-x": `${placement.xPct}%`,
+            "--sheet-y": `${placement.yPct}%`,
+            "--sheet-r": `${placement.rotate}deg`,
+            "--sheet-w": WIDTH[size],
+            zIndex: focused ? undefined : z,
+          } as CSSProperties
+        }
+        className={frameClass(look)}
+        onPointerDown={handlePointerDown}
+        onPointerMove={handlePointerMove}
+        onPointerUp={(event) => endDrag(event.pointerId)}
+        onPointerCancel={(event) => endDrag(event.pointerId)}
       >
-        {lightbox ? null : button}
-        {body}
+        <div
+          ref={cardRef}
+          role={focused ? "dialog" : undefined}
+          aria-modal={focused ? true : undefined}
+          aria-label={focused ? title : undefined}
+          tabIndex={focused ? -1 : undefined}
+          data-sheet-card
+          className={cardClass(look)}
+        >
+          {lightbox ? null : button}
+          {body}
+        </div>
       </div>
-    </div>
+    </>
   );
 }
 
