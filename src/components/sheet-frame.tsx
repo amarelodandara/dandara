@@ -141,7 +141,10 @@ function useKeptWithinReach({
     const haulBackIntoReach = () => {
       const frame = frameRef.current;
       if (!frame) return;
-      const next = keptWithinReach(restingRect(frame, drag.current), drag.current);
+      const next = keptWithinReach(
+        restingRect(frame, drag.current),
+        drag.current,
+      );
       if (next.x === drag.current.x && next.y === drag.current.y) return;
       drag.current = next;
       frame.style.translate = `calc(-50% + ${next.x}px) ${next.y}px`;
@@ -253,7 +256,7 @@ const WALL_BUTTON = [
 const PILE_BUTTON = [
   "relative z-10 float-right -mr-2 -mt-2 ml-4 cursor-pointer",
   "rounded-sm px-2 py-1",
-  "text-[0.7rem] font-medium tracking-[0.01em]",
+  "text-[0.7rem]",
   "hover:bg-foreground/10 focus-visible:bg-foreground/10",
   "transition-[opacity,background-color,scale] duration-(--motion-quick) ease-out-strong",
   "active:scale-[0.97] active:duration-(--press)",
@@ -298,7 +301,7 @@ const REVEALED_ON_HOVER =
 
 const CAPTION_VISIT = [
   "relative z-20 shrink-0 cursor-pointer",
-  "text-[0.7rem] font-medium tracking-[0.01em] text-foreground-soft",
+  "text-[0.7rem] text-foreground-soft",
   "transition-[opacity,color] duration-(--motion-quick) ease-out-strong",
   "hover:text-foreground focus-visible:text-foreground",
   "after:absolute after:left-1/2 after:top-1/2 after:content-['']",
@@ -319,7 +322,7 @@ const PEEK_LAYER = [
 
 const PEEK_PILL = [
   "rounded-full bg-background px-3 py-1.5 shadow-chip",
-  "text-[0.7rem] font-medium tracking-[0.01em] text-foreground-soft",
+  "text-[0.7rem] text-foreground-soft",
   "scale-[0.96] transition-transform duration-(--motion-quick) ease-out-strong",
   "group-hover:scale-100 group-focus-within:scale-100",
 ].join(" ");
@@ -449,7 +452,11 @@ function Card({
         <p className="text-[0.7rem] text-foreground-soft">{eyebrow}</p>
       ) : null}
       <h3
-        className={onWall ? WALL_LABEL : "mt-1 text-[clamp(1.15rem,1.7vw,1.4rem)] leading-tight font-semibold tracking-[-0.01em] text-balance"}
+        className={
+          onWall
+            ? WALL_LABEL
+            : "mt-1 text-[clamp(1.15rem,1.7vw,1.4rem)] leading-tight font-semibold tracking-[-0.01em] text-balance"
+        }
       >
         {title}
       </h3>

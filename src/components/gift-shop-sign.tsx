@@ -65,7 +65,7 @@ export function GiftShopSign({
           data-pressable
           className="-mr-3 flex shrink-0 items-center rounded-lg bg-background px-2.5 py-2 shadow-cutout transition-[background-color,scale] duration-(--motion-quick) ease-out-strong hover:bg-cutout focus-visible:bg-cutout active:scale-[0.97] active:duration-(--press)"
         >
-          <span className="text-[0.7rem] leading-none font-medium tracking-[0.01em] text-foreground-soft">
+          <span className="text-[0.7rem] leading-none text-foreground-soft">
             Close
           </span>
           <span className="sr-only">{sign.closes}</span>
@@ -73,7 +73,7 @@ export function GiftShopSign({
         </button>
       </div>
 
-      <p className="px-8 py-3 text-[0.9rem] leading-snug text-foreground-hard">
+      <p className="px-8 py-3 text-[clamp(0.95rem,1.15vw,1.0625rem)] leading-normal text-foreground-hard">
         {sign.blurb}
       </p>
     </header>

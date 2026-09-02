@@ -19,7 +19,7 @@ export function Colophon() {
             <span className="ml-2 text-sm font-normal">2026 —</span>
           </p>
 
-          <p className="mt-2 text-[0.85rem] leading-[1.7] text-foreground-soft">
+          <p className="mt-2 text-[0.85rem] text-foreground-soft">
             Next.js+TypeScript website hosted on Vercel.
             <br />
             Tailwind over a hand-picked color palette.

@@ -64,10 +64,7 @@ export default async function ArticlePage({
 
         <article data-article className="mx-auto w-full max-w-5xl">
           <header className="mb-12">
-            <p
-              data-quiet
-              className="text-[0.7rem] font-medium tracking-[0.01em] text-foreground/35"
-            >
+            <p data-quiet className="text-[0.7rem] text-foreground/35">
               <span className="sr-only">Published </span>
               <time dateTime={meta.date}>{formatPostMonth(meta.date)}</time>
             </p>

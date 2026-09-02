@@ -87,7 +87,6 @@ const focusThePageItself = () =>
     .querySelector<HTMLElement>("[data-page]")
     ?.focus({ preventScroll: true });
 
-
 const Tailored =
   process.env.NODE_ENV === "development"
     ? dynamic(() => import("./gift-shop-tailored"))
@@ -217,7 +216,7 @@ export function GiftShop() {
         {shelves.map((section) => (
           <section key={section.id} className={shelfSeat(section, article)}>
             {section.title ? (
-              <h3 className="px-3 text-[0.7rem] font-medium tracking-[0.01em] text-foreground-hard">
+              <h3 className="px-3 text-[0.7rem] text-foreground-hard">
                 {section.title}
               </h3>
             ) : null}

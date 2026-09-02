@@ -2,7 +2,7 @@ import Link from "next/link";
 import { SunMark } from "@/components/sun-mark";
 
 const HOME = [
-  "rounded-lg px-2.5 py-2 text-[0.7rem] leading-none font-medium tracking-[0.01em]",
+  "rounded-lg px-2.5 py-2 text-[0.7rem] leading-none",
   "text-foreground-soft/70",
   "transition-[background-color,color,scale] duration-(--motion-quick) ease-out-strong",
   "hover:bg-foreground/5 hover:text-foreground",

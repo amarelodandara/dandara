@@ -22,7 +22,7 @@ const MARKER = [
   "can-hover:group-hover:border-sun-ink/70 can-hover:group-hover:bg-sun-core/15",
   "can-hover:group-hover:text-sun-ink",
   "group-focus-visible:border-sun-ink/70 group-focus-visible:text-sun-ink",
-  "font-mono text-[0.55em] leading-none font-normal text-sun-ink/80",
+  "font-mono text-[0.65rem] leading-none font-normal text-sun-ink/80",
 ].join(" ");
 
 export function Note({ n, children }: { n: number; children?: ReactNode }) {
@@ -47,7 +47,10 @@ export function Note({ n, children }: { n: number; children?: ReactNode }) {
       className={`${PRESSABLE} inline rounded-xs`}
     >
       {children}
-      <span data-marker className={`${MARKER} ${current ? "border-sun-ink bg-sun-core/15 text-sun-ink" : ""}`}>
+      <span
+        data-marker
+        className={`${MARKER} ${current ? "border-sun-ink bg-sun-core/15 text-sun-ink" : ""}`}
+      >
         {n}
       </span>
       {children ? <span className="sr-only">, note {n}</span> : null}

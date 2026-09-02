@@ -31,9 +31,7 @@ export function GiftShopPlaque({
         visible ? "opacity-100" : "translate-y-3 opacity-0 sm:-translate-y-3",
       ].join(" ")}
     >
-      <span className="text-[0.7rem] leading-none font-medium tracking-[0.01em]">
-        {label}
-      </span>
+      <span className="text-[0.7rem] leading-none">{label}</span>
       <Kbd>G</Kbd>
     </button>
   );

@@ -71,15 +71,11 @@ export function GiftShopSwatch({
       >
         <span aria-hidden="true" className={`block w-full flex-1 ${fill}`} />
         <span className="block px-2 pt-2 pb-1">
-          <span className="block text-[0.7rem] leading-tight font-semibold">
-            {title}
-          </span>
+          <span className="block text-[0.7rem] leading-tight">{title}</span>
           <span className="mt-0.5 block text-[0.7rem] leading-tight text-foreground-soft">
             {note}
           </span>
-          <span className="sr-only">
-            {copied ? "" : ", copy the hex code"}
-          </span>
+          <span className="sr-only">{copied ? "" : ", copy the hex code"}</span>
         </span>
       </button>
       <Announcement>{announcement}</Announcement>

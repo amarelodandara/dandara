@@ -85,7 +85,13 @@ function ViewIcon({
   );
 }
 
-function ViewToggle({ view, onToggle }: { view: WorkView; onToggle: () => void }) {
+function ViewToggle({
+  view,
+  onToggle,
+}: {
+  view: WorkView;
+  onToggle: () => void;
+}) {
   const piled = view === "pile";
   return (
     <button
@@ -164,7 +170,9 @@ export function WorkPile({
   }, []);
 
   useEffect(() => {
-    const outside = document.querySelectorAll<HTMLElement>("[data-dim-on-focus]");
+    const outside = document.querySelectorAll<HTMLElement>(
+      "[data-dim-on-focus]",
+    );
     const clear = () => {
       delete document.body.dataset.sheetFocused;
       for (const el of outside) el.removeAttribute("inert");
@@ -187,7 +195,7 @@ export function WorkPile({
   return (
     <section id="work" className="relative mt-[18vh] pb-[12vh]">
       <div className="flex items-center justify-between gap-6">
-        <h2 className="text-[0.7rem] leading-none font-medium tracking-[0.01em] text-foreground-soft">
+        <h2 className="text-[0.7rem] leading-none text-foreground-soft">
           {label}
         </h2>
 
@@ -197,7 +205,7 @@ export function WorkPile({
             aria-hidden={view === "wall" || undefined}
             className={[
               "pointer-events-none absolute right-full mr-3 whitespace-nowrap",
-              "text-[0.7rem] leading-none tracking-[0.01em] text-foreground-hard",
+              "text-[0.7rem] leading-none text-foreground-hard",
               "transition-opacity duration-(--motion-quick) ease-out-strong",
               view === "pile" ? "opacity-100" : "opacity-0",
             ].join(" ")}

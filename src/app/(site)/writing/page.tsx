@@ -26,10 +26,7 @@ export default async function WritingIndex() {
           <ul className="mt-12 space-y-10">
             {posts.map(({ slug, meta }) => (
               <li key={slug}>
-                <p
-                  data-quiet
-                  className="text-[0.7rem] font-medium tracking-[0.01em] text-foreground/35"
-                >
+                <p data-quiet className="text-[0.7rem] text-foreground/35">
                   <time dateTime={meta.date}>{formatPostDate(meta.date)}</time>
                 </p>
                 <h2 className="mt-1.5 text-[clamp(1.15rem,1.7vw,1.4rem)] leading-tight font-semibold tracking-[-0.01em] text-balance">
@@ -45,10 +42,7 @@ export default async function WritingIndex() {
 
             {UPCOMING.map(({ title }) => (
               <li key={title}>
-                <p
-                  data-quiet
-                  className="text-[0.7rem] font-medium tracking-[0.01em] text-foreground/35"
-                >
+                <p data-quiet className="text-[0.7rem] text-foreground/35">
                   Coming soon
                 </p>
                 <h2 className="mt-1.5 text-[clamp(1.15rem,1.7vw,1.4rem)] leading-tight font-semibold tracking-[-0.01em] text-balance text-foreground-soft/60">

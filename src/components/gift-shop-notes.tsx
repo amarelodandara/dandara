@@ -5,10 +5,16 @@ import {
   useRequestedNote,
   type ArticleNote,
 } from "@/lib/article-notes";
-import { Announcement, COPIED_ANNOUNCEMENT, ROW, useCopy, Verb } from "./gift-shop-row";
+import {
+  Announcement,
+  COPIED_ANNOUNCEMENT,
+  ROW,
+  useCopy,
+  Verb,
+} from "./gift-shop-row";
 
 const NUMBER =
-  "w-3.5 shrink-0 text-[0.7rem] leading-tight font-medium tabular-nums text-foreground-hard";
+  "w-3.5 shrink-0 text-[0.7rem] leading-tight tabular-nums text-foreground-hard";
 
 const TITLE = "block text-[0.9rem] leading-tight font-semibold";
 
@@ -38,7 +44,11 @@ const sourceOf = (href: string) => {
 };
 
 const seatFor = (current: boolean, pressable: boolean) =>
-  [pressable ? ROW : SEAT, "items-baseline gap-2.5", current ? "bg-white/45" : ""]
+  [
+    pressable ? ROW : SEAT,
+    "items-baseline gap-2.5",
+    current ? "bg-white/45" : "",
+  ]
     .join(" ")
     .trim();
 
@@ -58,7 +68,13 @@ function Marked({ note, meta }: { note: ArticleNote; meta?: string }) {
   );
 }
 
-function LinkedNote({ note, current }: { note: ArticleNote; current: boolean }) {
+function LinkedNote({
+  note,
+  current,
+}: {
+  note: ArticleNote;
+  current: boolean;
+}) {
   return (
     <a
       href={note.href}
@@ -77,7 +93,13 @@ function LinkedNote({ note, current }: { note: ArticleNote; current: boolean }) 
   );
 }
 
-function QuotedNote({ note, current }: { note: ArticleNote; current: boolean }) {
+function QuotedNote({
+  note,
+  current,
+}: {
+  note: ArticleNote;
+  current: boolean;
+}) {
   const body = note.body as string;
   const [outcome, copy] = useCopy(body);
   const copied = outcome === "done";
@@ -137,9 +159,7 @@ export function GiftShopNotes({ titled = true }: { titled?: boolean }) {
   return (
     <section className={titled ? "mt-8" : "mt-6"}>
       {titled ? (
-        <h3 className="px-3 text-[0.7rem] font-medium tracking-[0.01em] text-foreground-hard">
-          Notes
-        </h3>
+        <h3 className="px-3 text-[0.7rem] text-foreground-hard">Notes</h3>
       ) : null}
       <ul className={titled ? "mt-2 space-y-0.5" : "space-y-0.5"}>
         {notes.map((note) => (
