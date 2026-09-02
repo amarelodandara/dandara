@@ -32,18 +32,33 @@ function Label({ title, meta }: { title: string; meta: string }) {
   );
 }
 
+const SWAPPED = [
+  "col-start-1 row-start-1",
+  "transition-[opacity,scale,filter] duration-(--motion-quick) ease-out-strong",
+].join(" ");
+
+const ARRIVED = "scale-100 opacity-100 blur-[0px]";
+
+const GONE = [
+  "scale-25 opacity-0 blur-[4px]",
+  "motion-reduce:scale-100 motion-reduce:blur-[0px]",
+].join(" ");
+
 export function Verb({
-  children,
+  idle,
+  done,
   shown,
 }: {
-  children: string;
+  idle: string;
+  done?: string;
   shown?: boolean;
 }) {
   return (
     <span
       aria-hidden="true"
       className={[
-        `shrink-0 self-center ${ANNOTATION} text-foreground-hard`,
+        `grid shrink-0 justify-items-end self-center ${ANNOTATION}`,
+        "text-foreground-hard",
         "transition-opacity duration-(--motion-quick) ease-out-strong",
         shown
           ? "opacity-100"
@@ -55,7 +70,10 @@ export function Verb({
             ].join(" "),
       ].join(" ")}
     >
-      {children}
+      <span className={`${SWAPPED} ${shown ? GONE : ARRIVED}`}>{idle}</span>
+      {done ? (
+        <span className={`${SWAPPED} ${shown ? ARRIVED : GONE}`}>{done}</span>
+      ) : null}
     </span>
   );
 }
@@ -182,7 +200,7 @@ function FileRow({ item }: { item: Extract<GiftShopItem, { kind: "file" }> }) {
   const label = (
     <>
       <Label title={item.title} meta={note} />
-      <Verb shown={saved}>{saved ? "✓" : "Download"}</Verb>
+      <Verb idle="Download" done="✓" shown={saved} />
     </>
   );
 
@@ -237,7 +255,7 @@ function CopyRow({
         className={`${ROW} items-center gap-3`}
       >
         <Label title={title} meta={note} />
-        <Verb shown={copied}>{copied ? "✓" : "Copy"}</Verb>
+        <Verb idle="Copy" done="✓" shown={copied} />
       </button>
       <Announcement>{announcement}</Announcement>
     </>

@@ -50,7 +50,7 @@ export default async function Home() {
 
   return (
     <main className="mx-auto w-full max-w-[1400px] flex-1 px-[7vw] py-[14vh] sm:py-[18vh]">
-      <div data-dim-on-focus data-landing className="">
+      <div data-dim-on-focus data-landing>
         <header className="grid grid-cols-1 gap-12 md:grid-cols-2">
           <div className="flex flex-col gap-20 md:h-full md:justify-between md:gap-24">
             <div className="h-fit">

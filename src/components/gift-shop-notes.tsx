@@ -87,7 +87,7 @@ function LinkedNote({
     >
       <Marked note={note} meta={sourceOf(note.href as string)} />
       <span className={`${CHIP} self-center`}>
-        <Verb>Open</Verb>
+        <Verb idle="Open" />
       </span>
     </a>
   );
@@ -121,7 +121,7 @@ function QuotedNote({
           <span className="flex items-baseline justify-between gap-3">
             <span className={NOTE_TITLE}>{note.title}</span>
             <span className={CHIP}>
-              <Verb shown={copied}>{copied ? "✓" : "Copy"}</Verb>
+              <Verb idle="Copy" done="✓" shown={copied} />
             </span>
           </span>
           <span className={QUOTED}>{body}</span>
