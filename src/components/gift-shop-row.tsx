@@ -74,7 +74,7 @@ function Preview({
   preview: NonNullable<Extract<GiftShopItem, { kind: "file" }>["preview"]>;
 }) {
   return (
-    <span className={`mx-auto block ${CHIP_W} bg-white p-1 shadow-chip`}>
+    <span className={`mx-auto block ${CHIP_W} bg-mount p-1 shadow-chip`}>
       <Image
         src={preview.src}
         alt={preview.alt}

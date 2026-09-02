@@ -62,7 +62,7 @@ export function GiftShopSwatch({
         data-pressable
         className={[
           `mx-auto flex aspect-[3/4] ${CHIP_W} touch-none motion-reduce:touch-auto flex-col select-none`,
-          "bg-white p-1 text-left",
+          "bg-mount p-1 text-left",
           "transition-[scale,box-shadow] duration-(--motion-quick) ease-out-strong",
           "focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-foreground/40",
           lifted

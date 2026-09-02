@@ -27,7 +27,7 @@ const QUOTED = `mt-4 block ${ANNOTATION} leading-normal text-foreground-hard`;
 const CHIP = [
   "-my-1.5 -mr-1.5 flex shrink-0 items-center rounded-md px-2.5 py-1.5",
   "transition-[background-color] duration-(--motion-quick) ease-out-strong",
-  "can-hover:group-hover:bg-white/50 group-focus-visible:bg-white/50",
+  "can-hover:group-hover:bg-lit-deep group-focus-visible:bg-lit-deep",
 ].join(" ");
 
 const SEAT = [
@@ -47,7 +47,7 @@ const seatFor = (current: boolean, pressable: boolean) =>
   [
     pressable ? ROW : SEAT,
     "items-baseline gap-2.5",
-    current ? "bg-white/45" : "",
+    current ? "bg-lit" : "",
   ]
     .join(" ")
     .trim();

@@ -26,6 +26,12 @@
      unchanged and only the seams are gone. */
   --color-foreground-faint: oklch(0.796 0.021 98.285);
 
+  /* The rule under a link, and the only line on the site that is allowed to be
+     a line. Warm grey, well below the weight of the word it belongs to, so an
+     underline marks the word rather than boxing it in. Named for the job so
+     the links stop reaching into Tailwind's own palette for a value. */
+  --color-rule: oklch(0.709 0.01 56.259);
+
   /* Bounce light in a cutout, not the cutout itself. The close button reads as
      a hole punched clean through the panel, so at rest it is `background` —
      literally the page showing through — with `shadow-cutout` for the cut edge.
@@ -38,6 +44,22 @@
      the values are visible here; recompute if either end of the mix moves. */
   --color-cutout: oklch(0.945 0.081 97);
   --color-cutout-deep: oklch(0.927 0.103 95.473);
+
+  /* Card stock. A small object in the shop — a colour swatch, a document
+     preview — is mounted on a piece of card and pinned to the panel, and that
+     card is the one surface here lighter than the wall rather than a tint of
+     it. Held as a token because it is a material, not a colour: if the panel
+     ever warms, the card is what stays put.
+
+     `lit` is the same stock let down to a wash, and it is the state of a row
+     with a pointer on it or the row an article just sent you to. On yellow a
+     lit row has to read as light landing on the panel; anything mixed from the
+     foreground reads as a grey plate laid over it instead. `lit-deep` is for a
+     small control inside an already-lit row — one step further up, so the chip
+     still separates from the row carrying it. */
+  --color-mount: oklch(1 0 0);
+  --color-lit: oklch(1 0 0 / 0.45);
+  --color-lit-deep: oklch(1 0 0 / 0.5);
 
   /* The shop's header carries the panel's own yellow — the sheet is the grain,
      not a change of colour, and every attempt at lightening it read as a stripe

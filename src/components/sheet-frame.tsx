@@ -204,7 +204,7 @@ const frameClass = ({ focused, onWall, dragging, lightbox }: Look) => {
 };
 
 const DETAIL_LINK = [
-  "underline decoration-stone-400 decoration-[0.04em] underline-offset-[0.25em]",
+  "underline decoration-rule decoration-[0.04em] underline-offset-[0.25em]",
   "transition-opacity duration-(--motion-quick) ease-out-strong hover:opacity-50",
 ].join(" ");
 
