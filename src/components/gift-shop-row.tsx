@@ -13,7 +13,7 @@ export const ROW = [
   "group flex w-full rounded-lg px-3 py-3 text-left",
   "transition-[background-color,scale] duration-(--motion-quick) ease-out-strong",
   "active:scale-[0.99] active:duration-(--press)",
-  "hover:bg-white/45 focus-visible:bg-white/45",
+  "can-hover:hover:bg-lit focus-visible:bg-lit",
   "focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-foreground/40",
 ].join(" ");
 

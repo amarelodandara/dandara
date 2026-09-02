@@ -205,7 +205,7 @@ const frameClass = ({ focused, onWall, dragging, lightbox }: Look) => {
 
 const DETAIL_LINK = [
   "underline decoration-rule decoration-[0.04em] underline-offset-[0.25em]",
-  "transition-opacity duration-(--motion-quick) ease-out-strong hover:opacity-50",
+  "transition-opacity duration-(--motion-quick) ease-out-strong can-hover:hover:opacity-50",
 ].join(" ");
 
 const MOTION =
@@ -243,7 +243,7 @@ const PILE_BUTTON = [
   "relative z-10 float-right -mr-2 -mt-2 ml-4 cursor-pointer",
   "rounded-sm px-2 py-1",
   ANNOTATION,
-  "hover:bg-foreground/10 focus-visible:bg-foreground/10",
+  "can-hover:hover:bg-foreground/10 focus-visible:bg-foreground/10",
   "transition-[opacity,background-color,scale] duration-(--motion-quick) ease-out-strong",
   "active:scale-[0.97] active:duration-(--press)",
   "after:absolute after:left-1/2 after:top-1/2 after:content-['']",
@@ -289,7 +289,7 @@ const CAPTION_VISIT = [
   "relative z-20 shrink-0 cursor-pointer",
   `${ANNOTATION} text-foreground-soft`,
   "transition-[opacity,color] duration-(--motion-quick) ease-out-strong",
-  "hover:text-foreground focus-visible:text-foreground",
+  "can-hover:hover:text-foreground focus-visible:text-foreground",
   "after:absolute after:left-1/2 after:top-1/2 after:content-['']",
   "after:h-11 after:w-[max(100%+1.5rem,2.75rem)]",
   "after:-translate-x-1/2 after:-translate-y-1/2",
@@ -300,14 +300,14 @@ const PEEK_LAYER = [
   "pointer-events-none absolute inset-0 grid place-items-center",
   "opacity-0",
   "transition-opacity duration-(--motion-quick) ease-out-strong",
-  "group-hover:opacity-100 group-focus-within:opacity-100",
+  "can-hover:group-hover:opacity-100 group-focus-within:opacity-100",
 ].join(" ");
 
 const PEEK_PILL = [
   "rounded-full bg-background px-3 py-1.5 shadow-chip",
   `${ANNOTATION} text-foreground-soft`,
   "scale-[0.96] transition-transform duration-(--motion-quick) ease-out-strong",
-  "group-hover:scale-100 group-focus-within:scale-100",
+  "can-hover:group-hover:scale-100 group-focus-within:scale-100",
 ].join(" ");
 
 function Peek() {

@@ -6,7 +6,7 @@ const HOME = [
   `rounded-lg px-2.5 py-2 ${ANNOTATION} leading-none`,
   "text-foreground-soft/70",
   "transition-[background-color,color,scale] duration-(--motion-quick) ease-out-strong",
-  "hover:bg-foreground/5 hover:text-foreground",
+  "can-hover:hover:bg-foreground/5 can-hover:hover:text-foreground",
   "focus-visible:bg-foreground/5 focus-visible:text-foreground",
   "active:scale-[0.97] active:duration-(--press)",
   "focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-foreground/40",
