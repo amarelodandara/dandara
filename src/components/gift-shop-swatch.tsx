@@ -13,6 +13,7 @@ import {
   COPIED_NOTE,
   useCopy,
 } from "./gift-shop-row";
+import { ANNOTATION } from "@/lib/type";
 
 const DRAGGED_PAST_PX = 4;
 
@@ -71,8 +72,10 @@ export function GiftShopSwatch({
       >
         <span aria-hidden="true" className={`block w-full flex-1 ${fill}`} />
         <span className="block px-2 pt-2 pb-1">
-          <span className="block text-[0.7rem] leading-tight">{title}</span>
-          <span className="mt-0.5 block text-[0.7rem] leading-tight text-foreground-soft">
+          <span className={`block ${ANNOTATION} leading-tight`}>{title}</span>
+          <span
+            className={`mt-0.5 block ${ANNOTATION} leading-tight text-foreground-soft`}
+          >
             {note}
           </span>
           <span className="sr-only">{copied ? "" : ", copy the hex code"}</span>

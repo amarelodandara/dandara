@@ -1,8 +1,9 @@
 import Link from "next/link";
 import { SunMark } from "@/components/sun-mark";
+import { ANNOTATION } from "@/lib/type";
 
 const HOME = [
-  "rounded-lg px-2.5 py-2 text-[0.7rem] leading-none",
+  `rounded-lg px-2.5 py-2 ${ANNOTATION} leading-none`,
   "text-foreground-soft/70",
   "transition-[background-color,color,scale] duration-(--motion-quick) ease-out-strong",
   "hover:bg-foreground/5 hover:text-foreground",

@@ -12,17 +12,17 @@ import {
   useCopy,
   Verb,
 } from "./gift-shop-row";
+import { ANNOTATION, TITLE } from "@/lib/type";
 
-const NUMBER =
-  "w-3.5 shrink-0 text-[0.7rem] leading-tight tabular-nums text-foreground-hard";
+const NUMBER = `w-3.5 shrink-0 ${ANNOTATION} leading-tight tabular-nums text-foreground-hard`;
 
-const TITLE = "block text-[0.9rem] leading-tight font-semibold";
+const NOTE_TITLE = `block ${TITLE}`;
 
-const SOURCE = "mt-0.5 block text-[0.7rem] leading-tight text-foreground-hard";
+const SOURCE = `mt-0.5 block ${ANNOTATION} leading-tight text-foreground-hard`;
 
-const BODY = "mt-1 block text-[0.7rem] leading-normal text-foreground-hard";
+const BODY = `mt-1 block ${ANNOTATION} leading-normal text-foreground-hard`;
 
-const QUOTED = "mt-4 block text-[0.7rem] leading-normal text-foreground-hard";
+const QUOTED = `mt-4 block ${ANNOTATION} leading-normal text-foreground-hard`;
 
 const CHIP = [
   "-my-1.5 -mr-1.5 flex shrink-0 items-center rounded-md px-2.5 py-1.5",
@@ -59,7 +59,7 @@ function Marked({ note, meta }: { note: ArticleNote; meta?: string }) {
         {note.n}
       </span>
       <span className="min-w-0 flex-1">
-        <span className={TITLE}>{note.title}</span>
+        <span className={NOTE_TITLE}>{note.title}</span>
         {meta ? (
           <span className={note.href ? SOURCE : BODY}>{meta}</span>
         ) : null}
@@ -119,7 +119,7 @@ function QuotedNote({
         </span>
         <span className="min-w-0 flex-1">
           <span className="flex items-baseline justify-between gap-3">
-            <span className={TITLE}>{note.title}</span>
+            <span className={NOTE_TITLE}>{note.title}</span>
             <span className={CHIP}>
               <Verb shown={copied}>{copied ? "✓" : "Copy"}</Verb>
             </span>
@@ -159,7 +159,7 @@ export function GiftShopNotes({ titled = true }: { titled?: boolean }) {
   return (
     <section className={titled ? "mt-8" : "mt-6"}>
       {titled ? (
-        <h3 className="px-3 text-[0.7rem] text-foreground-hard">Notes</h3>
+        <h3 className={`px-3 ${ANNOTATION} text-foreground-hard`}>Notes</h3>
       ) : null}
       <ul className={titled ? "mt-2 space-y-0.5" : "space-y-0.5"}>
         {notes.map((note) => (

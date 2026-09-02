@@ -21,6 +21,7 @@ import {
   useActiveOverlay,
 } from "@/lib/exclusive-overlay";
 import { useKeydown } from "@/lib/keydown";
+import { ANNOTATION } from "@/lib/type";
 
 const OVERLAY_ID = "work-pile";
 
@@ -195,7 +196,7 @@ export function WorkPile({
   return (
     <section id="work" className="relative mt-[18vh] pb-[12vh]">
       <div className="flex items-center justify-between gap-6">
-        <h2 className="text-[0.7rem] leading-none text-foreground-soft">
+        <h2 className={`${ANNOTATION} leading-none text-foreground-soft`}>
           {label}
         </h2>
 
@@ -205,7 +206,7 @@ export function WorkPile({
             aria-hidden={view === "wall" || undefined}
             className={[
               "pointer-events-none absolute right-full mr-3 whitespace-nowrap",
-              "text-[0.7rem] leading-none text-foreground-hard",
+              `${ANNOTATION} leading-none text-foreground-hard`,
               "transition-opacity duration-(--motion-quick) ease-out-strong",
               view === "pile" ? "opacity-100" : "opacity-0",
             ].join(" ")}

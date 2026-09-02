@@ -1,3 +1,5 @@
+import { ANNOTATION, LABEL, SECTION_HEADING, TITLE } from "@/lib/type";
+
 export function Colophon() {
   return (
     <footer
@@ -9,17 +11,19 @@ export function Colophon() {
         className="space-y-4 ml-auto max-w-120 rounded-md bg-background px-6 py-10 md:px-8 md:py-12"
       >
         <div>
-          <p className="text-xl font-bold lowercase">Amarelo Dandara</p>
-          <p className="text-sm text-foreground-soft">🇧🇷, born 2002</p>
+          <p className={`${SECTION_HEADING} lowercase`}>Amarelo Dandara</p>
+          <p className={LABEL}>🇧🇷, born 2002</p>
         </div>
 
         <div>
-          <p className="text-lg font-semibold">
+          <p className={TITLE}>
             Portfolio
-            <span className="ml-2 text-sm font-normal">2026 —</span>
+            <span className={`ml-2 ${ANNOTATION} text-foreground-soft`}>
+              2026 —
+            </span>
           </p>
 
-          <p className="mt-2 text-[0.85rem] text-foreground-soft">
+          <p className={`mt-2 ${LABEL}`}>
             Next.js+TypeScript website hosted on Vercel.
             <br />
             Tailwind over a hand-picked color palette.

@@ -4,6 +4,7 @@ import { ArticleNotes } from "@/components/writing/article-notes";
 import { PostFooter } from "@/components/writing/post-footer";
 import { WritingNav } from "@/components/writing/writing-nav";
 import { formatPostMonth, loadPost, SLUGS } from "@/lib/writing/posts";
+import { ACCENT_PROSE, ANNOTATION, PAGE_HEADING } from "@/lib/type";
 
 export const dynamicParams = false;
 
@@ -64,16 +65,12 @@ export default async function ArticlePage({
 
         <article data-article className="mx-auto w-full max-w-5xl">
           <header className="mb-12">
-            <p data-quiet className="text-[0.7rem] text-foreground/35">
+            <p data-quiet className={`${ANNOTATION} text-foreground/35`}>
               <span className="sr-only">Published </span>
               <time dateTime={meta.date}>{formatPostMonth(meta.date)}</time>
             </p>
-            <h1 className="mt-3 ml-[-0.02em] text-[clamp(2rem,4.5vw,3.25rem)] leading-[1.05] font-bold tracking-[-0.03em]">
-              {meta.title}
-            </h1>
-            <p className="mt-4 text-[clamp(1.05rem,1.4vw,1.25rem)] leading-snug text-balance text-foreground-soft">
-              {meta.deck}
-            </p>
+            <h1 className={`mt-3 ${PAGE_HEADING}`}>{meta.title}</h1>
+            <p className={`mt-4 ${ACCENT_PROSE}`}>{meta.deck}</p>
           </header>
 
           <Article />

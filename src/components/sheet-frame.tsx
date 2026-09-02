@@ -15,6 +15,7 @@ import {
 import type { SheetFront, SheetLink, SheetSize } from "./sheet";
 import type { WorkView } from "@/lib/work-view";
 import type { Placement } from "@/lib/scatter";
+import { ANNOTATION, LABEL, PROSE, SECTION_HEADING } from "@/lib/type";
 
 const WIDTH: Record<SheetSize, string> = {
   narrow: "clamp(9.5rem, 42vw, 18rem)",
@@ -241,7 +242,7 @@ const WALL_BUTTON = [
 const PILE_BUTTON = [
   "relative z-10 float-right -mr-2 -mt-2 ml-4 cursor-pointer",
   "rounded-sm px-2 py-1",
-  "text-[0.7rem]",
+  ANNOTATION,
   "hover:bg-foreground/10 focus-visible:bg-foreground/10",
   "transition-[opacity,background-color,scale] duration-(--motion-quick) ease-out-strong",
   "active:scale-[0.97] active:duration-(--press)",
@@ -286,7 +287,7 @@ const REVEALED_ON_HOVER =
 
 const CAPTION_VISIT = [
   "relative z-20 shrink-0 cursor-pointer",
-  "text-[0.7rem] text-foreground-soft",
+  `${ANNOTATION} text-foreground-soft`,
   "transition-[opacity,color] duration-(--motion-quick) ease-out-strong",
   "hover:text-foreground focus-visible:text-foreground",
   "after:absolute after:left-1/2 after:top-1/2 after:content-['']",
@@ -304,7 +305,7 @@ const PEEK_LAYER = [
 
 const PEEK_PILL = [
   "rounded-full bg-background px-3 py-1.5 shadow-chip",
-  "text-[0.7rem] text-foreground-soft",
+  `${ANNOTATION} text-foreground-soft`,
   "scale-[0.96] transition-transform duration-(--motion-quick) ease-out-strong",
   "group-hover:scale-100 group-focus-within:scale-100",
 ].join(" ");
@@ -317,7 +318,7 @@ function Peek() {
   );
 }
 
-const WALL_LABEL = "text-[0.85rem] text-foreground-soft";
+const WALL_LABEL = LABEL;
 
 function Plate({
   title,
@@ -387,12 +388,10 @@ function Lightbox({
       <aside data-sheet-chrome className={LIGHTBOX_LABEL}>
         {button}
         {eyebrow ? (
-          <p className="text-[0.7rem] text-foreground-soft">{eyebrow}</p>
+          <p className={`${ANNOTATION} text-foreground-soft`}>{eyebrow}</p>
         ) : null}
-        <h3 className="clear-right mt-5 text-[clamp(1.15rem,1.7vw,1.4rem)] leading-tight tracking-[-0.01em] text-balance text-foreground-soft">
-          {title}
-        </h3>
-        <div className="font-medium">{children}</div>
+        <h3 className={`clear-right mt-5 ${LABEL}`}>{title}</h3>
+        <div className={PROSE}>{children}</div>
         {link ? (
           <p className="mt-3">
             <a href={link.href} className={DETAIL_LINK}>
@@ -425,19 +424,13 @@ function Card({
   return (
     <>
       {showsDetail && eyebrow ? (
-        <p className="text-[0.7rem] text-foreground-soft">{eyebrow}</p>
+        <p className={`${ANNOTATION} text-foreground-soft`}>{eyebrow}</p>
       ) : null}
-      <h3
-        className={
-          onWall
-            ? WALL_LABEL
-            : "mt-1 text-[clamp(1.15rem,1.7vw,1.4rem)] leading-tight font-semibold tracking-[-0.01em] text-balance"
-        }
-      >
+      <h3 className={onWall ? WALL_LABEL : `mt-1 ${SECTION_HEADING}`}>
         {title}
       </h3>
       {front ? <div className="clear-right mt-6">{front}</div> : null}
-      {showsDetail ? children : null}
+      {showsDetail ? <div className={PROSE}>{children}</div> : null}
       {showsDetail && link ? (
         <p className="mt-3">
           <a href={link.href} className={DETAIL_LINK}>

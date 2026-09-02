@@ -6,6 +6,16 @@ import { WorkPile } from "@/components/work-pile";
 import { FIND_ME } from "@/content/socials";
 import { UPCOMING } from "@/content/upcoming";
 import { loadPostList } from "@/lib/writing/posts";
+import {
+  ACCENT_PROSE,
+  ANNOTATION,
+  LABEL,
+  PAGE_HEADING,
+  PROSE,
+  SECTION_HEADING,
+  STRONG,
+  TITLE,
+} from "@/lib/type";
 
 const WORK_MEDIA = "pointer-events-none h-auto w-full select-none";
 const WORK_SIZES = "(min-width: 1024px) 26rem, (min-width: 480px) 44vw, 88vw";
@@ -44,22 +54,18 @@ export default async function Home() {
         <header className="grid grid-cols-1 gap-12 md:grid-cols-2">
           <div className="flex flex-col gap-20 md:h-full md:justify-between md:gap-24">
             <div className="h-fit">
-              <h1 className="ml-[-0.02em] text-[clamp(2rem,4.5vw,3.25rem)] leading-[1.05] font-bold tracking-[-0.03em]">
-                Dandara
-              </h1>
-              <p className="mt-[0.08em] ml-[-0.02em] text-[clamp(2rem,4.5vw,3.25rem)] leading-[1.05] font-bold tracking-[-0.03em]">
-                Product Design
-              </p>
+              <h1 className={PAGE_HEADING}>Dandara</h1>
+              <p className={`mt-[0.08em] ${PAGE_HEADING}`}>Product Design</p>
             </div>
 
             <div className="h-fit">
-              <h2 className="text-[0.7rem] text-foreground-soft">
+              <h2 className={`${ANNOTATION} text-foreground-soft`}>
                 Personal work
               </h2>
-              <ul className="mt-2 space-y-1 text-[clamp(0.95rem,1.15vw,1.0625rem)] leading-normal">
+              <ul className={`mt-2 space-y-1 ${PROSE}`}>
                 {PERSONAL_WORK.map(({ title, href, blurb }) => (
                   <li key={title}>
-                    <strong className="font-semibold">
+                    <strong className={STRONG}>
                       {href ? (
                         <a href={href} className={LINK_UNDERLINED}>
                           {title}
@@ -73,10 +79,10 @@ export default async function Home() {
                 ))}
               </ul>
 
-              <h2 className="mt-8 text-[0.7rem] text-foreground-soft">
+              <h2 className={`mt-8 ${ANNOTATION} text-foreground-soft`}>
                 Find me
               </h2>
-              <ul className="mt-2 flex flex-wrap gap-x-5 gap-y-1 text-[0.85rem] text-foreground-soft">
+              <ul className={`mt-2 flex flex-wrap gap-x-5 gap-y-1 ${LABEL}`}>
                 {FIND_ME.map(({ label, href }) => (
                   <li key={label}>
                     <a href={href} className={LINK}>
@@ -90,16 +96,14 @@ export default async function Home() {
 
           <div className="flex flex-col gap-20 md:h-full md:justify-between md:gap-24">
             <div className="h-fit">
-              <blockquote className="text-[clamp(1.05rem,1.4vw,1.25rem)] leading-snug text-balance text-foreground-soft">
+              <blockquote className={ACCENT_PROSE}>
                 The role of the designer is that of a good, thoughtful host
                 anticipating the needs of his guests.
               </blockquote>
-              <p className="mt-2 text-[0.85rem] text-foreground-soft">
-                Charles Eames
-              </p>
+              <p className={`mt-2 ${LABEL}`}>Charles Eames</p>
             </div>
 
-            <div className="h-fit space-y-5 text-[clamp(0.95rem,1.15vw,1.0625rem)] leading-normal">
+            <div className={`h-fit space-y-5 ${PROSE}`}>
               <p>
                 I am a designer with 5+ years of experience. I have designed for
                 companies, for myself, for other people. I have designed with
@@ -131,14 +135,14 @@ export default async function Home() {
         className="mt-[18vh] grid grid-cols-1 gap-12 md:grid-cols-2"
       >
         <div className="md:col-start-2">
-          <h2 className="text-[0.7rem] leading-none text-foreground-soft">
+          <h2 className={`${ANNOTATION} leading-none text-foreground-soft`}>
             Writing
           </h2>
 
           <ul className="mt-6 space-y-2 md:mt-8">
             {writing.map(({ slug, meta }) => (
               <li key={slug}>
-                <h3 className="text-[clamp(1.15rem,1.7vw,1.4rem)] leading-tight font-semibold tracking-[-0.01em] text-balance">
+                <h3 className={SECTION_HEADING}>
                   <Link href={`/writing/${slug}`} className={LINK}>
                     {meta.title}
                   </Link>
@@ -148,9 +152,13 @@ export default async function Home() {
 
             {UPCOMING.map(({ title }) => (
               <li key={title}>
-                <h3 className="flex items-baseline gap-2.5 text-[clamp(1.15rem,1.7vw,1.4rem)] leading-tight font-semibold tracking-[-0.01em] text-balance text-foreground-soft/60">
+                <h3
+                  className={`flex items-baseline gap-2.5 ${SECTION_HEADING} text-foreground-soft/60`}
+                >
                   {title}
-                  <span className="shrink-0 text-[0.7rem] text-foreground-soft/60">
+                  <span
+                    className={`shrink-0 ${ANNOTATION} text-foreground-soft/60`}
+                  >
                     soon
                   </span>
                 </h3>
@@ -230,7 +238,7 @@ export default async function Home() {
           eyebrow="2022 — 2026"
           frontKind="words"
           front={
-            <ul className="text-[0.9rem] leading-tight font-semibold">
+            <ul className={TITLE}>
               {[
                 "Improvement of Activation flow",
                 "Improvement of Cancelation application",
@@ -268,7 +276,7 @@ export default async function Home() {
             />
           }
         >
-          <p className="mt-3 text-[0.7rem] text-foreground-soft">
+          <p className={`mt-3 ${ANNOTATION} text-foreground-soft`}>
             Presenting the Stone Terminal Store
           </p>
         </Sheet>

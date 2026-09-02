@@ -4,6 +4,7 @@ import Image from "next/image";
 import { useCallback, useEffect, useRef, useState } from "react";
 import type { GiftShopItem } from "@/content/gift-shop";
 import { GiftShopSwatch } from "./gift-shop-swatch";
+import { ANNOTATION, TITLE } from "@/lib/type";
 
 const CONFIRMED_FOR = 1500;
 const REPORTED_FOR = 4000;
@@ -21,22 +22,28 @@ export const CHIP_W = "w-[9.5rem]";
 function Label({ title, meta }: { title: string; meta: string }) {
   return (
     <span className="min-w-0 flex-1">
-      <span className="block text-[0.9rem] leading-tight font-semibold">
-        {title}
-      </span>
-      <span className="mt-0.5 block text-[0.7rem] leading-tight text-foreground-hard">
+      <span className={`block ${TITLE}`}>{title}</span>
+      <span
+        className={`mt-0.5 block ${ANNOTATION} leading-tight text-foreground-hard`}
+      >
         {meta}
       </span>
     </span>
   );
 }
 
-export function Verb({ children, shown }: { children: string; shown?: boolean }) {
+export function Verb({
+  children,
+  shown,
+}: {
+  children: string;
+  shown?: boolean;
+}) {
   return (
     <span
       aria-hidden="true"
       className={[
-        "shrink-0 self-center text-[0.7rem] text-foreground-hard",
+        `shrink-0 self-center ${ANNOTATION} text-foreground-hard`,
         "transition-opacity duration-(--motion-quick) ease-out-strong",
         shown
           ? "opacity-100"
@@ -67,9 +74,7 @@ function Preview({
   preview: NonNullable<Extract<GiftShopItem, { kind: "file" }>["preview"]>;
 }) {
   return (
-    <span
-      className={`mx-auto block ${CHIP_W} bg-white p-1 shadow-chip`}
-    >
+    <span className={`mx-auto block ${CHIP_W} bg-white p-1 shadow-chip`}>
       <Image
         src={preview.src}
         alt={preview.alt}
@@ -84,7 +89,9 @@ function Preview({
 
 export function GiftShopRow({ item }: { item: GiftShopItem }) {
   if (item.kind === "swatch") {
-    return <GiftShopSwatch title={item.title} hex={item.hex} fill={item.fill} />;
+    return (
+      <GiftShopSwatch title={item.title} hex={item.hex} fill={item.fill} />
+    );
   }
 
   if (item.kind === "file") {
@@ -114,7 +121,8 @@ export const COPIED_NOTE: Record<Settled, string> = {
 
 export const COPIED_ANNOUNCEMENT: Record<Settled, (title: string) => string> = {
   done: (title) => `${title} copied.`,
-  failed: (title) => `${title} could not be copied, the browser refused the clipboard.`,
+  failed: (title) =>
+    `${title} could not be copied, the browser refused the clipboard.`,
 };
 
 function useOutcome() {

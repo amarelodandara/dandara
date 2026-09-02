@@ -1,7 +1,8 @@
 import Image from "next/image";
 import type { ReactNode } from "react";
+import { ANNOTATION } from "@/lib/type";
 
-export const CAPTION = "mt-3 text-[0.7rem] leading-normal text-foreground-soft";
+export const CAPTION = `mt-3 ${ANNOTATION} leading-normal text-foreground-soft`;
 
 export type Measure = "wide" | "body" | "three-quarters";
 

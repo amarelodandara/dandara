@@ -4,6 +4,7 @@ import { LINK } from "@/components/link";
 import { UPCOMING } from "@/content/upcoming";
 import { WritingNav } from "@/components/writing/writing-nav";
 import { formatPostDate, loadPostList } from "@/lib/writing/posts";
+import { ANNOTATION, PAGE_HEADING, PROSE, SECTION_HEADING } from "@/lib/type";
 
 export const metadata: Metadata = {
   title: "Writing",
@@ -19,22 +20,20 @@ export default async function WritingIndex() {
 
       <main className="mx-auto w-full max-w-[1400px] flex-1 px-[7vw] pt-[9vh] pb-[14vh] sm:pt-[12vh]">
         <div data-landing className="mx-auto w-full max-w-2xl">
-          <h1 className="ml-[-0.02em] text-[clamp(2rem,4.5vw,3.25rem)] leading-[1.05] font-bold tracking-[-0.03em]">
-            Writing
-          </h1>
+          <h1 className={PAGE_HEADING}>Writing</h1>
 
           <ul className="mt-12 space-y-10">
             {posts.map(({ slug, meta }) => (
               <li key={slug}>
-                <p data-quiet className="text-[0.7rem] text-foreground/35">
+                <p data-quiet className={`${ANNOTATION} text-foreground/35`}>
                   <time dateTime={meta.date}>{formatPostDate(meta.date)}</time>
                 </p>
-                <h2 className="mt-1.5 text-[clamp(1.15rem,1.7vw,1.4rem)] leading-tight font-semibold tracking-[-0.01em] text-balance">
+                <h2 className={`mt-1.5 ${SECTION_HEADING}`}>
                   <Link href={`/writing/${slug}`} className={LINK}>
                     {meta.title}
                   </Link>
                 </h2>
-                <p className="mt-1.5 text-[clamp(0.95rem,1.15vw,1.0625rem)] leading-normal text-foreground-soft">
+                <p className={`mt-1.5 ${PROSE} text-foreground-soft`}>
                   {meta.deck}
                 </p>
               </li>
@@ -42,10 +41,12 @@ export default async function WritingIndex() {
 
             {UPCOMING.map(({ title }) => (
               <li key={title}>
-                <p data-quiet className="text-[0.7rem] text-foreground/35">
+                <p data-quiet className={`${ANNOTATION} text-foreground/35`}>
                   Coming soon
                 </p>
-                <h2 className="mt-1.5 text-[clamp(1.15rem,1.7vw,1.4rem)] leading-tight font-semibold tracking-[-0.01em] text-balance text-foreground-soft/60">
+                <h2
+                  className={`mt-1.5 ${SECTION_HEADING} text-foreground-soft/60`}
+                >
                   {title}
                 </h2>
               </li>

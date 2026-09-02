@@ -1,18 +1,14 @@
 import type { MDXComponents } from "mdx/types";
 import type { ComponentPropsWithoutRef } from "react";
 import { LINK_UNDERLINED } from "@/components/link";
+import { PROSE, SECTION_HEADING, STRONG } from "@/lib/type";
 import { Clip } from "@/components/writing/clip";
 import { Figure } from "@/components/writing/figure";
 import { Note } from "@/components/writing/note-ref";
 
-const PROSE = "mt-5 text-[clamp(0.95rem,1.15vw,1.0625rem)] leading-normal";
-
-const HEADING =
-  "mt-12 text-[clamp(1.15rem,1.7vw,1.4rem)] leading-tight font-semibold tracking-[-0.01em] text-balance";
-
 function Heading({ children, ...rest }: ComponentPropsWithoutRef<"h2">) {
   return (
-    <h2 {...rest} className={HEADING}>
+    <h2 {...rest} className={`mt-12 ${SECTION_HEADING}`}>
       {children}
     </h2>
   );
@@ -20,7 +16,7 @@ function Heading({ children, ...rest }: ComponentPropsWithoutRef<"h2">) {
 
 function Paragraph({ children, ...rest }: ComponentPropsWithoutRef<"p">) {
   return (
-    <p {...rest} className={PROSE}>
+    <p {...rest} className={`mt-5 ${PROSE}`}>
       {children}
     </p>
   );
@@ -36,7 +32,7 @@ function Anchor({ children, ...rest }: ComponentPropsWithoutRef<"a">) {
 
 function Strong({ children, ...rest }: ComponentPropsWithoutRef<"strong">) {
   return (
-    <strong {...rest} className="font-semibold">
+    <strong {...rest} className={STRONG}>
       {children}
     </strong>
   );
@@ -59,7 +55,7 @@ function Rule() {
 
 const components: MDXComponents = {
   h2: Heading,
-  "p": Paragraph,
+  p: Paragraph,
   a: Anchor,
   strong: Strong,
   blockquote: Quote,

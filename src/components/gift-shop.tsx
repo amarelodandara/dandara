@@ -11,6 +11,7 @@ import {
   useArticle,
   useRequestedNote,
 } from "@/lib/article-notes";
+import { ANNOTATION } from "@/lib/type";
 import { usePlaqueWanted } from "@/lib/plaque";
 import {
   closeOverlay,
@@ -216,7 +217,7 @@ export function GiftShop() {
         {shelves.map((section) => (
           <section key={section.id} className={shelfSeat(section, article)}>
             {section.title ? (
-              <h3 className="px-3 text-[0.7rem] text-foreground-hard">
+              <h3 className={`px-3 ${ANNOTATION} text-foreground-hard`}>
                 {section.title}
               </h3>
             ) : null}

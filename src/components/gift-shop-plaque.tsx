@@ -2,6 +2,7 @@
 
 import type { Ref } from "react";
 import { Kbd } from "./kbd";
+import { ANNOTATION } from "@/lib/type";
 
 export function GiftShopPlaque({
   visible,
@@ -31,7 +32,7 @@ export function GiftShopPlaque({
         visible ? "opacity-100" : "translate-y-3 opacity-0 sm:-translate-y-3",
       ].join(" ")}
     >
-      <span className="text-[0.7rem] leading-none">{label}</span>
+      <span className={`${ANNOTATION} leading-none`}>{label}</span>
       <Kbd>G</Kbd>
     </button>
   );
