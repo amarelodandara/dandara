@@ -332,6 +332,11 @@ function Peek() {
   );
 }
 
+// The setting a quote's attribution gets on the landing: 0.85rem, soft, no
+// weight. On the wall it does the same job — naming the thing next to it
+// without asking to be read first.
+const WALL_LABEL = "text-[0.85rem] text-foreground-soft";
+
 function Plate({
   title,
   front,
@@ -351,7 +356,7 @@ function Plate({
         data-sheet-chrome
         className="mt-3 flex items-baseline justify-between gap-4"
       >
-        <h3 className="text-[0.9rem]">{title}</h3>
+        <h3 className={WALL_LABEL}>{title}</h3>
         {link ? (
           <a href={link.href} className={CAPTION_VISIT}>
             Visit
@@ -405,7 +410,7 @@ function Lightbox({
         {eyebrow ? (
           <p className="text-[0.7rem] text-foreground-soft">{eyebrow}</p>
         ) : null}
-        <h3 className="clear-right mt-5 text-[1.05rem] text-foreground-soft">
+        <h3 className="clear-right mt-5 text-[clamp(1.15rem,1.7vw,1.4rem)] leading-tight tracking-[-0.01em] text-balance text-foreground-soft">
           {title}
         </h3>
         <div className="font-medium">{children}</div>
@@ -443,7 +448,9 @@ function Card({
       {showsDetail && eyebrow ? (
         <p className="text-[0.7rem] text-foreground-soft">{eyebrow}</p>
       ) : null}
-      <h3 className={`text-[1.05rem] ${onWall ? "" : "mt-1 font-semibold"}`}>
+      <h3
+        className={onWall ? WALL_LABEL : "mt-1 text-[clamp(1.15rem,1.7vw,1.4rem)] leading-tight font-semibold tracking-[-0.01em] text-balance"}
+      >
         {title}
       </h3>
       {front ? <div className="clear-right mt-6">{front}</div> : null}

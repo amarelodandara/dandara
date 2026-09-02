@@ -48,11 +48,11 @@ export default async function Home() {
         <header className="grid grid-cols-1 gap-12 md:grid-cols-2">
           <div className="flex flex-col gap-12 md:h-full md:justify-between md:gap-0">
             <div className="h-fit">
-            <h1 className="ml-[-0.025em] text-[clamp(3.25rem,8vw,7.5rem)] leading-[0.95] font-bold tracking-[-0.035em]">
+            <h1 className="ml-[-0.02em] text-[clamp(2rem,4.5vw,3.25rem)] leading-[1.05] font-bold tracking-[-0.03em]">
               Dandara
             </h1>
-            <p className="mt-[0.35em] text-[1.05rem] leading-tight font-semibold">
-              Product Designer
+            <p className="mt-[0.08em] ml-[-0.02em] text-[clamp(2rem,4.5vw,3.25rem)] leading-[1.05] font-bold tracking-[-0.03em]">
+              Product Design
               </p>
             </div>
 
@@ -60,9 +60,9 @@ export default async function Home() {
             <h2 className="text-[0.7rem] font-medium tracking-[0.01em] text-foreground-soft">
               Personal work
             </h2>
-            <ul className="mt-2 space-y-2 text-[1.05rem] leading-tight font-semibold">
+            <ul className="mt-2 space-y-2 text-[clamp(1.15rem,1.7vw,1.4rem)] leading-tight font-semibold tracking-[-0.01em] text-balance">
               {PERSONAL_WORK.map(({ title, href, blurb }) => (
-                <li key={title} className="text-balance">
+                <li key={title}>
                   {href ? (
                     <a href={href} className={LINK_UNDERLINED}>
                       {title}
@@ -91,7 +91,7 @@ export default async function Home() {
           </div>
 
           <div className="">
-            <blockquote className="text-[clamp(0.95rem,1.15vw,1.0625rem)] leading-[1.32] tracking-[-0.01em] text-balance text-foreground-soft">
+            <blockquote className="text-[clamp(1.05rem,1.4vw,1.25rem)] leading-snug text-balance text-foreground-soft">
               The role of the designer is that of a good, thoughtful host
               anticipating the needs of his guests.
             </blockquote>
@@ -118,9 +118,6 @@ export default async function Home() {
                 motorcycles, models for friends&rsquo; brands and gets paid in
                 tattoos, desperately hopes to get a Pantone shade named after her
                 someday, and absolutely treasures her girlfriend, Jade.
-              </p>
-              <p className="text-[0.85rem] text-foreground-soft">
-                All work shown is my own unless stated otherwise.
               </p>
             </div>
           </div>

@@ -32,7 +32,7 @@ export default async function WritingIndex() {
                 >
                   <time dateTime={meta.date}>{formatPostDate(meta.date)}</time>
                 </p>
-                <h2 className="mt-1.5 text-[1.05rem] leading-tight font-semibold text-balance">
+                <h2 className="mt-1.5 text-[clamp(1.15rem,1.7vw,1.4rem)] leading-tight font-semibold tracking-[-0.01em] text-balance">
                   <Link href={`/writing/${slug}`} className={LINK}>
                     {meta.title}
                   </Link>
@@ -51,7 +51,7 @@ export default async function WritingIndex() {
                 >
                   Coming soon
                 </p>
-                <h2 className="mt-1.5 text-[1.05rem] leading-tight font-semibold text-balance text-foreground-soft/60">
+                <h2 className="mt-1.5 text-[clamp(1.15rem,1.7vw,1.4rem)] leading-tight font-semibold tracking-[-0.01em] text-balance text-foreground-soft/60">
                   {title}
                 </h2>
               </li>

@@ -74,7 +74,7 @@ export default async function ArticlePage({
             <h1 className="mt-3 ml-[-0.02em] text-[clamp(2rem,4.5vw,3.25rem)] leading-[1.05] font-bold tracking-[-0.03em]">
               {meta.title}
             </h1>
-            <p className="mt-4 text-[clamp(1.05rem,1.4vw,1.25rem)] leading-snug text-pretty text-foreground-soft">
+            <p className="mt-4 text-[clamp(1.05rem,1.4vw,1.25rem)] leading-snug text-balance text-foreground-soft">
               {meta.deck}
             </p>
           </header>

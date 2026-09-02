@@ -5,10 +5,10 @@ import { Clip } from "@/components/writing/clip";
 import { Figure } from "@/components/writing/figure";
 import { Note } from "@/components/writing/note-ref";
 
-const PROSE = "mt-5 text-[clamp(1rem,1.2vw,1.125rem)] leading-[1.6]";
+const PROSE = "mt-5 text-[clamp(0.95rem,1.15vw,1.0625rem)] leading-normal";
 
 const HEADING =
-  "mt-12 text-[clamp(1.15rem,1.7vw,1.4rem)] leading-tight font-semibold tracking-[-0.01em]";
+  "mt-12 text-[clamp(1.15rem,1.7vw,1.4rem)] leading-tight font-semibold tracking-[-0.01em] text-balance";
 
 function Heading({ children, ...rest }: ComponentPropsWithoutRef<"h2">) {
   return (
