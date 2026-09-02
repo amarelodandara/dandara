@@ -9,12 +9,17 @@ import { ANNOTATION, TITLE } from "@/lib/type";
 const CONFIRMED_FOR = 1500;
 const REPORTED_FOR = 4000;
 
-export const ROW = [
+export const SEAT = [
   "group flex w-full rounded-lg px-3 py-3 text-left",
   "transition-[background-color,scale] duration-(--motion-quick) ease-out-strong",
-  "active:scale-[0.99] active:duration-(--press)",
-  "can-hover:hover:bg-lit focus-visible:bg-lit",
+  "focus-visible:bg-lit",
   "focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-foreground/40",
+].join(" ");
+
+export const ROW = [
+  SEAT,
+  "can-hover:hover:bg-lit",
+  "active:scale-[0.99] active:duration-(--press)",
 ].join(" ");
 
 export const CHIP_W = "w-[9.5rem]";

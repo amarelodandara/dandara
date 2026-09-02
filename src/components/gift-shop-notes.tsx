@@ -9,6 +9,7 @@ import {
   Announcement,
   COPIED_ANNOUNCEMENT,
   ROW,
+  SEAT,
   useCopy,
   Verb,
 } from "./gift-shop-row";
@@ -25,14 +26,9 @@ const BODY = `mt-1 block ${ANNOTATION} leading-normal text-foreground-hard`;
 const QUOTED = `mt-4 block ${ANNOTATION} leading-normal text-foreground-hard`;
 
 const CHIP = [
-  "-my-1.5 -mr-1.5 flex shrink-0 items-center rounded-md px-2.5 py-1.5",
+  "-my-1.5 -mr-1.5 flex shrink-0 items-center rounded-xs px-2.5 py-1.5",
   "transition-[background-color] duration-(--motion-quick) ease-out-strong",
   "can-hover:group-hover:bg-lit-deep group-focus-visible:bg-lit-deep",
-].join(" ");
-
-const SEAT = [
-  "flex w-full rounded-lg px-3 py-3 text-left",
-  "transition-[background-color] duration-(--motion-quick) ease-out-strong",
 ].join(" ");
 
 const sourceOf = (href: string) => {
