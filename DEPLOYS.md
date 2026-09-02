@@ -28,7 +28,12 @@ Pro, and the traffic here is too low for the numbers to mean much.
 
 ## How you find out it broke
 
-- an **issue labelled `outage`** opens on this repo, within 30 minutes
+- the **uptime workflow goes red** and GitHub emails you, within 30 minutes.
+  Issues are off on this repo, so the alarm is the failing run and the mail it
+  sends. A sustained outage will mail every half hour rather than collecting
+  itself into one thread — that is the cost of not opening a public issue
+  tracker on a portfolio repo, and it is the right trade until an outage lasts
+  long enough to be annoying.
 - the **smoke workflow goes red** on the Actions tab, within a couple of minutes
   of the deploy
 - you look at the site
