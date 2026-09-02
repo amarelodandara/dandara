@@ -1,14 +1,35 @@
 import type { MDXComponents } from "mdx/types";
-import type { ComponentPropsWithoutRef } from "react";
+import { isValidElement } from "react";
+import type { ComponentPropsWithoutRef, ReactNode } from "react";
 import { LINK_UNDERLINED } from "@/components/link";
 import { PROSE, SECTION_HEADING, STRONG } from "@/lib/type";
 import { Clip } from "@/components/writing/clip";
 import { Figure } from "@/components/writing/figure";
 import { Note } from "@/components/writing/note-ref";
 
+const textOf = (node: ReactNode): string => {
+  if (typeof node === "string" || typeof node === "number") return String(node);
+  if (Array.isArray(node)) return node.map((child) => textOf(child)).join("");
+  if (isValidElement<{ children?: ReactNode }>(node))
+    return textOf(node.props.children);
+  return "";
+};
+
+const slug = (node: ReactNode) =>
+  textOf(node)
+    .normalize("NFD")
+    .replaceAll(/[\u0300-\u036F]/g, "")
+    .toLowerCase()
+    .replaceAll(/[^a-z0-9]+/g, "-")
+    .replaceAll(/^-|-$/g, "");
+
 function Heading({ children, ...rest }: ComponentPropsWithoutRef<"h2">) {
   return (
-    <h2 {...rest} className={`mt-12 ${SECTION_HEADING}`}>
+    <h2
+      id={slug(children) || undefined}
+      {...rest}
+      className={`mt-12 scroll-mt-16 ${SECTION_HEADING}`}
+    >
       {children}
     </h2>
   );
