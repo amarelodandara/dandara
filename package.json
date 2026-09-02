@@ -4,16 +4,18 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
+    "prepare": "git config core.hooksPath .githooks",
     "build": "npm run og:image && next build",
     "start": "next start",
     "lint": "eslint",
     "lint:strict": "eslint --max-warnings 0",
-    "typecheck": "tsc --noEmit",
+    "typecheck": "rm -rf .next/dev/types && next typegen && tsc --noEmit",
     "cv:pdf": "node scripts/cv-pdf.mts",
     "cv:verify": "node scripts/cv-verify.mts",
     "cv:score": "node scripts/cv-score.mts",
     "cv:base": "node scripts/cv-pdf.mts --variant base --lang en --out public/gift-shop/cv-en.pdf && node scripts/cv-pdf.mts --variant base --lang pt --out public/gift-shop/cv-pt.pdf",
-    "og:image": "node scripts/og-image.mts"
+    "og:image": "node scripts/og-image.mts",
+    "smoke": "node scripts/smoke.mts"
   },
   "dependencies": {
     "@mdx-js/loader": "^3.1.1",

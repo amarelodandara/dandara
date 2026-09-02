@@ -1,0 +1,10 @@
+#!/bin/sh
+set -e
+
+echo "pre-push: typecheck"
+npm run --silent typecheck >/dev/null
+
+echo "pre-push: lint"
+npx eslint --quiet
+
+echo "pre-push: clear. bypass with --no-verify when you mean to."
