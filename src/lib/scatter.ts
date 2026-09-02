@@ -59,6 +59,17 @@ export function scatter(
     } satisfies Placement;
   });
 
+  for (let row = 0; row < rows; row++) {
+    const inRow = [];
+    for (let i = row * cols; i < Math.min((row + 1) * cols, count); i++) {
+      inRow.push(i);
+    }
+    const heights = inRow
+      .map((i) => placements[i].yPct)
+      .toSorted((a, b) => a - b);
+    for (const [rank, i] of inRow.entries()) placements[i].yPct = heights[rank];
+  }
+
   const order = items.map((_, i) => i);
   for (let i = order.length - 1; i > 0; i--) {
     const j = Math.floor(rand() * (i + 1));

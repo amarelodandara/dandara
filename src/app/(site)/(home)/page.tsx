@@ -7,6 +7,9 @@ import { FIND_ME } from "@/content/socials";
 import { UPCOMING } from "@/content/upcoming";
 import { loadPostList } from "@/lib/writing/posts";
 
+const WORK_MEDIA = "pointer-events-none h-auto w-full select-none";
+const WORK_SIZES = "(min-width: 1024px) 26rem, (min-width: 480px) 44vw, 88vw";
+
 const PERSONAL_WORK: { title: string; href?: string; blurb: string }[] = [
   {
     title: "In Service of Museums",
@@ -160,75 +163,31 @@ export default async function Home() {
       </section>
 
       <WorkPile>
-        <Sheet id="stone" kind="professional" title="Stone Co." size="wide">
-          <p className="text-[0.7rem] text-foreground-soft">2022 — 2026</p>
-          <h3 className="mt-1 text-[1.05rem] font-semibold">Stone Co.</h3>
-          <ul className="mt-3 text-[0.9rem] leading-normal font-semibold">
-            {[
-              "Activation Flow",
-              "Cancelation",
-              "Closing",
-              "News",
-              "Paper Roll Orders",
-              "Payment",
-              "Pix and Pix NFC",
-              "Pre-Authorization",
-              "Receipts",
-              "Sales Reports",
-              "Sales Simulation",
-              "Store",
-              "System Launcher",
-              "Tickets",
-            ].map((app) => (
-              <li key={app}>{app}</li>
-            ))}
-          </ul>
-        </Sheet>
-
-        <Sheet
-          id="stone-talk"
-          kind="professional"
-          title="Stone Co., on stage"
-          size="wide"
-        >
-          <Image
-            src="/work/stone-talk.jpg"
-            alt="Nicoly Dandara speaking into a microphone beside a projected slide of a Stone payment terminal running the app store."
-            width={3024}
-            height={4032}
-            sizes="(min-width: 768px) 24rem, 88vw"
-            draggable={false}
-            className="pointer-events-none clear-right mt-6 h-auto w-full select-none"
-          />
-          <p className="mt-3 text-[0.7rem] text-foreground-soft">
-            Presenting the Stone Terminal Store
-          </p>
-        </Sheet>
-
         <Sheet
           id="in-service-of-museums"
           kind="personal"
           title="In Service of Museums"
           size="wide"
+          eyebrow="Graphic Design thesis · UEMG"
+          link={{
+            href: "https://servico-museu.vercel.app",
+            label: "servico-museu.vercel.app",
+          }}
+          front={
+            <video
+              aria-label="A screen recording of the In Service of Museums site: a long scrolling essay on service design in museums, set in wide measure on white."
+              autoPlay
+              loop
+              muted
+              playsInline
+              preload="metadata"
+              className={`${WORK_MEDIA} aspect-video`}
+            >
+              <source src="/work/servico-museu.av1.mp4" type='video/mp4; codecs="av01.0.09M.08"' />
+              <source src="/work/servico-museu.mp4" type="video/mp4" />
+            </video>
+          }
         >
-          <p className="text-[0.7rem] text-foreground-soft">
-            Graphic Design thesis · UEMG
-          </p>
-          <h3 className="mt-1 text-[1.05rem] font-semibold">
-            In Service of Museums
-          </h3>
-          <video
-            aria-label="A screen recording of the In Service of Museums site: the research summary, its reading timeline, and the search that tells a museum whether it falls inside the study."
-            autoPlay
-            loop
-            muted
-            playsInline
-            preload="metadata"
-            className="pointer-events-none clear-right mt-6 aspect-video h-auto w-full select-none"
-          >
-            <source src="/work/servico-museu.av1.mp4" type='video/mp4; codecs="av01.0.09M.08"' />
-            <source src="/work/servico-museu.mp4" type="video/mp4" />
-          </video>
           <p className="mt-3">
             A service design framework for museum user experience: what the
             visit asks of a visitor before, during and after the room, and where
@@ -236,13 +195,80 @@ export default async function Home() {
             as a site rather than a PDF, so the research reads the way it argues
             things should be read.
           </p>
-          <p className="mt-3">
-            <a
-              href="https://servico-museu.vercel.app"
-              className="underline decoration-stone-400 decoration-[0.04em] underline-offset-[0.25em] transition-opacity duration-(--motion-quick) ease-out-strong hover:opacity-50"
+        </Sheet>
+
+        <Sheet
+          id="museu-mark"
+          kind="personal"
+          title="Museum mark"
+          eyebrow="Research icon"
+          link={{
+            href: "https://servico-museu.vercel.app",
+            label: "servico-museu.vercel.app",
+          }}
+          front={
+            <video
+              aria-label="The mark for In Service of Museums: a white gallery frame holding a grainy field of blue and yellow that rises and settles like a slow wave."
+              autoPlay
+              loop
+              muted
+              playsInline
+              preload="metadata"
+              className={`${WORK_MEDIA} aspect-square`}
             >
-              servico-museu.vercel.app
-            </a>
+              <source src="/work/museu-mark.mp4" type="video/mp4" />
+            </video>
+          }
+        />
+
+        <Sheet
+          id="stone"
+          kind="professional"
+          title="Stone Co. Product Designer"
+          size="wide"
+          eyebrow="2022 — 2026"
+          frontKind="words"
+          front={
+            <ul className="text-[0.9rem] leading-normal font-semibold">
+              {[
+                "Improvement of Activation flow",
+                "Improvement of Cancelation application",
+                "Improvement of Reports application",
+                "Automation structure of News app",
+                "Self-servic of supplies",
+                "Pix NFC launch",
+                "Homolog and design of new devices",
+                "Redesign of Pre-Authorization app",
+                "Launch of the App Store",
+                "System updates to devices",
+                "Launch of the Ticketing app",
+              ].map((app) => (
+                <li key={app}>{app}</li>
+              ))}
+            </ul>
+          }
+        />
+
+        <Sheet
+          id="stone-talk"
+          kind="professional"
+          title="Stone Co., on stage"
+          eyebrow="Presenting the Store on stage"
+          size="wide"
+          front={
+            <Image
+              src="/work/stone-talk.jpg"
+              alt="Nicoly Dandara speaking into a microphone beside a projected slide of a Stone payment terminal running the app store."
+              width={3024}
+              height={4032}
+              sizes={WORK_SIZES}
+              draggable={false}
+              className={WORK_MEDIA}
+            />
+          }
+        >
+          <p className="mt-3 text-[0.7rem] text-foreground-soft">
+            Presenting the Stone Terminal Store
           </p>
         </Sheet>
 
@@ -251,89 +277,83 @@ export default async function Home() {
           kind="personal"
           title="links amarelos"
           size="feature"
-        >
-          <p className="text-[0.7rem] text-foreground-soft">Monthly newsletter</p>
-          <h3 className="mt-1 text-[1.05rem] font-semibold">links amarelos</h3>
-          <video
-            aria-label="A screen recording of the links amarelos site: a yellow page promising monthly recommendations of texts, books, documentaries and things with no taxonomy yet."
-            autoPlay
-            loop
-            muted
-            playsInline
-            preload="metadata"
-            className="pointer-events-none clear-right mt-6 aspect-video h-auto w-full select-none"
-          >
-            <source src="/work/links-amarelos.av1.mp4" type='video/mp4; codecs="av01.0.12M.08"' />
-            <source src="/work/links-amarelos.mp4" type="video/mp4" />
-          </video>
-          <p className="mt-3">
-            <a
-              href="https://linksamarelos.com"
-              className="underline decoration-stone-400 decoration-[0.04em] underline-offset-[0.25em] transition-opacity duration-(--motion-quick) ease-out-strong hover:opacity-50"
+          eyebrow="linksamarelos.com"
+          link={{ href: "https://linksamarelos.com", label: "linksamarelos.com" }}
+          front={
+            <video
+              aria-label="A screen recording of the links amarelos site: a yellow page promising monthly recommendations of texts, books, documentaries and things with no taxonomy yet."
+              autoPlay
+              loop
+              muted
+              playsInline
+              preload="metadata"
+              className={`${WORK_MEDIA} aspect-video`}
             >
-              linksamarelos.com
-            </a>
-          </p>
-        </Sheet>
+              <source src="/work/links-amarelos.av1.mp4" type='video/mp4; codecs="av01.0.12M.08"' />
+              <source src="/work/links-amarelos.mp4" type="video/mp4" />
+            </video>
+          }
+        />
 
-        <Sheet id="ondas-amarelas" kind="personal" title="ondas amarelas">
-          <p className="text-[0.7rem] text-foreground-soft">Podcast cover</p>
-          <h3 className="mt-1 text-[1.05rem] font-semibold">ondas amarelas</h3>
-          <Image
-            src="/work/ondas-amarelas.png"
-            alt="Cover art for the ondas amarelas podcast: the title set in heavy type over a field of yellow ripples."
-            width={2000}
-            height={2000}
-            sizes="(min-width: 768px) 18rem, 88vw"
-            draggable={false}
-            className="pointer-events-none clear-right mt-6 h-auto w-full select-none"
-          />
-          <p className="mt-3">
-            <a
-              href="https://open.spotify.com/show/043Gs7eyY2KOlotEWSTSxB?si=651fe644a3234022"
-              className="underline decoration-stone-400 decoration-[0.04em] underline-offset-[0.25em] transition-opacity duration-(--motion-quick) ease-out-strong hover:opacity-50"
-            >
-              Listen on Spotify
-            </a>
-          </p>
-        </Sheet>
+        <Sheet
+          id="ondas-amarelas"
+          kind="personal"
+          title="ondas amarelas"
+          eyebrow="Monthly curated podcast"
+          link={{
+            href: "https://open.spotify.com/show/043Gs7eyY2KOlotEWSTSxB?si=651fe644a3234022",
+            label: "Listen on Spotify",
+          }}
+          front={
+            <Image
+              src="/work/ondas-amarelas.png"
+              alt="Cover art for the ondas amarelas podcast: the title set in heavy type over a field of yellow ripples."
+              width={2000}
+              height={2000}
+              sizes={WORK_SIZES}
+              draggable={false}
+              className={WORK_MEDIA}
+            />
+          }
+        />
 
         <Sheet
           id="ondas-amarelas-episode"
           kind="personal"
-          title="ondas amarelas, episode cover"
-        >
-          <p className="text-[0.7rem] text-foreground-soft">Episode cover</p>
-          <h3 className="mt-1 text-[1.05rem] font-semibold">ondas amarelas</h3>
-          <Image
-            src="/work/ondas-amarelas-episode.png"
-            alt="Episode cover for ondas amarelas number three: a figure falling through a close-up of the sun, on yellow."
-            width={1000}
-            height={1000}
-            sizes="(min-width: 768px) 18rem, 88vw"
-            draggable={false}
-            className="pointer-events-none clear-right mt-6 h-auto w-full select-none"
-          />
-        </Sheet>
+          title="ondas amarelas, episode three"
+          eyebrow="Monthly curated podcast"
+          front={
+            <Image
+              src="/work/ondas-amarelas-episode.png"
+              alt="Episode cover for ondas amarelas number three: a figure falling through a close-up of the sun, on yellow."
+              width={1000}
+              height={1000}
+              sizes={WORK_SIZES}
+              draggable={false}
+              className={WORK_MEDIA}
+            />
+          }
+        />
 
         <Sheet
           id="obsidian-graph"
           kind="personal"
           title="Obsidian graph"
           size="wide"
-        >
-          <p className="text-[0.7rem] text-foreground-soft">Notes</p>
-          <h3 className="mt-1 text-[1.05rem] font-semibold">Obsidian graph</h3>
-          <Image
-            src="/work/obsidian-graph.png"
-            alt="The graph view of a personal Obsidian vault: thousands of notes as pale dots, linked into one dense sphere with a few bright hubs."
-            width={2000}
-            height={1446}
-            sizes="(min-width: 768px) 24rem, 88vw"
-            draggable={false}
-            className="pointer-events-none clear-right mt-6 h-auto w-full select-none"
-          />
-        </Sheet>
+          eyebrow="Personal Obsidian graph"
+          front={
+            <Image
+              src="/work/obsidian-graph.png"
+              alt="The graph view of a personal Obsidian vault: thousands of notes as pale dots, linked into one dense sphere with a few bright hubs."
+              width={2000}
+              height={1446}
+              sizes={WORK_SIZES}
+              draggable={false}
+              className={WORK_MEDIA}
+            />
+          }
+        />
+
       </WorkPile>
     </main>
   );

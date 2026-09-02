@@ -18,6 +18,14 @@
      to that ground — 8.3:1 against it, where the wall version manages 6.1:1. */
   --color-foreground-hard: oklch(0.322 0.066 92.948);
 
+  /* The dimmed end of a two-state control, as a colour rather than an opacity.
+     Transparency on an icon whose shapes overlap stacks the strokes at every
+     crossing and draws seams that are not in the artwork. This is the same
+     value `foreground-soft` at 35% used to composite to over `background`,
+     flattened in sRGB the way the browser was doing it — so the tone is
+     unchanged and only the seams are gone. */
+  --color-foreground-faint: oklch(0.796 0.021 98.285);
+
   /* The surface a cutout in the shop panel reveals. Not `background`, though
      that was the obvious first guess: the wall is 0.029 chroma and the panel it
      sits inside is 0.177, and against that much saturation a near-white pale
@@ -69,6 +77,23 @@
   --shadow-raised: 0 0 0 1px oklch(0 0 0 / 0.059), 0 18px 48px oklch(0 0 0 / 0.161),
     0 2px 6px oklch(0 0 0 / 0.122);
   --shadow-chip: 0 0 0 1px oklch(0 0 0 / 0.059), 0 1px 3px oklch(0 0 0 / 0.102);
+
+  /* The fourth note, and the only one that is not an object above the wall.
+     Nothing on the exhibition wall floats: a picture is printed straight onto
+     the page and a block of words is printed inside a drawn boundary. So this
+     is the hairline from `card` with the light taken away — no blur, no lift,
+     just the edge. It is a little darker than the ring inside `card` because
+     there it sits on top of a shadow doing half the work, and here it is doing
+     all of it. */
+  --shadow-label: 0 0 0 1px oklch(0 0 0 / 0.09);
+
+  /* The fifth note, and the only one that falls inward. `card` inverted: a
+     hairline ring plus a short throw of light, both turned back on themselves,
+     so the surface reads as a hollow pressed into the wall rather than an
+     object resting on it. The colophon is one, and so is the track a toggle
+     knob sits in. */
+  --shadow-hollow: inset 0 0 0 1px oklch(0 0 0 / 0.035),
+    inset 0 1px 4px oklch(0 0 0 / 0.02);
 }
 
 /* Inter 4.001 OpenType features applied to every glyph on the site.
@@ -175,17 +200,36 @@ body {
   overflow-x: clip;
 }
 
-/* The work pile is one scattered heap at every width, never a column and never
-   a grid. It used to switch to an alternating flex column below `md`, and at
-   half a desktop screen that alternation reads as two columns of cards — a
-   layout nobody asked for and the opposite of a pile.
+/* The work is shown two ways, and the visitor picks: hung on a wall, or tipped
+   into a pile. They are separate layouts for the same DOM — the same seven
+   frames, re-placed — which is what lets one FLIP carry every card between them.
 
-   So the scatter is unconditional now, and the narrowing happens inside it.
+   THE PILE is one scattered heap at every width, never a column and never a
+   grid. It used to switch to an alternating flex column below `md`, and at half
+   a desktop screen that alternation reads as two columns of cards — a layout
+   nobody asked for and the opposite of a pile.
+
+   So the scatter is unconditional, and the narrowing happens inside it.
    `--pile-spread` is how much of each sheet's horizontal offset from centre
    actually gets used: at 1 the heap is as wide as it was designed, at 0.34 the
    sheets collapse toward the middle and stack almost straight down. The result
    gets more vertical as the screen narrows because the horizontal component is
-   scaled away, not because a different layout took over. */
+   scaled away, not because a different layout took over.
+
+   On THE WALL a card is treated by what it holds, which is where the rhythm
+   comes from: a picture hangs directly on the page — no ground, no border, no
+   padding, its title a caption underneath — while a card that is only words
+   gets a boundary drawn around it, because type with nothing behind it is not
+   hung, it is spilled. Six plates and one label, in this set. The rule is the
+   wall's alone: tipped into the pile, every card is the same sheet of paper
+   again.
+
+   THE WALL is CSS multi-column, not a grid and not a measured masonry. The
+   cards are different heights because the work is, and `columns` is the one
+   layout that packs uneven heights without anyone measuring anything — which
+   matters here, because the morph animates a transform on each card and a JS
+   masonry would be re-measuring mid-flight. The cost is column-major reading
+   order; for seven pieces with no ranking, there is no order to lose. */
 [data-pile] {
   --pile-spread: 0.34;
   position: relative;
@@ -221,12 +265,73 @@ body {
    gesture once the movement is more sideways than vertical. `none` here would
    make the pile a dead zone that swallows every scroll that started on a card,
    which on a phone is most of them. */
-[data-sheet-frame] {
+[data-pile] > [data-sheet-frame] {
   position: absolute;
   top: var(--sheet-y);
   left: calc(50% + (var(--sheet-x) - 50%) * var(--pile-spread));
   width: var(--sheet-w);
   touch-action: pan-y;
+}
+
+/* A card on the wall is placed by the column, not by the scatter: no absolute
+   position, no `--sheet-w`, and its width is whatever the column is. Nothing
+   here is media-gated except the column count — the card is the same object it
+   was in the pile, only put down straight. */
+[data-wall] {
+  columns: 1;
+  column-gap: var(--wall-gap);
+}
+
+@media (min-width: 480px) {
+  [data-wall] {
+    columns: 2;
+  }
+}
+
+@media (min-width: 1024px) {
+  [data-wall] {
+    columns: 3;
+  }
+}
+
+/* Hovering one piece on the wall pulls the rest back out of focus. The gallery
+   reading of it: you step up to a picture and the room goes soft around it.
+
+   The trigger is `:has(> [data-sheet-frame]:hover)` and not a plain `:hover` on
+   the wall, because the wall is wider than its cards — a cursor resting in the
+   gutter between two columns is hovering the wall and nothing in it, and that
+   should not blur the whole room.
+
+   The blur is lighter than the focused-sheet dim (3px against 6px, 0.62 against
+   0.5): this is a passing glance, not a state you entered, and it has to read as
+   the weaker of the two when a visitor does both in a row. Touch is excluded
+   entirely — with no hover there is no unhovered rest, so every card would blur
+   the moment a finger landed. */
+[data-wall] > [data-sheet-frame] {
+  break-inside: avoid;
+  margin-bottom: var(--wall-gap);
+  transition:
+    filter 200ms var(--ease-out-strong),
+    opacity 200ms var(--ease-out-strong);
+}
+
+@media (hover: hover) and (pointer: fine) {
+  [data-wall]:has(> [data-sheet-frame]:hover) > [data-sheet-frame]:not(:hover),
+  [data-wall]:has(> [data-sheet-frame]:focus-within)
+    > [data-sheet-frame]:not(:focus-within):not(:hover) {
+    filter: blur(3px);
+    opacity: 0.62;
+  }
+}
+
+:root {
+  --wall-gap: 1.25rem;
+}
+
+@media (min-width: 768px) {
+  :root {
+    --wall-gap: 1.75rem;
+  }
 }
 
 /* `--shop-w` is how far the page moves, not how wide the card is. The card is
@@ -299,9 +404,7 @@ body[data-shop-open] [data-shop-panel] {
    downstairs is one hollow; an article's figures are the others, each picture
    sitting on its own mat with a margin of wall left showing around it. */
 [data-recessed] {
-  box-shadow:
-    inset 0 0 0 1px oklch(0 0 0 / 0.035),
-    inset 0 1px 4px oklch(0 0 0 / 0.02);
+  box-shadow: var(--shadow-hollow);
   background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='160' height='160' filter='url(%23n)' opacity='0.03'/%3E%3C/svg%3E");
 }
 
@@ -314,8 +417,15 @@ body[data-shop-open] [data-shop-panel] {
   [data-sheet-card],
   [data-shop-panel],
   [data-page],
-  [data-plaque] {
+  [data-plaque],
+  [data-flavour] {
     transition-duration: 0.01ms !important;
+  }
+
+  /* The peek pill's fade is opacity and stays; only its arrival scale goes. */
+  [data-peek] span {
+    transition-duration: 0.01ms !important;
+    scale: 1;
   }
 
   /* The dim stays. It changes no position — it is opacity and blur telling you

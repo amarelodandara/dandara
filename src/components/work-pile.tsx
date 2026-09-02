@@ -13,6 +13,8 @@ import {
 import { SheetFrame } from "./sheet-frame";
 import type { SheetProps, SheetSize } from "./sheet";
 import { scatter } from "@/lib/scatter";
+import type { WorkView } from "@/lib/work-view";
+import { PileIcon, WallIcon } from "./work-view-icons";
 import {
   closeOverlay,
   openOverlay,
@@ -27,6 +29,10 @@ type Item = {
   kind: SheetProps["kind"];
   title: string;
   size: SheetSize;
+  eyebrow?: string;
+  front: ReactNode;
+  frontKind: SheetProps["frontKind"];
+  link: SheetProps["link"];
   content: ReactNode;
 };
 
@@ -47,10 +53,69 @@ function readSheets(children: ReactNode): Item[] {
         kind: props.kind,
         title: props.title,
         size: props.size ?? "narrow",
+        eyebrow: props.eyebrow,
+        front: props.front,
+        frontKind: props.frontKind,
+        link: props.link,
         content: props.children,
       },
     ];
   });
+}
+
+function ViewIcon({
+  active,
+  lit,
+  children,
+}: {
+  active: boolean;
+  lit: string;
+  children: ReactNode;
+}) {
+  return (
+    <span
+      aria-hidden="true"
+      className={[
+        "transition-colors duration-(--motion-quick) ease-out-strong",
+        active ? lit : "text-foreground-faint",
+      ].join(" ")}
+    >
+      {children}
+    </span>
+  );
+}
+
+function ViewToggle({ view, onToggle }: { view: WorkView; onToggle: () => void }) {
+  const piled = view === "pile";
+  return (
+    <button
+      type="button"
+      role="switch"
+      aria-checked={piled}
+      data-pressable
+      onClick={onToggle}
+      className={[
+        "relative h-5 w-9 shrink-0 cursor-pointer rounded-full",
+        "transition-[background-color,scale] duration-(--motion-quick) ease-out-strong",
+        "active:scale-[0.97] active:duration-(--press)",
+        "outline-offset-4 focus-visible:outline-2 focus-visible:outline-foreground",
+        "after:absolute after:left-1/2 after:top-1/2 after:h-11 after:w-11 after:content-['']",
+        "after:-translate-x-1/2 after:-translate-y-1/2",
+        "shadow-hollow",
+        piled ? "bg-background-hard" : "bg-foreground/10",
+      ].join(" ")}
+    >
+      <span
+        aria-hidden="true"
+        className={[
+          "absolute top-0.5 left-0.5 h-4 w-4 rounded-full bg-background shadow-chip",
+          "transition-transform duration-(--motion-quick) ease-out-strong",
+          piled ? "translate-x-0" : "translate-x-4",
+        ].join(" ")}
+      />
+      <span className="sr-only">Tip the work into a pile</span>
+    </button>
+  );
 }
 
 export function WorkPile({
@@ -66,6 +131,7 @@ export function WorkPile({
     [items],
   );
 
+  const [view, setView] = useState<WorkView>("wall");
   const [requestedId, setRequestedId] = useState<string | null>(null);
   const active = useActiveOverlay();
   const focusedId = active === OVERLAY_ID ? requestedId : null;
@@ -92,6 +158,11 @@ export function WorkPile({
 
   const close = useCallback(() => closeOverlay(OVERLAY_ID), []);
 
+  const show = useCallback((next: WorkView) => {
+    closeOverlay(OVERLAY_ID);
+    setView(next);
+  }, []);
+
   useEffect(() => {
     const outside = document.querySelectorAll<HTMLElement>("[data-dim-on-focus]");
     const clear = () => {
@@ -115,23 +186,56 @@ export function WorkPile({
 
   return (
     <section id="work" className="relative mt-[18vh] pb-[12vh]">
-      <div className="flex items-baseline justify-between gap-6">
+      <div className="flex items-center justify-between gap-6">
         <h2 className="text-[0.7rem] leading-none font-medium tracking-[0.01em] text-foreground-soft">
           {label}
         </h2>
-        <p className="text-[0.7rem] leading-none tracking-[0.01em] text-foreground-soft/60">
-          it&rsquo;s art, please touch
-        </p>
+
+        <div className="relative flex items-center gap-2">
+          <p
+            data-flavour
+            aria-hidden={view === "wall" || undefined}
+            className={[
+              "pointer-events-none absolute right-full mr-3 whitespace-nowrap",
+              "text-[0.7rem] leading-none tracking-[0.01em] text-foreground-hard",
+              "transition-opacity duration-(--motion-quick) ease-out-strong",
+              view === "pile" ? "opacity-100" : "opacity-0",
+            ].join(" ")}
+          >
+            it&rsquo;s art, please touch
+          </p>
+
+          <ViewIcon active={view === "pile"} lit="text-foreground-hard">
+            <PileIcon />
+          </ViewIcon>
+
+          <ViewToggle
+            view={view}
+            onToggle={() => show(view === "pile" ? "wall" : "pile")}
+          />
+
+          <ViewIcon active={view === "wall"} lit="text-foreground-soft">
+            <WallIcon />
+          </ViewIcon>
+        </div>
       </div>
 
-      <div data-pile className="relative mt-10 md:mt-16">
+      <div
+        data-pile={view === "pile" ? "" : undefined}
+        data-wall={view === "wall" ? "" : undefined}
+        className="relative mt-10 md:mt-16"
+      >
         {items.map((item) => (
           <SheetFrame
             key={item.id}
             id={item.id}
-            kind={item.kind}
             title={item.title}
             size={item.size}
+            view={view}
+            eyebrow={item.eyebrow}
+            front={item.front}
+            frontKind={item.frontKind}
+            link={item.link}
             placement={placements[item.id]}
             z={lifted[item.id] ?? placements[item.id].z}
             focused={focusedId === item.id}
