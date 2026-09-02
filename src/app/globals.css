@@ -39,6 +39,17 @@
   --color-cutout: oklch(0.945 0.081 97);
   --color-cutout-deep: oklch(0.927 0.103 95.473);
 
+  /* The shop's header carries the panel's own yellow — the sheet is the grain,
+     not a change of colour, and every attempt at lightening it read as a stripe
+     stuck to the panel. Aliased rather than repeated so there is one value to
+     move if that decision is revisited.
+
+     The edge is 30% of the way from there back toward `background`, on the same
+     line the cutout pair is mixed on. It is the colour of the perforation, not
+     of a rule: see `[data-perforated]`. */
+  --color-shop-band: var(--color-background-hard);
+  --color-shop-edge: oklch(0.902 0.133 93.44);
+
 
   /* The hot spot at the middle of the site's own mark, the same orange as
      `icon.svg` converted out of #ff8e00. Same chroma as the yellow it sits in,
@@ -400,6 +411,53 @@ body[data-shop-open] [data-shop-panel] {
   visibility: visible;
   translate: 0 0;
   transition-duration: var(--motion-enter);
+}
+
+/* Paper, tuned by eye against the panel rather than reasoned about.
+
+   Three things carry it, and the first is the one that was wrong for two
+   attempts. `baseFrequency: 1` is a one-pixel speck, and a speck that small
+   only survives because `slope: 4` throws every value hard away from mid-grey
+   first: without that contrast the noise averages itself into a flat tint
+   before it is ever drawn. `feColorMatrix` desaturates before painting, so the
+   flecks are light and dark rather than red and blue and the yellow underneath
+   stays the only hue on the surface. And `feFuncA` flattens alpha to 1, because
+   raw `feTurbulence` writes noise into the alpha channel too — without it a
+   sheet asked for at 0.1 arrives at roughly half that, unevenly.
+
+   One octave, not four. At this frequency the finer octaves land under a pixel
+   and only cost time. */
+[data-paper] {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='f'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='1' numOctaves='1' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3CfeComponentTransfer%3E%3CfeFuncR type='linear' slope='4' intercept='-1.5'/%3E%3CfeFuncG type='linear' slope='4' intercept='-1.5'/%3E%3CfeFuncB type='linear' slope='4' intercept='-1.5'/%3E%3CfeFuncA type='linear' slope='0' intercept='1'/%3E%3C/feComponentTransfer%3E%3C/filter%3E%3Crect width='180' height='180' filter='url(%23f)' opacity='0.1'/%3E%3C/svg%3E");
+  background-size: 180px 180px;
+}
+
+/* Perforation, not a rule. `border-style: dotted` is square dashes in Chromium
+   and round ones in Firefox, and neither is controllable, so the line is drawn:
+   one round dot in a 7px tile repeated along the bottom edge. It reads as the
+   tear line on a sheet of stamps, which is the right idea for a shop.
+
+   On a pseudo-element rather than in `background-image`, because the header is
+   already spending that property on its grain and a second rule would replace
+   the first rather than layer under it. */
+[data-perforated] {
+  position: relative;
+}
+
+[data-perforated]::after {
+  content: "";
+  position: absolute;
+  inset-inline: 0;
+  bottom: 0;
+  height: 2px;
+  pointer-events: none;
+  background-image: radial-gradient(
+    circle at 1px 1px,
+    var(--color-shop-edge) 0 1px,
+    transparent 1.5px
+  );
+  background-size: 7px 2px;
+  background-repeat: repeat-x;
 }
 
 /* Recessed: pressed into the wall rather than mounted on it. The shadow falls
