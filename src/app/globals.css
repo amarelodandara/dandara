@@ -173,18 +173,38 @@ body {
 
 /* Focusing a sheet pushes the rest of the page back. The blur is per element,
    never on a shared ancestor — a filter there would blur the focused sheet too
-   and turn itself into a containing block for its fixed positioning. */
+   and turn itself into a containing block for its fixed positioning.
+
+   Which is also why it is desktop-only. Per element means every element: open
+   one card on the wall and a phone is asked to blur the six others, the landing
+   and the colophon, and to animate all of it for 240ms. That is a full-screen
+   filter pass per frame on the hardware least able to pay for one, and it was
+   the reason the open felt like it fell. Below `md` the recede is the fade
+   alone, taken further to carry the weight the blur was carrying, with the
+   scrim above it doing the rest. */
 [data-dimmed],
 [data-dim-on-focus] {
-  transition:
-    filter 240ms var(--ease-out-strong),
-    opacity 240ms var(--ease-out-strong);
+  transition: opacity 240ms var(--ease-out-strong);
 }
 
 [data-dimmed],
 body[data-sheet-focused] [data-dim-on-focus] {
-  filter: blur(6px);
-  opacity: 0.5;
+  opacity: 0.35;
+}
+
+@media (min-width: 768px) {
+  [data-dimmed],
+  [data-dim-on-focus] {
+    transition:
+      filter 240ms var(--ease-out-strong),
+      opacity 240ms var(--ease-out-strong);
+  }
+
+  [data-dimmed],
+  body[data-sheet-focused] [data-dim-on-focus] {
+    filter: blur(6px);
+    opacity: 0.5;
+  }
 }
 
 /* `html` is the scroller (it carries h-full), so the lock has to reach it. */
@@ -335,12 +355,15 @@ body {
 [data-wall] > [data-sheet-frame] {
   break-inside: avoid;
   margin-bottom: var(--wall-gap);
-  transition:
-    filter 200ms var(--ease-out-strong),
-    opacity 200ms var(--ease-out-strong);
 }
 
 @media (hover: hover) and (pointer: fine) {
+  [data-wall] > [data-sheet-frame] {
+    transition:
+      filter 200ms var(--ease-out-strong),
+      opacity 200ms var(--ease-out-strong);
+  }
+
   [data-wall]:has(> [data-sheet-frame]:hover) > [data-sheet-frame]:not(:hover),
   [data-wall]:has(> [data-sheet-frame]:focus-within)
     > [data-sheet-frame]:not(:focus-within):not(:hover) {
