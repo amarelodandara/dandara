@@ -1,6 +1,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { LINK, LINK_UNDERLINED } from "@/components/link";
+import { PersonSchema } from "@/components/person-schema";
 import { Sheet } from "@/components/sheet";
 import { WorkPile } from "@/components/work-pile";
 import { FIND_ME } from "@/content/socials";
@@ -50,6 +51,8 @@ export default async function Home() {
 
   return (
     <main className="mx-auto w-full max-w-[1400px] flex-1 px-[7vw] py-[14vh] sm:py-[18vh]">
+      <PersonSchema />
+
       <div data-dim-on-focus data-landing>
         <header className="grid grid-cols-1 gap-12 md:grid-cols-2">
           <div className="flex flex-col gap-20 md:h-full md:justify-between md:gap-24">
