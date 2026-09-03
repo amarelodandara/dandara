@@ -294,6 +294,7 @@ const CAPTION_VISIT = [
   "after:absolute after:left-1/2 after:top-1/2 after:content-['']",
   "after:h-11 after:w-[max(100%+1.5rem,2.75rem)]",
   "after:-translate-x-1/2 after:-translate-y-1/2",
+  "hidden can-hover:inline",
   REVEALED_ON_HOVER,
 ].join(" ");
 
