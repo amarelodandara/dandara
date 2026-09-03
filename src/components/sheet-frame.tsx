@@ -192,7 +192,8 @@ const FOCUSED_FRAME =
   "fixed left-1/2 top-1/2 z-[60] w-[88vw] -translate-x-1/2 -translate-y-1/2 md:w-[var(--sheet-w)]";
 
 const LIGHTBOX_FRAME = [
-  "fixed left-1/2 top-1/2 z-[60] w-max max-w-[92vw] -translate-x-1/2 -translate-y-1/2",
+  "fixed left-1/2 top-1/2 z-[60] w-screen -translate-x-1/2 -translate-y-1/2",
+  "md:w-max md:max-w-[96vw]",
   "max-h-[92vh] overflow-y-auto md:max-h-none md:overflow-visible",
 ].join(" ");
 
@@ -355,14 +356,14 @@ function Plate({
 }
 
 const LIGHTBOX_MEDIA = [
-  "flex min-h-0 w-auto items-center justify-center",
-  "[&>*]:max-h-[46vh] [&>*]:w-auto [&>*]:max-w-full [&>*]:object-contain",
-  "md:[&>*]:max-h-[62vh]",
+  "flex min-h-0 w-full items-center justify-center md:w-auto",
+  "[&>*]:max-h-[62vh] [&>*]:w-auto [&>*]:max-w-full [&>*]:object-contain",
+  "md:[&>*]:max-h-[78vh]",
 ].join(" ");
 
 const LIGHTBOX_LABEL = [
-  "w-full shrink-0 bg-background p-5 shadow-raised",
-  "md:max-h-[62vh] md:w-[17rem] md:self-end md:overflow-y-auto md:p-6",
+  "w-[86vw] shrink-0 bg-background p-5 shadow-raised",
+  "md:max-h-[78vh] md:w-[17rem] md:self-end md:overflow-y-auto md:p-6",
 ].join(" ");
 
 function Lightbox({
