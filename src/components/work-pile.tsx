@@ -21,9 +21,11 @@ import {
   useActiveOverlay,
 } from "@/lib/exclusive-overlay";
 import { useKeydown } from "@/lib/keydown";
+import { useMediaQuery } from "@/lib/media-query";
 import { ANNOTATION } from "@/lib/type";
 
 const OVERLAY_ID = "work-pile";
+const ROOM_FOR_A_PILE = "(min-width: 768px)";
 
 type Item = {
   id: string;
@@ -138,7 +140,9 @@ export function WorkPile({
     [items],
   );
 
-  const [view, setView] = useState<WorkView>("wall");
+  const canPile = useMediaQuery(ROOM_FOR_A_PILE);
+  const [chosen, setChosen] = useState<WorkView>("wall");
+  const view: WorkView = canPile ? chosen : "wall";
   const [requestedId, setRequestedId] = useState<string | null>(null);
   const active = useActiveOverlay();
   const focusedId = active === OVERLAY_ID ? requestedId : null;
@@ -167,7 +171,7 @@ export function WorkPile({
 
   const show = useCallback((next: WorkView) => {
     closeOverlay(OVERLAY_ID);
-    setView(next);
+    setChosen(next);
   }, []);
 
   useEffect(() => {
@@ -200,7 +204,7 @@ export function WorkPile({
           {label}
         </h2>
 
-        <div className="relative flex items-center gap-2">
+        <div className="relative hidden items-center gap-2 md:flex">
           <p
             data-flavour
             aria-hidden={view === "wall" || undefined}

@@ -18,7 +18,7 @@ import {
 } from "@/lib/type";
 
 const WORK_MEDIA = "pointer-events-none h-auto w-full select-none";
-const WORK_SIZES = "(min-width: 1024px) 26rem, (min-width: 480px) 44vw, 88vw";
+const WORK_SIZES = "(min-width: 1024px) 26rem, (min-width: 768px) 42vw, 100vw";
 
 const PERSONAL_WORK: { title: string; href?: string; blurb: string }[] = [
   {

@@ -239,21 +239,22 @@ body {
   overflow-x: clip;
 }
 
-/* The work is shown two ways, and the visitor picks: hung on a wall, or tipped
-   into a pile. They are separate layouts for the same DOM — the same seven
-   frames, re-placed — which is what lets one FLIP carry every card between them.
+/* The work is shown two ways above `md`, and the visitor picks: hung on a wall,
+   or tipped into a pile. They are separate layouts for the same DOM — the same
+   seven frames, re-placed — which is what lets one FLIP carry every card
+   between them.
 
-   THE PILE is one scattered heap at every width, never a column and never a
-   grid. It used to switch to an alternating flex column below `md`, and at half
-   a desktop screen that alternation reads as two columns of cards — a layout
-   nobody asked for and the opposite of a pile.
+   Below `md` there is only the wall. A pile is a thing you push around, and a
+   phone has neither the room to spread seven sheets nor a cursor to shove them
+   with; what survived the narrowing was a heap collapsed to almost a column.
+   The toggle goes with it — `WorkPile` pins the view to the wall under that
+   width rather than leaving a control that no longer earns its place.
 
-   So the scatter is unconditional, and the narrowing happens inside it.
-   `--pile-spread` is how much of each sheet's horizontal offset from centre
-   actually gets used: at 1 the heap is as wide as it was designed, at 0.34 the
-   sheets collapse toward the middle and stack almost straight down. The result
-   gets more vertical as the screen narrows because the horizontal component is
-   scaled away, not because a different layout took over.
+   THE PILE is therefore a desktop layout, and one scattered heap at every width
+   it appears at — never a column and never a grid. `--pile-spread` is how much
+   of each sheet's horizontal offset from centre actually gets used; there is
+   nothing narrow left to scale it down for, so it is 1 and the heap is as wide
+   as it was designed.
 
    On THE WALL a card is treated by what it holds, which is where the rhythm
    comes from: a picture hangs directly on the page — no ground, no border, no
@@ -263,6 +264,12 @@ body {
    wall's alone: tipped into the pile, every card is the same sheet of paper
    again.
 
+   The wall runs one column below `md`, which is the same `md` the pile and its
+   toggle disappear at: on a phone the wall is not one of two views any more, it
+   is the whole of the work, and each piece gets the full measure rather than
+   half of it. Two columns is what a phone has room to draw, not what this work
+   has room to be read at.
+
    THE WALL is CSS multi-column, not a grid and not a measured masonry. The
    cards are different heights because the work is, and `columns` is the one
    layout that packs uneven heights without anyone measuring anything — which
@@ -270,30 +277,9 @@ body {
    masonry would be re-measuring mid-flight. The cost is column-major reading
    order; for seven pieces with no ranking, there is no order to lose. */
 [data-pile] {
-  --pile-spread: 0.34;
+  --pile-spread: 1;
   position: relative;
-  min-height: 40rem;
-}
-
-@media (min-width: 480px) {
-  [data-pile] {
-    --pile-spread: 0.52;
-    min-height: 42rem;
-  }
-}
-
-@media (min-width: 640px) {
-  [data-pile] {
-    --pile-spread: 0.74;
-    min-height: 44rem;
-  }
-}
-
-@media (min-width: 768px) {
-  [data-pile] {
-    --pile-spread: 1;
-    min-height: 46rem;
-  }
+  min-height: 46rem;
 }
 
 /* `translate` is left to the drag handler, which writes it inline on every
@@ -321,7 +307,7 @@ body {
   column-gap: var(--wall-gap);
 }
 
-@media (min-width: 480px) {
+@media (min-width: 768px) {
   [data-wall] {
     columns: 2;
   }
