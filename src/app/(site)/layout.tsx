@@ -66,8 +66,6 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
           Skip to content
         </a>
 
-        <GiftShop />
-
         <div
           id="content"
           data-page
@@ -76,6 +74,8 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
         >
           {children}
         </div>
+
+        <GiftShop />
 
         {Agentation ? <Agentation endpoint="http://localhost:4747" /> : null}
         <Analytics />
