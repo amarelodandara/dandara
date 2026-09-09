@@ -97,6 +97,12 @@
   --press: 160ms;
   --motion-quick: 150ms;
 
+  /* Arrival is the one duration allowed past the enter budget. Every other one
+     answers a gesture and has to keep up with a hand; this one answers a page
+     load, where nobody is waiting on a response and the room is meant to settle
+     rather than snap. */
+  --motion-appear: 600ms;
+
   /* Elevation, after Superlogical. Three notes only, and every one of them
      starts with a hairline ring instead of a border: an object is separated
      from its ground by its own edge plus the light it blocks, never by a drawn
@@ -221,6 +227,56 @@ body[data-sheet-focused] {
 html {
   scrollbar-gutter: stable;
   overscroll-behavior-y: none;
+}
+
+/* The landing arrives instead of being already there. Three properties move
+   together and each is doing a different job: opacity is the fade, the 6px rise
+   gives it somewhere to come from, and the 4px blur is what stops the other two
+   from reading as a slideshow — an out-of-focus thing coming into focus is one
+   object resolving, where opacity alone is a second object faded up over the
+   wall.
+
+   `backwards` is what makes the stagger legible: without it a block would paint
+   fully formed and then vanish when its delay ran out. The attribute carries the
+   block's place in the order rather than a duration, so the page says what comes
+   after what and this stays the only file a delay is written in. 80ms apart: far
+   enough to read as a sequence, close enough that the last block is in by a
+   quarter second and nobody waits on a page they can already see.
+
+   The filter is also why the attribute stays on the header. An element with a
+   `filter` is the containing block for every `position: fixed` descendant — the
+   same trap the shop's translate documents below, and the work's focused sheet
+   is fixed. Here the filter exists only while the animation runs and the header
+   holds nothing fixed, so it costs nothing. On the work it would be a bug that
+   surfaced only in the first second of a page load. */
+@keyframes appear {
+  from {
+    opacity: 0;
+    filter: blur(4px);
+    translate: 0 6px;
+  }
+
+  to {
+    opacity: 1;
+    filter: blur(0);
+    translate: 0 0;
+  }
+}
+
+[data-appear] {
+  animation: appear var(--motion-appear) var(--ease-out-strong) backwards;
+}
+
+[data-appear="2"] {
+  animation-delay: 80ms;
+}
+
+[data-appear="3"] {
+  animation-delay: 160ms;
+}
+
+[data-appear="4"] {
+  animation-delay: 240ms;
 }
 
 /* Opening the shop slides the page aside to make room; the shop itself floats
@@ -515,6 +571,14 @@ body[data-shop-open] [data-shop-panel] {
   [data-plaque],
   [data-flavour] {
     transition-duration: 0.01ms !important;
+  }
+
+  /* The arrival goes entirely rather than shrinking to a fade. It explains
+     nothing — the page is fully readable the instant it is painted — so what is
+     left once the movement is removed is decoration with a delay attached, and a
+     visitor who asked for less motion should simply get the page. */
+  [data-appear] {
+    animation: none;
   }
 
   /* The peek pill's fade is opacity and stays; only its arrival scale goes. */

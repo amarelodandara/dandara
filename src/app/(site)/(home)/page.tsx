@@ -56,12 +56,12 @@ export default async function Home() {
       <div data-dim-on-focus data-landing>
         <header className="grid grid-cols-1 gap-12 md:grid-cols-2">
           <div className="flex flex-col gap-20 md:h-full md:justify-between md:gap-24">
-            <div className="h-fit">
+            <div data-appear="1" className="h-fit">
               <h1 className={PAGE_HEADING}>Dandara</h1>
               <p className={`mt-[0.08em] ${PAGE_HEADING}`}>Product Design</p>
             </div>
 
-            <div className="h-fit">
+            <div data-appear="2" className="h-fit">
               <h2 className={`${ANNOTATION} text-foreground-soft`}>
                 Personal work
               </h2>
@@ -98,7 +98,7 @@ export default async function Home() {
           </div>
 
           <div className="flex flex-col gap-20 md:h-full md:justify-between md:gap-24">
-            <div className="h-fit">
+            <div data-appear="3" className="h-fit">
               <blockquote className={ACCENT_PROSE}>
                 The role of the designer is that of a good, thoughtful host
                 anticipating the needs of his guests.
@@ -106,7 +106,7 @@ export default async function Home() {
               <p className={`mt-2 ${LABEL}`}>Charles Eames</p>
             </div>
 
-            <div className={`h-fit space-y-5 ${PROSE}`}>
+            <div data-appear="4" className={`h-fit space-y-5 ${PROSE}`}>
               <p>
                 I am a designer with 5+ years of experience. I have designed for
                 companies, for myself, for other people. I have designed with
