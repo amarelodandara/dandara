@@ -320,7 +320,7 @@ function Peek() {
   );
 }
 
-const WALL_LABEL = LABEL;
+const WALL_LABEL = `${LABEL} text-foreground-soft`;
 
 function Plate({
   title,
@@ -392,7 +392,9 @@ function Lightbox({
         {eyebrow ? (
           <p className={`${ANNOTATION} text-foreground-soft`}>{eyebrow}</p>
         ) : null}
-        <h3 className={`clear-right mt-5 ${LABEL}`}>{title}</h3>
+        <h3 className={`clear-right mt-5 ${LABEL} text-foreground-soft`}>
+          {title}
+        </h3>
         <div className={PROSE}>{children}</div>
         {link ? (
           <p className="mt-3">

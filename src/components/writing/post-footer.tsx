@@ -20,7 +20,9 @@ export function PostFooter() {
         , come hang out there.
       </p>
 
-      <ul className={`mt-4 flex flex-wrap gap-x-5 gap-y-1 ${LABEL}`}>
+      <ul
+        className={`mt-4 flex flex-wrap gap-x-5 gap-y-1 ${LABEL} text-foreground-soft`}
+      >
         {ELSEWHERE.map(({ label, href }) => (
           <li key={label}>
             <a href={href} className={LINK}>

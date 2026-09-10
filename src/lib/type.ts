@@ -17,7 +17,7 @@ export const PROSE = "text-[clamp(0.95rem,1.15vw,1.0625rem)] leading-normal";
 
 export const TITLE = "text-[0.9rem] leading-tight font-semibold";
 
-export const LABEL = "text-[0.85rem] text-foreground-soft";
+export const LABEL = "text-[0.85rem]";
 
 export const ANNOTATION = "text-[0.7rem]";
 

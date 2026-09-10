@@ -20,7 +20,7 @@ import { PROSE, SECTION_HEADING } from "@/lib/type";
 | `ACCENT_PROSE` | `clamp(1.05rem, 1.4vw, 1.25rem)` · 400 · soft | a line that opens something rather than being read through — a deck, a quote. |
 | `PROSE` | `clamp(0.95rem, 1.15vw, 1.0625rem)` · 400 | anything read as a passage. |
 | `TITLE` | `0.9rem` · 600 · tight | the name of one object inside a list. |
-| `LABEL` | `0.85rem` · 400 · soft | it names the thing beside it without asking to be read first. One line. |
+| `LABEL` | `0.85rem` · 400 | it names the thing beside it without asking to be read first. One line. Colour comes from the call site. |
 | `ANNOTATION` | `0.7rem` · 400 | everything small: eyebrows, button text, dates, captions, note bodies. |
 | `MICRO` | `0.65rem` · mono | apparatus — a key you press, a marker you count. |
 | `STRONG` | 600 | emphasis inside prose. The weight every `<strong>` gets. |

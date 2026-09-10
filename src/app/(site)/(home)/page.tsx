@@ -85,7 +85,9 @@ export default async function Home() {
               <h2 className={`mt-8 ${ANNOTATION} text-foreground-soft`}>
                 Find me
               </h2>
-              <ul className={`mt-2 flex flex-wrap gap-x-5 gap-y-1 ${LABEL}`}>
+              <ul
+                className={`mt-2 flex flex-wrap gap-x-5 gap-y-1 ${LABEL} text-foreground-soft`}
+              >
                 {FIND_ME.map(({ label, href }) => (
                   <li key={label}>
                     <a href={href} className={LINK}>
@@ -103,7 +105,9 @@ export default async function Home() {
                 The role of the designer is that of a good, thoughtful host
                 anticipating the needs of his guests.
               </blockquote>
-              <p className={`mt-2 ${LABEL}`}>Charles Eames</p>
+              <p className={`mt-2 ${LABEL} text-foreground-soft`}>
+                Charles Eames
+              </p>
             </div>
 
             <div data-appear="4" className={`h-fit space-y-5 ${PROSE}`}>

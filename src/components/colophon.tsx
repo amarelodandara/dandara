@@ -12,7 +12,7 @@ export function Colophon() {
       >
         <div>
           <p className={`${SECTION_HEADING} lowercase`}>Amarelo Dandara</p>
-          <p className={LABEL}>🇧🇷, born 2002</p>
+          <p className={`${LABEL} text-foreground-soft`}>🇧🇷, born 2002</p>
         </div>
 
         <div>
