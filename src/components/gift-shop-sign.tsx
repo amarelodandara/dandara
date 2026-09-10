@@ -4,7 +4,7 @@ import { amareloSection, giftShopSections } from "@/content/gift-shop";
 import type { GiftShopSection } from "@/content/gift-shop";
 import type { Article } from "@/lib/article-notes";
 import { Kbd } from "./kbd";
-import { ANNOTATION, PROSE, SECTION_HEADING } from "@/lib/type";
+import { ANNOTATION, LABEL, SECTION_HEADING } from "@/lib/type";
 
 export type Sign = { name: string; blurb: string; closes: string };
 
@@ -64,7 +64,7 @@ export function GiftShopSign({
         </button>
       </div>
 
-      <p className={`px-8 py-3 ${PROSE} text-foreground-hard`}>{sign.blurb}</p>
+      <p className={`px-8 py-3 ${LABEL} text-foreground-hard`}>{sign.blurb}</p>
     </header>
   );
 }

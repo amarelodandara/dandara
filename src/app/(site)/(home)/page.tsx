@@ -21,28 +21,26 @@ import {
 const WORK_MEDIA = "pointer-events-none h-auto w-full select-none";
 const WORK_SIZES = "(min-width: 1024px) 26rem, (min-width: 768px) 42vw, 100vw";
 
+const MUSEUMS = {
+  href: "https://servico-museu.vercel.app",
+  label: "servico-museu.vercel.app",
+};
+
 const PERSONAL_WORK: { title: string; href?: string; blurb: string }[] = [
   {
-    title: "In Service of Museums",
-    blurb: "academic thesis about service design in museology",
+    title: "in service of museums",
+    href: MUSEUMS.href,
+    blurb: "academic thesis",
   },
   {
-    title: "links amarelos",
+    title: "linksamarelos.com",
     href: "https://linksamarelos.com",
-    blurb: "a curated newsletter",
+    blurb: "a curated website",
   },
   {
     title: "ondas amarelas",
     href: "https://open.spotify.com/show/043Gs7eyY2KOlotEWSTSxB",
     blurb: "a curated podcast",
-  },
-  {
-    title: "hyperlinks amarelos",
-    blurb: "an essay podcast",
-  },
-  {
-    title: "crayola",
-    blurb: "a remotion tool to create yellow assets",
   },
 ];
 
@@ -182,10 +180,7 @@ export default async function Home() {
           title="In Service of Museums"
           size="wide"
           eyebrow="Graphic Design thesis · UEMG"
-          link={{
-            href: "https://servico-museu.vercel.app",
-            label: "servico-museu.vercel.app",
-          }}
+          link={MUSEUMS}
           front={
             <video
               aria-label="A screen recording of the In Service of Museums site: a long scrolling essay on service design in museums, set in wide measure on white."
@@ -218,10 +213,7 @@ export default async function Home() {
           kind="personal"
           title="Museum mark"
           eyebrow="Research icon"
-          link={{
-            href: "https://servico-museu.vercel.app",
-            label: "servico-museu.vercel.app",
-          }}
+          link={MUSEUMS}
           front={
             <video
               aria-label="The mark for In Service of Museums: a white gallery frame holding a grainy field of blue and yellow that rises and settles like a slow wave."

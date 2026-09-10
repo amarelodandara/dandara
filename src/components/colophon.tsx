@@ -22,16 +22,6 @@ export function Colophon() {
               2026 —
             </span>
           </p>
-
-          <p className={`mt-2 ${LABEL}`}>
-            Next.js+TypeScript website hosted on Vercel.
-            <br />
-            Tailwind over a hand-picked color palette.
-            <br />
-            Claude Code dutifully listening to Agentation.
-            <br />
-            ESLint over ESLint keeping the slop at bay.
-          </p>
         </div>
       </div>
     </footer>
