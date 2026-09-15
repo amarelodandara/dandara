@@ -27,6 +27,7 @@ type FlowRow = {
 type GraphFlowProps = {
   title: string;
   rows: FlowRow[];
+  direction?: "row" | "column";
   palette?: GraphPalette;
   corner?: string;
   className?: string;
@@ -34,13 +35,21 @@ type GraphFlowProps = {
 
 function nodeTone(palette: GraphPalette | undefined): Record<FlowTone, string> {
   return {
-    default: "text-foreground",
+    default: "text-(--graph-ink)",
     accent: paletteTone(palette, "primary"),
     muted: paletteTone(palette, "secondary"),
   };
 }
 
-function GraphFlow({ title, rows, palette, corner, className }: GraphFlowProps) {
+function GraphFlow({
+  title,
+  rows,
+  direction = "row",
+  palette,
+  corner,
+  className,
+}: GraphFlowProps) {
+  const column = direction === "column";
   const reduce = useReducedMotion();
   const item = fadeUp(reduce);
   const list = staggerList(reduce, 0.08);
@@ -59,7 +68,10 @@ function GraphFlow({ title, rows, palette, corner, className }: GraphFlowProps) 
           {rows.map((row, rowIndex) => (
             <motion.div
               key={rowIndex}
-              className="flex min-w-0 flex-wrap items-center gap-x-3 gap-y-2"
+              className={cn(
+                "flex min-w-0 gap-x-3 gap-y-2",
+                column ? "flex-col items-center" : "flex-wrap items-center",
+              )}
               variants={item}
             >
               {row.nodes.map((node, nodeIndex) => {
@@ -71,13 +83,20 @@ function GraphFlow({ title, rows, palette, corner, className }: GraphFlowProps) 
                     key={`${node.label}-${nodeIndex}`}
                     className={cn(
                       "flex min-w-0 items-center gap-3",
-                      node.stretch && "min-w-16 flex-1",
+                      column && "flex-col",
+                      node.stretch && (column ? "min-h-16" : "min-w-16 flex-1"),
                     )}
                   >
                     {nodeIndex > 0 ? (
-                      <GraphArrow accent={live} stretch={node.stretch} />
+                      <GraphArrow
+                        accent={live}
+                        stretch={node.stretch}
+                        column={column}
+                      />
                     ) : null}
-                    <span className={cn("shrink-0 whitespace-nowrap", tones[tone])}>
+                    <span
+                      className={cn("shrink-0 whitespace-nowrap", tones[tone])}
+                    >
                       {node.label}
                     </span>
                   </div>

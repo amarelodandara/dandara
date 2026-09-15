@@ -5,12 +5,6 @@
    the convention for any project or article that needs colours, tokens, or
    utilities the rest of the site has no business carrying. */
 
-@theme inline {
-  --color-graph-accent: var(--graph-accent);
-  --color-graph-accent-2: var(--graph-accent-2);
-  --color-graph-frame: var(--graph-frame);
-}
-
 /* Fallback for a diagram mounted with no palette wrapper around it — reuses
    the wall's own ink and rule rather than inventing a colour nobody chose. A
    palette showcase overrides all three on its own wrapper, which is what every
@@ -19,20 +13,47 @@
   --graph-accent: var(--color-foreground);
   --graph-accent-2: var(--color-foreground-soft);
   --graph-frame: var(--color-rule);
+  --graph-paper: var(--color-background);
+  --graph-ink: var(--color-foreground);
+  --graph-muted: var(--color-foreground-soft);
 }
 
 /* The dashed-ruler border every ASCII graph frame stands inside. Four repeating
    gradients rather than a real border so the dashes stay a fixed 2px mark in a
    5px gap regardless of the frame's size — a border-image would stretch. */
-@utility graph-frame {
+.graph-frame {
   background-image:
-    repeating-linear-gradient(to right, var(--graph-frame) 0 2px, transparent 2px 7px),
-    repeating-linear-gradient(to bottom, var(--graph-frame) 0 2px, transparent 2px 7px),
-    repeating-linear-gradient(to right, var(--graph-frame) 0 2px, transparent 2px 7px),
-    repeating-linear-gradient(to bottom, var(--graph-frame) 0 2px, transparent 2px 7px);
+    repeating-linear-gradient(
+      to right,
+      var(--graph-frame) 0 2px,
+      transparent 2px 7px
+    ),
+    repeating-linear-gradient(
+      to bottom,
+      var(--graph-frame) 0 2px,
+      transparent 2px 7px
+    ),
+    repeating-linear-gradient(
+      to right,
+      var(--graph-frame) 0 2px,
+      transparent 2px 7px
+    ),
+    repeating-linear-gradient(
+      to bottom,
+      var(--graph-frame) 0 2px,
+      transparent 2px 7px
+    );
   background-repeat: repeat-x, repeat-y, repeat-x, repeat-y;
-  background-position: 0 0, 100% 0, 0 100%, 0 0;
-  background-size: 100% 1px, 1px 100%, 100% 1px, 1px 100%;
+  background-position:
+    0 0,
+    100% 0,
+    0 100%,
+    0 0;
+  background-size:
+    100% 1px,
+    1px 100%,
+    100% 1px,
+    1px 100%;
 }
 
 /* highlight.js token colours, aliased to custom properties instead of fixed
@@ -77,7 +98,11 @@
   scroll-padding-left: var(--carousel-inset);
   padding-right: 7vw;
   margin-right: -7vw;
-  mask-image: linear-gradient(to right, black calc(100% - 8rem), transparent 100%);
+  mask-image: linear-gradient(
+    to right,
+    black calc(100% - 8rem),
+    transparent 100%
+  );
   -webkit-mask-image: linear-gradient(
     to right,
     black calc(100% - 8rem),

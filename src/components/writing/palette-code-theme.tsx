@@ -1,45 +1,65 @@
 import hljs from "highlight.js";
-import type { CSSProperties } from "react";
 import { MICRO } from "@/lib/type";
-import { darkest, lightest, midtones, withAlpha, type Palette } from "@/lib/writing/palettes";
-import { PaletteCopyButton } from "./palette-copy-button";
+import { codeFor } from "@/lib/writing/palette-code";
+import type { Palette } from "@/lib/writing/palettes";
 
-const SNIPPET = `type Signal = "spot" | "flash" | "shadow";
+const LINE = "1.35rem";
 
-function chase(reef: Signal[]): Signal {
-  return reef.at(-1) ?? "shadow";
-}`;
+function FileIcon() {
+  return (
+    <svg
+      width="10"
+      height="12"
+      viewBox="0 0 10 12"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="1"
+      aria-hidden="true"
+      className="shrink-0"
+    >
+      <path d="M1 1h4.5L9 4.5V11H1z" />
+      <path d="M5.5 1v3.5H9" />
+    </svg>
+  );
+}
 
 export function PaletteCodeTheme({ palette }: { palette: Palette }) {
-  const ink = darkest(palette);
-  const paper = lightest(palette);
-  const accents = midtones(palette);
-  const highlighted = hljs.highlight(SNIPPET, { language: "typescript" }).value;
-
-  const codeStyle = {
-    "--hljs-keyword": accents[0],
-    "--hljs-string": accents[1] ?? accents[0],
-    "--hljs-number": accents[2] ?? accents[0],
-    "--hljs-title": accents[1] ?? accents[0],
-    "--hljs-comment": accents.at(-1),
-  } as CSSProperties;
+  const { language, label, file, code } = codeFor(palette.slug);
+  const highlighted = hljs.highlight(code, { language }).value;
+  const lines = code.split("\n");
 
   return (
-    <div
-      className="flex size-full flex-col overflow-hidden rounded-md shadow-label"
-      style={{ background: ink, color: paper }}
-    >
+    <div className="w-full overflow-hidden rounded-(--fish-radius) border border-(--fish-rule) bg-(--fish-ink) text-(--fish-paper)">
       <div
-        className="flex shrink-0 items-center justify-between px-3 py-2"
-        style={{ borderBottom: `1px solid ${withAlpha(paper, 0.14)}` }}
+        className={`flex items-center justify-between gap-2 bg-(--fish-header-fill) px-3 py-2 text-(--fish-header-ink) ${MICRO}`}
       >
-        <span className={`${MICRO} uppercase opacity-60`}>typescript</span>
-        <PaletteCopyButton text={SNIPPET} />
+        <span className="flex min-w-0 items-center gap-1.5">
+          <FileIcon />
+          <span className="truncate">{file}</span>
+        </span>
+        <span className="shrink-0 uppercase opacity-70">{label}</span>
       </div>
 
-      <pre className="min-h-0 flex-1 overflow-auto p-4 text-xs/relaxed" style={codeStyle}>
-        <code dangerouslySetInnerHTML={{ __html: highlighted }} />
-      </pre>
+      <div className="flex">
+        <ol
+          aria-hidden="true"
+          className={`${MICRO} shrink-0 border-r border-(--fish-rule) py-3 pr-2 pl-3 text-right opacity-35 select-none`}
+          style={{ lineHeight: LINE }}
+        >
+          {lines.map((line, index) => (
+            <li key={`${index}-${line}`} className="tabular-nums">
+              {index + 1}
+            </li>
+          ))}
+        </ol>
+
+        <pre
+          className={`${MICRO} min-w-0 flex-1 overflow-x-auto py-3 pr-3 pl-2.5`}
+          style={{ lineHeight: LINE }}
+        >
+          <code dangerouslySetInnerHTML={{ __html: highlighted }} />
+        </pre>
+      </div>
     </div>
   );
 }

@@ -6,7 +6,7 @@ import { cn } from "@/lib/cn";
 
 function GraphCorners({ mark = "+" }: { mark?: string }) {
   const corner =
-    "pointer-events-none absolute z-10 flex size-4 items-center justify-center bg-background font-mono text-sm leading-none text-graph-frame select-none";
+    "pointer-events-none absolute z-10 flex size-4 items-center justify-center bg-(--graph-paper) font-mono text-sm leading-none text-(--graph-frame) select-none";
 
   return (
     <>
@@ -33,10 +33,7 @@ function GraphCorners({ mark = "+" }: { mark?: string }) {
       </span>
       <span
         aria-hidden="true"
-        className={cn(
-          corner,
-          "right-0 bottom-0 translate-1/2",
-        )}
+        className={cn(corner, "right-0 bottom-0 translate-1/2")}
       >
         {mark}
       </span>
@@ -52,22 +49,19 @@ function GraphTitle({
   return (
     <figcaption
       className={cn(
-        "absolute top-0 left-1/2 z-10 -translate-1/2 bg-background px-2.5 tracking-wide whitespace-nowrap uppercase",
+        "absolute top-0 left-1/2 z-10 -translate-1/2 bg-(--graph-paper) px-2.5 tracking-wide whitespace-nowrap uppercase",
         className,
       )}
       {...props}
     >
-      <span className="text-graph-accent">[ {children} ]</span>
+      <span className="text-(--graph-accent)">[ {children} ]</span>
     </figcaption>
   );
 }
 
 function GraphBody({ className, ...props }: React.ComponentProps<"div">) {
   return (
-    <div
-      className={cn("min-w-0 px-5 py-7 sm:p-8", className)}
-      {...props}
-    />
+    <div className={cn("min-w-0 px-5 py-7 sm:p-8", className)} {...props} />
   );
 }
 
@@ -87,7 +81,7 @@ function Graph({
     <figure
       aria-labelledby={title ? captionId : undefined}
       className={cn(
-        "relative w-full min-w-0 graph-frame font-mono text-sm text-foreground",
+        "relative w-full min-w-0 graph-frame font-mono text-sm text-(--graph-ink)",
         className,
       )}
       {...props}
