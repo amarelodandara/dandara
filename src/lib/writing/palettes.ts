@@ -37,7 +37,7 @@ export const PALETTES: Palette[] = [
       width: 2818,
       height: 2136,
       alt: "A spotted eagle ray seen from below, wings spread, gliding overhead.",
-      credit: "John Norton, CC BY 2.0, via Wikimedia Commons",
+      credit: "Photo by John Norton, CC BY 2.0, via Wikimedia Commons",
     },
   },
   {
@@ -120,7 +120,7 @@ export const PALETTES: Palette[] = [
       width: 1183,
       height: 1183,
       alt: "A moorish idol, bold black and yellow bands, trailing dorsal filament.",
-      credit: "Background removed from a photo by Diego Delso, CC BY-SA 4.0, via Wikimedia Commons",
+      credit: "Photo by Diego Delso, CC BY-SA 4.0, via Wikimedia Commons",
       zoom: 0.66,
     },
   },
