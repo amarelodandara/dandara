@@ -1,6 +1,5 @@
 "use client";
 
-import Image from "next/image";
 import { useRef, type ReactNode, type PointerEvent as ReactPointerEvent } from "react";
 import { CAPTION } from "./figure";
 import { ANNOTATION } from "@/lib/type";
@@ -33,12 +32,11 @@ function FishPhoto({ photo }: { photo: PalettePhoto }) {
 
   return (
     <div className="relative size-64 overflow-hidden rounded-sm sm:size-72">
-      <Image
+      <img
         src={photo.src}
         alt={photo.alt}
         width={photo.width}
         height={photo.height}
-        sizes="320px"
         style={{
           position: "absolute",
           left: "50%",
