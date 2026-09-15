@@ -29,6 +29,13 @@ const inter = localFont({
   display: "swap",
 });
 
+const firaCode = localFont({
+  src: [{ path: "../../fonts/FiraCode-VF.woff2", style: "normal" }],
+  weight: "300 700",
+  variable: "--font-fira-code",
+  display: "swap",
+});
+
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
   title: { default: TITLE, template: `%s — ${NAME}` },
@@ -60,7 +67,10 @@ export const metadata: Metadata = {
 
 export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
-    <html lang="en" className={`${inter.variable} h-full antialiased`}>
+    <html
+      lang="en"
+      className={`${inter.variable} ${firaCode.variable} h-full antialiased`}
+    >
       <body className="min-h-full">
         <a href="#content" className={SKIP}>
           Skip to content

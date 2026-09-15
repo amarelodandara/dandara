@@ -13,6 +13,13 @@ const inter = localFont({
   display: "swap",
 });
 
+const firaCode = localFont({
+  src: [{ path: "../fonts/FiraCode-VF.woff2", style: "normal" }],
+  weight: "300 700",
+  variable: "--font-fira-code",
+  display: "swap",
+});
+
 export const metadata: Metadata = {
   title: "Not found",
   description: "This address does not match a page on this site.",
@@ -32,7 +39,10 @@ const ELSEWHERE = [
 
 export default function GlobalNotFound() {
   return (
-    <html lang="en" className={`${inter.variable} h-full antialiased`}>
+    <html
+      lang="en"
+      className={`${inter.variable} ${firaCode.variable} h-full antialiased`}
+    >
       <body className="min-h-full bg-background">
         <main className="mx-auto w-full max-w-[1400px] px-[7vw] pt-[9vh] pb-[14vh] sm:pt-[12vh]">
           <div className="mx-auto w-full max-w-2xl">
