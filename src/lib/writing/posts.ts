@@ -4,6 +4,7 @@ import type { ArticleNote } from "@/lib/article-notes";
 export type PostMeta = {
   title: string;
   deck: string;
+  deckFull?: boolean;
   blurb: string;
   date: string;
 };

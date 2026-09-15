@@ -88,6 +88,10 @@ const eslintConfig = defineConfig([
     rules: { "better-tailwindcss/no-unknown-classes": "off" },
   },
   {
+    files: ["src/components/graphs/**"],
+    rules: { "better-tailwindcss/no-unknown-classes": "off" },
+  },
+  {
     files: ["src/components/sheet-frame.tsx"],
     rules: { "react/forbid-dom-props": "off" },
   },

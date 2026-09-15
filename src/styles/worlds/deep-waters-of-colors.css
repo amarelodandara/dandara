@@ -66,3 +66,24 @@
 .hljs-name {
   color: var(--hljs-title);
 }
+
+/* The showcase carousel's own bleed: its left edge lines up with the article's
+   text column — the same `(100% - min(100%, 42rem)) / 2` split the wide/text
+   grid already does — while the right side is left free to run past it into
+   the wide gutter and fade there, rather than stopping square at the margin. */
+[data-palette-carousel] {
+  padding-left: max(0px, calc((100% - min(100%, 42rem)) / 2));
+  padding-right: 7vw;
+  margin-right: -7vw;
+  mask-image: linear-gradient(to right, black calc(100% - 8rem), transparent 100%);
+  -webkit-mask-image: linear-gradient(
+    to right,
+    black calc(100% - 8rem),
+    transparent 100%
+  );
+  scrollbar-width: none;
+}
+
+[data-palette-carousel]::-webkit-scrollbar {
+  display: none;
+}

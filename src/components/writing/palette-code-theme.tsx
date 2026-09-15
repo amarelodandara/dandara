@@ -1,6 +1,8 @@
 import hljs from "highlight.js";
 import type { CSSProperties } from "react";
-import type { Palette } from "@/lib/writing/palettes";
+import { MICRO } from "@/lib/type";
+import { withAlpha, type Palette } from "@/lib/writing/palettes";
+import { PaletteCopyButton } from "./palette-copy-button";
 
 const SNIPPET = `type Signal = "spot" | "flash" | "shadow";
 
@@ -12,9 +14,7 @@ export function PaletteCodeTheme({ palette }: { palette: Palette }) {
   const { ink, paper, accents } = palette;
   const highlighted = hljs.highlight(SNIPPET, { language: "typescript" }).value;
 
-  const style = {
-    background: ink,
-    color: paper,
+  const codeStyle = {
     "--hljs-keyword": accents[0],
     "--hljs-string": accents[1] ?? accents[0],
     "--hljs-number": accents[2] ?? accents[0],
@@ -23,8 +23,21 @@ export function PaletteCodeTheme({ palette }: { palette: Palette }) {
   } as CSSProperties;
 
   return (
-    <pre className="overflow-x-auto rounded-md p-4 text-xs/normal" style={style}>
-      <code dangerouslySetInnerHTML={{ __html: highlighted }} />
-    </pre>
+    <div
+      className="flex size-full flex-col overflow-hidden rounded-md shadow-label"
+      style={{ background: ink, color: paper }}
+    >
+      <div
+        className="flex shrink-0 items-center justify-between px-3 py-2"
+        style={{ borderBottom: `1px solid ${withAlpha(paper, 0.14)}` }}
+      >
+        <span className={`${MICRO} uppercase opacity-60`}>typescript</span>
+        <PaletteCopyButton text={SNIPPET} />
+      </div>
+
+      <pre className="min-h-0 flex-1 overflow-auto p-4 text-xs/relaxed" style={codeStyle}>
+        <code dangerouslySetInnerHTML={{ __html: highlighted }} />
+      </pre>
+    </div>
   );
 }

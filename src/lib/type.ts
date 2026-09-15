@@ -13,6 +13,11 @@ export const ACCENT_PROSE = [
   "leading-snug text-balance text-foreground-soft",
 ].join(" ");
 
+export const ACCENT_PROSE_FULL = [
+  "text-[clamp(1.05rem,1.4vw,1.25rem)]",
+  "leading-snug text-foreground-soft",
+].join(" ");
+
 export const PROSE = "text-[clamp(0.95rem,1.15vw,1.0625rem)] leading-normal";
 
 export const TITLE = "text-[0.9rem] leading-tight font-semibold";

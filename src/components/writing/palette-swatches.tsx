@@ -1,26 +1,30 @@
-import { ANNOTATION } from "@/lib/type";
+import { MICRO } from "@/lib/type";
 import type { Palette } from "@/lib/writing/palettes";
 
-function chip(color: string, label: string) {
+function numbers(oklch: string) {
+  return oklch.replace("oklch(", "").replace(")", "");
+}
+
+function Band({ color }: { color: string }) {
   return (
-    <div key={label + color} className="flex-1">
-      <div
-        className="aspect-square w-full rounded-sm"
-        style={{ background: color }}
-      />
-      <p className={`mt-1.5 ${ANNOTATION} leading-none text-foreground-soft`}>
-        {label}
-      </p>
+    <div className="relative min-h-0 flex-1" style={{ background: color }}>
+      <span
+        className={`absolute bottom-1.5 left-1/2 -translate-x-1/2 rounded-full bg-background px-2 py-0.5 shadow-chip ${MICRO} whitespace-nowrap text-foreground`}
+      >
+        {numbers(color)}
+      </span>
     </div>
   );
 }
 
 export function PaletteSwatches({ palette }: { palette: Palette }) {
-  const chips = [
-    chip(palette.ink, "ink"),
-    ...palette.accents.map((accent, i) => chip(accent, `accent ${i + 1}`)),
-    chip(palette.paper, "paper"),
-  ];
+  const bands = [palette.ink, ...palette.accents, palette.paper];
 
-  return <div className="flex gap-2">{chips}</div>;
+  return (
+    <div className="flex size-full flex-col overflow-hidden rounded-md">
+      {bands.map((color, i) => (
+        <Band key={color + i} color={color} />
+      ))}
+    </div>
+  );
 }

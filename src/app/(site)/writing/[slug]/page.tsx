@@ -4,7 +4,12 @@ import { ArticleNotes } from "@/components/writing/article-notes";
 import { PostFooter } from "@/components/writing/post-footer";
 import { WritingNav } from "@/components/writing/writing-nav";
 import { formatPostMonth, loadPost, SLUGS } from "@/lib/writing/posts";
-import { ACCENT_PROSE, ANNOTATION, PAGE_HEADING } from "@/lib/type";
+import {
+  ACCENT_PROSE,
+  ACCENT_PROSE_FULL,
+  ANNOTATION,
+  PAGE_HEADING,
+} from "@/lib/type";
 
 export const dynamicParams = false;
 
@@ -70,7 +75,11 @@ export default async function ArticlePage({
               <time dateTime={meta.date}>{formatPostMonth(meta.date)}</time>
             </p>
             <h1 className={`mt-3 ${PAGE_HEADING}`}>{meta.title}</h1>
-            <p className={`mt-4 ${ACCENT_PROSE}`}>{meta.deck}</p>
+            <p
+              className={`mt-4 ${meta.deckFull ? ACCENT_PROSE_FULL : ACCENT_PROSE}`}
+            >
+              {meta.deck}
+            </p>
           </header>
 
           <Article />

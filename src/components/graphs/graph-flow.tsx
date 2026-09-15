@@ -59,7 +59,7 @@ function GraphFlow({ title, rows, palette, corner, className }: GraphFlowProps) 
           {rows.map((row, rowIndex) => (
             <motion.div
               key={rowIndex}
-              className="flex min-w-0 flex-wrap items-center gap-x-3 gap-y-2 sm:flex-nowrap"
+              className="flex min-w-0 flex-wrap items-center gap-x-3 gap-y-2"
               variants={item}
             >
               {row.nodes.map((node, nodeIndex) => {

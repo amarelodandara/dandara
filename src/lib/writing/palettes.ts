@@ -104,6 +104,10 @@ export const PALETTES: Palette[] = [
   },
 ];
 
+export function withAlpha(oklch: string, alpha: number): string {
+  return oklch.replace(")", ` / ${alpha})`);
+}
+
 export function findPalette(slug: string): Palette {
   const palette = PALETTES.find((one) => one.slug === slug);
   if (!palette) throw new Error(`Unknown palette: ${slug}`);
