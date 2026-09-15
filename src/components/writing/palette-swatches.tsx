@@ -2,7 +2,7 @@
 
 import { useState, type CSSProperties } from "react";
 import { ANNOTATION, MICRO } from "@/lib/type";
-import type { Palette } from "@/lib/writing/palettes";
+import { darkest, lightest, type Palette } from "@/lib/writing/palettes";
 
 const GHOST =
   "transition-colors duration-(--motion-quick) can-hover:hover:text-sun-ink";
@@ -52,7 +52,9 @@ function Band({
 }
 
 export function PaletteSwatches({ palette }: { palette: Palette }) {
-  const bands = [palette.ink, ...palette.accents, palette.paper];
+  const bands = palette.colors;
+  const ink = darkest(palette);
+  const paper = lightest(palette);
   const [copiedAll, setCopiedAll] = useState(false);
 
   async function copyAll() {
@@ -65,7 +67,7 @@ export function PaletteSwatches({ palette }: { palette: Palette }) {
     <>
       <div className="flex size-72 flex-col overflow-hidden rounded-md sm:size-80">
         {bands.map((color, i) => (
-          <Band key={color + i} color={color} ink={palette.ink} paper={palette.paper} />
+          <Band key={color + i} color={color} ink={ink} paper={paper} />
         ))}
       </div>
       <button

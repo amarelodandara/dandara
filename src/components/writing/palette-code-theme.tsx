@@ -1,7 +1,7 @@
 import hljs from "highlight.js";
 import type { CSSProperties } from "react";
 import { MICRO } from "@/lib/type";
-import { withAlpha, type Palette } from "@/lib/writing/palettes";
+import { darkest, lightest, midtones, withAlpha, type Palette } from "@/lib/writing/palettes";
 import { PaletteCopyButton } from "./palette-copy-button";
 
 const SNIPPET = `type Signal = "spot" | "flash" | "shadow";
@@ -11,7 +11,9 @@ function chase(reef: Signal[]): Signal {
 }`;
 
 export function PaletteCodeTheme({ palette }: { palette: Palette }) {
-  const { ink, paper, accents } = palette;
+  const ink = darkest(palette);
+  const paper = lightest(palette);
+  const accents = midtones(palette);
   const highlighted = hljs.highlight(SNIPPET, { language: "typescript" }).value;
 
   const codeStyle = {

@@ -10,9 +10,7 @@ export type Palette = {
   scientific: string;
   common: string;
   ptName: string;
-  ink: string;
-  paper: string;
-  accents: string[];
+  colors: string[];
   photo?: PalettePhoto;
 };
 
@@ -23,9 +21,11 @@ export const PALETTES: Palette[] = [
     scientific: "Batoideias",
     common: "ray",
     ptName: "Raia",
-    ink: "oklch(0.255 0.015 76.2)",
-    paper: "oklch(0.973 0.004 91.4)",
-    accents: ["oklch(0.55 0.035 75)"],
+    colors: [
+      "oklch(0.255 0.015 76.2)",
+      "oklch(0.55 0.035 75)",
+      "oklch(0.973 0.004 91.4)",
+    ],
     photo: {
       src: "/writing/deep-waters-of-colors/idea-ray.png",
       alt: "A spotted eagle ray seen from below, wings spread, gliding overhead.",
@@ -38,25 +38,11 @@ export const PALETTES: Palette[] = [
     scientific: "Paracanthurus hepatus",
     common: "Blue Surgeonfish",
     ptName: "Cirurgião Patela",
-    ink: "oklch(0.2 0.01 260)",
-    paper: "oklch(0.96 0.012 255)",
-    accents: [
-      "oklch(0.55 0.18 255)",
-      "oklch(0.87 0.17 95)",
-      "oklch(0.32 0.06 255)",
-    ],
-  },
-  {
-    slug: "carcharias",
-    name: "Carcharias",
-    scientific: "Carcharodon carcharias",
-    common: "White Shark",
-    ptName: "Tubarão Branco",
-    ink: "oklch(0.22 0.004 250)",
-    paper: "oklch(0.95 0.004 220)",
-    accents: [
-      "oklch(0.48 0.012 240)",
-      "oklch(0.72 0.008 230)",
+    colors: [
+      "oklch(0.190 0.111 284.8)",
+      "oklch(0.454 0.255 285.4)",
+      "oklch(0.955 0.216 114.6)",
+      "oklch(0.605 0.217 257.2)",
     ],
   },
   {
@@ -65,11 +51,11 @@ export const PALETTES: Palette[] = [
     scientific: "Caranx",
     common: "Jack",
     ptName: "Xaréu",
-    ink: "oklch(0.28 0.01 90)",
-    paper: "oklch(0.9 0.03 95)",
-    accents: [
+    colors: [
+      "oklch(0.28 0.01 90)",
       "oklch(0.82 0.01 240)",
       "oklch(0.62 0.015 235)",
+      "oklch(0.9 0.03 95)",
     ],
   },
   {
@@ -78,11 +64,11 @@ export const PALETTES: Palette[] = [
     scientific: "Drymonema larsoni",
     common: "Pink Meanie",
     ptName: "Água Viva",
-    ink: "oklch(0.22 0.05 345)",
-    paper: "oklch(0.95 0.01 340)",
-    accents: [
+    colors: [
+      "oklch(0.22 0.05 345)",
       "oklch(0.62 0.22 345)",
       "oklch(0.4 0.14 345)",
+      "oklch(0.95 0.01 340)",
     ],
   },
   {
@@ -91,11 +77,11 @@ export const PALETTES: Palette[] = [
     scientific: "Zanclus cornutus",
     common: "Moorish Idol",
     ptName: "Ídolo Mourisco",
-    ink: "oklch(0.18 0.005 90)",
-    paper: "oklch(0.97 0.003 90)",
-    accents: [
+    colors: [
+      "oklch(0.18 0.005 90)",
       "oklch(0.85 0.16 95)",
       "oklch(0.55 0.02 60)",
+      "oklch(0.97 0.003 90)",
     ],
   },
   {
@@ -104,17 +90,43 @@ export const PALETTES: Palette[] = [
     scientific: "Pterois volitans",
     common: "Lion Fish",
     ptName: "Peixe-Leão",
-    ink: "oklch(0.3 0.09 35)",
-    paper: "oklch(0.95 0.02 70)",
-    accents: [
+    colors: [
+      "oklch(0.3 0.09 35)",
       "oklch(0.55 0.16 30)",
       "oklch(0.5 0.11 40)",
+      "oklch(0.95 0.02 70)",
     ],
   },
 ];
 
 export function withAlpha(oklch: string, alpha: number): string {
   return oklch.replace(")", ` / ${alpha})`);
+}
+
+export function lightnessOf(oklch: string): number {
+  return Number.parseFloat(oklch.replace("oklch(", ""));
+}
+
+function extreme(palette: Palette, pick: (a: number, b: number) => boolean): string {
+  let best = palette.colors[0];
+  for (const color of palette.colors) {
+    if (pick(lightnessOf(color), lightnessOf(best))) best = color;
+  }
+  return best;
+}
+
+export function darkest(palette: Palette): string {
+  return extreme(palette, (a, b) => a < b);
+}
+
+export function lightest(palette: Palette): string {
+  return extreme(palette, (a, b) => a > b);
+}
+
+export function midtones(palette: Palette): string[] {
+  const dark = darkest(palette);
+  const light = lightest(palette);
+  return palette.colors.filter((c) => c !== dark && c !== light);
 }
 
 export function findPalette(slug: string): Palette {

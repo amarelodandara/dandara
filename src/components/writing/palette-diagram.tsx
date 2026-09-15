@@ -1,12 +1,13 @@
 import type { CSSProperties } from "react";
 import { GraphFlow } from "@/components/graphs/graph-flow";
-import type { Palette } from "@/lib/writing/palettes";
+import { darkest, midtones, type Palette } from "@/lib/writing/palettes";
 
 export function PaletteDiagram({ palette }: { palette: Palette }) {
+  const accents = midtones(palette);
   const style = {
-    "--graph-accent": palette.accents[0],
-    "--graph-accent-2": palette.accents[1] ?? palette.accents[0],
-    "--graph-frame": palette.ink,
+    "--graph-accent": accents[0] ?? darkest(palette),
+    "--graph-accent-2": accents[1] ?? accents[0] ?? darkest(palette),
+    "--graph-frame": darkest(palette),
   } as CSSProperties;
 
   return (

@@ -4,12 +4,15 @@ import { Avatar } from "@base-ui/react/avatar";
 import { Switch } from "@base-ui/react/switch";
 import { useState } from "react";
 import { ANNOTATION, TITLE } from "@/lib/type";
-import type { Palette } from "@/lib/writing/palettes";
+import { darkest, lightest, midtones, type Palette } from "@/lib/writing/palettes";
 
 export function PaletteUiWidget({ palette }: { palette: Palette }) {
   const [on, setOn] = useState(true);
-  const { ink, paper, common, ptName, accents } = palette;
-  const track = on ? accents[0] : "transparent";
+  const { common, ptName } = palette;
+  const ink = darkest(palette);
+  const paper = lightest(palette);
+  const accents = midtones(palette);
+  const track = on ? (accents[0] ?? ink) : "transparent";
 
   return (
     <div
