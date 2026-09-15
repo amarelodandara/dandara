@@ -56,6 +56,7 @@ export const PALETTES: Palette[] = [
       "oklch(0.82 0.01 240)",
       "oklch(0.62 0.015 235)",
       "oklch(0.9 0.03 95)",
+      "oklch(0.906 0.143 94.0)",
     ],
   },
   {
