@@ -25,7 +25,7 @@ export const PALETTES: Palette[] = [
     slug: "idea",
     name: "Idea",
     scientific: "Batoideias",
-    common: "ray",
+    common: "Ray",
     ptName: "Raia",
     colors: [
       "oklch(0.255 0.015 76.2)",
@@ -85,25 +85,6 @@ export const PALETTES: Palette[] = [
     },
   },
   {
-    slug: "pink-moon",
-    name: "Pink Moon",
-    scientific: "Drymonema larsoni",
-    common: "Pink Meanie",
-    ptName: "Água Viva",
-    colors: [
-      "oklch(0.912 0.066 69.8)",
-      "oklch(0.815 0.137 67.3)",
-      "oklch(0.949 0.024 259.8)",
-    ],
-    photo: {
-      src: "/writing/deep-waters-of-colors/pink-moon.png",
-      width: 525,
-      height: 700,
-      alt: "A pink meanie jellyfish, pale peach oral arms trailing below a translucent bell.",
-      credit: "Photo by Liza Gomez Daglio, CC BY-SA 4.0, via Wikimedia Commons",
-    },
-  },
-  {
     slug: "idol",
     name: "Idol",
     scientific: "Zanclus cornutus",
@@ -148,6 +129,27 @@ export const PALETTES: Palette[] = [
       zoom: 0.76,
     },
   },
+  {
+    slug: "pink-moon",
+    name: "Pink Moon",
+    scientific: "Drymonema larsoni",
+    common: "Pink Meanie",
+    ptName: "Água Viva",
+    colors: [
+      "oklch(0.912 0.066 69.8)",
+      "oklch(0.815 0.137 67.3)",
+      "oklch(0.949 0.024 259.8)",
+    ],
+    photo: {
+      src: "/writing/deep-waters-of-colors/pink-moon.png",
+      width: 525,
+      height: 700,
+      alt: "A pink meanie jellyfish adrift in blue water, pale peach oral arms trailing below a translucent bell.",
+      credit: "Photo by Liza Gomez Daglio, CC BY-SA 4.0, via Wikimedia Commons",
+      y: -18,
+      zoom: 1.15,
+    },
+  },
 ];
 
 export function withAlpha(oklch: string, alpha: number): string {
@@ -158,7 +160,10 @@ export function lightnessOf(oklch: string): number {
   return Number.parseFloat(oklch.replace("oklch(", ""));
 }
 
-function extreme(palette: Palette, pick: (a: number, b: number) => boolean): string {
+function extreme(
+  palette: Palette,
+  pick: (a: number, b: number) => boolean,
+): string {
   let best = palette.colors[0];
   for (const color of palette.colors) {
     if (pick(lightnessOf(color), lightnessOf(best))) best = color;
