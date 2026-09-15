@@ -5,14 +5,8 @@ import {
   useRequestedNote,
   type ArticleNote,
 } from "@/lib/article-notes";
-import {
-  Announcement,
-  COPIED_ANNOUNCEMENT,
-  ROW,
-  SEAT,
-  useCopy,
-  Verb,
-} from "./gift-shop-row";
+import { Announcement, COPIED_ANNOUNCEMENT, useCopy, Verb } from "./copy";
+import { ROW, SEAT } from "@/lib/pressable";
 import { ANNOTATION, TITLE } from "@/lib/type";
 
 const NUMBER = `w-3.5 shrink-0 ${ANNOTATION} leading-tight tabular-nums text-foreground-hard`;
@@ -42,7 +36,7 @@ const sourceOf = (href: string) => {
 const seatFor = (current: boolean, pressable: boolean) =>
   [
     pressable ? ROW : SEAT,
-    "items-baseline gap-2.5",
+    "w-full items-baseline gap-2.5",
     current ? "bg-lit" : "",
   ]
     .join(" ")
