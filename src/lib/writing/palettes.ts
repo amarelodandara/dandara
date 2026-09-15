@@ -66,10 +66,9 @@ export const PALETTES: Palette[] = [
     common: "Pink Meanie",
     ptName: "Água Viva",
     colors: [
-      "oklch(0.22 0.05 345)",
-      "oklch(0.62 0.22 345)",
-      "oklch(0.4 0.14 345)",
-      "oklch(0.95 0.01 340)",
+      "oklch(0.912 0.066 69.8)",
+      "oklch(0.815 0.137 67.3)",
+      "oklch(0.949 0.024 259.8)",
     ],
   },
   {
