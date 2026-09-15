@@ -6,6 +6,7 @@ import { PROSE, SECTION_HEADING, STRONG } from "@/lib/type";
 import { Clip } from "@/components/writing/clip";
 import { Figure } from "@/components/writing/figure";
 import { Note } from "@/components/writing/note-ref";
+import { PaletteShowcase } from "@/components/writing/palette-showcase";
 
 const textOf = (node: ReactNode): string => {
   if (typeof node === "string" || typeof node === "number") return String(node);
@@ -84,6 +85,7 @@ const components: MDXComponents = {
   Figure,
   Clip,
   Note,
+  Palette: PaletteShowcase,
 };
 
 export function useMDXComponents(): MDXComponents {

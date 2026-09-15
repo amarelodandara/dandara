@@ -92,6 +92,13 @@ const eslintConfig = defineConfig([
     rules: { "react/forbid-dom-props": "off" },
   },
   {
+    files: ["src/components/writing/palette-*.tsx"],
+    rules: {
+      "react/forbid-dom-props": "off",
+      "react/forbid-component-props": "off",
+    },
+  },
+  {
     files: ["src/lib/cv/load.ts"],
     rules: { "security/detect-non-literal-fs-filename": "off" },
   },

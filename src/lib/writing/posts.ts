@@ -17,6 +17,8 @@ export type Post = {
 const POSTS: Record<string, () => Promise<unknown>> = {
   "museums-and-websites": () =>
     import("@/content/writing/museums-and-websites.mdx"),
+  "deep-waters-of-colors": () =>
+    import("@/content/writing/deep-waters-of-colors.mdx"),
 };
 
 export const SLUGS = Object.keys(POSTS);
