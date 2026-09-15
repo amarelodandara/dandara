@@ -1,3 +1,9 @@
+export type PalettePhoto = {
+  src: string;
+  alt: string;
+  credit: string;
+};
+
 export type Palette = {
   slug: string;
   name: string;
@@ -7,6 +13,7 @@ export type Palette = {
   ink: string;
   paper: string;
   accents: string[];
+  photo?: PalettePhoto;
 };
 
 export const PALETTES: Palette[] = [
@@ -22,6 +29,11 @@ export const PALETTES: Palette[] = [
       "oklch(0.6 0.09 240)",
       "oklch(0.55 0.035 75)",
     ],
+    photo: {
+      src: "/writing/deep-waters-of-colors/idea-ray.png",
+      alt: "A spotted eagle ray seen from below, wings spread, gliding overhead.",
+      credit: "John Norton, CC BY 2.0, via Wikimedia Commons",
+    },
   },
   {
     slug: "patela",

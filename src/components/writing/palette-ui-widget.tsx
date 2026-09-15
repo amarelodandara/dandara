@@ -13,7 +13,7 @@ export function PaletteUiWidget({ palette }: { palette: Palette }) {
 
   return (
     <div
-      className="flex items-center gap-3 rounded-md p-4"
+      className="flex w-full items-center gap-3 rounded-md p-4"
       style={{ background: paper, color: ink }}
     >
       <Avatar.Root className="size-11 shrink-0 overflow-hidden rounded-full">
