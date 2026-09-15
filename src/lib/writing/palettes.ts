@@ -91,10 +91,11 @@ export const PALETTES: Palette[] = [
     common: "Lion Fish",
     ptName: "Peixe-Leão",
     colors: [
-      "oklch(0.3 0.09 35)",
-      "oklch(0.55 0.16 30)",
-      "oklch(0.5 0.11 40)",
-      "oklch(0.95 0.02 70)",
+      "oklch(0.260 0.000 89.9)",
+      "oklch(0.807 0.009 67.7)",
+      "oklch(0.446 0.126 45.5)",
+      "oklch(0.858 0.094 74.9)",
+      "oklch(0.729 0.146 168.1)",
     ],
   },
 ];
