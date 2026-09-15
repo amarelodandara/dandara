@@ -7,6 +7,7 @@ export type PalettePhoto = {
   x?: number;
   y?: number;
   zoom?: number;
+  flip?: boolean;
 };
 
 export type Palette = {
@@ -57,6 +58,7 @@ export const PALETTES: Palette[] = [
       height: 2592,
       alt: "A blue tang, dark blue body with a black palette-shaped patch and a yellow tail.",
       credit: "Photo by DerHans04, CC BY-SA 3.0, via Wikimedia Commons",
+      zoom: 0.52,
     },
   },
   {
@@ -78,6 +80,8 @@ export const PALETTES: Palette[] = [
       height: 1123,
       alt: "A vintage hand-colored engraving of a Caranx jack, grey-blue back and pale gold belly.",
       credit: "From a public domain plate, via Wikimedia Commons",
+      zoom: 0.44,
+      flip: true,
     },
   },
   {
@@ -117,6 +121,7 @@ export const PALETTES: Palette[] = [
       height: 1183,
       alt: "A moorish idol, bold black and yellow bands, trailing dorsal filament.",
       credit: "Background removed from a photo by Diego Delso, CC BY-SA 4.0, via Wikimedia Commons",
+      zoom: 0.66,
     },
   },
   {
@@ -138,6 +143,9 @@ export const PALETTES: Palette[] = [
       height: 1226,
       alt: "A red lionfish, striped fan-like fins spread wide, venomous spines fanned above.",
       credit: "Photo by Michael Gäbler, CC BY 3.0, via Wikimedia Commons",
+      x: -24,
+      y: -5,
+      zoom: 0.76,
     },
   },
 ];

@@ -31,6 +31,7 @@ function Recessed({ children }: { children: ReactNode }) {
 function FishPhoto({ photo }: { photo: PalettePhoto }) {
   const baseScale = PHOTO_FRAME / Math.min(photo.width, photo.height);
   const scale = baseScale * (photo.zoom ?? 1);
+  const scaleX = photo.flip ? -scale : scale;
 
   return (
     <div className="relative size-full overflow-hidden rounded-sm">
@@ -47,7 +48,7 @@ function FishPhoto({ photo }: { photo: PalettePhoto }) {
           width: photo.width,
           height: photo.height,
           maxWidth: "none",
-          transform: `translate(calc(-50% + ${photo.x ?? 0}px), calc(-50% + ${photo.y ?? 0}px)) scale(${scale})`,
+          transform: `translate(calc(-50% + ${photo.x ?? 0}px), calc(-50% + ${photo.y ?? 0}px)) scale(${scaleX}, ${scale})`,
         }}
       />
     </div>
