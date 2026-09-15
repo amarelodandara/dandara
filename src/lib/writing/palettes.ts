@@ -23,12 +23,9 @@ export const PALETTES: Palette[] = [
     scientific: "Batoideias",
     common: "ray",
     ptName: "Raia",
-    ink: "oklch(0.25 0.012 75)",
-    paper: "oklch(0.93 0.02 90)",
-    accents: [
-      "oklch(0.6 0.09 240)",
-      "oklch(0.55 0.035 75)",
-    ],
+    ink: "oklch(0.255 0.015 76.2)",
+    paper: "oklch(0.973 0.004 91.4)",
+    accents: ["oklch(0.6 0.09 240)"],
     photo: {
       src: "/writing/deep-waters-of-colors/idea-ray.png",
       alt: "A spotted eagle ray seen from below, wings spread, gliding overhead.",
