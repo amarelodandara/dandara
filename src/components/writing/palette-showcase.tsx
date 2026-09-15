@@ -10,9 +10,7 @@ import { PaletteDiagram } from "./palette-diagram";
 import { PaletteSwatches } from "./palette-swatches";
 import { PaletteUiWidget } from "./palette-ui-widget";
 
-const FRAME = 320;
-const PHOTO_PADDING = 16;
-const PHOTO_FRAME = FRAME - PHOTO_PADDING * 2;
+const PHOTO_FRAME = 288;
 const SQUARE = "size-72 sm:size-80";
 const CARD = `${SQUARE} shrink-0 snap-start overflow-hidden`;
 const WRAP = "w-72 sm:w-80 shrink-0 snap-start";
@@ -34,7 +32,7 @@ function FishPhoto({ photo }: { photo: PalettePhoto }) {
   const scaleX = photo.flip ? -scale : scale;
 
   return (
-    <div className="relative size-full overflow-hidden rounded-sm">
+    <div className="relative size-64 overflow-hidden rounded-sm sm:size-72">
       <Image
         src={photo.src}
         alt={photo.alt}
