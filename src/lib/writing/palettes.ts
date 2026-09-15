@@ -78,10 +78,10 @@ export const PALETTES: Palette[] = [
     common: "Moorish Idol",
     ptName: "Ídolo Mourisco",
     colors: [
-      "oklch(0.18 0.005 90)",
-      "oklch(0.85 0.16 95)",
-      "oklch(0.55 0.02 60)",
-      "oklch(0.97 0.003 90)",
+      "oklch(0.261 0.004 84.6)",
+      "oklch(0.979 0.096 111.2)",
+      "oklch(0.925 0.194 102.9)",
+      "oklch(0.991 0.000 89.9)",
     ],
   },
   {
