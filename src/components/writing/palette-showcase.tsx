@@ -2,14 +2,17 @@
 
 import Image from "next/image";
 import { useRef, type ReactNode, type PointerEvent as ReactPointerEvent } from "react";
-import { ANNOTATION, MICRO } from "@/lib/type";
+import { CAPTION } from "./figure";
+import { ANNOTATION } from "@/lib/type";
 import { findPalette, type Palette } from "@/lib/writing/palettes";
 import { PaletteCodeTheme } from "./palette-code-theme";
 import { PaletteDiagram } from "./palette-diagram";
 import { PaletteSwatches } from "./palette-swatches";
 import { PaletteUiWidget } from "./palette-ui-widget";
 
-const CARD = "size-72 shrink-0 snap-start overflow-hidden sm:size-80";
+const SQUARE = "size-72 sm:size-80";
+const CARD = `${SQUARE} shrink-0 snap-start overflow-hidden`;
+const WRAP = "w-72 sm:w-80 shrink-0 snap-start";
 
 function Recessed({ children }: { children: ReactNode }) {
   return (
@@ -23,35 +26,31 @@ function Recessed({ children }: { children: ReactNode }) {
 }
 
 function FishCard({ palette }: { palette: Palette }) {
-  if (!palette.photo) {
-    return (
-      <Recessed>
-        <p
-          className={`${ANNOTATION} text-center leading-normal text-foreground-soft italic`}
-        >
-          {palette.scientific}
-        </p>
-      </Recessed>
-    );
-  }
-
   return (
-    <Recessed>
-      <div className="relative size-full self-stretch">
-        <Image
-          src={palette.photo.src}
-          alt={palette.photo.alt}
-          fill
-          sizes="320px"
-          className="object-contain"
-        />
-        <span
-          className={`absolute bottom-1 left-1 rounded-md bg-background px-1.5 py-0.5 shadow-chip ${MICRO} leading-normal text-foreground-soft`}
-        >
-          {palette.photo.credit}
-        </span>
+    <div className={WRAP}>
+      <div className={`${SQUARE} overflow-hidden`}>
+        <Recessed>
+          {palette.photo ? (
+            <div className="relative size-full">
+              <Image
+                src={palette.photo.src}
+                alt={palette.photo.alt}
+                fill
+                sizes="320px"
+                className="object-contain"
+              />
+            </div>
+          ) : (
+            <p
+              className={`${ANNOTATION} text-center leading-normal text-foreground-soft italic`}
+            >
+              {palette.scientific}
+            </p>
+          )}
+        </Recessed>
       </div>
-    </Recessed>
+      {palette.photo ? <p className={CAPTION}>{palette.photo.credit}</p> : null}
+    </div>
   );
 }
 
@@ -84,17 +83,15 @@ export function PaletteShowcase({ slug }: { slug: string }) {
       <div
         ref={scroller}
         data-palette-carousel
-        className="flex cursor-grab touch-pan-y snap-x snap-proximity gap-4 overflow-x-auto pb-2 select-none active:cursor-grabbing"
+        className="flex cursor-grab touch-pan-y snap-x snap-proximity items-start gap-4 overflow-x-auto pb-2 select-none active:cursor-grabbing"
         onPointerDown={onPointerDown}
         onPointerMove={onPointerMove}
         onPointerUp={onPointerUp}
         onPointerLeave={onPointerUp}
       >
-        <div className={CARD}>
-          <FishCard palette={palette} />
-        </div>
+        <FishCard palette={palette} />
 
-        <div className={CARD}>
+        <div className={WRAP}>
           <PaletteSwatches palette={palette} />
         </div>
 

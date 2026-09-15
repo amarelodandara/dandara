@@ -1,33 +1,49 @@
 "use client";
 
-import { useState } from "react";
-import { MICRO } from "@/lib/type";
+import { useState, type CSSProperties } from "react";
+import { ANNOTATION, MICRO } from "@/lib/type";
 import type { Palette } from "@/lib/writing/palettes";
 
-function numbers(oklch: string) {
-  return oklch.replace("oklch(", "").replace(")", "");
+const GHOST =
+  "transition-colors duration-(--motion-quick) can-hover:hover:text-sun-ink";
+
+function lightness(oklch: string) {
+  return Number.parseFloat(oklch.replace("oklch(", ""));
 }
 
-function Band({ color }: { color: string }) {
+function legibleOn(color: string, ink: string, paper: string) {
+  return lightness(color) > 0.5 ? ink : paper;
+}
+
+async function copyText(text: string) {
+  await navigator.clipboard.writeText(text);
+}
+
+function Band({
+  color,
+  ink,
+  paper,
+}: {
+  color: string;
+  ink: string;
+  paper: string;
+}) {
   const [copied, setCopied] = useState(false);
+  const fg = legibleOn(color, ink, paper);
 
   async function copy() {
-    await navigator.clipboard.writeText(color);
+    await copyText(color);
     setCopied(true);
     setTimeout(() => setCopied(false), 1500);
   }
 
   return (
     <div className="relative min-h-0 flex-1" style={{ background: color }}>
-      <span
-        className={`absolute bottom-1.5 left-1/2 -translate-x-1/2 rounded-full bg-background px-2 py-0.5 shadow-chip ${MICRO} whitespace-nowrap text-foreground`}
-      >
-        {numbers(color)}
-      </span>
       <button
         type="button"
         onClick={copy}
-        className={`absolute right-1.5 bottom-1.5 rounded-full bg-background/60 px-2 py-0.5 backdrop-blur-sm transition-colors duration-(--motion-quick) can-hover:hover:bg-background/85 ${MICRO} text-foreground`}
+        style={{ "--band-fg": fg } as CSSProperties}
+        className={`absolute right-1.5 bottom-1.5 text-(--band-fg) ${MICRO} ${GHOST}`}
       >
         {copied ? "copied" : "copy"}
       </button>
@@ -37,12 +53,28 @@ function Band({ color }: { color: string }) {
 
 export function PaletteSwatches({ palette }: { palette: Palette }) {
   const bands = [palette.ink, ...palette.accents, palette.paper];
+  const [copiedAll, setCopiedAll] = useState(false);
+
+  async function copyAll() {
+    await copyText(bands.join("\n"));
+    setCopiedAll(true);
+    setTimeout(() => setCopiedAll(false), 1500);
+  }
 
   return (
-    <div className="flex size-full flex-col overflow-hidden rounded-md">
-      {bands.map((color, i) => (
-        <Band key={color + i} color={color} />
-      ))}
-    </div>
+    <>
+      <div className="flex size-72 flex-col overflow-hidden rounded-md sm:size-80">
+        {bands.map((color, i) => (
+          <Band key={color + i} color={color} ink={palette.ink} paper={palette.paper} />
+        ))}
+      </div>
+      <button
+        type="button"
+        onClick={copyAll}
+        className={`mt-3 ${ANNOTATION} text-foreground-soft ${GHOST}`}
+      >
+        {copiedAll ? "copied palette" : "copy palette"}
+      </button>
+    </>
   );
 }
