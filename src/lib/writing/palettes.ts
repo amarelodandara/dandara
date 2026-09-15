@@ -25,7 +25,7 @@ export const PALETTES: Palette[] = [
     ptName: "Raia",
     ink: "oklch(0.255 0.015 76.2)",
     paper: "oklch(0.973 0.004 91.4)",
-    accents: ["oklch(0.6 0.09 240)"],
+    accents: ["oklch(0.55 0.035 75)"],
     photo: {
       src: "/writing/deep-waters-of-colors/idea-ray.png",
       alt: "A spotted eagle ray seen from below, wings spread, gliding overhead.",
