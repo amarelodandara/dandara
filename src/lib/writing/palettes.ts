@@ -98,6 +98,11 @@ export const PALETTES: Palette[] = [
       "oklch(0.925 0.194 102.9)",
       "oklch(0.991 0.000 89.9)",
     ],
+    photo: {
+      src: "/writing/deep-waters-of-colors/idol.jpg",
+      alt: "A moorish idol, bold black and yellow bands, trailing dorsal filament, over a blurred reef.",
+      credit: "Cropped from a photo by Diego Delso, CC BY-SA 4.0, via Wikimedia Commons",
+    },
   },
   {
     slug: "volitas",
