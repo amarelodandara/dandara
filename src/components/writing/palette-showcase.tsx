@@ -11,6 +11,8 @@ import { PaletteSwatches } from "./palette-swatches";
 import { PaletteUiWidget } from "./palette-ui-widget";
 
 const FRAME = 320;
+const PHOTO_PADDING = 16;
+const PHOTO_FRAME = FRAME - PHOTO_PADDING * 2;
 const SQUARE = "size-72 sm:size-80";
 const CARD = `${SQUARE} shrink-0 snap-start overflow-hidden`;
 const WRAP = "w-72 sm:w-80 shrink-0 snap-start";
@@ -27,11 +29,11 @@ function Recessed({ children }: { children: ReactNode }) {
 }
 
 function FishPhoto({ photo }: { photo: PalettePhoto }) {
-  const baseScale = FRAME / Math.min(photo.width, photo.height);
+  const baseScale = PHOTO_FRAME / Math.min(photo.width, photo.height);
   const scale = baseScale * (photo.zoom ?? 1);
 
   return (
-    <div className="relative size-full overflow-hidden rounded-md">
+    <div className="relative size-full overflow-hidden rounded-sm">
       <Image
         src={photo.src}
         alt={photo.alt}
@@ -56,17 +58,17 @@ function FishCard({ palette }: { palette: Palette }) {
   return (
     <div className={WRAP}>
       <div className={`${SQUARE} overflow-hidden`}>
-        {palette.photo ? (
-          <FishPhoto photo={palette.photo} />
-        ) : (
-          <Recessed>
+        <Recessed>
+          {palette.photo ? (
+            <FishPhoto photo={palette.photo} />
+          ) : (
             <p
               className={`${ANNOTATION} text-center leading-normal text-foreground-soft italic`}
             >
               {palette.scientific}
             </p>
-          </Recessed>
-        )}
+          )}
+        </Recessed>
       </div>
       {palette.photo ? <p className={CAPTION}>{palette.photo.credit}</p> : null}
     </div>
