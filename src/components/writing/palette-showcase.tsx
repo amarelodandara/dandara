@@ -1,26 +1,45 @@
-"use client";
-
-import { useRef, type ReactNode, type PointerEvent as ReactPointerEvent } from "react";
+import type { CSSProperties, ReactNode } from "react";
 import { CAPTION } from "./figure";
 import { ANNOTATION } from "@/lib/type";
-import { findPalette, type Palette, type PalettePhoto } from "@/lib/writing/palettes";
+import {
+  findPalette,
+  type Palette,
+  type PalettePhoto,
+} from "@/lib/writing/palettes";
+import { skinFor } from "@/lib/writing/palette-skin";
+import { PaletteCarousel } from "./palette-carousel";
 import { PaletteCodeTheme } from "./palette-code-theme";
 import { PaletteDiagram } from "./palette-diagram";
 import { PaletteSwatches } from "./palette-swatches";
 import { PaletteUiWidget } from "./palette-ui-widget";
 
-const PHOTO_FRAME = 288;
+const PHOTO_FRAME = 320;
 const SQUARE = "size-72 sm:size-80";
 const CARD = `${SQUARE} shrink-0 snap-start overflow-hidden`;
 const WRAP = "w-72 sm:w-80 shrink-0 snap-start";
 
-function Recessed({ children }: { children: ReactNode }) {
+function Recessed({
+  children,
+  bleed = false,
+  style,
+}: {
+  children: ReactNode;
+  bleed?: boolean;
+  style?: CSSProperties;
+}) {
   return (
     <div
       data-recessed
-      className="flex size-full items-center justify-center rounded-md bg-background p-4"
+      style={style}
+      className={`relative flex size-full items-center justify-center overflow-hidden rounded-md bg-background ${bleed ? "" : "p-4"}`}
     >
       {children}
+      {bleed ? (
+        <span
+          aria-hidden
+          className="pointer-events-none absolute inset-0 rounded-md shadow-hollow"
+        />
+      ) : null}
     </div>
   );
 }
@@ -31,7 +50,7 @@ function FishPhoto({ photo }: { photo: PalettePhoto }) {
   const scaleX = photo.flip ? -scale : scale;
 
   return (
-    <div className="relative size-64 overflow-hidden rounded-sm sm:size-72">
+    <div className="relative size-full overflow-hidden rounded-md">
       <img
         src={photo.src}
         alt={photo.alt}
@@ -55,7 +74,7 @@ function FishCard({ palette }: { palette: Palette }) {
   return (
     <div className={WRAP}>
       <div className={`${SQUARE} overflow-hidden`}>
-        <Recessed>
+        <Recessed bleed={Boolean(palette.photo)}>
           {palette.photo ? (
             <FishPhoto photo={palette.photo} />
           ) : (
@@ -74,39 +93,10 @@ function FishCard({ palette }: { palette: Palette }) {
 
 export function PaletteShowcase({ slug }: { slug: string }) {
   const palette = findPalette(slug);
-  const scroller = useRef<HTMLDivElement>(null);
-  const drag = useRef<{ startX: number; startScroll: number } | null>(null);
-
-  function onPointerDown(event: ReactPointerEvent<HTMLDivElement>) {
-    if (event.pointerType === "touch" || !scroller.current) return;
-    drag.current = {
-      startX: event.clientX,
-      startScroll: scroller.current.scrollLeft,
-    };
-    event.currentTarget.setPointerCapture(event.pointerId);
-  }
-
-  function onPointerMove(event: ReactPointerEvent<HTMLDivElement>) {
-    const active = drag.current;
-    if (!active || !scroller.current) return;
-    scroller.current.scrollLeft = active.startScroll - (event.clientX - active.startX);
-  }
-
-  function onPointerUp() {
-    drag.current = null;
-  }
 
   return (
-    <figure className="my-12">
-      <div
-        ref={scroller}
-        data-palette-carousel
-        className="flex cursor-grab touch-pan-y snap-x snap-proximity items-start gap-4 overflow-x-auto pb-2 select-none active:cursor-grabbing"
-        onPointerDown={onPointerDown}
-        onPointerMove={onPointerMove}
-        onPointerUp={onPointerUp}
-        onPointerLeave={onPointerUp}
-      >
+    <figure className="my-12" style={skinFor(palette)}>
+      <PaletteCarousel>
         <FishCard palette={palette} />
 
         <div className={WRAP}>
@@ -120,15 +110,17 @@ export function PaletteShowcase({ slug }: { slug: string }) {
         </div>
 
         <div className={CARD}>
-          <PaletteCodeTheme palette={palette} />
+          <Recessed>
+            <PaletteCodeTheme palette={palette} />
+          </Recessed>
         </div>
 
         <div className={CARD}>
-          <Recessed>
+          <Recessed style={{ background: "var(--fish-ink)" }}>
             <PaletteDiagram palette={palette} />
           </Recessed>
         </div>
-      </div>
+      </PaletteCarousel>
     </figure>
   );
 }
