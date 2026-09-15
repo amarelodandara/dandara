@@ -1,7 +1,12 @@
 export type PalettePhoto = {
   src: string;
+  width: number;
+  height: number;
   alt: string;
   credit: string;
+  x?: number;
+  y?: number;
+  zoom?: number;
 };
 
 export type Palette = {
@@ -28,6 +33,8 @@ export const PALETTES: Palette[] = [
     ],
     photo: {
       src: "/writing/deep-waters-of-colors/idea-ray.png",
+      width: 2818,
+      height: 2136,
       alt: "A spotted eagle ray seen from below, wings spread, gliding overhead.",
       credit: "John Norton, CC BY 2.0, via Wikimedia Commons",
     },
@@ -46,8 +53,10 @@ export const PALETTES: Palette[] = [
     ],
     photo: {
       src: "/writing/deep-waters-of-colors/patela.png",
+      width: 3872,
+      height: 2592,
       alt: "A blue tang, dark blue body with a black palette-shaped patch and a yellow tail.",
-      credit: "Cropped from a photo by DerHans04, CC BY-SA 3.0, via Wikimedia Commons",
+      credit: "Photo by DerHans04, CC BY-SA 3.0, via Wikimedia Commons",
     },
   },
   {
@@ -65,8 +74,10 @@ export const PALETTES: Palette[] = [
     ],
     photo: {
       src: "/writing/deep-waters-of-colors/caranx.png",
+      width: 1997,
+      height: 1123,
       alt: "A vintage hand-colored engraving of a Caranx jack, grey-blue back and pale gold belly.",
-      credit: "Cropped from a public domain plate, via Wikimedia Commons",
+      credit: "From a public domain plate, via Wikimedia Commons",
     },
   },
   {
@@ -82,8 +93,10 @@ export const PALETTES: Palette[] = [
     ],
     photo: {
       src: "/writing/deep-waters-of-colors/pink-moon.png",
+      width: 525,
+      height: 700,
       alt: "A pink meanie jellyfish, pale peach oral arms trailing below a translucent bell.",
-      credit: "Cropped from a photo by Liza Gomez Daglio, CC BY-SA 4.0, via Wikimedia Commons",
+      credit: "Photo by Liza Gomez Daglio, CC BY-SA 4.0, via Wikimedia Commons",
     },
   },
   {
@@ -100,8 +113,10 @@ export const PALETTES: Palette[] = [
     ],
     photo: {
       src: "/writing/deep-waters-of-colors/idol.png",
+      width: 1183,
+      height: 1183,
       alt: "A moorish idol, bold black and yellow bands, trailing dorsal filament.",
-      credit: "Cropped and background removed from a photo by Diego Delso, CC BY-SA 4.0, via Wikimedia Commons",
+      credit: "Background removed from a photo by Diego Delso, CC BY-SA 4.0, via Wikimedia Commons",
     },
   },
   {
@@ -119,8 +134,10 @@ export const PALETTES: Palette[] = [
     ],
     photo: {
       src: "/writing/deep-waters-of-colors/volitas.png",
+      width: 1636,
+      height: 1226,
       alt: "A red lionfish, striped fan-like fins spread wide, venomous spines fanned above.",
-      credit: "Cropped from a photo by Michael Gäbler, CC BY 3.0, via Wikimedia Commons",
+      credit: "Photo by Michael Gäbler, CC BY 3.0, via Wikimedia Commons",
     },
   },
 ];

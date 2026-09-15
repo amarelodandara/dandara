@@ -4,12 +4,13 @@ import Image from "next/image";
 import { useRef, type ReactNode, type PointerEvent as ReactPointerEvent } from "react";
 import { CAPTION } from "./figure";
 import { ANNOTATION } from "@/lib/type";
-import { findPalette, type Palette } from "@/lib/writing/palettes";
+import { findPalette, type Palette, type PalettePhoto } from "@/lib/writing/palettes";
 import { PaletteCodeTheme } from "./palette-code-theme";
 import { PaletteDiagram } from "./palette-diagram";
 import { PaletteSwatches } from "./palette-swatches";
 import { PaletteUiWidget } from "./palette-ui-widget";
 
+const FRAME = 320;
 const SQUARE = "size-72 sm:size-80";
 const CARD = `${SQUARE} shrink-0 snap-start overflow-hidden`;
 const WRAP = "w-72 sm:w-80 shrink-0 snap-start";
@@ -25,29 +26,47 @@ function Recessed({ children }: { children: ReactNode }) {
   );
 }
 
+function FishPhoto({ photo }: { photo: PalettePhoto }) {
+  const baseScale = FRAME / Math.min(photo.width, photo.height);
+  const scale = baseScale * (photo.zoom ?? 1);
+
+  return (
+    <div className="relative size-full overflow-hidden rounded-md">
+      <Image
+        src={photo.src}
+        alt={photo.alt}
+        width={photo.width}
+        height={photo.height}
+        sizes="320px"
+        style={{
+          position: "absolute",
+          left: "50%",
+          top: "50%",
+          width: photo.width,
+          height: photo.height,
+          maxWidth: "none",
+          transform: `translate(calc(-50% + ${photo.x ?? 0}px), calc(-50% + ${photo.y ?? 0}px)) scale(${scale})`,
+        }}
+      />
+    </div>
+  );
+}
+
 function FishCard({ palette }: { palette: Palette }) {
   return (
     <div className={WRAP}>
       <div className={`${SQUARE} overflow-hidden`}>
-        <Recessed>
-          {palette.photo ? (
-            <div className="relative size-full">
-              <Image
-                src={palette.photo.src}
-                alt={palette.photo.alt}
-                fill
-                sizes="320px"
-                className="object-contain"
-              />
-            </div>
-          ) : (
+        {palette.photo ? (
+          <FishPhoto photo={palette.photo} />
+        ) : (
+          <Recessed>
             <p
               className={`${ANNOTATION} text-center leading-normal text-foreground-soft italic`}
             >
               {palette.scientific}
             </p>
-          )}
-        </Recessed>
+          </Recessed>
+        )}
       </div>
       {palette.photo ? <p className={CAPTION}>{palette.photo.credit}</p> : null}
     </div>
