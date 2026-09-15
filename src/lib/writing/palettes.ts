@@ -44,6 +44,11 @@ export const PALETTES: Palette[] = [
       "oklch(0.955 0.216 114.6)",
       "oklch(0.605 0.217 257.2)",
     ],
+    photo: {
+      src: "/writing/deep-waters-of-colors/patela.png",
+      alt: "A blue tang, dark blue body with a black palette-shaped patch and a yellow tail.",
+      credit: "Cropped from a photo by DerHans04, CC BY-SA 3.0, via Wikimedia Commons",
+    },
   },
   {
     slug: "caranx",
@@ -58,6 +63,11 @@ export const PALETTES: Palette[] = [
       "oklch(0.9 0.03 95)",
       "oklch(0.906 0.143 94.0)",
     ],
+    photo: {
+      src: "/writing/deep-waters-of-colors/caranx.png",
+      alt: "A vintage hand-colored engraving of a Caranx jack, grey-blue back and pale gold belly.",
+      credit: "Cropped from a public domain plate, via Wikimedia Commons",
+    },
   },
   {
     slug: "pink-moon",
@@ -70,6 +80,11 @@ export const PALETTES: Palette[] = [
       "oklch(0.815 0.137 67.3)",
       "oklch(0.949 0.024 259.8)",
     ],
+    photo: {
+      src: "/writing/deep-waters-of-colors/pink-moon.png",
+      alt: "A pink meanie jellyfish, pale peach oral arms trailing below a translucent bell.",
+      credit: "Cropped from a photo by Liza Gomez Daglio, CC BY-SA 4.0, via Wikimedia Commons",
+    },
   },
   {
     slug: "idol",
@@ -97,6 +112,11 @@ export const PALETTES: Palette[] = [
       "oklch(0.858 0.094 74.9)",
       "oklch(0.729 0.146 168.1)",
     ],
+    photo: {
+      src: "/writing/deep-waters-of-colors/volitas.png",
+      alt: "A red lionfish, striped fan-like fins spread wide, venomous spines fanned above.",
+      credit: "Cropped from a photo by Michael Gäbler, CC BY 3.0, via Wikimedia Commons",
+    },
   },
 ];
 
