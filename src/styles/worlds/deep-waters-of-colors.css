@@ -1,0 +1,68 @@
+/* The world for "Deep waters of colors": the ASCII diagram frame and the
+   highlight.js theme, both keyed to plain custom properties instead of fixed
+   values, so a palette showcase can set them on its own wrapper and inherit
+   nothing from the wall. This file is imported only by that one article —
+   the convention for any project or article that needs colours, tokens, or
+   utilities the rest of the site has no business carrying. */
+
+@theme inline {
+  --color-graph-accent: var(--graph-accent);
+  --color-graph-accent-2: var(--graph-accent-2);
+  --color-graph-frame: var(--graph-frame);
+}
+
+/* Fallback for a diagram mounted with no palette wrapper around it — reuses
+   the wall's own ink and rule rather than inventing a colour nobody chose. A
+   palette showcase overrides all three on its own wrapper, which is what every
+   real instance in the aquarium piece does. */
+:root {
+  --graph-accent: var(--color-foreground);
+  --graph-accent-2: var(--color-foreground-soft);
+  --graph-frame: var(--color-rule);
+}
+
+/* The dashed-ruler border every ASCII graph frame stands inside. Four repeating
+   gradients rather than a real border so the dashes stay a fixed 2px mark in a
+   5px gap regardless of the frame's size — a border-image would stretch. */
+@utility graph-frame {
+  background-image:
+    repeating-linear-gradient(to right, var(--graph-frame) 0 2px, transparent 2px 7px),
+    repeating-linear-gradient(to bottom, var(--graph-frame) 0 2px, transparent 2px 7px),
+    repeating-linear-gradient(to right, var(--graph-frame) 0 2px, transparent 2px 7px),
+    repeating-linear-gradient(to bottom, var(--graph-frame) 0 2px, transparent 2px 7px);
+  background-repeat: repeat-x, repeat-y, repeat-x, repeat-y;
+  background-position: 0 0, 100% 0, 0 100%, 0 0;
+  background-size: 100% 1px, 1px 100%, 100% 1px, 1px 100%;
+}
+
+/* highlight.js token colours, aliased to custom properties instead of fixed
+   hues. Every code-theme box in the aquarium piece sets these six on its own
+   wrapper, so the same markup becomes a different fish's theme without a
+   second stylesheet per palette. */
+.hljs-comment,
+.hljs-quote {
+  color: var(--hljs-comment);
+  font-style: italic;
+}
+
+.hljs-keyword,
+.hljs-selector-tag,
+.hljs-built_in {
+  color: var(--hljs-keyword);
+}
+
+.hljs-string,
+.hljs-attr {
+  color: var(--hljs-string);
+}
+
+.hljs-number,
+.hljs-literal {
+  color: var(--hljs-number);
+}
+
+.hljs-title,
+.hljs-title.function_,
+.hljs-name {
+  color: var(--hljs-title);
+}

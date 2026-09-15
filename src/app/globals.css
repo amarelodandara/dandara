@@ -139,15 +139,6 @@
      yellow being cut through instead of a grey line drawn on it. */
   --shadow-cutout: inset 0 0 0 1px oklch(0.55 0.12 92 / 0.18),
     inset 0 2px 5px oklch(0.45 0.1 92 / 0.16);
-
-  /* The ASCII diagram frame's own palette, aliased to plain custom properties
-     rather than fixed values: a palette showcase sets `--graph-accent` and
-     friends on its own wrapper, and every diagram mounted inside inherits that
-     fish's colours instead of the site's. Left at the wall's own tones here so
-     a diagram dropped with no wrapper still reads correctly. */
-  --color-graph-accent: var(--graph-accent);
-  --color-graph-accent-2: var(--graph-accent-2);
-  --color-graph-frame: var(--graph-frame);
 }
 
 /* Inter 4.001 OpenType features applied to every glyph on the site.
@@ -695,58 +686,3 @@ body[data-shop-open] [data-shop-panel] {
   }
 }
 
-/* Fallback for a diagram mounted with no palette wrapper around it — reuses
-   the wall's own ink and rule rather than inventing a colour nobody chose. A
-   palette showcase overrides all three on its own wrapper, which is what every
-   real instance in the aquarium piece does. */
-:root {
-  --graph-accent: var(--color-foreground);
-  --graph-accent-2: var(--color-foreground-soft);
-  --graph-frame: var(--color-rule);
-}
-
-/* The dashed-ruler border every ASCII graph frame stands inside. Four repeating
-   gradients rather than a real border so the dashes stay a fixed 2px mark in a
-   5px gap regardless of the frame's size — a border-image would stretch. */
-@utility graph-frame {
-  background-image:
-    repeating-linear-gradient(to right, var(--graph-frame) 0 2px, transparent 2px 7px),
-    repeating-linear-gradient(to bottom, var(--graph-frame) 0 2px, transparent 2px 7px),
-    repeating-linear-gradient(to right, var(--graph-frame) 0 2px, transparent 2px 7px),
-    repeating-linear-gradient(to bottom, var(--graph-frame) 0 2px, transparent 2px 7px);
-  background-repeat: repeat-x, repeat-y, repeat-x, repeat-y;
-  background-position: 0 0, 100% 0, 0 100%, 0 0;
-  background-size: 100% 1px, 1px 100%, 100% 1px, 1px 100%;
-}
-
-/* highlight.js token colours, aliased to custom properties instead of fixed
-   hues. Every code-theme box in the aquarium piece sets these six on its own
-   wrapper, so the same markup becomes a different fish's theme without a
-   second stylesheet per palette. */
-.hljs-comment,
-.hljs-quote {
-  color: var(--hljs-comment);
-  font-style: italic;
-}
-
-.hljs-keyword,
-.hljs-selector-tag,
-.hljs-built_in {
-  color: var(--hljs-keyword);
-}
-
-.hljs-string,
-.hljs-attr {
-  color: var(--hljs-string);
-}
-
-.hljs-number,
-.hljs-literal {
-  color: var(--hljs-number);
-}
-
-.hljs-title,
-.hljs-title.function_,
-.hljs-name {
-  color: var(--hljs-title);
-}
