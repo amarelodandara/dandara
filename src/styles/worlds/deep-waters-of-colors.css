@@ -88,6 +88,30 @@
   color: var(--hljs-title);
 }
 
+/* Markdown carries its structure in tokens the six-colour theme above never
+   named: a heading is a section, a list marker a bullet, emphasis and strong
+   their own spans. Mapped onto the same six so a prose sample reads in the
+   palette rather than falling through to the body colour. */
+.hljs-section,
+.hljs-bullet {
+  color: var(--hljs-keyword);
+}
+
+.hljs-strong {
+  color: var(--hljs-title);
+  font-weight: 600;
+}
+
+.hljs-emphasis {
+  color: var(--hljs-string);
+  font-style: italic;
+}
+
+.hljs-link,
+.hljs-code {
+  color: var(--hljs-number);
+}
+
 /* The showcase carousel's own bleed: its left edge lines up with the article's
    text column — the same `(100% - min(100%, 42rem)) / 2` split the wide/text
    grid already does — while the right side is left free to run past it into

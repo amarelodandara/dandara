@@ -1,4 +1,5 @@
 import { GraphCheck } from "@/components/graphs/graph-check";
+import { GraphCountdown } from "@/components/graphs/graph-countdown";
 import { GraphFlow } from "@/components/graphs/graph-flow";
 import { GraphStack } from "@/components/graphs/graph-stack";
 import { GraphTree } from "@/components/graphs/graph-tree";
@@ -11,6 +12,18 @@ function Drawing({ graph }: { graph: PaletteGraph }) {
       <GraphStack
         title={graph.title}
         items={graph.items}
+        palette={graph.palette}
+      />
+    );
+  }
+
+  if (graph.kind === "countdown") {
+    return (
+      <GraphCountdown
+        title={graph.title}
+        to={graph.to}
+        done={graph.done}
+        caption={graph.caption}
         palette={graph.palette}
       />
     );

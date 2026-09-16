@@ -18,6 +18,7 @@ export type SkinVars = {
   headerInk: string;
   headerNote: string;
   headerRule: string;
+  headerImage: string;
   barFill: string;
   barInk: string;
   barRule: string;
@@ -25,6 +26,7 @@ export type SkinVars = {
   barRadiusTop: string;
   barRadiusBottom: string;
   barImage: string;
+  barFilter: string;
   barPad: string;
   barGap: string;
   barCellPad: string;
@@ -70,7 +72,48 @@ const CARANX_STEEL = "oklch(0.62 0.015 235)";
 const CARANX_CREAM = "oklch(0.9 0.03 95)";
 const CARANX_GOLD = "oklch(0.906 0.143 94.0)";
 
+const MOON_PEACH = "oklch(0.912 0.066 69.8)";
+const MOON_SALMON = "oklch(0.815 0.137 67.3)";
+const MOON_GREY = "oklch(0.949 0.024 259.8)";
+const MOON_INK = "oklch(0.44 0.021 264)";
+const MOON_DEEP = "oklch(0.55 0.157 42)";
+const MOON_WASH = `radial-gradient(120% 140% at 16% 10%, ${fade(MOON_SALMON, 0.55)} 0%, transparent 64%), radial-gradient(110% 130% at 92% 88%, ${fade(MOON_PEACH, 0.6)} 0%, transparent 70%)`;
+
 const OVERRIDES: Record<string, Partial<SkinVars>> = {
+  "pink-moon": {
+    barFill: MOON_GREY,
+    barImage: MOON_WASH,
+    barFilter: "blur(14px) saturate(150%)",
+    barRule: fade(MOON_GREY, 0.85),
+    barUnderline: fade(MOON_GREY, 0.85),
+    barRadiusTop: "0.25rem",
+    barRadiusBottom: "0.25rem",
+    barInk: MOON_INK,
+    badgeFill: MOON_SALMON,
+    badgeInk: MOON_INK,
+    avatar: `radial-gradient(circle at 34% 28%, ${MOON_PEACH} 0%, ${MOON_SALMON} 100%)`,
+    ink: MOON_GREY,
+    codeFill: MOON_GREY,
+    codeInk: MOON_INK,
+    codeRule: fade(MOON_SALMON, 0.45),
+    codeUnderline: fade(MOON_SALMON, 0.45),
+    codeRadiusTop: "0.25rem",
+    codeRadiusBottom: "0.25rem",
+    headerFill: MOON_GREY,
+    headerImage: MOON_WASH,
+    headerInk: MOON_INK,
+    headerNote: MOON_DEEP,
+    headerRule: fade(MOON_DEEP, 0.4),
+    keyword: MOON_DEEP,
+    string: fade(MOON_INK, 0.75),
+    number: MOON_DEEP,
+    title: MOON_INK,
+    comment: fade(MOON_INK, 0.45),
+    graphInk: MOON_INK,
+    graphAccent: MOON_DEEP,
+    graphMuted: fade(MOON_INK, 0.6),
+    graphFrame: fade(MOON_DEEP, 0.35),
+  },
   caranx: {
     barPad: "0px",
     barGap: "0px",
@@ -119,6 +162,7 @@ const OVERRIDES: Record<string, Partial<SkinVars>> = {
     barRadiusTop: "1rem",
     barRadiusBottom: "0px",
     barImage: "none",
+    barFilter: "none",
     barPad: "1rem",
     barGap: "0.75rem",
     barCellPad: "0px",
@@ -165,6 +209,7 @@ function derive(palette: Palette): SkinVars {
     headerInk: paper,
     headerNote: accent,
     headerRule: accent,
+    headerImage: "none",
     barFill: ink,
     barInk: paper,
     barRule: accent,
@@ -172,6 +217,7 @@ function derive(palette: Palette): SkinVars {
     barRadiusTop: "0px",
     barRadiusBottom: "0px",
     barImage: "none",
+    barFilter: "none",
     barPad: "1rem",
     barGap: "0.75rem",
     barCellPad: "0px",
@@ -212,6 +258,7 @@ export function skinFor(palette: Palette): CSSProperties {
     "--fish-header-ink": skin.headerInk,
     "--fish-header-note": skin.headerNote,
     "--fish-header-rule": skin.headerRule,
+    "--fish-header-image": skin.headerImage,
     "--fish-bar-fill": skin.barFill,
     "--fish-bar-ink": skin.barInk,
     "--fish-bar-rule": skin.barRule,
@@ -219,6 +266,7 @@ export function skinFor(palette: Palette): CSSProperties {
     "--fish-bar-radius-top": skin.barRadiusTop,
     "--fish-bar-radius-bottom": skin.barRadiusBottom,
     "--fish-bar-image": skin.barImage,
+    "--fish-bar-filter": skin.barFilter,
     "--fish-bar-pad": skin.barPad,
     "--fish-bar-gap": skin.barGap,
     "--fish-bar-cell-pad": skin.barCellPad,

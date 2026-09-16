@@ -74,14 +74,17 @@ where spines > 12
 order by venom desc;`,
   },
   "pink-moon": {
-    language: "json",
-    label: "json",
-    file: "bell.json",
-    code: `{
-  "bell": "pink-moon",
-  "arms": 8,
-  "drift": true
-}`,
+    language: "markdown",
+    label: "markdown",
+    file: "field-notes.md",
+    code: `# Pink Moon
+
+A *drifting* bell, **8** arms.
+
+- [x] log the bloom
+- [ ] tag the shoal
+
+> found at 40 m`,
   },
 };
 

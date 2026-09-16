@@ -4,7 +4,7 @@ import type { Palette } from "@/lib/writing/palettes";
 
 export function PaletteUiWidget({ palette }: { palette: Palette }) {
   return (
-    <div className="flex w-full items-center gap-(--fish-bar-gap) rounded-t-(--fish-bar-radius-top) rounded-b-(--fish-bar-radius-bottom) border border-(--fish-bar-rule) bg-(--fish-bar-fill) bg-[image:var(--fish-bar-image)] p-(--fish-bar-pad) text-(--fish-bar-ink) [border-bottom-color:var(--fish-bar-underline)]">
+    <div className="flex w-full items-center gap-(--fish-bar-gap) rounded-t-(--fish-bar-radius-top) rounded-b-(--fish-bar-radius-bottom) border border-(--fish-bar-rule) bg-(--fish-bar-fill) bg-[image:var(--fish-bar-image)] p-(--fish-bar-pad) [backdrop-filter:var(--fish-bar-filter)] text-(--fish-bar-ink) [border-bottom-color:var(--fish-bar-underline)]">
       <span className="flex shrink-0 items-center self-stretch border-r border-(--fish-bar-cell-rule) p-(--fish-bar-cell-pad)">
         <span
           aria-hidden="true"

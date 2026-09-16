@@ -19,9 +19,23 @@ export type PaletteGraph =
     })
   | (GraphShared & { kind: "check"; items: CheckItem[] })
   | (GraphShared & { kind: "stack"; items: StackItem[] })
-  | (GraphShared & { kind: "tree"; items: TreeItem[] });
+  | (GraphShared & { kind: "tree"; items: TreeItem[] })
+  | (GraphShared & {
+      kind: "countdown";
+      to: string;
+      done: string;
+      caption?: string;
+    });
 
 const GRAPHS: Record<string, PaletteGraph> = {
+  "pink-moon": {
+    kind: "countdown",
+    title: "FREEZE",
+    width: "13rem",
+    to: "2027-01-01T00:00:00Z",
+    done: "open",
+    caption: "until offsite",
+  },
   caranx: {
     kind: "tree",
     title: "SHOAL",
