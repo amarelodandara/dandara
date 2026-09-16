@@ -4,7 +4,8 @@ import type { ArticleNote } from "@/lib/article-notes";
 export type PostMeta = {
   title: string;
   deck: string;
-  deckFull?: boolean;
+  searchTitle?: string;
+  description?: string;
   blurb: string;
   date: string;
 };
@@ -18,8 +19,8 @@ export type Post = {
 const POSTS: Record<string, () => Promise<unknown>> = {
   "museums-and-websites": () =>
     import("@/content/writing/museums-and-websites.mdx"),
-  "deep-waters-of-colors": () =>
-    import("@/content/writing/deep-waters-of-colors.mdx"),
+  "the-color-of-water": () =>
+    import("@/content/writing/the-color-of-water.mdx"),
 };
 
 export const SLUGS = Object.keys(POSTS);

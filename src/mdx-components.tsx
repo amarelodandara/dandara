@@ -4,10 +4,8 @@ import type { ComponentPropsWithoutRef, ReactNode } from "react";
 import { LINK_UNDERLINED } from "@/components/link";
 import { PROSE, SECTION_HEADING, STRONG } from "@/lib/type";
 import { Clip } from "@/components/writing/clip";
-import { ColorFormatSelect } from "@/components/writing/color-format-select";
 import { Figure } from "@/components/writing/figure";
 import { Note } from "@/components/writing/note-ref";
-import { PaletteShowcase } from "@/components/writing/palette-showcase";
 
 const textOf = (node: ReactNode): string => {
   if (typeof node === "string" || typeof node === "number") return String(node);
@@ -86,8 +84,6 @@ const components: MDXComponents = {
   Figure,
   Clip,
   Note,
-  Palette: PaletteShowcase,
-  CopyFormat: ColorFormatSelect,
 };
 
 export function useMDXComponents(): MDXComponents {

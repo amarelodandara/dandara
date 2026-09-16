@@ -2,14 +2,10 @@ import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { ArticleNotes } from "@/components/writing/article-notes";
 import { PostFooter } from "@/components/writing/post-footer";
+import { PostSchema } from "@/components/writing/post-schema";
 import { WritingNav } from "@/components/writing/writing-nav";
 import { formatPostMonth, loadPost, SLUGS } from "@/lib/writing/posts";
-import {
-  ACCENT_PROSE,
-  ACCENT_PROSE_FULL,
-  ANNOTATION,
-  PAGE_HEADING,
-} from "@/lib/type";
+import { ACCENT_PROSE, ANNOTATION, PAGE_HEADING } from "@/lib/type";
 
 export const dynamicParams = false;
 
@@ -24,29 +20,31 @@ export async function generateMetadata({
   const post = await loadPost(slug);
   if (!post) return {};
 
+  const { meta } = post;
+  const description = meta.description ?? meta.deck;
   const card = {
     url: `/writing/og/${slug}.png`,
     width: 1200,
     height: 630,
-    alt: `${post.meta.title} — ${post.meta.deck}`,
+    alt: `${meta.title} — ${meta.deck}`,
   };
 
   return {
-    title: post.meta.title,
-    description: post.meta.deck,
+    title: meta.searchTitle ?? meta.title,
+    description,
     alternates: { canonical: `/writing/${slug}` },
     openGraph: {
       type: "article",
       url: `/writing/${slug}`,
-      title: post.meta.title,
-      description: post.meta.deck,
-      publishedTime: post.meta.date,
+      title: meta.title,
+      description,
+      publishedTime: meta.date,
       images: [card],
     },
     twitter: {
       card: "summary_large_image",
-      title: post.meta.title,
-      description: post.meta.deck,
+      title: meta.title,
+      description,
       images: [card],
     },
   };
@@ -63,6 +61,7 @@ export default async function ArticlePage({
 
   return (
     <>
+      <PostSchema slug={slug} meta={meta} />
       <WritingNav />
 
       <main className="mx-auto w-full max-w-[1400px] flex-1 px-[7vw] pt-[9vh] pb-[14vh] sm:pt-[12vh]">
@@ -75,11 +74,7 @@ export default async function ArticlePage({
               <time dateTime={meta.date}>{formatPostMonth(meta.date)}</time>
             </p>
             <h1 className={`mt-3 ${PAGE_HEADING}`}>{meta.title}</h1>
-            <p
-              className={`mt-4 ${meta.deckFull ? ACCENT_PROSE_FULL : ACCENT_PROSE}`}
-            >
-              {meta.deck}
-            </p>
+            <p className={`mt-4 ${ACCENT_PROSE}`}>{meta.deck}</p>
           </header>
 
           <Article />
