@@ -6,7 +6,7 @@ import { cn } from "@/lib/cn";
 
 function GraphCorners({ mark = "+" }: { mark?: string }) {
   const corner =
-    "pointer-events-none absolute z-10 flex size-4 items-center justify-center bg-(--graph-paper) font-mono text-sm leading-none text-(--graph-frame) select-none";
+    "pointer-events-none absolute z-10 flex size-4 items-center justify-center bg-(--graph-paper) font-mono text-sm leading-none text-(--graph-mark) select-none";
 
   return (
     <>

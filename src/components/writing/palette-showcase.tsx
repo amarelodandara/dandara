@@ -116,7 +116,7 @@ export function PaletteShowcase({ slug }: { slug: string }) {
         </div>
 
         <div className={CARD}>
-          <Recessed style={{ background: "var(--fish-ink)" }}>
+          <Recessed style={{ background: "var(--graph-paper)" }}>
             <PaletteDiagram palette={palette} />
           </Recessed>
         </div>

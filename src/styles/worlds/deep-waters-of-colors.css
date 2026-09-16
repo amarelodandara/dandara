@@ -13,6 +13,7 @@
   --graph-accent: var(--color-foreground);
   --graph-accent-2: var(--color-foreground-soft);
   --graph-frame: var(--color-rule);
+  --graph-mark: var(--color-rule);
   --graph-paper: var(--color-background);
   --graph-ink: var(--color-foreground);
   --graph-muted: var(--color-foreground-soft);
@@ -112,27 +113,144 @@
   color: var(--hljs-number);
 }
 
+/* The fades at the carousel's two edges. Each is a radial gradient rather than
+   a linear one: an ellipse centred on the middle of its edge, a little taller
+   than the carousel, so the fade bites deepest where the eye is and eases off
+   towards the corners instead of ruling a straight line down the cards. The
+   nine stops follow 0.5 + 0.5cos(pi t) rather than a straight ramp, because a
+   two-stop gradient ramps alpha linearly and the eye reads both ends of that
+   ramp as edges — which is what made the old fade look like a band laid over
+   the cards rather than air, worst over the dark code and diagram cards. */
+
+/* Each edge carries two numbers, and it takes both to make a fade arrive
+   rather than appear. The width is how far in the ellipse reaches; the strength
+   is how much of the card it is allowed to take, 0 leaving the mask fully
+   opaque and 1 erasing the edge outright. Width alone pops: however narrow the
+   ellipse gets, its centre is still alpha 0, so the pixels at the very edge cut
+   out the moment the fade exists and snap back the moment it stops. Ramping the
+   strength alongside the width means the fade washes in from nothing and drains
+   back to nothing, and the edge never changes abruptly. */
+@property --carousel-fade {
+  syntax: "<length>";
+  inherits: false;
+  initial-value: 8rem;
+}
+
+@property --carousel-strength {
+  syntax: "<number>";
+  inherits: false;
+  initial-value: 1;
+}
+
+@property --carousel-fade-back {
+  syntax: "<length>";
+  inherits: false;
+  initial-value: 0rem;
+}
+
+@property --carousel-back-strength {
+  syntax: "<number>";
+  inherits: false;
+  initial-value: 0;
+}
+
+/* Both pairs are a function of how far there is left to go that way. The right
+   fade is full before the first drag and gone by the time the last card lands,
+   so the carousel says it is over by having nothing left to hide; the left one
+   runs backwards, absent at rest and opening as the cards pass, so there is
+   always something covered in the direction you can still travel.
+
+   They are not symmetrical in time. The left fade opens across the whole
+   scroll, because the distance behind you grows from the first drag. The right
+   one holds full until the last quarter and closes only then: what it covers is
+   the card still to come, and that card is there for the whole scroll — draining
+   the fade in step with the distance would announce the end from the middle. */
+@keyframes carousel-fade {
+  0% {
+    --carousel-fade: 8rem;
+    --carousel-strength: 1;
+    --carousel-fade-back: 0rem;
+    --carousel-back-strength: 0;
+  }
+  75% {
+    --carousel-fade: 8rem;
+    --carousel-strength: 1;
+  }
+  100% {
+    --carousel-fade: 0rem;
+    --carousel-strength: 0;
+    --carousel-fade-back: 8rem;
+    --carousel-back-strength: 1;
+  }
+}
+
 /* The showcase carousel's own bleed: its left edge lines up with the article's
    text column — the same `(100% - min(100%, 42rem)) / 2` split the wide/text
    grid already does — while the right side is left free to run past it into
    the wide gutter and fade there, rather than stopping square at the margin. */
 [data-palette-carousel] {
   --carousel-inset: max(0px, calc((100% - min(100%, 42rem)) / 2));
+  --carousel-mask: radial-gradient(
+    var(--carousel-fade) 120% at 100% 50%,
+    rgb(0 0 0 / calc(1 - var(--carousel-strength))) 0%,
+    rgb(0 0 0 / calc(1 - var(--carousel-strength) * 0.962)) 12.5%,
+    rgb(0 0 0 / calc(1 - var(--carousel-strength) * 0.854)) 25%,
+    rgb(0 0 0 / calc(1 - var(--carousel-strength) * 0.691)) 37.5%,
+    rgb(0 0 0 / calc(1 - var(--carousel-strength) * 0.5)) 50%,
+    rgb(0 0 0 / calc(1 - var(--carousel-strength) * 0.309)) 62.5%,
+    rgb(0 0 0 / calc(1 - var(--carousel-strength) * 0.146)) 75%,
+    rgb(0 0 0 / calc(1 - var(--carousel-strength) * 0.038)) 87.5%,
+    rgb(0 0 0 / 1) 100%
+  );
+  --carousel-mask-back: radial-gradient(
+    var(--carousel-fade-back) 120% at 0% 50%,
+    rgb(0 0 0 / calc(1 - var(--carousel-back-strength))) 0%,
+    rgb(0 0 0 / calc(1 - var(--carousel-back-strength) * 0.962)) 12.5%,
+    rgb(0 0 0 / calc(1 - var(--carousel-back-strength) * 0.854)) 25%,
+    rgb(0 0 0 / calc(1 - var(--carousel-back-strength) * 0.691)) 37.5%,
+    rgb(0 0 0 / calc(1 - var(--carousel-back-strength) * 0.5)) 50%,
+    rgb(0 0 0 / calc(1 - var(--carousel-back-strength) * 0.309)) 62.5%,
+    rgb(0 0 0 / calc(1 - var(--carousel-back-strength) * 0.146)) 75%,
+    rgb(0 0 0 / calc(1 - var(--carousel-back-strength) * 0.038)) 87.5%,
+    rgb(0 0 0 / 1) 100%
+  );
   padding-left: var(--carousel-inset);
   scroll-padding-left: var(--carousel-inset);
   padding-right: 7vw;
   margin-right: -7vw;
-  mask-image: linear-gradient(
-    to right,
-    black calc(100% - 8rem),
-    transparent 100%
-  );
-  -webkit-mask-image: linear-gradient(
-    to right,
-    black calc(100% - 8rem),
-    transparent 100%
-  );
+  mask-image: var(--carousel-mask);
+  -webkit-mask-image: var(--carousel-mask);
   scrollbar-width: none;
+}
+
+/* Two mask layers, one per edge, and they have to be intersected: layers add by
+   default, and since each layer is opaque everywhere except its own ellipse,
+   adding them cancels both fades out. Gated rather than assumed, because that
+   is exactly what a browser without mask-composite would render — so one
+   without it keeps the right-hand fade alone from the rule above. */
+@supports (mask-composite: intersect) {
+  [data-palette-carousel] {
+    mask-image: var(--carousel-mask-back), var(--carousel-mask);
+    -webkit-mask-image: var(--carousel-mask-back), var(--carousel-mask);
+    mask-composite: intersect;
+  }
+}
+
+/* All four are driven by a scroll timeline rather than a scroll listener: it
+   runs off the main thread, and every one of them is declared inherits: false,
+   so redrawing them each frame restyles the scroller alone and never the cards
+   inside it. Gated on support because without a timeline the same animation
+   would settle on its last keyframe, which is the far end of the scroll with
+   the fades the wrong way round; browsers that lack one hold the initial values
+   instead — right edge covered, left edge open. */
+@supports (animation-timeline: scroll(self inline)) {
+  [data-palette-carousel] {
+    animation-name: carousel-fade;
+    animation-duration: auto;
+    animation-timing-function: linear;
+    animation-fill-mode: both;
+    animation-timeline: scroll(self inline);
+  }
 }
 
 [data-palette-carousel]::-webkit-scrollbar {

@@ -1,5 +1,5 @@
 import { ANNOTATION, MICRO, TITLE } from "@/lib/type";
-import { roleFor } from "@/lib/writing/palette-widget";
+import { nameFor, roleFor } from "@/lib/writing/palette-widget";
 import type { Palette } from "@/lib/writing/palettes";
 
 export function PaletteUiWidget({ palette }: { palette: Palette }) {
@@ -13,7 +13,9 @@ export function PaletteUiWidget({ palette }: { palette: Palette }) {
       </span>
 
       <div className="min-w-0 flex-1 px-(--fish-bar-cell-pad)">
-        <p className={`${TITLE} truncate`}>{palette.common}</p>
+        <p className={`${TITLE} truncate`}>
+          {nameFor(palette.slug, palette.common)}
+        </p>
         <p className={`${ANNOTATION} truncate opacity-60`}>
           {roleFor(palette.slug)}
         </p>

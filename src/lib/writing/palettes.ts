@@ -51,9 +51,10 @@ export const PALETTES: Palette[] = [
     colors: [
       "oklch(0.190 0.111 284.8)",
       "oklch(0.454 0.255 285.4)",
-      "oklch(0.955 0.216 114.6)",
       "oklch(0.605 0.217 257.2)",
+      "oklch(0.955 0.216 114.6)",
     ],
+    weights: [50, 10, 25, 10],
     photo: {
       src: "/writing/deep-waters-of-colors/patela.png",
       width: 3872,
@@ -71,11 +72,12 @@ export const PALETTES: Palette[] = [
     ptName: "Xaréu",
     colors: [
       "oklch(0.28 0.01 90)",
-      "oklch(0.82 0.01 240)",
       "oklch(0.62 0.015 235)",
+      "oklch(0.82 0.01 240)",
       "oklch(0.9 0.03 95)",
       "oklch(0.906 0.143 94.0)",
     ],
+    weights: [45, 10, 15, 20, 10],
     photo: {
       src: "/writing/deep-waters-of-colors/caranx.png",
       width: 1997,
@@ -98,7 +100,7 @@ export const PALETTES: Palette[] = [
       "oklch(0.925 0.194 102.9)",
       "oklch(0.991 0.000 89.9)",
     ],
-    weights: [40, 15, 15, 30],
+    weights: [40, 5, 15, 40],
     photo: {
       src: "/writing/deep-waters-of-colors/idol.png",
       width: 1183,
@@ -121,6 +123,7 @@ export const PALETTES: Palette[] = [
       "oklch(0.858 0.094 74.9)",
       "oklch(0.729 0.146 168.1)",
     ],
+    weights: [25, 15, 30, 20, 10],
     photo: {
       src: "/writing/deep-waters-of-colors/volitas.png",
       width: 1636,
@@ -139,10 +142,11 @@ export const PALETTES: Palette[] = [
     common: "Pink Meanie",
     ptName: "Água Viva",
     colors: [
-      "oklch(0.912 0.066 69.8)",
-      "oklch(0.815 0.137 67.3)",
       "oklch(0.949 0.024 259.8)",
+      "oklch(0.815 0.137 67.3)",
+      "oklch(0.912 0.066 69.8)",
     ],
+    weights: [50, 30, 20],
     photo: {
       src: "/writing/deep-waters-of-colors/pink-moon.png",
       width: 525,

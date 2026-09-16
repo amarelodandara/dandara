@@ -4,9 +4,9 @@ export type ColorFormat = (typeof COLOR_FORMATS)[number];
 
 export const FORMAT_LABELS: Record<ColorFormat, string> = {
   oklch: "oklch",
-  hex: "hex codes",
+  hex: "hex",
   hsl: "hsl",
-  variables: "CSS variables",
+  variables: "css",
 };
 
 type Rgb = { red: number; green: number; blue: number };

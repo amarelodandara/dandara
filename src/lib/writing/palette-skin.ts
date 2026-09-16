@@ -39,10 +39,12 @@ export type SkinVars = {
   codeUnderline: string;
   codeRadius: string;
   codeImage: string;
+  graphPaper?: string;
   graphInk: string;
   graphAccent: string;
   graphMuted: string;
   graphFrame: string;
+  graphMark?: string;
   keyword: string;
   string: string;
   number: string;
@@ -78,27 +80,41 @@ const MOON_DEEP = "oklch(0.55 0.157 42)";
 const MOON_WASH = `radial-gradient(120% 140% at 16% 10%, ${fade(MOON_SALMON, 0.55)} 0%, transparent 64%), radial-gradient(110% 130% at 92% 88%, ${fade(MOON_PEACH, 0.6)} 0%, transparent 70%)`;
 
 const LION_BLACK = "oklch(0.260 0.000 89.9)";
-const LION_GREY = "oklch(0.807 0.009 67.7)";
 const LION_RUST = "oklch(0.446 0.126 45.5)";
 const LION_TAN = "oklch(0.858 0.094 74.9)";
 const LION_TEAL = "oklch(0.729 0.146 168.1)";
+const LION_OUTLINE = fade(LION_RUST, 0.45);
 
 const OVERRIDES: Record<string, Partial<SkinVars>> = {
   volitas: {
-    barFill: LION_GREY,
-    barImage: "var(--paper-grain)",
+    barFill: "transparent",
     barRadius: "0 1.25rem 0 1.25rem",
-    barRule: fade(LION_RUST, 0.45),
-    barUnderline: fade(LION_RUST, 0.45),
+    barRule: LION_OUTLINE,
+    barUnderline: LION_OUTLINE,
     barInk: LION_BLACK,
-    badgeFill: LION_TEAL,
+    badgeFill: LION_TAN,
     badgeInk: LION_BLACK,
     avatar: `radial-gradient(circle at 34% 30%, ${LION_TAN} 0%, ${LION_RUST} 100%)`,
     accent2: LION_RUST,
+    codeFill: "transparent",
+    codeInk: LION_BLACK,
+    codeRule: LION_OUTLINE,
+    codeUnderline: LION_OUTLINE,
+    headerFill: "transparent",
+    headerImage: "none",
+    headerInk: LION_BLACK,
+    headerNote: LION_RUST,
+    headerRule: LION_OUTLINE,
+    keyword: LION_RUST,
+    string: fade(LION_BLACK, 0.75),
+    number: LION_RUST,
+    title: LION_BLACK,
+    comment: fade(LION_BLACK, 0.45),
+    graphPaper: "var(--color-background)",
     graphAccent: LION_TEAL,
-    graphInk: LION_TAN,
-    graphMuted: fade(LION_GREY, 0.7),
-    graphFrame: fade(LION_GREY, 0.35),
+    graphInk: fade(LION_BLACK, 0.8),
+    graphMuted: fade(LION_BLACK, 0.5),
+    graphFrame: LION_OUTLINE,
   },
   "pink-moon": {
     barFill: MOON_GREY,
@@ -148,7 +164,7 @@ const OVERRIDES: Record<string, Partial<SkinVars>> = {
   },
   patela: {
     barRadius: "9999px",
-    barPad: "0.75rem 1.25rem",
+    barPad: "0.75rem",
     barRule: PATELA_BLUE,
     barUnderline: PATELA_BLUE,
     barInk: PATELA_WHITE,
@@ -168,8 +184,9 @@ const OVERRIDES: Record<string, Partial<SkinVars>> = {
     comment: fade(PATELA_WHITE, 0.45),
     graphInk: fade(PATELA_WHITE, 0.85),
     graphAccent: PATELA_GREEN,
-    graphMuted: PATELA_BLUE,
-    graphFrame: fade(PATELA_WHITE, 0.35),
+    graphMuted: PATELA_WHITE,
+    graphFrame: PATELA_WHITE,
+    graphMark: PATELA_BLUE,
   },
   idol: {
     barFill: IDOL_WHITE,
@@ -292,12 +309,13 @@ export function skinFor(palette: Palette): CSSProperties {
     "--fish-code-underline": skin.codeUnderline,
     "--fish-code-radius": skin.codeRadius,
     "--fish-code-image": skin.codeImage,
-    "--graph-paper": skin.ink,
+    "--graph-paper": skin.graphPaper ?? skin.ink,
     "--graph-ink": skin.graphInk,
     "--graph-accent": skin.graphAccent,
     "--graph-accent-2": skin.accent2,
     "--graph-muted": skin.graphMuted,
     "--graph-frame": skin.graphFrame,
+    "--graph-mark": skin.graphMark ?? skin.graphFrame,
     "--hljs-keyword": skin.keyword,
     "--hljs-string": skin.string,
     "--hljs-number": skin.number,

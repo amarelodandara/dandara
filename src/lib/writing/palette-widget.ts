@@ -8,6 +8,19 @@ const ROLES: Record<string, string> = {
   volitas: "VP of Product",
 };
 
+const NAMES: Record<string, string> = {
+  idea: "Raya Baitoi",
+  patela: "Blue Surg",
+  caranx: "Jackie",
+  idol: "Zaya Idol",
+  volitas: "Leon Volita",
+  "pink-moon": "Larson Dry",
+};
+
 export function roleFor(slug: string): string {
   return ROLES[slug] ?? DEFAULT_ROLE;
+}
+
+export function nameFor(slug: string, fallback: string): string {
+  return NAMES[slug] ?? fallback;
 }

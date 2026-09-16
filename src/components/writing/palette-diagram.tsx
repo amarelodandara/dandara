@@ -77,7 +77,7 @@ export function PaletteDiagram({ palette }: { palette: Palette }) {
 
   return (
     <div
-      className="mx-auto w-full bg-(--fish-ink)"
+      className="mx-auto w-full bg-(--graph-paper)"
       style={graph.width ? { maxWidth: graph.width } : undefined}
     >
       <Drawing graph={graph} />
