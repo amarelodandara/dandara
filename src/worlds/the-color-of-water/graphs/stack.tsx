@@ -5,6 +5,7 @@ import { motion, useReducedMotion } from "motion/react";
 
 import { Graph, GraphBody } from "./frame";
 import { fadeUp, staggerList, type GraphPalette } from "./motion";
+import { useReveal } from "./reveal";
 import { GraphRule } from "./rule";
 import { cn } from "../cn";
 
@@ -23,6 +24,7 @@ type GraphStackProps = {
 
 function GraphStack({ title, items, corner, className }: GraphStackProps) {
   const reduce = useReducedMotion();
+  const [ref, revealed] = useReveal<HTMLDivElement>(reduce);
   const item = fadeUp(reduce);
   const list = staggerList(reduce, 0.08);
 
@@ -31,10 +33,10 @@ function GraphStack({ title, items, corner, className }: GraphStackProps) {
       <GraphBody>
         <motion.div
           className="flex flex-col gap-4"
-          initial={reduce ? false : "hidden"}
+          ref={ref}
+          initial={false}
+          animate={revealed}
           variants={list}
-          viewport={{ once: true, amount: 0.5 }}
-          whileInView="show"
         >
           {items.map((entry, index) => (
             <Fragment key={`${entry.label}-${index}`}>

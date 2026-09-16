@@ -4,6 +4,7 @@ import { motion, useReducedMotion } from "motion/react";
 
 import { Graph, GraphBody } from "./frame";
 import { fadeUp, staggerList, type GraphPalette } from "./motion";
+import { useReveal } from "./reveal";
 import { cn } from "../cn";
 
 type SlopeItem = {
@@ -37,6 +38,7 @@ function GraphSlope({
   className,
 }: GraphSlopeProps) {
   const reduce = useReducedMotion();
+  const [ref, revealed] = useReveal<HTMLDivElement>(reduce);
   const item = fadeUp(reduce);
   const list = staggerList(reduce, 0.08);
 
@@ -45,10 +47,10 @@ function GraphSlope({
       <GraphBody className="px-4 py-6 sm:px-5 sm:py-7">
         <motion.div
           className="grid grid-cols-[1fr_auto_1rem_auto] gap-x-2 gap-y-3"
-          initial={reduce ? false : "hidden"}
+          ref={ref}
+          initial={false}
+          animate={revealed}
           variants={list}
-          viewport={{ once: true, amount: 0.5 }}
-          whileInView="show"
         >
           {fromLabel || toLabel ? (
             <motion.div

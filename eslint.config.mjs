@@ -95,6 +95,10 @@ const eslintConfig = defineConfig([
     files: ["src/worlds/**"],
     rules: {
       "better-tailwindcss/no-unknown-classes": "off",
+      "jsx-a11y/no-noninteractive-tabindex": [
+        "error",
+        { roles: ["tabpanel", "region"] },
+      ],
       "react/forbid-dom-props": "off",
       "react/forbid-component-props": "off",
     },

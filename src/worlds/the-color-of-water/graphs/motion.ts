@@ -19,7 +19,11 @@ export function fadeUp(reduce: boolean | null): Variants {
   }
 
   return {
-    hidden: { opacity: 0, transform: "translateY(8px)" },
+    hidden: {
+      opacity: 0,
+      transform: "translateY(8px)",
+      transition: { duration: 0 },
+    },
     show: {
       opacity: 1,
       transform: "translateY(0px)",

@@ -36,9 +36,16 @@ const CHIP_SETTLED = "rounded-md bg-(--band-lit) px-2 py-1";
 
 const WASH = "can-hover:hover:bg-foreground/5 focus-visible:bg-foreground/5";
 
-function Band({ swatch, text }: { swatch: Swatch; text: string }) {
+function Band({
+  swatch,
+  text,
+  label,
+}: {
+  swatch: Swatch;
+  text: string;
+  label: string;
+}) {
   const [outcome, copy] = useCopy(text);
-  const copied = outcome === "done";
   const announcement = outcome ? COPIED_ANNOUNCEMENT[outcome](text) : "";
 
   return (
@@ -46,6 +53,7 @@ function Band({ swatch, text }: { swatch: Swatch; text: string }) {
       <button
         type="button"
         onClick={copy}
+        aria-label={label}
         data-pressable
         style={
           {
@@ -59,9 +67,9 @@ function Band({ swatch, text }: { swatch: Swatch; text: string }) {
       >
         <span className={CHIP_SEAT}>
           <Verb
-            idle={outcome === "failed" ? COPIED_NOTE.failed : "Copy"}
-            done="Copied"
-            shown={copied}
+            idle="Copy"
+            done={COPIED_NOTE[outcome ?? "done"]}
+            shown={Boolean(outcome)}
             className="text-(--band-fg)"
             itemClassName={outcome ? CHIP_SETTLED : CHIP}
           />
@@ -90,13 +98,19 @@ export function PaletteSwatches({
   return (
     <>
       <div className="flex size-72 flex-col overflow-hidden rounded-md sm:size-80">
-        {swatches.map((swatch) => (
-          <Band key={swatch.variables} swatch={swatch} text={swatch[format]} />
+        {swatches.map((swatch, index) => (
+          <Band
+            key={swatch.variables}
+            swatch={swatch}
+            text={swatch[format]}
+            label={`Copy ${name} color ${index + 1}, ${swatch[format]}`}
+          />
         ))}
       </div>
       <button
         type="button"
         onClick={copyAll}
+        aria-label={`Copy the ${name} palette`}
         data-pressable
         className={`${PRESS} ${WASH} mt-1 ml-auto w-fit cursor-pointer items-center px-3 py-2 ${ANNOTATION} ${outcome ? "text-foreground" : "text-foreground-soft"}`}
       >

@@ -5,6 +5,7 @@ import { motion, useReducedMotion } from "motion/react";
 
 import { Graph, GraphBody } from "./frame";
 import { fadeUp, type GraphPalette } from "./motion";
+import { useReveal } from "./reveal";
 
 type GraphCountdownProps = {
   title: string;
@@ -40,6 +41,7 @@ export function GraphCountdown({
   className,
 }: GraphCountdownProps) {
   const reduce = useReducedMotion();
+  const [ref, revealed] = useReveal<HTMLDivElement>(reduce);
   const item = fadeUp(reduce);
   const [reading, setReading] = useState(PENDING);
 
@@ -64,10 +66,10 @@ export function GraphCountdown({
       <GraphBody>
         <motion.div
           className="flex flex-col gap-2"
-          initial={reduce ? false : "hidden"}
+          ref={ref}
+          initial={false}
+          animate={revealed}
           variants={item}
-          viewport={{ once: true, amount: 0.5 }}
-          whileInView="show"
         >
           <p className="tabular-nums text-(--graph-accent)">{reading}</p>
           {caption ? (

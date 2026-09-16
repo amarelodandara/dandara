@@ -53,8 +53,8 @@ export const PALETTES: Record<string, Palette> = {
         hsl: "hsl(34.3 16.1% 42.5%)",
         variables: "--idea-2: oklch(0.55 0.035 75);",
         share: 30,
-        ink: "oklch(0.255 0.015 76.2)",
-        lit: "oklch(0.255 0.015 76.2 / 0.12)",
+        ink: "oklch(0.973 0.004 91.4)",
+        lit: "oklch(0.973 0.004 91.4 / 0.12)",
       },
       {
         oklch: "oklch(0.973 0.004 91.4)",
@@ -202,8 +202,8 @@ export const PALETTES: Record<string, Palette> = {
         hsl: "hsl(202.5 6.6% 52.5%)",
         variables: "--caranx-2: oklch(0.62 0.015 235);",
         share: 10,
-        ink: "oklch(0.28 0.01 90)",
-        lit: "oklch(0.28 0.01 90 / 0.12)",
+        ink: "oklch(0.2 0.01 90)",
+        lit: "oklch(0.2 0.01 90 / 0.12)",
       },
       {
         oklch: "oklch(0.82 0.01 240)",
@@ -318,7 +318,7 @@ export const PALETTES: Record<string, Palette> = {
     ],
     person: {
       name: "Zaya Idol",
-      role: "Chef Design Officer",
+      role: "Chief Design Officer",
     },
     code: {
       label: "css",

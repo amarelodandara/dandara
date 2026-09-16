@@ -10,6 +10,7 @@ import {
   toneClass as paletteTone,
   type GraphPalette,
 } from "./motion";
+import { useReveal } from "./reveal";
 import { cn } from "../cn";
 
 type FlowTone = "default" | "accent" | "muted";
@@ -51,6 +52,7 @@ function GraphFlow({
 }: GraphFlowProps) {
   const column = direction === "column";
   const reduce = useReducedMotion();
+  const [ref, revealed] = useReveal<HTMLDivElement>(reduce);
   const item = fadeUp(reduce);
   const list = staggerList(reduce, 0.08);
   const tones = nodeTone(palette);
@@ -60,10 +62,10 @@ function GraphFlow({
       <GraphBody className="flex flex-col gap-7">
         <motion.div
           className="flex flex-col gap-7"
-          initial={reduce ? false : "hidden"}
+          ref={ref}
+          initial={false}
+          animate={revealed}
           variants={list}
-          viewport={{ once: true, amount: 0.5 }}
-          whileInView="show"
         >
           {rows.map((row, rowIndex) => (
             <motion.div

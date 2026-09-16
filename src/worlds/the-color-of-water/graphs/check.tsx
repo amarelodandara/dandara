@@ -4,6 +4,7 @@ import { motion, useReducedMotion } from "motion/react";
 
 import { Graph, GraphBody } from "./frame";
 import { fadeUp, staggerList, type GraphPalette } from "./motion";
+import { useReveal } from "./reveal";
 import { cn } from "../cn";
 
 type CheckItem = {
@@ -21,6 +22,7 @@ type GraphCheckProps = {
 
 function GraphCheck({ title, items, corner, className }: GraphCheckProps) {
   const reduce = useReducedMotion();
+  const [ref, revealed] = useReveal<HTMLUListElement>(reduce);
   const item = fadeUp(reduce);
   const list = staggerList(reduce, 0.08);
 
@@ -29,10 +31,10 @@ function GraphCheck({ title, items, corner, className }: GraphCheckProps) {
       <GraphBody>
         <motion.ul
           className="flex flex-col gap-4"
-          initial={reduce ? false : "hidden"}
+          ref={ref}
+          initial={false}
+          animate={revealed}
           variants={list}
-          viewport={{ once: true, amount: 0.5 }}
-          whileInView="show"
         >
           {items.map((entry, index) => (
             <motion.li

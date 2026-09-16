@@ -8,6 +8,10 @@ import { PersonBar } from "./person-bar";
 import { PaletteSwatches } from "./swatches";
 
 const SQUARE = "size-72 sm:size-80";
+const SHOWCASE = [
+  "my-12 rounded-md outline-offset-4 outline-foreground/40",
+  "has-[[data-palette-carousel]:focus-visible]:outline-2",
+].join(" ");
 const CARD = `${SQUARE} shrink-0 snap-start overflow-hidden`;
 const WRAP = "w-72 sm:w-80 shrink-0 snap-start";
 
@@ -64,8 +68,8 @@ export function Palette({ slug }: { slug: string }) {
   const palette = PALETTES[slug];
 
   return (
-    <figure className="my-12" data-palette={palette.slug}>
-      <PaletteCarousel>
+    <figure className={SHOWCASE} data-palette={palette.slug}>
+      <PaletteCarousel label={`${palette.name} showcase`}>
         <FishCard photo={palette.photo} />
 
         <div className={WRAP}>
