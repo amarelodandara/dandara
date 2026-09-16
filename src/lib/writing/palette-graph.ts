@@ -1,18 +1,36 @@
+import type { CheckItem } from "@/components/graphs/graph-check";
 import type { FlowRow } from "@/components/graphs/graph-flow";
 import type { GraphPalette } from "@/components/graphs/graph-motion";
 import type { Palette } from "./palettes";
 
-export type PaletteGraph = {
+type GraphShared = {
   title: string;
-  rows: FlowRow[];
-  direction?: "row" | "column";
+  width?: string;
   palette?: GraphPalette;
 };
 
+export type PaletteGraph =
+  | (GraphShared & {
+      kind?: "flow";
+      rows: FlowRow[];
+      direction?: "row" | "column";
+    })
+  | (GraphShared & { kind: "check"; items: CheckItem[] });
+
 const GRAPHS: Record<string, PaletteGraph> = {
+  idol: {
+    kind: "check",
+    title: "BLOG DASHBOARD",
+    width: "15.5rem",
+    items: [
+      { label: "build", done: true },
+      { label: "curate", done: false },
+    ],
+  },
   idea: {
     title: "THE PLAN",
     direction: "column",
+    width: "13rem",
     rows: [
       {
         nodes: [

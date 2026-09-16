@@ -29,21 +29,23 @@ export function PaletteCodeTheme({ palette }: { palette: Palette }) {
   const lines = code.split("\n");
 
   return (
-    <div className="w-full overflow-hidden rounded-(--fish-radius) border border-(--fish-rule) bg-(--fish-ink) text-(--fish-paper)">
+    <div className="w-full overflow-hidden rounded-t-(--fish-code-radius-top) rounded-b-(--fish-code-radius-bottom) border border-(--fish-code-rule) bg-(--fish-code-fill) bg-[image:var(--fish-code-image)] text-(--fish-code-ink) [border-bottom-color:var(--fish-code-underline)]">
       <div
-        className={`flex items-center justify-between gap-2 bg-(--fish-header-fill) px-3 py-2 text-(--fish-header-ink) ${MICRO}`}
+        className={`flex items-center justify-between gap-2 border-b border-(--fish-header-rule) bg-(--fish-header-fill) px-3 py-2 text-(--fish-header-ink) ${MICRO}`}
       >
         <span className="flex min-w-0 items-center gap-1.5">
           <FileIcon />
           <span className="truncate">{file}</span>
         </span>
-        <span className="shrink-0 uppercase opacity-70">{label}</span>
+        <span className="shrink-0 text-(--fish-header-note) uppercase">
+          {label}
+        </span>
       </div>
 
       <div className="flex">
         <ol
           aria-hidden="true"
-          className={`${MICRO} shrink-0 border-r border-(--fish-rule) py-3 pr-2 pl-3 text-right opacity-35 select-none`}
+          className={`${MICRO} shrink-0 border-r border-(--fish-code-rule) py-3 pr-2 pl-3 text-right opacity-35 select-none`}
           style={{ lineHeight: LINE }}
         >
           {lines.map((line, index) => (

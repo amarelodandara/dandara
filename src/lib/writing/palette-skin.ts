@@ -16,6 +16,25 @@ export type SkinVars = {
   radius: string;
   headerFill: string;
   headerInk: string;
+  headerNote: string;
+  headerRule: string;
+  barFill: string;
+  barInk: string;
+  barRule: string;
+  barUnderline: string;
+  barRadiusTop: string;
+  barRadiusBottom: string;
+  barImage: string;
+  badgeFill: string;
+  badgeInk: string;
+  avatar: string;
+  codeFill: string;
+  codeInk: string;
+  codeRule: string;
+  codeUnderline: string;
+  codeRadiusTop: string;
+  codeRadiusBottom: string;
+  codeImage: string;
   graphInk: string;
   graphAccent: string;
   graphMuted: string;
@@ -27,7 +46,47 @@ export type SkinVars = {
   comment: string;
 };
 
-const OVERRIDES: Record<string, Partial<SkinVars>> = {};
+const IDOL_GREEN = "oklch(0.979 0.096 111.2)";
+const IDOL_GOLD = "oklch(0.925 0.194 102.9)";
+const IDOL_BLACK = "oklch(0.261 0.004 84.6)";
+const IDOL_WHITE = "oklch(0.991 0.000 89.9)";
+
+function fade(color: string, alpha: number) {
+  return color.replace(")", ` / ${alpha})`);
+}
+
+const OVERRIDES: Record<string, Partial<SkinVars>> = {
+  idol: {
+    barFill: IDOL_WHITE,
+    barInk: IDOL_BLACK,
+    barRule: "transparent",
+    barUnderline: IDOL_GREEN,
+    barRadiusTop: "1rem",
+    barRadiusBottom: "0px",
+    barImage: "none",
+    badgeFill: IDOL_GOLD,
+    badgeInk: IDOL_BLACK,
+    avatar: `radial-gradient(circle at 32% 30%, ${IDOL_GREEN} 0%, ${IDOL_GOLD} 100%)`,
+    codeFill: IDOL_BLACK,
+    codeInk: IDOL_WHITE,
+    codeRule: "transparent",
+    codeUnderline: IDOL_GREEN,
+    codeRadiusTop: "0.5rem",
+    codeRadiusBottom: "0px",
+    codeImage: "none",
+    headerFill: "transparent",
+    headerInk: IDOL_WHITE,
+    headerNote: IDOL_GOLD,
+    headerRule: IDOL_GREEN,
+    keyword: IDOL_GOLD,
+    string: IDOL_GREEN,
+    number: IDOL_GOLD,
+    title: IDOL_GREEN,
+    comment: fade(IDOL_WHITE, 0.4),
+    graphAccent: IDOL_GOLD,
+    graphMuted: IDOL_GREEN,
+  },
+};
 
 function derive(palette: Palette): SkinVars {
   const ink = darkest(palette);
@@ -43,8 +102,27 @@ function derive(palette: Palette): SkinVars {
     accent2,
     rule: accent,
     radius: "0px",
-    headerFill: accent,
-    headerInk: ink,
+    headerFill: ink,
+    headerInk: paper,
+    headerNote: accent,
+    headerRule: accent,
+    barFill: ink,
+    barInk: paper,
+    barRule: accent,
+    barUnderline: accent,
+    barRadiusTop: "0px",
+    barRadiusBottom: "0px",
+    barImage: "none",
+    badgeFill: accent,
+    badgeInk: paper,
+    avatar: `linear-gradient(135deg, ${accent} 0%, ${accent} 55%, ${paper} 100%)`,
+    codeFill: ink,
+    codeInk: paper,
+    codeRule: accent,
+    codeUnderline: accent,
+    codeRadiusTop: "0px",
+    codeRadiusBottom: "0px",
+    codeImage: "none",
     graphInk: withAlpha(paper, 0.8),
     graphAccent: paper,
     graphMuted: accent,
@@ -69,6 +147,25 @@ export function skinFor(palette: Palette): CSSProperties {
     "--fish-radius": skin.radius,
     "--fish-header-fill": skin.headerFill,
     "--fish-header-ink": skin.headerInk,
+    "--fish-header-note": skin.headerNote,
+    "--fish-header-rule": skin.headerRule,
+    "--fish-bar-fill": skin.barFill,
+    "--fish-bar-ink": skin.barInk,
+    "--fish-bar-rule": skin.barRule,
+    "--fish-bar-underline": skin.barUnderline,
+    "--fish-bar-radius-top": skin.barRadiusTop,
+    "--fish-bar-radius-bottom": skin.barRadiusBottom,
+    "--fish-bar-image": skin.barImage,
+    "--fish-badge-fill": skin.badgeFill,
+    "--fish-badge-ink": skin.badgeInk,
+    "--fish-avatar": skin.avatar,
+    "--fish-code-fill": skin.codeFill,
+    "--fish-code-ink": skin.codeInk,
+    "--fish-code-rule": skin.codeRule,
+    "--fish-code-underline": skin.codeUnderline,
+    "--fish-code-radius-top": skin.codeRadiusTop,
+    "--fish-code-radius-bottom": skin.codeRadiusBottom,
+    "--fish-code-image": skin.codeImage,
     "--graph-paper": skin.ink,
     "--graph-ink": skin.graphInk,
     "--graph-accent": skin.graphAccent,

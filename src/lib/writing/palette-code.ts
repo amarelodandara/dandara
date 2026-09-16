@@ -39,12 +39,19 @@ Glide ray(int beat) {
     return turn / max(size, 1)`,
   },
   idol: {
-    language: "bash",
-    label: "shell",
-    file: "reef.sh",
-    code: `reef ls --band gold
-reef tag idol --keep
-reef sync --dry-run`,
+    language: "css",
+    label: "css",
+    file: "idol.css",
+    code: `.idol {
+  --band: oklch(0.93 0.19 103);
+  --ink: color-mix(in oklch,
+    var(--band) 60%, black);
+  background: linear-gradient(
+    105deg, var(--band), #fff);
+  color: var(--ink);
+
+  &:hover { --band: #ffd400; }
+}`,
   },
   volitas: {
     language: "sql",
