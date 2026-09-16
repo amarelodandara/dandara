@@ -45,7 +45,7 @@ export function PaletteCodeTheme({ palette }: { palette: Palette }) {
       <div className="flex">
         <ol
           aria-hidden="true"
-          className={`${MICRO} shrink-0 border-r border-(--fish-code-rule) py-3 pr-2 pl-3 text-right opacity-35 select-none`}
+          className={`${MICRO} shrink-0 border-r border-(--fish-header-rule) py-3 pr-2 pl-3 text-right opacity-35 select-none`}
           style={{ lineHeight: LINE }}
         >
           {lines.map((line, index) => (

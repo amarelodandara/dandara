@@ -25,6 +25,10 @@ export type SkinVars = {
   barRadiusTop: string;
   barRadiusBottom: string;
   barImage: string;
+  barPad: string;
+  barGap: string;
+  barCellPad: string;
+  barCellRule: string;
   badgeFill: string;
   badgeInk: string;
   avatar: string;
@@ -55,7 +59,58 @@ function fade(color: string, alpha: number) {
   return color.replace(")", ` / ${alpha})`);
 }
 
+const PATELA_DEEP = "oklch(0.190 0.111 284.8)";
+const PATELA_VIOLET = "oklch(0.454 0.255 285.4)";
+const PATELA_GREEN = "oklch(0.955 0.216 114.6)";
+const PATELA_BLUE = "oklch(0.605 0.217 257.2)";
+const PATELA_WHITE = "oklch(0.97 0.014 258)";
+
+const CARANX_RULE = "oklch(0.82 0.01 240)";
+const CARANX_STEEL = "oklch(0.62 0.015 235)";
+const CARANX_CREAM = "oklch(0.9 0.03 95)";
+const CARANX_GOLD = "oklch(0.906 0.143 94.0)";
+
 const OVERRIDES: Record<string, Partial<SkinVars>> = {
+  caranx: {
+    barPad: "0px",
+    barGap: "0px",
+    barCellPad: "0.875rem",
+    barCellRule: fade(CARANX_RULE, 0.45),
+    barRule: fade(CARANX_RULE, 0.45),
+    barInk: CARANX_CREAM,
+    badgeFill: CARANX_GOLD,
+    badgeInk: "oklch(0.28 0.01 90)",
+    graphAccent: CARANX_GOLD,
+    graphInk: CARANX_CREAM,
+    graphMuted: CARANX_RULE,
+    graphFrame: fade(CARANX_STEEL, 0.55),
+  },
+  patela: {
+    barRadiusTop: "9999px",
+    barRadiusBottom: "9999px",
+    barPad: "0.75rem 1.25rem",
+    barRule: PATELA_BLUE,
+    barUnderline: PATELA_BLUE,
+    barInk: PATELA_WHITE,
+    badgeFill: PATELA_GREEN,
+    badgeInk: PATELA_DEEP,
+    avatar: `radial-gradient(circle at 50% 45%, ${PATELA_GREEN} 0%, ${PATELA_BLUE} 62%, ${PATELA_VIOLET} 100%)`,
+    codeInk: PATELA_WHITE,
+    headerInk: PATELA_WHITE,
+    headerNote: PATELA_GREEN,
+    headerRule: PATELA_BLUE,
+    codeRule: PATELA_BLUE,
+    codeUnderline: PATELA_BLUE,
+    keyword: PATELA_GREEN,
+    string: PATELA_BLUE,
+    number: PATELA_GREEN,
+    title: PATELA_GREEN,
+    comment: fade(PATELA_WHITE, 0.45),
+    graphInk: fade(PATELA_WHITE, 0.85),
+    graphAccent: PATELA_GREEN,
+    graphMuted: PATELA_BLUE,
+    graphFrame: fade(PATELA_WHITE, 0.35),
+  },
   idol: {
     barFill: IDOL_WHITE,
     barInk: IDOL_BLACK,
@@ -64,6 +119,10 @@ const OVERRIDES: Record<string, Partial<SkinVars>> = {
     barRadiusTop: "1rem",
     barRadiusBottom: "0px",
     barImage: "none",
+    barPad: "1rem",
+    barGap: "0.75rem",
+    barCellPad: "0px",
+    barCellRule: "transparent",
     badgeFill: IDOL_GOLD,
     badgeInk: IDOL_BLACK,
     avatar: `radial-gradient(circle at 32% 30%, ${IDOL_GREEN} 0%, ${IDOL_GOLD} 100%)`,
@@ -113,6 +172,10 @@ function derive(palette: Palette): SkinVars {
     barRadiusTop: "0px",
     barRadiusBottom: "0px",
     barImage: "none",
+    barPad: "1rem",
+    barGap: "0.75rem",
+    barCellPad: "0px",
+    barCellRule: "transparent",
     badgeFill: accent,
     badgeInk: paper,
     avatar: `linear-gradient(135deg, ${accent} 0%, ${accent} 55%, ${paper} 100%)`,
@@ -156,6 +219,10 @@ export function skinFor(palette: Palette): CSSProperties {
     "--fish-bar-radius-top": skin.barRadiusTop,
     "--fish-bar-radius-bottom": skin.barRadiusBottom,
     "--fish-bar-image": skin.barImage,
+    "--fish-bar-pad": skin.barPad,
+    "--fish-bar-gap": skin.barGap,
+    "--fish-bar-cell-pad": skin.barCellPad,
+    "--fish-bar-cell-rule": skin.barCellRule,
     "--fish-badge-fill": skin.badgeFill,
     "--fish-badge-ink": skin.badgeInk,
     "--fish-avatar": skin.avatar,

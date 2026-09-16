@@ -21,22 +21,33 @@ Glide ray(int beat) {
 }`,
   },
   patela: {
-    language: "css",
-    label: "css",
-    file: "tang.css",
-    code: `.tang {
-  color: var(--patela-2);
-  border: 1px solid var(--patela-1);
-  transition: color 150ms;
-}`,
+    language: "xml",
+    label: "blade",
+    file: "tank.blade.php",
+    code: `<flux:card>
+  <flux:heading>Tank</flux:heading>
+
+  <flux:input
+    wire:model.live="species"
+    label="Species"
+  />
+
+  <flux:button>Save</flux:button>
+</flux:card>`,
   },
   caranx: {
-    language: "python",
-    label: "python",
-    file: "school.py",
-    code: `def school(fish, size=12):
-    turn = sum(f.angle for f in fish)
-    return turn / max(size, 1)`,
+    language: "rust",
+    label: "rust",
+    file: "caranx.rs",
+    code: `struct Jack {
+    speed: f32,
+}
+
+impl Jack {
+    fn chase(&self) -> f32 {
+        self.speed * 1.4
+    }
+}`,
   },
   idol: {
     language: "css",

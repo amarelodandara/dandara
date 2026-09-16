@@ -1,4 +1,6 @@
 import type { CheckItem } from "@/components/graphs/graph-check";
+import type { StackItem } from "@/components/graphs/graph-stack";
+import type { TreeItem } from "@/components/graphs/graph-tree";
 import type { FlowRow } from "@/components/graphs/graph-flow";
 import type { GraphPalette } from "@/components/graphs/graph-motion";
 import type { Palette } from "./palettes";
@@ -15,9 +17,32 @@ export type PaletteGraph =
       rows: FlowRow[];
       direction?: "row" | "column";
     })
-  | (GraphShared & { kind: "check"; items: CheckItem[] });
+  | (GraphShared & { kind: "check"; items: CheckItem[] })
+  | (GraphShared & { kind: "stack"; items: StackItem[] })
+  | (GraphShared & { kind: "tree"; items: TreeItem[] });
 
 const GRAPHS: Record<string, PaletteGraph> = {
+  caranx: {
+    kind: "tree",
+    title: "SHOAL",
+    width: "13rem",
+    items: [
+      { label: "school/", dir: true },
+      { label: "caranx.rs", depth: 1, tone: "ink" },
+      { label: "shoal.rs", depth: 1, tone: "muted" },
+      { label: "Cargo.toml", tone: "alt" },
+    ],
+  },
+  patela: {
+    kind: "stack",
+    title: "USAGE",
+    width: "12rem",
+    items: [
+      { label: "Empathy", muted: true },
+      { label: "Focus" },
+      { label: "Impute", muted: true },
+    ],
+  },
   idol: {
     kind: "check",
     title: "BLOG DASHBOARD",
