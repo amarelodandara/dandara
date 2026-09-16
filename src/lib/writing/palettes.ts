@@ -17,6 +17,7 @@ export type Palette = {
   common: string;
   ptName: string;
   colors: string[];
+  weights?: number[];
   photo?: PalettePhoto;
 };
 
@@ -32,6 +33,7 @@ export const PALETTES: Palette[] = [
       "oklch(0.55 0.035 75)",
       "oklch(0.973 0.004 91.4)",
     ],
+    weights: [50, 30, 20],
     photo: {
       src: "/writing/deep-waters-of-colors/idea-ray.png",
       width: 2818,
@@ -96,6 +98,7 @@ export const PALETTES: Palette[] = [
       "oklch(0.925 0.194 102.9)",
       "oklch(0.991 0.000 89.9)",
     ],
+    weights: [40, 15, 15, 30],
     photo: {
       src: "/writing/deep-waters-of-colors/idol.png",
       width: 1183,
@@ -183,6 +186,10 @@ export function midtones(palette: Palette): string[] {
   const dark = darkest(palette);
   const light = lightest(palette);
   return palette.colors.filter((c) => c !== dark && c !== light);
+}
+
+export function shareOf(palette: Palette, index: number): number {
+  return palette.weights?.[index] ?? 1;
 }
 
 export function findPalette(slug: string): Palette {

@@ -16,12 +16,13 @@ import { useColorFormat } from "@/lib/writing/color-format-store";
 import {
   darkest,
   lightest,
+  shareOf,
   withAlpha,
   type Palette,
 } from "@/lib/writing/palettes";
 
 const BAND = [
-  "group relative min-h-0 flex-1 cursor-pointer text-left select-none",
+  "group relative min-h-0 basis-0 cursor-pointer text-left select-none",
   "focus-visible:outline-2 focus-visible:-outline-offset-4 focus-visible:outline-(--band-fg)",
 ].join(" ");
 
@@ -53,11 +54,13 @@ function legibleOn(color: string, ink: string, paper: string) {
 function Band({
   color,
   text,
+  share,
   ink,
   paper,
 }: {
   color: string;
   text: string;
+  share: number;
   ink: string;
   paper: string;
 }) {
@@ -75,6 +78,7 @@ function Band({
         style={
           {
             background: color,
+            flexGrow: share,
             "--band-fg": fg,
             "--band-lit": withAlpha(fg, 0.12),
           } as CSSProperties
@@ -116,6 +120,7 @@ export function PaletteSwatches({ palette }: { palette: Palette }) {
             key={color + i}
             color={color}
             text={formatColor(color, format, `${palette.slug}-${i + 1}`)}
+            share={shareOf(palette, i)}
             ink={ink}
             paper={paper}
           />
