@@ -23,8 +23,7 @@ export type SkinVars = {
   barInk: string;
   barRule: string;
   barUnderline: string;
-  barRadiusTop: string;
-  barRadiusBottom: string;
+  barRadius: string;
   barImage: string;
   barFilter: string;
   barPad: string;
@@ -38,8 +37,7 @@ export type SkinVars = {
   codeInk: string;
   codeRule: string;
   codeUnderline: string;
-  codeRadiusTop: string;
-  codeRadiusBottom: string;
+  codeRadius: string;
   codeImage: string;
   graphInk: string;
   graphAccent: string;
@@ -79,15 +77,36 @@ const MOON_INK = "oklch(0.44 0.021 264)";
 const MOON_DEEP = "oklch(0.55 0.157 42)";
 const MOON_WASH = `radial-gradient(120% 140% at 16% 10%, ${fade(MOON_SALMON, 0.55)} 0%, transparent 64%), radial-gradient(110% 130% at 92% 88%, ${fade(MOON_PEACH, 0.6)} 0%, transparent 70%)`;
 
+const LION_BLACK = "oklch(0.260 0.000 89.9)";
+const LION_GREY = "oklch(0.807 0.009 67.7)";
+const LION_RUST = "oklch(0.446 0.126 45.5)";
+const LION_TAN = "oklch(0.858 0.094 74.9)";
+const LION_TEAL = "oklch(0.729 0.146 168.1)";
+
 const OVERRIDES: Record<string, Partial<SkinVars>> = {
+  volitas: {
+    barFill: LION_GREY,
+    barImage: "var(--paper-grain)",
+    barRadius: "0 1.25rem 0 1.25rem",
+    barRule: fade(LION_RUST, 0.45),
+    barUnderline: fade(LION_RUST, 0.45),
+    barInk: LION_BLACK,
+    badgeFill: LION_TEAL,
+    badgeInk: LION_BLACK,
+    avatar: `radial-gradient(circle at 34% 30%, ${LION_TAN} 0%, ${LION_RUST} 100%)`,
+    accent2: LION_RUST,
+    graphAccent: LION_TEAL,
+    graphInk: LION_TAN,
+    graphMuted: fade(LION_GREY, 0.7),
+    graphFrame: fade(LION_GREY, 0.35),
+  },
   "pink-moon": {
     barFill: MOON_GREY,
     barImage: MOON_WASH,
     barFilter: "blur(14px) saturate(150%)",
     barRule: fade(MOON_GREY, 0.85),
     barUnderline: fade(MOON_GREY, 0.85),
-    barRadiusTop: "0.25rem",
-    barRadiusBottom: "0.25rem",
+    barRadius: "0.25rem",
     barInk: MOON_INK,
     badgeFill: MOON_SALMON,
     badgeInk: MOON_INK,
@@ -97,8 +116,7 @@ const OVERRIDES: Record<string, Partial<SkinVars>> = {
     codeInk: MOON_INK,
     codeRule: fade(MOON_SALMON, 0.45),
     codeUnderline: fade(MOON_SALMON, 0.45),
-    codeRadiusTop: "0.25rem",
-    codeRadiusBottom: "0.25rem",
+    codeRadius: "0.25rem",
     headerFill: MOON_GREY,
     headerImage: MOON_WASH,
     headerInk: MOON_INK,
@@ -129,8 +147,7 @@ const OVERRIDES: Record<string, Partial<SkinVars>> = {
     graphFrame: fade(CARANX_STEEL, 0.55),
   },
   patela: {
-    barRadiusTop: "9999px",
-    barRadiusBottom: "9999px",
+    barRadius: "9999px",
     barPad: "0.75rem 1.25rem",
     barRule: PATELA_BLUE,
     barUnderline: PATELA_BLUE,
@@ -159,8 +176,7 @@ const OVERRIDES: Record<string, Partial<SkinVars>> = {
     barInk: IDOL_BLACK,
     barRule: "transparent",
     barUnderline: IDOL_GREEN,
-    barRadiusTop: "1rem",
-    barRadiusBottom: "0px",
+    barRadius: "1rem 1rem 0 0",
     barImage: "none",
     barFilter: "none",
     barPad: "1rem",
@@ -174,8 +190,7 @@ const OVERRIDES: Record<string, Partial<SkinVars>> = {
     codeInk: IDOL_WHITE,
     codeRule: "transparent",
     codeUnderline: IDOL_GREEN,
-    codeRadiusTop: "0.5rem",
-    codeRadiusBottom: "0px",
+    codeRadius: "0.5rem 0.5rem 0 0",
     codeImage: "none",
     headerFill: "transparent",
     headerInk: IDOL_WHITE,
@@ -214,8 +229,7 @@ function derive(palette: Palette): SkinVars {
     barInk: paper,
     barRule: accent,
     barUnderline: accent,
-    barRadiusTop: "0px",
-    barRadiusBottom: "0px",
+    barRadius: "0px",
     barImage: "none",
     barFilter: "none",
     barPad: "1rem",
@@ -229,8 +243,7 @@ function derive(palette: Palette): SkinVars {
     codeInk: paper,
     codeRule: accent,
     codeUnderline: accent,
-    codeRadiusTop: "0px",
-    codeRadiusBottom: "0px",
+    codeRadius: "0px",
     codeImage: "none",
     graphInk: withAlpha(paper, 0.8),
     graphAccent: paper,
@@ -263,8 +276,7 @@ export function skinFor(palette: Palette): CSSProperties {
     "--fish-bar-ink": skin.barInk,
     "--fish-bar-rule": skin.barRule,
     "--fish-bar-underline": skin.barUnderline,
-    "--fish-bar-radius-top": skin.barRadiusTop,
-    "--fish-bar-radius-bottom": skin.barRadiusBottom,
+    "--fish-bar-radius": skin.barRadius,
     "--fish-bar-image": skin.barImage,
     "--fish-bar-filter": skin.barFilter,
     "--fish-bar-pad": skin.barPad,
@@ -278,8 +290,7 @@ export function skinFor(palette: Palette): CSSProperties {
     "--fish-code-ink": skin.codeInk,
     "--fish-code-rule": skin.codeRule,
     "--fish-code-underline": skin.codeUnderline,
-    "--fish-code-radius-top": skin.codeRadiusTop,
-    "--fish-code-radius-bottom": skin.codeRadiusBottom,
+    "--fish-code-radius": skin.codeRadius,
     "--fish-code-image": skin.codeImage,
     "--graph-paper": skin.ink,
     "--graph-ink": skin.graphInk,

@@ -1,6 +1,7 @@
 import { GraphCheck } from "@/components/graphs/graph-check";
 import { GraphCountdown } from "@/components/graphs/graph-countdown";
 import { GraphFlow } from "@/components/graphs/graph-flow";
+import { GraphSlope } from "@/components/graphs/graph-slope";
 import { GraphStack } from "@/components/graphs/graph-stack";
 import { GraphTree } from "@/components/graphs/graph-tree";
 import { graphFor, type PaletteGraph } from "@/lib/writing/palette-graph";
@@ -12,6 +13,18 @@ function Drawing({ graph }: { graph: PaletteGraph }) {
       <GraphStack
         title={graph.title}
         items={graph.items}
+        palette={graph.palette}
+      />
+    );
+  }
+
+  if (graph.kind === "slope") {
+    return (
+      <GraphSlope
+        title={graph.title}
+        items={graph.items}
+        fromLabel={graph.fromLabel}
+        toLabel={graph.toLabel}
         palette={graph.palette}
       />
     );

@@ -29,7 +29,7 @@ export function PaletteCodeTheme({ palette }: { palette: Palette }) {
   const lines = code.split("\n");
 
   return (
-    <div className="w-full overflow-hidden rounded-t-(--fish-code-radius-top) rounded-b-(--fish-code-radius-bottom) border border-(--fish-code-rule) bg-(--fish-code-fill) bg-[image:var(--fish-code-image)] text-(--fish-code-ink) [border-bottom-color:var(--fish-code-underline)]">
+    <div className="w-full overflow-hidden [border-radius:var(--fish-code-radius)] border border-(--fish-code-rule) bg-(--fish-code-fill) bg-[image:var(--fish-code-image)] text-(--fish-code-ink) [border-bottom-color:var(--fish-code-underline)]">
       <div
         className={`flex items-center justify-between gap-2 border-b border-(--fish-header-rule) bg-(--fish-header-fill) bg-[image:var(--fish-header-image)] px-3 py-2 text-(--fish-header-ink) ${MICRO}`}
       >

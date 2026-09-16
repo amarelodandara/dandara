@@ -1,5 +1,6 @@
 import type { CheckItem } from "@/components/graphs/graph-check";
 import type { StackItem } from "@/components/graphs/graph-stack";
+import type { SlopeItem } from "@/components/graphs/graph-slope";
 import type { TreeItem } from "@/components/graphs/graph-tree";
 import type { FlowRow } from "@/components/graphs/graph-flow";
 import type { GraphPalette } from "@/components/graphs/graph-motion";
@@ -21,6 +22,12 @@ export type PaletteGraph =
   | (GraphShared & { kind: "stack"; items: StackItem[] })
   | (GraphShared & { kind: "tree"; items: TreeItem[] })
   | (GraphShared & {
+      kind: "slope";
+      items: SlopeItem[];
+      fromLabel?: string;
+      toLabel?: string;
+    })
+  | (GraphShared & {
       kind: "countdown";
       to: string;
       done: string;
@@ -28,6 +35,19 @@ export type PaletteGraph =
     });
 
 const GRAPHS: Record<string, PaletteGraph> = {
+  volitas: {
+    kind: "slope",
+    title: "USERS",
+    palette: "duo",
+    width: "16rem",
+    fromLabel: "2025",
+    toLabel: "2026",
+    items: [
+      { label: "store", from: 8200, to: 12_400 },
+      { label: "docs", from: 5100, to: 4100 },
+      { label: "dashboard", from: 640, to: 860 },
+    ],
+  },
   "pink-moon": {
     kind: "countdown",
     title: "FREEZE",

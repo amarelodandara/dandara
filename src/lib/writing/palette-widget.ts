@@ -5,6 +5,7 @@ const ROLES: Record<string, string> = {
   patela: "DevRel",
   caranx: "Chief Engineering Officer",
   "pink-moon": "Personality Hire",
+  volitas: "VP of Product",
 };
 
 export function roleFor(slug: string): string {

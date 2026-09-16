@@ -522,6 +522,13 @@ body[data-shop-open] [data-shop-panel] {
   transition-duration: var(--motion-enter);
 }
 
+/* Held as a property so anything else that wants this exact paper — a palette
+   showcase in an article, say — references the asset rather than pasting a
+   second copy of the data URI that then drifts from this one. */
+:root {
+  --paper-grain: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='f'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='1' numOctaves='1' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3CfeComponentTransfer%3E%3CfeFuncR type='linear' slope='4' intercept='-1.5'/%3E%3CfeFuncG type='linear' slope='4' intercept='-1.5'/%3E%3CfeFuncB type='linear' slope='4' intercept='-1.5'/%3E%3CfeFuncA type='linear' slope='0' intercept='1'/%3E%3C/feComponentTransfer%3E%3C/filter%3E%3Crect width='180' height='180' filter='url(%23f)' opacity='0.1'/%3E%3C/svg%3E");
+}
+
 /* Paper, tuned by eye against the panel rather than reasoned about.
 
    Three things carry it, and the first is the one that was wrong for two
@@ -537,7 +544,7 @@ body[data-shop-open] [data-shop-panel] {
    One octave, not four. At this frequency the finer octaves land under a pixel
    and only cost time. */
 [data-paper] {
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='f'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='1' numOctaves='1' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3CfeComponentTransfer%3E%3CfeFuncR type='linear' slope='4' intercept='-1.5'/%3E%3CfeFuncG type='linear' slope='4' intercept='-1.5'/%3E%3CfeFuncB type='linear' slope='4' intercept='-1.5'/%3E%3CfeFuncA type='linear' slope='0' intercept='1'/%3E%3C/feComponentTransfer%3E%3C/filter%3E%3Crect width='180' height='180' filter='url(%23f)' opacity='0.1'/%3E%3C/svg%3E");
+  background-image: var(--paper-grain);
   background-size: 180px 180px;
 }
 

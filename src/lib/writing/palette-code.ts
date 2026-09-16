@@ -65,13 +65,18 @@ impl Jack {
 }`,
   },
   volitas: {
-    language: "sql",
-    label: "sql",
-    file: "lionfish.sql",
-    code: `select fin, venom
-from lionfish
-where spines > 12
-order by venom desc;`,
+    language: "ruby",
+    label: "ruby",
+    file: "lionfish.rb",
+    code: `class Lionfish < Fish
+  scope :venomous, -> {
+    where("spines > ?", 12)
+  }
+
+  def flare
+    fins.sum(&:span)
+  end
+end`,
   },
   "pink-moon": {
     language: "markdown",
