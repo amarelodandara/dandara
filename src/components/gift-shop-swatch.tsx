@@ -8,11 +8,11 @@ import {
 import { useSpringDrag } from "@/lib/spring-drag";
 import {
   Announcement,
-  CHIP_W,
   COPIED_ANNOUNCEMENT,
   COPIED_NOTE,
   useCopy,
-} from "./gift-shop-row";
+} from "./copy";
+import { CHIP_W } from "./gift-shop-row";
 import { ANNOTATION } from "@/lib/type";
 
 const DRAGGED_PAST_PX = 4;

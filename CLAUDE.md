@@ -49,13 +49,77 @@ import { PROSE, SECTION_HEADING } from "@/lib/type";
 
 ## Exceptions
 
-There is one, and it is the whole CV flow: `src/app/(cv)/**` and
+There are two. The first is the whole CV flow: `src/app/(cv)/**` and
 `src/components/cv/**` are set in Arial at point sizes, because they have to
 survive an applicant tracking system and a printer. Leave them alone. They are
 not part of this scale and must not import from `src/lib/type.ts`.
 
+The second is a world (below). A world may borrow these roles, but it is not
+bound by them, and it never adds one: a variant a single post wants lives in
+that post's folder, not in `type.ts`.
+
 Everywhere else has none. If a design seems to need one, the answer is a role it
 already fits — check `LABEL` before inventing a quiet variant of a heading.
+
+# Worlds
+
+A world is a post (or project) that brings its own look: its own colours,
+fonts, components and motion. `the-color-of-water` is the first. Everything
+that belongs to a world lives in `src/worlds/<slug>/` and nowhere else.
+
+**Nothing flows out.** A world never edits `globals.css`, `src/lib/type.ts`,
+the root layouts, `mdx-components.tsx`, `PostMeta` or the post page template to
+get its look. It may *read* the site's tokens and shared pieces (`@/lib/type`,
+`@/components/copy`, `@/lib/pressable`, `CAPTION`). If a world needs something
+new, that thing goes in the world's folder, even if it looks reusable. It
+graduates to the site only by a separate decision, never as a side effect of a
+post.
+
+**Everything is scoped.** The post's MDX sets the world as its layout and
+imports its components itself:
+
+```mdx
+import { Palette } from "@/worlds/<slug>/showcase";
+
+export { World as default } from "@/worlds/<slug>/world";
+```
+
+`World` wraps the body in `<div data-world="<slug>" className="contents">`, and
+every rule in the world's `world.css` starts with `[data-world="<slug>"]`. This
+is required, not tidiness: the home page, the writing index, the feed and the
+sitemap import every post module to read its `meta`, so a world's stylesheet
+reaches pages that never render it. Names that CSS cannot scope (`@keyframes`,
+`@property`, `@font-face`) are prefixed with the world's name.
+
+- **Fonts** are a plain `@font-face` in `world.css`, with the file in the world's
+  folder. Never `next/font`: it preloads the font on every page that imports
+  the module. A declared face only downloads when something uses it.
+- **Grid placement** does not pass through the wrapper. The article grid's
+  `[data-article] > *` and `> figure` rules miss a world's blocks, so
+  `world.css` restates them for `[data-world="<slug>"] > *`. Forgetting this
+  scatters the post's paragraphs across the grid's columns.
+- **Portals** leave the wrapper. Put `data-world={WORLD}` on the positioner.
+- **The page around the post** (its deck, say) is restyled only from
+  `world.css`, via `[data-article]:has(> [data-world="<slug>"])`. The page
+  template has no per-post switches.
+- **Lint.** `src/worlds/**` may use `style` and classes Tailwind does not know.
+  Everything else in the house style still applies.
+
+**A finished world is baked.** While a world is being designed its values can be
+computed: skins derived from a palette, colour conversions, syntax
+highlighting, image framing. Once it ships, the results are written out as
+literals, and the code that derived them is deleted:
+
+- data in the world's `.ts` file (for `the-color-of-water`, `palettes.ts`:
+  hex, hsl and css forms of every colour, highlighted code as HTML);
+- per-item custom properties in `world.css` (`[data-palette="…"]` blocks);
+- photos resized once to twice their drawn size, as WebP, and not passed through
+  `next/image`;
+- client components get only the fields they render. Props are serialised into
+  the page, so a whole data object sent to a client component ships all of it.
+
+How the numbers were reached goes in the commit message that bakes them. To
+change a baked world, edit the literals. Do not bring back the derivation.
 
 # House style
 

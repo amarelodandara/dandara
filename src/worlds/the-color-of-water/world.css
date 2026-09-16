@@ -1,0 +1,634 @@
+/* "The color of water" is a world: a post that brings its own look and
+   keeps it. Everything it needs beyond the wall's tokens lives in this folder,
+   and every rule here is scoped under [data-world="the-color-of-water"], the
+   wrapper the post's MDX layout puts around its body. Scoping is not a nicety.
+   The home page and the writing index import every post module to read its
+   meta, so this sheet can arrive on pages that never render the post; scoped,
+   it does nothing there.
+
+   The numbers below are final. The palette skins, the photo framing and the
+   graph widths were derived once from the palettes and are written out as
+   plain values rather than recomputed on every build or every read. */
+
+/* Fira Code, the world's mono face, and only the world's. A plain @font-face
+   rather than next/font on purpose: next/font preloads, and a module the home
+   page imports would drag the preload with it. A declared face downloads only
+   when something on the page is set in it, which only happens in here.
+   Ligatures are asked for explicitly so `=>` and `!==` read as the single marks
+   they are in an editor. */
+@font-face {
+  font-family: "The Color of Water Fira Code";
+  src: url("./FiraCode-VF.woff2") format("woff2");
+  font-weight: 300 700;
+  font-style: normal;
+  font-display: swap;
+}
+
+[data-world="the-color-of-water"] {
+  --font-mono:
+    "The Color of Water Fira Code", ui-monospace, SFMono-Regular, Menlo,
+    monospace;
+}
+
+[data-world="the-color-of-water"] :is(.font-mono, code, kbd, pre, samp) {
+  font-family: var(--font-mono);
+  font-variant-ligatures: contextual common-ligatures;
+  font-feature-settings:
+    "liga" 1,
+    "calt" 1;
+}
+
+/* The deck runs to the full measure instead of balancing, which is the one
+   thing this post changes about its page. It reaches out of its wrapper with
+   :has so the page template carries no per-post switch. */
+[data-article]:has(> [data-world="the-color-of-water"])
+  > header
+  > p:last-of-type {
+  text-wrap: wrap;
+}
+
+/* The wrapper is display: contents, so the post's blocks are still items of
+   the article grid — but the page's `[data-article] > *` placement no longer
+   reaches them through it. Restated here for the wrapper's own children: prose
+   in the text column, figures across the wide one. */
+[data-world="the-color-of-water"] > * {
+  grid-column: text;
+}
+
+[data-world="the-color-of-water"] > figure {
+  grid-column: wide;
+}
+
+/* The photo inside each fish card, sized and nudged per palette below. */
+[data-world="the-color-of-water"] [data-fish-photo] {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: var(--fish-photo-width);
+  height: var(--fish-photo-height);
+  max-width: none;
+  transform: var(--fish-photo-transform);
+}
+
+/* The dashed-ruler border every ASCII graph frame stands inside. Four repeating
+   gradients rather than a real border so the dashes stay a fixed 2px mark in a
+   5px gap regardless of the frame's size — a border-image would stretch. */
+[data-world="the-color-of-water"] .graph-frame {
+  background-image:
+    repeating-linear-gradient(
+      to right,
+      var(--graph-frame) 0 2px,
+      transparent 2px 7px
+    ),
+    repeating-linear-gradient(
+      to bottom,
+      var(--graph-frame) 0 2px,
+      transparent 2px 7px
+    ),
+    repeating-linear-gradient(
+      to right,
+      var(--graph-frame) 0 2px,
+      transparent 2px 7px
+    ),
+    repeating-linear-gradient(
+      to bottom,
+      var(--graph-frame) 0 2px,
+      transparent 2px 7px
+    );
+  background-repeat: repeat-x, repeat-y, repeat-x, repeat-y;
+  background-position:
+    0 0,
+    100% 0,
+    0 100%,
+    0 0;
+  background-size:
+    100% 1px,
+    1px 100%,
+    100% 1px,
+    1px 100%;
+}
+
+/* highlight.js token colours, aliased to custom properties instead of fixed
+   hues. Every code-theme box in the aquarium piece sets these six on its own
+   wrapper, so the same markup becomes a different fish's theme without a
+   second stylesheet per palette. */
+[data-world="the-color-of-water"] .hljs-comment,
+[data-world="the-color-of-water"] .hljs-quote {
+  color: var(--hljs-comment);
+  font-style: italic;
+}
+
+[data-world="the-color-of-water"] .hljs-keyword,
+[data-world="the-color-of-water"] .hljs-selector-tag,
+[data-world="the-color-of-water"] .hljs-built_in {
+  color: var(--hljs-keyword);
+}
+
+[data-world="the-color-of-water"] .hljs-string,
+[data-world="the-color-of-water"] .hljs-attr {
+  color: var(--hljs-string);
+}
+
+[data-world="the-color-of-water"] .hljs-number,
+[data-world="the-color-of-water"] .hljs-literal {
+  color: var(--hljs-number);
+}
+
+[data-world="the-color-of-water"] .hljs-title,
+[data-world="the-color-of-water"] .hljs-title.function_,
+[data-world="the-color-of-water"] .hljs-name {
+  color: var(--hljs-title);
+}
+
+/* Markdown carries its structure in tokens the six-colour theme above never
+   named: a heading is a section, a list marker a bullet, emphasis and strong
+   their own spans. Mapped onto the same six so a prose sample reads in the
+   palette rather than falling through to the body colour. */
+[data-world="the-color-of-water"] .hljs-section,
+[data-world="the-color-of-water"] .hljs-bullet {
+  color: var(--hljs-keyword);
+}
+
+[data-world="the-color-of-water"] .hljs-strong {
+  color: var(--hljs-title);
+  font-weight: 600;
+}
+
+[data-world="the-color-of-water"] .hljs-emphasis {
+  color: var(--hljs-string);
+  font-style: italic;
+}
+
+[data-world="the-color-of-water"] .hljs-link,
+[data-world="the-color-of-water"] .hljs-code {
+  color: var(--hljs-number);
+}
+
+/* The fades at the carousel's two edges. Each is a radial gradient rather than
+   a linear one: an ellipse centred on the middle of its edge, a little taller
+   than the carousel, so the fade bites deepest where the eye is and eases off
+   towards the corners instead of ruling a straight line down the cards. The
+   nine stops follow 0.5 + 0.5cos(pi t) rather than a straight ramp, because a
+   two-stop gradient ramps alpha linearly and the eye reads both ends of that
+   ramp as edges — which is what made the old fade look like a band laid over
+   the cards rather than air, worst over the dark code and diagram cards. */
+
+/* Each edge carries two numbers, and it takes both to make a fade arrive
+   rather than appear. The width is how far in the ellipse reaches; the strength
+   is how much of the card it is allowed to take, 0 leaving the mask fully
+   opaque and 1 erasing the edge outright. Width alone pops: however narrow the
+   ellipse gets, its centre is still alpha 0, so the pixels at the very edge cut
+   out the moment the fade exists and snap back the moment it stops. Ramping the
+   strength alongside the width means the fade washes in from nothing and drains
+   back to nothing, and the edge never changes abruptly. */
+@property --the-color-of-water-fade {
+  syntax: "<length>";
+  inherits: false;
+  initial-value: 8rem;
+}
+
+@property --the-color-of-water-strength {
+  syntax: "<number>";
+  inherits: false;
+  initial-value: 1;
+}
+
+@property --the-color-of-water-fade-back {
+  syntax: "<length>";
+  inherits: false;
+  initial-value: 0rem;
+}
+
+@property --the-color-of-water-back-strength {
+  syntax: "<number>";
+  inherits: false;
+  initial-value: 0;
+}
+
+/* Both pairs are a function of how far there is left to go that way. The right
+   fade is full before the first drag and gone by the time the last card lands,
+   so the carousel says it is over by having nothing left to hide; the left one
+   runs backwards, absent at rest and opening as the cards pass, so there is
+   always something covered in the direction you can still travel.
+
+   They are not symmetrical in time. The left fade opens across the whole
+   scroll, because the distance behind you grows from the first drag. The right
+   one holds full until the last quarter and closes only then: what it covers is
+   the card still to come, and that card is there for the whole scroll — draining
+   the fade in step with the distance would announce the end from the middle. */
+@keyframes the-color-of-water-carousel-fade {
+  0% {
+    --the-color-of-water-fade: 8rem;
+    --the-color-of-water-strength: 1;
+    --the-color-of-water-fade-back: 0rem;
+    --the-color-of-water-back-strength: 0;
+  }
+  75% {
+    --the-color-of-water-fade: 8rem;
+    --the-color-of-water-strength: 1;
+  }
+  100% {
+    --the-color-of-water-fade: 0rem;
+    --the-color-of-water-strength: 0;
+    --the-color-of-water-fade-back: 8rem;
+    --the-color-of-water-back-strength: 1;
+  }
+}
+
+/* The showcase carousel's own bleed: its left edge lines up with the article's
+   text column — the same `(100% - min(100%, 42rem)) / 2` split the wide/text
+   grid already does — while the right side is left free to run past it into
+   the wide gutter and fade there, rather than stopping square at the margin.
+
+   The snap inset is the same split written again, because a percentage means
+   something different in each property: padding resolves against the figure,
+   scroll-padding against the scrollport, which is 7vw wider for the bleed.
+   Sharing one value put every snapped card 3.5vw left of the text column. */
+[data-world="the-color-of-water"] [data-palette-carousel] {
+  --carousel-inset: max(0px, calc((100% - min(100%, 42rem)) / 2));
+  --carousel-snap-inset: max(
+    0px,
+    calc((100% - 7vw - min(100% - 7vw, 42rem)) / 2)
+  );
+  --carousel-mask: radial-gradient(
+    var(--the-color-of-water-fade) 120% at 100% 50%,
+    rgb(0 0 0 / calc(1 - var(--the-color-of-water-strength))) 0%,
+    rgb(0 0 0 / calc(1 - var(--the-color-of-water-strength) * 0.962)) 12.5%,
+    rgb(0 0 0 / calc(1 - var(--the-color-of-water-strength) * 0.854)) 25%,
+    rgb(0 0 0 / calc(1 - var(--the-color-of-water-strength) * 0.691)) 37.5%,
+    rgb(0 0 0 / calc(1 - var(--the-color-of-water-strength) * 0.5)) 50%,
+    rgb(0 0 0 / calc(1 - var(--the-color-of-water-strength) * 0.309)) 62.5%,
+    rgb(0 0 0 / calc(1 - var(--the-color-of-water-strength) * 0.146)) 75%,
+    rgb(0 0 0 / calc(1 - var(--the-color-of-water-strength) * 0.038)) 87.5%,
+    rgb(0 0 0 / 1) 100%
+  );
+  --carousel-mask-back: radial-gradient(
+    var(--the-color-of-water-fade-back) 120% at 0% 50%,
+    rgb(0 0 0 / calc(1 - var(--the-color-of-water-back-strength))) 0%,
+    rgb(0 0 0 / calc(1 - var(--the-color-of-water-back-strength) * 0.962)) 12.5%,
+    rgb(0 0 0 / calc(1 - var(--the-color-of-water-back-strength) * 0.854)) 25%,
+    rgb(0 0 0 / calc(1 - var(--the-color-of-water-back-strength) * 0.691)) 37.5%,
+    rgb(0 0 0 / calc(1 - var(--the-color-of-water-back-strength) * 0.5)) 50%,
+    rgb(0 0 0 / calc(1 - var(--the-color-of-water-back-strength) * 0.309)) 62.5%,
+    rgb(0 0 0 / calc(1 - var(--the-color-of-water-back-strength) * 0.146)) 75%,
+    rgb(0 0 0 / calc(1 - var(--the-color-of-water-back-strength) * 0.038)) 87.5%,
+    rgb(0 0 0 / 1) 100%
+  );
+  padding-left: var(--carousel-inset);
+  scroll-padding-left: var(--carousel-snap-inset);
+  padding-right: 7vw;
+  margin-right: -7vw;
+  mask-image: var(--carousel-mask);
+  -webkit-mask-image: var(--carousel-mask);
+  scrollbar-width: none;
+}
+
+/* Two mask layers, one per edge, and they have to be intersected: layers add by
+   default, and since each layer is opaque everywhere except its own ellipse,
+   adding them cancels both fades out. Gated rather than assumed, because that
+   is exactly what a browser without mask-composite would render — so one
+   without it keeps the right-hand fade alone from the rule above. */
+@supports (mask-composite: intersect) {
+  [data-world="the-color-of-water"] [data-palette-carousel] {
+    mask-image: var(--carousel-mask-back), var(--carousel-mask);
+    -webkit-mask-image: var(--carousel-mask-back), var(--carousel-mask);
+    mask-composite: intersect;
+  }
+}
+
+/* All four are driven by a scroll timeline rather than a scroll listener: it
+   runs off the main thread, and every one of them is declared inherits: false,
+   so redrawing them each frame restyles the scroller alone and never the cards
+   inside it. Gated on support because without a timeline the same animation
+   would settle on its last keyframe, which is the far end of the scroll with
+   the fades the wrong way round; browsers that lack one hold the initial values
+   instead — right edge covered, left edge open. */
+@supports (animation-timeline: scroll(self inline)) {
+  [data-world="the-color-of-water"] [data-palette-carousel] {
+    animation-name: the-color-of-water-carousel-fade;
+    animation-duration: auto;
+    animation-timing-function: linear;
+    animation-fill-mode: both;
+    animation-timeline: scroll(self inline);
+  }
+}
+
+[data-world="the-color-of-water"] [data-palette-carousel]::-webkit-scrollbar {
+  display: none;
+}
+
+/* One block per fish. Each sets the custom properties the swatch bar, the code
+   card, the diagram and the photo read: a base derived from the palette's
+   darkest, lightest and middle colours, with that fish's hand-tuned overrides
+   already applied. */
+[data-world="the-color-of-water"] [data-palette="idea"] {
+  --fish-header-fill: oklch(0.255 0.015 76.2);
+  --fish-header-ink: oklch(0.973 0.004 91.4);
+  --fish-header-note: oklch(0.55 0.035 75);
+  --fish-header-rule: oklch(0.55 0.035 75);
+  --fish-header-image: none;
+  --fish-bar-fill: oklch(0.255 0.015 76.2);
+  --fish-bar-ink: oklch(0.973 0.004 91.4);
+  --fish-bar-rule: oklch(0.55 0.035 75);
+  --fish-bar-underline: oklch(0.55 0.035 75);
+  --fish-bar-radius: 0px;
+  --fish-bar-image: none;
+  --fish-bar-filter: none;
+  --fish-bar-pad: 1rem;
+  --fish-bar-gap: 0.75rem;
+  --fish-bar-cell-pad: 0px;
+  --fish-bar-cell-rule: transparent;
+  --fish-badge-fill: oklch(0.55 0.035 75);
+  --fish-badge-ink: oklch(0.973 0.004 91.4);
+  --fish-avatar: linear-gradient(
+    135deg,
+    oklch(0.55 0.035 75) 0%,
+    oklch(0.55 0.035 75) 55%,
+    oklch(0.973 0.004 91.4) 100%
+  );
+  --fish-code-fill: oklch(0.255 0.015 76.2);
+  --fish-code-ink: oklch(0.973 0.004 91.4);
+  --fish-code-rule: oklch(0.55 0.035 75);
+  --fish-code-underline: oklch(0.55 0.035 75);
+  --fish-code-radius: 0px;
+  --fish-code-image: none;
+  --graph-paper: oklch(0.255 0.015 76.2);
+  --graph-ink: oklch(0.973 0.004 91.4 / 0.8);
+  --graph-accent: oklch(0.973 0.004 91.4);
+  --graph-accent-2: oklch(0.55 0.035 75);
+  --graph-muted: oklch(0.55 0.035 75);
+  --graph-frame: oklch(0.973 0.004 91.4 / 0.4);
+  --graph-mark: oklch(0.973 0.004 91.4 / 0.4);
+  --hljs-keyword: oklch(0.55 0.035 75);
+  --hljs-string: oklch(0.55 0.035 75);
+  --hljs-number: oklch(0.55 0.035 75);
+  --hljs-title: oklch(0.55 0.035 75);
+  --hljs-comment: oklch(0.55 0.035 75);
+  --fish-photo-width: 422.17px;
+  --fish-photo-height: 320px;
+  --fish-photo-transform: translate(calc(-50% + 0px), calc(-50% + 0px));
+  --fish-graph-width: 13rem;
+}
+
+[data-world="the-color-of-water"] [data-palette="patela"] {
+  --fish-header-fill: oklch(0.19 0.111 284.8);
+  --fish-header-ink: oklch(0.97 0.014 258);
+  --fish-header-note: oklch(0.955 0.216 114.6);
+  --fish-header-rule: oklch(0.605 0.217 257.2);
+  --fish-header-image: none;
+  --fish-bar-fill: oklch(0.19 0.111 284.8);
+  --fish-bar-ink: oklch(0.97 0.014 258);
+  --fish-bar-rule: oklch(0.605 0.217 257.2);
+  --fish-bar-underline: oklch(0.605 0.217 257.2);
+  --fish-bar-radius: 9999px;
+  --fish-bar-image: none;
+  --fish-bar-filter: none;
+  --fish-bar-pad: 0.75rem;
+  --fish-bar-gap: 0.75rem;
+  --fish-bar-cell-pad: 0px;
+  --fish-bar-cell-rule: transparent;
+  --fish-badge-fill: oklch(0.955 0.216 114.6);
+  --fish-badge-ink: oklch(0.19 0.111 284.8);
+  --fish-avatar: radial-gradient(
+    circle at 50% 45%,
+    oklch(0.955 0.216 114.6) 0%,
+    oklch(0.605 0.217 257.2) 62%,
+    oklch(0.454 0.255 285.4) 100%
+  );
+  --fish-code-fill: oklch(0.19 0.111 284.8);
+  --fish-code-ink: oklch(0.97 0.014 258);
+  --fish-code-rule: oklch(0.605 0.217 257.2);
+  --fish-code-underline: oklch(0.605 0.217 257.2);
+  --fish-code-radius: 0px;
+  --fish-code-image: none;
+  --graph-paper: oklch(0.19 0.111 284.8);
+  --graph-ink: oklch(0.97 0.014 258 / 0.85);
+  --graph-accent: oklch(0.955 0.216 114.6);
+  --graph-accent-2: oklch(0.605 0.217 257.2);
+  --graph-muted: oklch(0.97 0.014 258);
+  --graph-frame: oklch(0.97 0.014 258);
+  --graph-mark: oklch(0.605 0.217 257.2);
+  --hljs-keyword: oklch(0.955 0.216 114.6);
+  --hljs-string: oklch(0.605 0.217 257.2);
+  --hljs-number: oklch(0.955 0.216 114.6);
+  --hljs-title: oklch(0.955 0.216 114.6);
+  --hljs-comment: oklch(0.97 0.014 258 / 0.45);
+  --fish-photo-width: 248.57px;
+  --fish-photo-height: 166.4px;
+  --fish-photo-transform: translate(calc(-50% + 0px), calc(-50% + 0px));
+  --fish-graph-width: 12rem;
+}
+
+[data-world="the-color-of-water"] [data-palette="caranx"] {
+  --fish-header-fill: oklch(0.28 0.01 90);
+  --fish-header-ink: oklch(0.906 0.143 94);
+  --fish-header-note: oklch(0.62 0.015 235);
+  --fish-header-rule: oklch(0.62 0.015 235);
+  --fish-header-image: none;
+  --fish-bar-fill: oklch(0.28 0.01 90);
+  --fish-bar-ink: oklch(0.9 0.03 95);
+  --fish-bar-rule: oklch(0.82 0.01 240 / 0.45);
+  --fish-bar-underline: oklch(0.62 0.015 235);
+  --fish-bar-radius: 0px;
+  --fish-bar-image: none;
+  --fish-bar-filter: none;
+  --fish-bar-pad: 0px;
+  --fish-bar-gap: 0px;
+  --fish-bar-cell-pad: 0.875rem;
+  --fish-bar-cell-rule: oklch(0.82 0.01 240 / 0.45);
+  --fish-badge-fill: oklch(0.906 0.143 94);
+  --fish-badge-ink: oklch(0.28 0.01 90);
+  --fish-avatar: linear-gradient(
+    135deg,
+    oklch(0.62 0.015 235) 0%,
+    oklch(0.62 0.015 235) 55%,
+    oklch(0.906 0.143 94) 100%
+  );
+  --fish-code-fill: oklch(0.28 0.01 90);
+  --fish-code-ink: oklch(0.906 0.143 94);
+  --fish-code-rule: oklch(0.62 0.015 235);
+  --fish-code-underline: oklch(0.62 0.015 235);
+  --fish-code-radius: 0px;
+  --fish-code-image: none;
+  --graph-paper: oklch(0.28 0.01 90);
+  --graph-ink: oklch(0.9 0.03 95);
+  --graph-accent: oklch(0.906 0.143 94);
+  --graph-accent-2: oklch(0.82 0.01 240);
+  --graph-muted: oklch(0.82 0.01 240);
+  --graph-frame: oklch(0.62 0.015 235 / 0.55);
+  --graph-mark: oklch(0.62 0.015 235 / 0.55);
+  --hljs-keyword: oklch(0.62 0.015 235);
+  --hljs-string: oklch(0.82 0.01 240);
+  --hljs-number: oklch(0.9 0.03 95);
+  --hljs-title: oklch(0.82 0.01 240);
+  --hljs-comment: oklch(0.9 0.03 95);
+  --fish-photo-width: 250.38px;
+  --fish-photo-height: 140.8px;
+  --fish-photo-transform: translate(calc(-50% + 0px), calc(-50% + 0px))
+    scaleX(-1);
+  --fish-graph-width: 13rem;
+}
+
+[data-world="the-color-of-water"] [data-palette="idol"] {
+  --fish-header-fill: transparent;
+  --fish-header-ink: oklch(0.991 0 89.9);
+  --fish-header-note: oklch(0.925 0.194 102.9);
+  --fish-header-rule: oklch(0.979 0.096 111.2);
+  --fish-header-image: none;
+  --fish-bar-fill: oklch(0.991 0 89.9);
+  --fish-bar-ink: oklch(0.261 0.004 84.6);
+  --fish-bar-rule: transparent;
+  --fish-bar-underline: oklch(0.979 0.096 111.2);
+  --fish-bar-radius: 1rem 1rem 0 0;
+  --fish-bar-image: none;
+  --fish-bar-filter: none;
+  --fish-bar-pad: 1rem;
+  --fish-bar-gap: 0.75rem;
+  --fish-bar-cell-pad: 0px;
+  --fish-bar-cell-rule: transparent;
+  --fish-badge-fill: oklch(0.925 0.194 102.9);
+  --fish-badge-ink: oklch(0.261 0.004 84.6);
+  --fish-avatar: radial-gradient(
+    circle at 32% 30%,
+    oklch(0.979 0.096 111.2) 0%,
+    oklch(0.925 0.194 102.9) 100%
+  );
+  --fish-code-fill: oklch(0.261 0.004 84.6);
+  --fish-code-ink: oklch(0.991 0 89.9);
+  --fish-code-rule: transparent;
+  --fish-code-underline: oklch(0.979 0.096 111.2);
+  --fish-code-radius: 0.5rem 0.5rem 0 0;
+  --fish-code-image: none;
+  --graph-paper: oklch(0.261 0.004 84.6);
+  --graph-ink: oklch(0.991 0 89.9 / 0.8);
+  --graph-accent: oklch(0.925 0.194 102.9);
+  --graph-accent-2: oklch(0.925 0.194 102.9);
+  --graph-muted: oklch(0.979 0.096 111.2);
+  --graph-frame: oklch(0.991 0 89.9 / 0.4);
+  --graph-mark: oklch(0.991 0 89.9 / 0.4);
+  --hljs-keyword: oklch(0.925 0.194 102.9);
+  --hljs-string: oklch(0.979 0.096 111.2);
+  --hljs-number: oklch(0.925 0.194 102.9);
+  --hljs-title: oklch(0.979 0.096 111.2);
+  --hljs-comment: oklch(0.991 0 89.9 / 0.4);
+  --fish-photo-width: 211.2px;
+  --fish-photo-height: 211.2px;
+  --fish-photo-transform: translate(calc(-50% + 0px), calc(-50% + 0px));
+  --fish-graph-width: 15.5rem;
+}
+
+[data-world="the-color-of-water"] [data-palette="volitas"] {
+  --fish-header-fill: transparent;
+  --fish-header-ink: oklch(0.26 0 89.9);
+  --fish-header-note: oklch(0.446 0.126 45.5);
+  --fish-header-rule: oklch(0.446 0.126 45.5 / 0.45);
+  --fish-header-image: none;
+  --fish-bar-fill: transparent;
+  --fish-bar-ink: oklch(0.26 0 89.9);
+  --fish-bar-rule: oklch(0.446 0.126 45.5 / 0.45);
+  --fish-bar-underline: oklch(0.446 0.126 45.5 / 0.45);
+  --fish-bar-radius: 0 1.25rem 0 1.25rem;
+  --fish-bar-image: none;
+  --fish-bar-filter: none;
+  --fish-bar-pad: 1rem;
+  --fish-bar-gap: 0.75rem;
+  --fish-bar-cell-pad: 0px;
+  --fish-bar-cell-rule: transparent;
+  --fish-badge-fill: oklch(0.858 0.094 74.9);
+  --fish-badge-ink: oklch(0.26 0 89.9);
+  --fish-avatar: radial-gradient(
+    circle at 34% 30%,
+    oklch(0.858 0.094 74.9) 0%,
+    oklch(0.446 0.126 45.5) 100%
+  );
+  --fish-code-fill: transparent;
+  --fish-code-ink: oklch(0.26 0 89.9);
+  --fish-code-rule: oklch(0.446 0.126 45.5 / 0.45);
+  --fish-code-underline: oklch(0.446 0.126 45.5 / 0.45);
+  --fish-code-radius: 0px;
+  --fish-code-image: none;
+  --graph-paper: var(--color-background);
+  --graph-ink: oklch(0.26 0 89.9 / 0.8);
+  --graph-accent: oklch(0.729 0.146 168.1);
+  --graph-accent-2: oklch(0.446 0.126 45.5);
+  --graph-muted: oklch(0.26 0 89.9 / 0.5);
+  --graph-frame: oklch(0.446 0.126 45.5 / 0.45);
+  --graph-mark: oklch(0.446 0.126 45.5 / 0.45);
+  --hljs-keyword: oklch(0.446 0.126 45.5);
+  --hljs-string: oklch(0.26 0 89.9 / 0.75);
+  --hljs-number: oklch(0.446 0.126 45.5);
+  --hljs-title: oklch(0.26 0 89.9);
+  --hljs-comment: oklch(0.26 0 89.9 / 0.45);
+  --fish-photo-width: 324.53px;
+  --fish-photo-height: 243.2px;
+  --fish-photo-transform: translate(calc(-50% + -24px), calc(-50% + -5px));
+  --fish-graph-width: 16rem;
+}
+
+[data-world="the-color-of-water"] [data-palette="pink-moon"] {
+  --fish-header-fill: oklch(0.949 0.024 259.8);
+  --fish-header-ink: oklch(0.44 0.021 264);
+  --fish-header-note: oklch(0.55 0.157 42);
+  --fish-header-rule: oklch(0.55 0.157 42 / 0.4);
+  --fish-header-image:
+    radial-gradient(
+      120% 140% at 16% 10%,
+      oklch(0.815 0.137 67.3 / 0.55) 0%,
+      transparent 64%
+    ),
+    radial-gradient(
+      110% 130% at 92% 88%,
+      oklch(0.912 0.066 69.8 / 0.6) 0%,
+      transparent 70%
+    );
+  --fish-bar-fill: oklch(0.949 0.024 259.8);
+  --fish-bar-ink: oklch(0.44 0.021 264);
+  --fish-bar-rule: oklch(0.949 0.024 259.8 / 0.85);
+  --fish-bar-underline: oklch(0.949 0.024 259.8 / 0.85);
+  --fish-bar-radius: 0.25rem;
+  --fish-bar-image:
+    radial-gradient(
+      120% 140% at 16% 10%,
+      oklch(0.815 0.137 67.3 / 0.55) 0%,
+      transparent 64%
+    ),
+    radial-gradient(
+      110% 130% at 92% 88%,
+      oklch(0.912 0.066 69.8 / 0.6) 0%,
+      transparent 70%
+    );
+  --fish-bar-filter: blur(14px) saturate(150%);
+  --fish-bar-pad: 1rem;
+  --fish-bar-gap: 0.75rem;
+  --fish-bar-cell-pad: 0px;
+  --fish-bar-cell-rule: transparent;
+  --fish-badge-fill: oklch(0.815 0.137 67.3);
+  --fish-badge-ink: oklch(0.44 0.021 264);
+  --fish-avatar: radial-gradient(
+    circle at 34% 28%,
+    oklch(0.912 0.066 69.8) 0%,
+    oklch(0.815 0.137 67.3) 100%
+  );
+  --fish-code-fill: oklch(0.949 0.024 259.8);
+  --fish-code-ink: oklch(0.44 0.021 264);
+  --fish-code-rule: oklch(0.815 0.137 67.3 / 0.45);
+  --fish-code-underline: oklch(0.815 0.137 67.3 / 0.45);
+  --fish-code-radius: 0.25rem;
+  --fish-code-image: none;
+  --graph-paper: oklch(0.949 0.024 259.8);
+  --graph-ink: oklch(0.44 0.021 264);
+  --graph-accent: oklch(0.55 0.157 42);
+  --graph-accent-2: oklch(0.912 0.066 69.8);
+  --graph-muted: oklch(0.44 0.021 264 / 0.6);
+  --graph-frame: oklch(0.55 0.157 42 / 0.35);
+  --graph-mark: oklch(0.55 0.157 42 / 0.35);
+  --hljs-keyword: oklch(0.55 0.157 42);
+  --hljs-string: oklch(0.44 0.021 264 / 0.75);
+  --hljs-number: oklch(0.55 0.157 42);
+  --hljs-title: oklch(0.44 0.021 264);
+  --hljs-comment: oklch(0.44 0.021 264 / 0.45);
+  --fish-photo-width: 368px;
+  --fish-photo-height: 490.67px;
+  --fish-photo-transform: translate(calc(-50% + 0px), calc(-50% + -18px));
+  --fish-graph-width: 13rem;
+}

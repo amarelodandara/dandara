@@ -1,0 +1,37 @@
+import { ANNOTATION, MICRO, TITLE } from "@/lib/type";
+import type { Palette } from "./palettes";
+
+export function PersonBar({
+  person,
+  unread,
+}: {
+  person: Palette["person"];
+  unread: number;
+}) {
+  return (
+    <div className="flex w-full items-center gap-(--fish-bar-gap) [border-radius:var(--fish-bar-radius)] border border-(--fish-bar-rule) bg-(--fish-bar-fill) bg-[image:var(--fish-bar-image)] p-(--fish-bar-pad) [backdrop-filter:var(--fish-bar-filter)] text-(--fish-bar-ink) [border-bottom-color:var(--fish-bar-underline)]">
+      <span className="flex shrink-0 items-center self-stretch border-r border-(--fish-bar-cell-rule) p-(--fish-bar-cell-pad)">
+        <span
+          aria-hidden="true"
+          className="block size-10 shrink-0 rounded-full bg-[image:var(--fish-avatar)]"
+        />
+      </span>
+
+      <div className="min-w-0 flex-1 px-(--fish-bar-cell-pad)">
+        <p className={`${TITLE} truncate`}>{person.name}</p>
+        <p className={`${ANNOTATION} truncate opacity-60`}>{person.role}</p>
+      </div>
+
+      <span className="flex shrink-0 items-center self-stretch border-l border-(--fish-bar-cell-rule) p-(--fish-bar-cell-pad)">
+        <span
+          className={`grid h-5 min-w-5 shrink-0 place-items-center rounded-full bg-(--fish-badge-fill) px-1.5 text-(--fish-badge-ink) ${MICRO}`}
+        >
+          <span className="block translate-y-[0.1em] leading-none tabular-nums">
+            {unread}
+          </span>
+          <span className="sr-only"> unread</span>
+        </span>
+      </span>
+    </div>
+  );
+}
