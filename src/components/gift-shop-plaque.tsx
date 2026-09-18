@@ -26,7 +26,7 @@ export function GiftShopPlaque({
       className={[
         "group fixed left-[3vw] z-20 flex items-center",
         "bottom-[4vh] sm:top-[5vh] sm:bottom-auto",
-        "rounded-sm bg-amber-100 px-3 py-2 shadow-card",
+        "rounded-sm bg-cadmium-100 px-3 py-2 shadow-card",
         "transition-[opacity,translate,scale] duration-(--motion-enter) ease-out-strong",
         "active:scale-[0.97] active:duration-(--press)",
         visible ? "opacity-100" : "translate-y-3 opacity-0 sm:-translate-y-3",

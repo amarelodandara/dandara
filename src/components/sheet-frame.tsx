@@ -205,7 +205,7 @@ const frameClass = ({ focused, onWall, dragging, lightbox }: Look) => {
 };
 
 const DETAIL_LINK = [
-  "underline decoration-rule decoration-[0.04em] underline-offset-[0.25em]",
+  "underline decoration-graphite-400 decoration-[0.04em] underline-offset-[0.25em]",
   "transition-opacity duration-(--motion-quick) ease-out-strong can-hover:hover:opacity-50",
 ].join(" ");
 
@@ -214,9 +214,9 @@ const MOTION =
 
 const surface = ({ focused, onWall, dragging, bare, lightbox }: Look) => {
   if (lightbox || bare) return "";
-  if (onWall) return "bg-background p-4 shadow-label md:p-7";
+  if (onWall) return "bg-cadmium-50 p-4 shadow-label md:p-7";
   const lift = dragging || focused ? "shadow-raised" : "shadow-card";
-  return `bg-background ${focused ? "p-6 md:p-7" : "p-4 md:p-7"} ${lift}`;
+  return `bg-cadmium-50 ${focused ? "p-6 md:p-7" : "p-4 md:p-7"} ${lift}`;
 };
 
 const cardClass = (look: Look) =>
@@ -233,18 +233,18 @@ const cardClass = (look: Look) =>
     .filter(Boolean)
     .join(" ");
 
-const VACATED = "bg-foreground/[0.02] shadow-hollow";
+const VACATED = "bg-graphite-900/[0.02] shadow-hollow";
 
 const WALL_BUTTON = [
   "absolute inset-0 z-10 cursor-pointer",
-  "outline-offset-4 focus-visible:outline-2 focus-visible:outline-foreground",
+  "outline-offset-4 focus-visible:outline-2 focus-visible:outline-graphite-900",
 ].join(" ");
 
 const PILE_BUTTON = [
   "relative z-10 float-right -mr-2 -mt-2 ml-4 cursor-pointer",
   "rounded-sm px-2 py-1",
   ANNOTATION,
-  "can-hover:hover:bg-foreground/10 focus-visible:bg-foreground/10",
+  "can-hover:hover:bg-graphite-200 focus-visible:bg-graphite-200",
   "transition-[opacity,background-color,scale] duration-(--motion-quick) ease-out-strong",
   "active:scale-[0.97] active:duration-(--press)",
   "after:absolute after:left-1/2 after:top-1/2 after:content-['']",
@@ -288,9 +288,9 @@ const REVEALED_ON_HOVER =
 
 const CAPTION_VISIT = [
   "relative z-20 shrink-0 cursor-pointer",
-  `${ANNOTATION} text-foreground-soft`,
+  `${ANNOTATION} text-graphite-700`,
   "transition-[opacity,color] duration-(--motion-quick) ease-out-strong",
-  "can-hover:hover:text-foreground focus-visible:text-foreground",
+  "can-hover:hover:text-graphite-900 focus-visible:text-graphite-900",
   "after:absolute after:left-1/2 after:top-1/2 after:content-['']",
   "after:h-11 after:w-[max(100%+1.5rem,2.75rem)]",
   "after:-translate-x-1/2 after:-translate-y-1/2",
@@ -306,8 +306,8 @@ const PEEK_LAYER = [
 ].join(" ");
 
 const PEEK_PILL = [
-  "rounded-full bg-background px-3 py-1.5 shadow-chip",
-  `${ANNOTATION} text-foreground-soft`,
+  "rounded-full bg-cadmium-50 px-3 py-1.5 shadow-chip",
+  `${ANNOTATION} text-graphite-700`,
   "scale-[0.96] transition-transform duration-(--motion-quick) ease-out-strong",
   "can-hover:group-hover:scale-100 group-focus-within:scale-100",
 ].join(" ");
@@ -320,7 +320,7 @@ function Peek() {
   );
 }
 
-const WALL_LABEL = `${LABEL} text-foreground-soft`;
+const WALL_LABEL = `${LABEL} text-graphite-700`;
 
 function Plate({
   title,
@@ -363,7 +363,7 @@ const LIGHTBOX_MEDIA = [
 ].join(" ");
 
 const LIGHTBOX_LABEL = [
-  "w-[86vw] shrink-0 bg-background p-5 shadow-raised",
+  "w-[86vw] shrink-0 bg-cadmium-50 p-5 shadow-raised",
   "md:max-h-[78vh] md:w-[17rem] md:self-end md:overflow-y-auto md:p-6",
 ].join(" ");
 
@@ -390,9 +390,9 @@ function Lightbox({
       <aside data-sheet-chrome className={LIGHTBOX_LABEL}>
         {button}
         {eyebrow ? (
-          <p className={`${ANNOTATION} text-foreground-soft`}>{eyebrow}</p>
+          <p className={`${ANNOTATION} text-graphite-700`}>{eyebrow}</p>
         ) : null}
-        <h3 className={`clear-right mt-5 ${LABEL} text-foreground-soft`}>
+        <h3 className={`clear-right mt-5 ${LABEL} text-graphite-700`}>
           {title}
         </h3>
         <div className={PROSE}>{children}</div>
@@ -428,7 +428,7 @@ function Card({
   return (
     <>
       {showsDetail && eyebrow ? (
-        <p className={`${ANNOTATION} text-foreground-soft`}>{eyebrow}</p>
+        <p className={`${ANNOTATION} text-graphite-700`}>{eyebrow}</p>
       ) : null}
       <h3 className={onWall ? WALL_LABEL : `mt-1 ${SECTION_HEADING}`}>
         {title}

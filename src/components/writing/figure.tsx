@@ -2,11 +2,11 @@ import Image from "next/image";
 import type { ReactNode } from "react";
 import { ANNOTATION } from "@/lib/type";
 
-export const CAPTION = `mt-3 ${ANNOTATION} leading-normal text-foreground-soft`;
+export const CAPTION = `mt-3 ${ANNOTATION} leading-normal text-graphite-700`;
 
 export type Measure = "wide" | "body" | "three-quarters";
 
-const MAT = "rounded-md bg-background p-3 md:p-5";
+const MAT = "rounded-md bg-cadmium-50 p-3 md:p-5";
 
 const SIZES: Record<Measure, string> = {
   wide: "(min-width: 68rem) 64rem, 92vw",

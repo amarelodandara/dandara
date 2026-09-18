@@ -11,21 +11,21 @@ import {
 
 const PRESSABLE = [
   "group transition-[color] duration-(--motion-quick) ease-out-strong",
-  "can-hover:hover:text-sun-ink focus-visible:text-sun-ink active:text-sun-ink",
+  "can-hover:hover:text-cadmium-700 focus-visible:text-cadmium-700 active:text-cadmium-700",
   "active:duration-(--press)",
-  "focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-foreground/40",
+  "focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-graphite-900/40",
 ].join(" ");
 
 const MARKER = [
   "ml-[0.15em] inline-flex min-w-[1.1em] items-center justify-center align-super",
   "relative after:absolute after:top-1/2 after:left-1/2 after:h-6 after:w-6",
   "after:-translate-x-1/2 after:-translate-y-1/2 after:content-['']",
-  "rounded-[0.25rem] border border-sun-ink/30 px-1 py-0.5",
+  "rounded-[0.25rem] border border-cadmium-300 px-1 py-0.5",
   "transition-[background-color,border-color,color] duration-(--motion-quick) ease-out-strong",
-  "can-hover:group-hover:border-sun-ink/70 can-hover:group-hover:bg-sun-core/15",
-  "can-hover:group-hover:text-sun-ink",
-  "group-focus-visible:border-sun-ink/70 group-focus-visible:text-sun-ink",
-  `${MICRO} text-sun-ink/80`,
+  "can-hover:group-hover:border-cadmium-600 can-hover:group-hover:bg-cadmium-100",
+  "can-hover:group-hover:text-cadmium-700",
+  "group-focus-visible:border-cadmium-600 group-focus-visible:text-cadmium-700",
+  `${MICRO} text-cadmium-600`,
 ].join(" ");
 
 export function Note({ n, children }: { n: number; children?: ReactNode }) {
@@ -52,7 +52,7 @@ export function Note({ n, children }: { n: number; children?: ReactNode }) {
       {children}
       <span
         data-marker
-        className={`${MARKER} ${current ? "border-sun-ink bg-sun-core/15 text-sun-ink" : ""}`}
+        className={`${MARKER} ${current ? "border-cadmium-700 bg-cadmium-100 text-cadmium-700" : ""}`}
       >
         {n}
       </span>

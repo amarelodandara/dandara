@@ -63,7 +63,7 @@ function Quote({ children, ...rest }: ComponentPropsWithoutRef<"blockquote">) {
   return (
     <blockquote
       {...rest}
-      className="mt-8 border-l border-foreground/15 pl-5 text-foreground-soft [&>*:first-child]:mt-0"
+      className="mt-8 border-l border-graphite-200 pl-5 text-graphite-700 [&>*:first-child]:mt-0"
     >
       {children}
     </blockquote>
@@ -71,7 +71,7 @@ function Quote({ children, ...rest }: ComponentPropsWithoutRef<"blockquote">) {
 }
 
 function Rule() {
-  return <hr className="mt-14 border-0 border-t border-foreground/10" />;
+  return <hr className="mt-14 border-0 border-t border-graphite-200" />;
 }
 
 const components: MDXComponents = {

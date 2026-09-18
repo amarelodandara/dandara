@@ -16,8 +16,8 @@ const Agentation =
 const SKIP = [
   `sr-only ${ANNOTATION} leading-none`,
   "focus:not-sr-only focus:fixed focus:top-3 focus:left-3 focus:z-50",
-  "focus:rounded-lg focus:bg-background focus:px-3 focus:py-2 focus:shadow-card",
-  "focus:outline-2 focus:outline-offset-2 focus:outline-foreground",
+  "focus:rounded-lg focus:bg-cadmium-50 focus:px-3 focus:py-2 focus:shadow-card",
+  "focus:outline-2 focus:outline-offset-2 focus:outline-graphite-900",
 ].join(" ");
 
 const inter = localFont({
@@ -70,7 +70,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
           id="content"
           data-page
           tabIndex={-1}
-          className="relative z-10 flex min-h-full flex-col bg-background outline-none"
+          className="relative z-10 flex min-h-full flex-col bg-cadmium-50 outline-none"
         >
           {children}
         </div>

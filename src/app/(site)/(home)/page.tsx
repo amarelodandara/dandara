@@ -60,7 +60,7 @@ export default async function Home() {
             </div>
 
             <div data-appear="2" className="h-fit">
-              <h2 className={`${ANNOTATION} text-foreground-soft`}>
+              <h2 className={`${ANNOTATION} text-graphite-700`}>
                 Personal work
               </h2>
               <ul className={`mt-2 space-y-1 ${PROSE}`}>
@@ -80,11 +80,11 @@ export default async function Home() {
                 ))}
               </ul>
 
-              <h2 className={`mt-8 ${ANNOTATION} text-foreground-soft`}>
+              <h2 className={`mt-8 ${ANNOTATION} text-graphite-700`}>
                 Find me
               </h2>
               <ul
-                className={`mt-2 flex flex-wrap gap-x-5 gap-y-1 ${LABEL} text-foreground-soft`}
+                className={`mt-2 flex flex-wrap gap-x-5 gap-y-1 ${LABEL} text-graphite-700`}
               >
                 {FIND_ME.map(({ label, href }) => (
                   <li key={label}>
@@ -103,9 +103,7 @@ export default async function Home() {
                 The role of the designer is that of a good, thoughtful host
                 anticipating the needs of his guests.
               </blockquote>
-              <p className={`mt-2 ${LABEL} text-foreground-soft`}>
-                Charles Eames
-              </p>
+              <p className={`mt-2 ${LABEL} text-graphite-700`}>Charles Eames</p>
             </div>
 
             <div data-appear="4" className={`h-fit space-y-5 ${PROSE}`}>
@@ -140,7 +138,7 @@ export default async function Home() {
         className="mt-[18vh] grid grid-cols-1 gap-12 md:grid-cols-2"
       >
         <div className="md:col-start-2">
-          <h2 className={`${ANNOTATION} leading-none text-foreground-soft`}>
+          <h2 className={`${ANNOTATION} leading-none text-graphite-700`}>
             Writing
           </h2>
 
@@ -158,12 +156,10 @@ export default async function Home() {
             {UPCOMING.map(({ title }) => (
               <li key={title}>
                 <h3
-                  className={`flex items-baseline gap-2.5 ${SECTION_HEADING} text-foreground-soft/60`}
+                  className={`flex items-baseline gap-2.5 ${SECTION_HEADING} text-graphite-500`}
                 >
                   {title}
-                  <span
-                    className={`shrink-0 ${ANNOTATION} text-foreground-soft/60`}
-                  >
+                  <span className={`shrink-0 ${ANNOTATION} text-graphite-500`}>
                     soon
                   </span>
                 </h3>
@@ -275,7 +271,7 @@ export default async function Home() {
             />
           }
         >
-          <p className={`mt-3 ${ANNOTATION} text-foreground-soft`}>
+          <p className={`mt-3 ${ANNOTATION} text-graphite-700`}>
             Presenting the Stone Terminal Store
           </p>
         </Sheet>

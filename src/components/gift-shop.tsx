@@ -217,7 +217,7 @@ export function GiftShop() {
         {shelves.map((section) => (
           <section key={section.id} className={shelfSeat(section, article)}>
             {section.title ? (
-              <h3 className={`px-3 ${ANNOTATION} text-foreground-hard`}>
+              <h3 className={`px-3 ${ANNOTATION} text-cadmium-900`}>
                 {section.title}
               </h3>
             ) : null}

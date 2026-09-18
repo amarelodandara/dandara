@@ -547,7 +547,7 @@
   --fish-code-underline: oklch(0.446 0.126 45.5 / 0.45);
   --fish-code-radius: 0px;
   --fish-code-image: none;
-  --graph-paper: var(--color-background);
+  --graph-paper: var(--color-cadmium-50);
   --graph-ink: oklch(0.26 0 89.9 / 0.8);
   --graph-accent: oklch(0.729 0.146 168.1);
   --graph-accent-2: oklch(0.446 0.126 45.5);

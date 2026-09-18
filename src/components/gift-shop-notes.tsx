@@ -9,20 +9,20 @@ import { Announcement, COPIED_ANNOUNCEMENT, useCopy, Verb } from "./copy";
 import { ROW, SEAT } from "@/lib/pressable";
 import { ANNOTATION, TITLE } from "@/lib/type";
 
-const NUMBER = `w-3.5 shrink-0 ${ANNOTATION} leading-tight tabular-nums text-foreground-hard`;
+const NUMBER = `w-3.5 shrink-0 ${ANNOTATION} leading-tight tabular-nums text-cadmium-900`;
 
 const NOTE_TITLE = `block ${TITLE}`;
 
-const SOURCE = `mt-0.5 block ${ANNOTATION} leading-tight text-foreground-hard`;
+const SOURCE = `mt-0.5 block ${ANNOTATION} leading-tight text-cadmium-900`;
 
-const BODY = `mt-1 block ${ANNOTATION} leading-normal text-foreground-hard`;
+const BODY = `mt-1 block ${ANNOTATION} leading-normal text-cadmium-900`;
 
-const QUOTED = `mt-4 block ${ANNOTATION} leading-normal text-foreground-hard`;
+const QUOTED = `mt-4 block ${ANNOTATION} leading-normal text-cadmium-900`;
 
 const CHIP = [
   "-my-1.5 -mr-1.5 flex shrink-0 items-center rounded-xs px-2.5 py-1.5",
   "transition-[background-color] duration-(--motion-quick) ease-out-strong",
-  "can-hover:group-hover:bg-lit-deep group-focus-visible:bg-lit-deep",
+  "can-hover:group-hover:bg-cadmium-100 group-focus-visible:bg-cadmium-100",
 ].join(" ");
 
 const sourceOf = (href: string) => {
@@ -37,7 +37,7 @@ const seatFor = (current: boolean, pressable: boolean) =>
   [
     pressable ? ROW : SEAT,
     "w-full items-baseline gap-2.5",
-    current ? "bg-lit" : "",
+    current ? "bg-cadmium-200" : "",
   ]
     .join(" ")
     .trim();
@@ -149,7 +149,7 @@ export function GiftShopNotes({ titled = true }: { titled?: boolean }) {
   return (
     <section className={titled ? "mt-8" : "mt-6"}>
       {titled ? (
-        <h3 className={`px-3 ${ANNOTATION} text-foreground-hard`}>Notes</h3>
+        <h3 className={`px-3 ${ANNOTATION} text-cadmium-900`}>Notes</h3>
       ) : null}
       <ul className={titled ? "mt-2 space-y-0.5" : "space-y-0.5"}>
         {notes.map((note) => (

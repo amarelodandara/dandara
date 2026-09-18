@@ -22,7 +22,7 @@ function Label({ title, meta }: { title: string; meta: string }) {
     <span className="min-w-0 flex-1">
       <span className={`block ${TITLE}`}>{title}</span>
       <span
-        className={`mt-0.5 block ${ANNOTATION} leading-tight text-foreground-hard`}
+        className={`mt-0.5 block ${ANNOTATION} leading-tight text-cadmium-900`}
       >
         {meta}
       </span>
@@ -36,7 +36,7 @@ function Preview({
   preview: NonNullable<Extract<GiftShopItem, { kind: "file" }>["preview"]>;
 }) {
   return (
-    <span className={`mx-auto block ${CHIP_W} bg-mount p-1 shadow-chip`}>
+    <span className={`mx-auto block ${CHIP_W} bg-graphite-50 p-1 shadow-chip`}>
       <Image
         src={preview.src}
         alt={preview.alt}

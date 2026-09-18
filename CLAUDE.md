@@ -35,17 +35,21 @@ import { PROSE, SECTION_HEADING } from "@/lib/type";
 
 ## Rules that decide the near misses
 
-- **Colour is contextual, not part of the role.** `foreground-hard` is the
+- **Colour is contextual, not part of the role.** `cadmium-900` is the
   yellow panel's version of soft: anything inside the gift shop takes it,
-  anything on the wall takes `foreground-soft`. Add it at the call site.
+  anything on the wall takes `graphite-700`. Add it at the call site.
 - **Leading is layout, not type.** `ANNOTATION` sets none. Add `leading-none`
   where a box must be tight, `leading-normal` where the text genuinely wraps.
 - **A label that runs to a paragraph is prose set small**, so it is `PROSE`, not
   `LABEL`.
 - **Weight is never punctuation.** Do not drop to 400 mid-sentence to separate a
   name from its description; that is what `STRONG` is for.
-- **Never write a raw colour.** `black/35` is wrong; `foreground/35` is the same
-  thing through the token.
+- **Never write a raw colour.** Every colour is a step on one of two ramps in
+  `globals.css`: `graphite` (neutral) and `cadmium` (lemon to orange, olive at
+  900), 50 to 900. Reach for a step, not an opacity: `text-graphite-400`, not
+  `text-graphite-900/35`. Opacity is kept for what has to stay translucent:
+  focus rings (they sit on the wall and on yellow), scrims, and lines drawn on
+  the yellow panel.
 
 ## Exceptions
 

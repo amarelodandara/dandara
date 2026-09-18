@@ -70,7 +70,7 @@ export function Swap({
   idle,
   done,
   shown,
-  className = "text-foreground-hard",
+  className = "text-cadmium-900",
   itemClassName = "",
 }: {
   idle: string;
@@ -102,7 +102,7 @@ export function Verb({
   idle,
   done,
   shown,
-  className = "text-foreground-hard",
+  className = "text-cadmium-900",
   itemClassName = "",
 }: {
   idle: string;

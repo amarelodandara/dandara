@@ -80,7 +80,7 @@ function ViewIcon({
       aria-hidden="true"
       className={[
         "transition-colors duration-(--motion-quick) ease-out-strong",
-        active ? lit : "text-foreground-faint",
+        active ? lit : "text-graphite-300",
       ].join(" ")}
     >
       {children}
@@ -107,17 +107,17 @@ function ViewToggle({
         "relative h-5 w-9 shrink-0 cursor-pointer rounded-full",
         "transition-[background-color,scale] duration-(--motion-quick) ease-out-strong",
         "active:scale-[0.97] active:duration-(--press)",
-        "outline-offset-4 focus-visible:outline-2 focus-visible:outline-foreground",
+        "outline-offset-4 focus-visible:outline-2 focus-visible:outline-graphite-900",
         "after:absolute after:left-1/2 after:top-1/2 after:h-11 after:w-11 after:content-['']",
         "after:-translate-x-1/2 after:-translate-y-1/2",
         "shadow-hollow",
-        piled ? "bg-background-hard" : "bg-foreground/10",
+        piled ? "bg-cadmium-400" : "bg-graphite-200",
       ].join(" ")}
     >
       <span
         aria-hidden="true"
         className={[
-          "absolute top-0.5 left-0.5 h-4 w-4 rounded-full bg-background shadow-chip",
+          "absolute top-0.5 left-0.5 h-4 w-4 rounded-full bg-cadmium-50 shadow-chip",
           "transition-transform duration-(--motion-quick) ease-out-strong",
           piled ? "translate-x-0" : "translate-x-4",
         ].join(" ")}
@@ -200,7 +200,7 @@ export function WorkPile({
   return (
     <section id="work" className="relative mt-[18vh] pb-[12vh]">
       <div className="flex items-center justify-between gap-6">
-        <h2 className={`${ANNOTATION} leading-none text-foreground-soft`}>
+        <h2 className={`${ANNOTATION} leading-none text-graphite-700`}>
           {label}
         </h2>
 
@@ -210,7 +210,7 @@ export function WorkPile({
             aria-hidden={view === "wall" || undefined}
             className={[
               "pointer-events-none absolute right-full mr-3 whitespace-nowrap",
-              `${ANNOTATION} leading-none text-foreground-hard`,
+              `${ANNOTATION} leading-none text-cadmium-900`,
               "transition-opacity duration-(--motion-quick) ease-out-strong",
               view === "pile" ? "opacity-100" : "opacity-0",
             ].join(" ")}
@@ -218,7 +218,7 @@ export function WorkPile({
             it&rsquo;s art, please touch
           </p>
 
-          <ViewIcon active={view === "pile"} lit="text-foreground-hard">
+          <ViewIcon active={view === "pile"} lit="text-cadmium-900">
             <PileIcon />
           </ViewIcon>
 
@@ -227,7 +227,7 @@ export function WorkPile({
             onToggle={() => show(view === "pile" ? "wall" : "pile")}
           />
 
-          <ViewIcon active={view === "wall"} lit="text-foreground-soft">
+          <ViewIcon active={view === "wall"} lit="text-graphite-700">
             <WallIcon />
           </ViewIcon>
         </div>
@@ -266,7 +266,7 @@ export function WorkPile({
         <div
           aria-hidden="true"
           onClick={close}
-          className="fixed inset-0 z-50 bg-background/40"
+          className="fixed inset-0 z-50 bg-cadmium-50/40"
         />
       ) : null}
     </section>

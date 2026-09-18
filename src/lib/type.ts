@@ -10,7 +10,7 @@ export const SECTION_HEADING = [
 
 export const ACCENT_PROSE = [
   "text-[clamp(1.05rem,1.4vw,1.25rem)]",
-  "leading-snug text-balance text-foreground-soft",
+  "leading-snug text-balance text-graphite-700",
 ].join(" ");
 
 export const PROSE = "text-[clamp(0.95rem,1.15vw,1.0625rem)] leading-normal";

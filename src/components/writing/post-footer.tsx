@@ -6,7 +6,7 @@ const ELSEWHERE = FIND_ME.filter((one) => one !== TWITTER);
 
 export function PostFooter() {
   return (
-    <footer className="mt-20 border-t border-foreground/10 pt-8">
+    <footer className="mt-20 border-t border-graphite-200 pt-8">
       <p className={PROSE}>
         I talk a lot more on{" "}
         <a
@@ -21,7 +21,7 @@ export function PostFooter() {
       </p>
 
       <ul
-        className={`mt-4 flex flex-wrap gap-x-5 gap-y-1 ${LABEL} text-foreground-soft`}
+        className={`mt-4 flex flex-wrap gap-x-5 gap-y-1 ${LABEL} text-graphite-700`}
       >
         {ELSEWHERE.map(({ label, href }) => (
           <li key={label}>

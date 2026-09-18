@@ -9,7 +9,7 @@ import { PaletteSwatches } from "./swatches";
 
 const SQUARE = "size-72 sm:size-80";
 const SHOWCASE = [
-  "my-12 rounded-md outline-offset-4 outline-foreground/40",
+  "my-12 rounded-md outline-offset-4 outline-graphite-900/40",
   "has-[[data-palette-carousel]:focus-visible]:outline-2",
 ].join(" ");
 const CARD = `${SQUARE} shrink-0 snap-start overflow-hidden`;
@@ -28,7 +28,7 @@ function Recessed({
     <div
       data-recessed
       style={style}
-      className={`relative flex size-full items-center justify-center overflow-hidden rounded-md bg-background ${bleed ? "" : "p-4"}`}
+      className={`relative flex size-full items-center justify-center overflow-hidden rounded-md bg-cadmium-50 ${bleed ? "" : "p-4"}`}
     >
       {children}
       {bleed ? (

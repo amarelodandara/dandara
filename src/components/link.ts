@@ -1,5 +1,5 @@
 const LINK_BASE = [
-  "decoration-rule decoration-[0.04em] underline-offset-[0.25em]",
+  "decoration-graphite-400 decoration-[0.04em] underline-offset-[0.25em]",
   "transition-opacity duration-(--motion-quick) ease-out-strong",
   "can-hover:hover:opacity-50",
 ].join(" ");

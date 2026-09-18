@@ -34,7 +34,7 @@ const CHIP = [
 
 const CHIP_SETTLED = "rounded-md bg-(--band-lit) px-2 py-1";
 
-const WASH = "can-hover:hover:bg-foreground/5 focus-visible:bg-foreground/5";
+const WASH = "can-hover:hover:bg-graphite-900/5 focus-visible:bg-graphite-900/5";
 
 function Band({
   swatch,
@@ -112,7 +112,7 @@ export function PaletteSwatches({
         onClick={copyAll}
         aria-label={`Copy the ${name} palette`}
         data-pressable
-        className={`${PRESS} ${WASH} mt-1 ml-auto w-fit cursor-pointer items-center px-3 py-2 ${ANNOTATION} ${outcome ? "text-foreground" : "text-foreground-soft"}`}
+        className={`${PRESS} ${WASH} mt-1 ml-auto w-fit cursor-pointer items-center px-3 py-2 ${ANNOTATION} ${outcome ? "text-graphite-900" : "text-graphite-700"}`}
       >
         <Swap
           idle="Copy palette"

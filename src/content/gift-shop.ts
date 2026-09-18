@@ -30,7 +30,7 @@ export const amareloSection: GiftShopSection = {
       id: "amarelo",
       title: "Amarelo Dandara",
       hex: "#FFCC00",
-      fill: "bg-background-hard",
+      fill: "bg-cadmium-400",
     },
   ],
 };

@@ -17,7 +17,7 @@ export function PileIcon() {
   return (
     <svg viewBox="0 0 16 16" fill="none" aria-hidden="true" className={ICON}>
       <g
-        fill="var(--color-background)"
+        fill="var(--color-cadmium-50)"
         stroke="currentColor"
         strokeWidth="0.9"
         strokeLinejoin="round"

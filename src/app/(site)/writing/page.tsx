@@ -25,7 +25,7 @@ export default async function WritingIndex() {
           <ul className="mt-12 space-y-10">
             {posts.map(({ slug, meta }) => (
               <li key={slug}>
-                <p data-quiet className={`${ANNOTATION} text-foreground/35`}>
+                <p data-quiet className={`${ANNOTATION} text-graphite-400`}>
                   <time dateTime={meta.date}>{formatPostDate(meta.date)}</time>
                 </p>
                 <h2 className={`mt-1.5 ${SECTION_HEADING}`}>
@@ -33,7 +33,7 @@ export default async function WritingIndex() {
                     {meta.title}
                   </Link>
                 </h2>
-                <p className={`mt-1.5 ${PROSE} text-foreground-soft`}>
+                <p className={`mt-1.5 ${PROSE} text-graphite-700`}>
                   {meta.deck}
                 </p>
               </li>
@@ -41,12 +41,10 @@ export default async function WritingIndex() {
 
             {UPCOMING.map(({ title }) => (
               <li key={title}>
-                <p data-quiet className={`${ANNOTATION} text-foreground/35`}>
+                <p data-quiet className={`${ANNOTATION} text-graphite-400`}>
                   Coming soon
                 </p>
-                <h2
-                  className={`mt-1.5 ${SECTION_HEADING} text-foreground-soft/60`}
-                >
+                <h2 className={`mt-1.5 ${SECTION_HEADING} text-graphite-500`}>
                   {title}
                 </h2>
               </li>

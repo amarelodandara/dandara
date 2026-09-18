@@ -33,12 +33,12 @@ const ELSEWHERE = [
 export default function GlobalNotFound() {
   return (
     <html lang="en" className={`${inter.variable} h-full antialiased`}>
-      <body className="min-h-full bg-background">
+      <body className="min-h-full bg-cadmium-50">
         <main className="mx-auto w-full max-w-[1400px] px-[7vw] pt-[9vh] pb-[14vh] sm:pt-[12vh]">
           <div className="mx-auto w-full max-w-2xl">
-            <p className={`${ANNOTATION} text-foreground-soft`}>404</p>
+            <p className={`${ANNOTATION} text-graphite-700`}>404</p>
             <h1 className={`mt-1.5 ${PAGE_HEADING}`}>Nothing hangs here</h1>
-            <p className={`mt-6 ${ACCENT_PROSE} text-foreground-soft`}>
+            <p className={`mt-6 ${ACCENT_PROSE} text-graphite-700`}>
               This address does not match a page on this site. It may have been
               renamed, or it may never have existed. Everything that does exist
               is one link away.
@@ -50,7 +50,7 @@ export default function GlobalNotFound() {
                   <a href={href} className={LINK}>
                     {label}
                   </a>
-                  <span className="text-foreground-soft"> — {blurb}</span>
+                  <span className="text-graphite-700"> — {blurb}</span>
                 </li>
               ))}
             </ul>

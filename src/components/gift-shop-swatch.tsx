@@ -62,9 +62,9 @@ export function GiftShopSwatch({
         data-pressable
         className={[
           `mx-auto flex aspect-[3/4] ${CHIP_W} touch-none motion-reduce:touch-auto flex-col select-none`,
-          "bg-mount p-1 text-left will-change-transform",
+          "bg-graphite-50 p-1 text-left will-change-transform",
           "transition-[scale,box-shadow] duration-(--motion-quick) ease-out-strong",
-          "focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-foreground/40",
+          "focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-graphite-900/40",
           lifted
             ? "scale-[1.04] cursor-grabbing shadow-card"
             : "cursor-grab shadow-chip",
@@ -74,7 +74,7 @@ export function GiftShopSwatch({
         <span className="block px-2 pt-2 pb-1">
           <span className={`block ${ANNOTATION} leading-tight`}>{title}</span>
           <span
-            className={`mt-0.5 block ${ANNOTATION} leading-tight text-foreground-soft`}
+            className={`mt-0.5 block ${ANNOTATION} leading-tight text-graphite-700`}
           >
             {note}
           </span>

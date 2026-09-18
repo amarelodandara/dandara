@@ -9,81 +9,61 @@
 @theme inline {
   --font-sans: var(--font-inter), system-ui, sans-serif;
 
-  --color-background: oklch(0.988 0.029 100.564);
-  --color-foreground: oklch(0.178 0 0);
-  --color-foreground-soft: oklch(0.4 0.006 67.643);
-  --color-background-hard: oklch(0.865 0.177 90.382);
-  /* Secondary text for the hard background. `foreground-soft` is mixed for a
-     pale wall and goes muddy on saturated yellow; this is the same role, tuned
-     to that ground — 8.3:1 against it, where the wall version manages 6.1:1. */
-  --color-foreground-hard: oklch(0.322 0.066 92.948);
+  /* Two ramps and nothing else: `graphite`, the pencil, and `cadmium`, the
+     paint tube. Ten steps each, 50 the lightest and 900 the darkest, named by
+     where they sit rather than by what they are for, so one step can serve
+     text, a surface and a line alike. Every colour the site had before the
+     ramps is still here as an anchor, at the value it was written with; the
+     steps between were spaced evenly where the site had nothing.
 
-  /* The dimmed end of a two-state control, as a colour rather than an opacity.
-     Transparency on an icon whose shapes overlap stacks the strokes at every
-     crossing and draws seams that are not in the artwork. This is the same
-     value `foreground-soft` at 35% used to composite to over `background`,
-     flattened in sRGB the way the browser was doing it — so the tone is
-     unchanged and only the seams are gone. */
-  --color-foreground-faint: oklch(0.796 0.021 98.285);
+     Graphite holds one hue, 95°, the wall's own family, with chroma falling to
+     zero at both ends so the ink and the card are pure. 400 is the underline
+     under a link: well below the weight of the word, so it marks the word
+     rather than boxing it in. 300 is the dimmed end of a two-state control, a
+     colour rather than an opacity, because transparency on an icon whose
+     shapes overlap stacks the strokes at every crossing and draws seams.
+     50 is card stock, the one surface lighter than the wall rather than a tint
+     of it: a swatch or a document preview mounted on card and pinned to the
+     panel. */
+  --color-graphite-50: oklch(1 0 0);
+  --color-graphite-100: oklch(0.953 0.026 95);
+  --color-graphite-200: oklch(0.905 0.024 95);
+  --color-graphite-300: oklch(0.796 0.021 95);
+  --color-graphite-400: oklch(0.709 0.016 95);
+  --color-graphite-500: oklch(0.62 0.013 95);
+  --color-graphite-600: oklch(0.51 0.01 95);
+  --color-graphite-700: oklch(0.4 0.006 95);
+  --color-graphite-800: oklch(0.29 0.003 95);
+  --color-graphite-900: oklch(0.178 0 0);
 
-  /* The rule under a link, and the only line on the site that is allowed to be
-     a line. Warm grey, well below the weight of the word it belongs to, so an
-     underline marks the word rather than boxing it in. Named for the job so
-     the links stop reaching into Tailwind's own palette for a value. */
-  --color-rule: oklch(0.709 0.01 56.259);
+  /* Cadmium turns its hue with its lightness, the way sunlight does: lemon on
+     the wall (50, 101°), the shop's yellow (400, 90°, exactly #ffcc00), the
+     orange hot spot at the middle of the site's mark (500, 60°, `icon.svg`'s
+     #ff8e00) and that orange taken down to where it carries text on the wall
+     (700, 5.6:1). 700 is written as the colour sRGB screens were already
+     showing: the old value asked for more chroma than sRGB has at that
+     lightness and was clipped.
 
-  /* Bounce light in a cutout, not the cutout itself. The close button reads as
-     a hole punched clean through the panel, so at rest it is `background` —
-     literally the page showing through — with `shadow-cutout` for the cut edge.
-     These two are what the hole warms to when a pointer approaches, which is
-     what a recess lit by its own yellow walls actually does.
+     900 breaks the turn on purpose. It is the shop's text, and it stays the
+     olive it was rather than following the ramp into brown: the grey
+     secondary text mixed for the wall goes muddy on saturated yellow, and this
+     is the same role tuned to that ground, 8.3:1 against 400. 800 bridges the
+     two, halfway round the wheel.
 
-     35% of the way from `background` to `background-hard`, mixed in oklch, and
-     50% for the deeper step: 2.8x the chroma of the wall, still a clear step
-     lighter than the panel. Written out rather than left as a `color-mix()` so
-     the values are visible here; recompute if either end of the mix moves. */
-  --color-cutout: oklch(0.945 0.081 97);
-  --color-cutout-deep: oklch(0.927 0.103 95.473);
-
-  /* Card stock. A small object in the shop — a colour swatch, a document
-     preview — is mounted on a piece of card and pinned to the panel, and that
-     card is the one surface here lighter than the wall rather than a tint of
-     it. Held as a token because it is a material, not a colour: if the panel
-     ever warms, the card is what stays put.
-
-     `lit` is the same stock let down to a wash, and it is the state of a row
-     with a pointer on it or the row an article just sent you to. On yellow a
-     lit row has to read as light landing on the panel; anything mixed from the
-     foreground reads as a grey plate laid over it instead. `lit-deep` is for a
-     small control inside an already-lit row — one step further up, so the chip
-     still separates from the row carrying it. */
-  --color-mount: oklch(1 0 0);
-  --color-lit: oklch(1 0 0 / 0.45);
-  --color-lit-deep: oklch(1 0 0 / 0.5);
-
-  /* The shop's header carries the panel's own yellow — the sheet is the grain,
-     not a change of colour, and every attempt at lightening it read as a stripe
-     stuck to the panel. Aliased rather than repeated so there is one value to
-     move if that decision is revisited.
-
-     The edge is 30% of the way from there back toward `background`, on the same
-     line the cutout pair is mixed on. It is the colour of the perforation, not
-     of a rule: see `[data-perforated]`. */
-  --color-shop-band: var(--color-background-hard);
-  --color-shop-edge: oklch(0.902 0.133 93.44);
-
-
-  /* The hot spot at the middle of the site's own mark, the same orange as
-     `icon.svg` converted out of #ff8e00. Same chroma as the yellow it sits in,
-     30 degrees round the wheel: one light source, not a second colour. */
-  --color-sun-core: oklch(0.755 0.178 59.8);
-
-  /* The same orange taken down to where it can carry text on the pale wall:
-     5.6:1 against `background`, against the 2.3:1 the mark itself manages. */
-  --color-sun-ink: oklch(0.52 0.16 55);
-
-  --color-professional: oklch(0.891 0.078 218.299);
-  --color-creative: oklch(0.95 0.11 100.35);
+     100 to 300 are light landing on the panel. A lit row, or a cutout warming
+     as a pointer approaches, has to read as a recess lit by its own yellow
+     walls; anything mixed from graphite reads as a grey plate laid over it
+     instead. 300 is also the perforation under the shop's header. */
+  --color-cadmium-50: oklch(0.988 0.029 100.564);
+  --color-cadmium-100: oklch(0.962 0.059 97);
+  --color-cadmium-200: oklch(0.935 0.095 96);
+  --color-cadmium-300: oklch(0.902 0.133 93.44);
+  --color-cadmium-400: oklch(0.865 0.177 90.382);
+  --color-cadmium-500: oklch(0.755 0.178 59.8);
+  --color-cadmium-600: oklch(0.64 0.15 53);
+  --color-cadmium-700: oklch(0.523 0.147 45.972);
+  --color-cadmium-800: oklch(0.42 0.066 70);
+  --color-cadmium-900: oklch(0.322 0.066 92.948);
 
   /* One curve for the whole product. Strong decelerate: it starts fast, so the
      moment the user is watching is the moment that moves. The built-in `ease`
@@ -170,8 +150,8 @@
 
 body {
   font-family: var(--font-sans);
-  background: var(--color-background);
-  color: var(--color-foreground);
+  background: var(--color-cadmium-50);
+  color: var(--color-graphite-900);
   text-rendering: optimizeLegibility;
   font-feature-settings: var(--font-features);
   font-optical-sizing: auto;
@@ -476,7 +456,7 @@ body {
   left: var(--shop-gap);
   width: calc(var(--shop-w) - var(--shop-gap) * 2);
   border-radius: var(--shop-radius);
-  background-color: var(--color-background-hard);
+  background-color: var(--color-cadmium-400);
   box-shadow: var(--shadow-raised);
   /* The shop scrolls; the bar just never shows. Hiding the bar is not the same
      as removing the scroller — the content still has to be reachable. */
@@ -540,7 +520,7 @@ body[data-shop-open] [data-shop-panel] {
   pointer-events: none;
   background-image: radial-gradient(
     circle at 1px 1px,
-    var(--color-shop-edge) 0 1px,
+    var(--color-cadmium-300) 0 1px,
     transparent 1.5px
   );
   background-size: 7px 2px;
@@ -611,12 +591,12 @@ body[data-shop-open] [data-shop-panel] {
    text would need; asked for contrast, they come back up to full strength. */
 @media (prefers-contrast: more) {
   [data-quiet] {
-    color: var(--color-foreground);
+    color: var(--color-graphite-900);
   }
 
   [data-note-ref] [data-marker] {
-    border-color: var(--color-sun-ink);
-    color: var(--color-sun-ink);
+    border-color: var(--color-cadmium-700);
+    color: var(--color-cadmium-700);
   }
 }
 
@@ -632,8 +612,8 @@ body[data-shop-open] [data-shop-panel] {
   --sun-y: 44%;
   background: radial-gradient(
     circle at var(--sun-x) var(--sun-y),
-    var(--color-sun-core) 0%,
-    var(--color-background-hard) 100%
+    var(--color-cadmium-500) 0%,
+    var(--color-cadmium-400) 100%
   );
 }
 

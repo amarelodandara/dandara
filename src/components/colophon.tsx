@@ -8,17 +8,17 @@ export function Colophon() {
     >
       <div
         data-recessed
-        className="space-y-4 ml-auto max-w-120 rounded-md bg-background px-6 py-10 md:px-8 md:py-12"
+        className="space-y-4 ml-auto max-w-120 rounded-md bg-cadmium-50 px-6 py-10 md:px-8 md:py-12"
       >
         <div>
           <p className={`${SECTION_HEADING} lowercase`}>Amarelo Dandara</p>
-          <p className={`${LABEL} text-foreground-soft`}>🇧🇷, born 2002</p>
+          <p className={`${LABEL} text-graphite-700`}>🇧🇷, born 2002</p>
         </div>
 
         <div>
           <p className={TITLE}>
             Portfolio
-            <span className={`ml-2 ${ANNOTATION} text-foreground-soft`}>
+            <span className={`ml-2 ${ANNOTATION} text-graphite-700`}>
               2026 —
             </span>
           </p>
