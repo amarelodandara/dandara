@@ -119,6 +119,7 @@ export function PaletteSwatches({
           done={outcome ? COPIED_NOTE[outcome] : COPIED_NOTE.done}
           shown={Boolean(outcome)}
           className="text-current"
+          itemClassName="justify-self-center"
         />
       </button>
       <Announcement>{announcement}</Announcement>
