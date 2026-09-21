@@ -148,8 +148,11 @@ skills and agent tooling · building internal tools on top of models
 **Research and process**
 Usability testing and experiments · continuous discovery · qualitative and
 quantitative analysis · customer conversations · defining success criteria and
-metrics · scoping and prioritisation · async written communication ·
-documentation · public speaking
+metrics · scoping and prioritisation · workshop facilitation (discovery and
+Design Thinking, journey mapping, kickoff and alignment, co-creation and
+critique) · user journey mapping · writing user stories · Jira and Confluence ·
+agile squad rituals · async written communication · documentation ·
+public speaking
 
 **Domain**
 Payments and fintech · point-of-sale and terminal hardware · Pix · marketplaces
@@ -213,6 +216,13 @@ these were an earlier draft's inference rather than her account.
 - Used qualitative and quantitative signal together — support themes, field
   feedback from merchants, and product analytics — to choose between options.
 
+**Facilitation and squad process**
+- Facilitated discovery and Design Thinking workshops, journey-mapping sessions,
+  kickoff and alignment sessions across teams, and co-creation and critique
+  sessions with product and engineering.
+- Wrote user stories and product documentation in Jira and Confluence, and
+  followed the work through the squad's tickets from refinement to delivery.
+
 **Communication and influence**
 - Communicated design decisions in writing to an async, cross-functional
   audience, and used that writing as the mechanism of alignment rather than
@@ -260,6 +270,9 @@ QuintoAndar is Brazil's largest rental platform.
   direction between competing options.
 - Paired directly with engineers and product managers inside a squad rather than
   delivering finished files to it.
+- Facilitated discovery and journey-mapping workshops with product and
+  engineering, and wrote the user stories and documentation the squad worked
+  from in Jira and Confluence.
 
 ---
 

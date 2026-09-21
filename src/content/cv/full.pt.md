@@ -93,8 +93,11 @@ modelos
 **Pesquisa e processo**
 Testes e experimentos de usabilidade · descoberta contínua · análise qualitativa
 e quantitativa · conversas com usuários · definição de critérios de sucesso e
-métricas · escopo e priorização · comunicação escrita assíncrona · documentação
-· falar em público
+métricas · escopo e priorização · condução de workshops (discovery e Design
+Thinking, mapeamento de jornada, kickoff e alinhamento, cocriação e crítica) ·
+mapeamento de jornada do usuário · escrita de histórias de usuário · Jira e
+Confluence · rituais ágeis de squad · comunicação escrita assíncrona ·
+documentação · falar em público
 
 **Domínio**
 Pagamentos e fintech · ponto de venda e hardware de terminal · Pix ·
@@ -155,6 +158,13 @@ isso era inferência de um rascunho anterior, não o relato dela.
   retorno de campo dos lojistas e analytics de produto — para escolher entre
   alternativas.
 
+**Facilitação e processo de squad**
+- Conduziu workshops de discovery e Design Thinking, sessões de mapeamento de
+  jornada, rituais de kickoff e alinhamento entre áreas, e sessões de cocriação
+  e crítica com produto e engenharia.
+- Escreveu histórias de usuário e documentação de produto em Jira e Confluence,
+  acompanhando o trabalho pelos tickets da squad do refinamento à entrega.
+
 **Comunicação e influência**
 - Comunicou decisões de design por escrito para uma audiência assíncrona e
   multidisciplinar, usando a escrita como mecanismo de alinhamento em vez da
@@ -201,6 +211,9 @@ Remoto, Brasil | 12/2021 - 04/2022
   resultados para decidir entre alternativas concorrentes.
 - Trabalhou lado a lado com engenheiros e product managers dentro da squad, em
   vez de entregar arquivos prontos a ela.
+- Conduziu workshops de discovery e mapeamento de jornada com produto e
+  engenharia, e escreveu as histórias de usuário e a documentação que a squad
+  usava em Jira e Confluence.
 
 ---
 
