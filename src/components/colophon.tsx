@@ -4,11 +4,11 @@ export function Colophon() {
   return (
     <footer
       data-dim-on-focus
-      className="mx-auto w-full max-w-[1400px] px-[7vw] pt-[6vh] pb-[10vh]"
+      className="mx-auto flex w-full max-w-[1400px] justify-end px-[7vw] pt-[6vh] pb-[10vh]"
     >
       <div
         data-recessed
-        className="ml-auto w-fit max-w-120 space-y-4 rounded-md bg-cadmium-50 px-6 py-10 md:px-8 md:py-12"
+        className="flex w-full flex-col justify-center gap-4 rounded-md bg-cadmium-50 px-6 py-10 sm:aspect-2/1 sm:h-48 sm:w-auto sm:max-w-120 sm:py-0 md:px-8"
       >
         <div>
           <p className={`${SECTION_HEADING} lowercase`}>Amarelo Dandara</p>
