@@ -8,7 +8,7 @@ export function Colophon() {
     >
       <div
         data-recessed
-        className="space-y-4 ml-auto max-w-120 rounded-md bg-cadmium-50 px-6 py-10 md:px-8 md:py-12"
+        className="ml-auto w-fit max-w-120 space-y-4 rounded-md bg-cadmium-50 px-6 py-10 md:px-8 md:py-12"
       >
         <div>
           <p className={`${SECTION_HEADING} lowercase`}>Amarelo Dandara</p>
