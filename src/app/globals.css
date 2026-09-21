@@ -88,9 +88,11 @@
      from its ground by its own edge plus the light it blocks, never by a drawn
      line. `card` is a thing resting on the wall, `raised` the same thing picked
      up, `chip` a small object where the wide blur would only smudge. */
-  --shadow-card: 0 0 0 1px oklch(0 0 0 / 0.059), 0 8px 28px oklch(0 0 0 / 0.141),
+  --shadow-card:
+    0 0 0 1px oklch(0 0 0 / 0.059), 0 8px 28px oklch(0 0 0 / 0.141),
     0 1px 3px oklch(0 0 0 / 0.102);
-  --shadow-raised: 0 0 0 1px oklch(0 0 0 / 0.059), 0 18px 48px oklch(0 0 0 / 0.161),
+  --shadow-raised:
+    0 0 0 1px oklch(0 0 0 / 0.059), 0 18px 48px oklch(0 0 0 / 0.161),
     0 2px 6px oklch(0 0 0 / 0.122);
   --shadow-chip: 0 0 0 1px oklch(0 0 0 / 0.059), 0 1px 3px oklch(0 0 0 / 0.102);
 
@@ -108,8 +110,8 @@
      so the surface reads as a hollow pressed into the wall rather than an
      object resting on it. The colophon is one, and so is the track a toggle
      knob sits in. */
-  --shadow-hollow: inset 0 0 0 1px oklch(0 0 0 / 0.035),
-    inset 0 1px 4px oklch(0 0 0 / 0.02);
+  --shadow-hollow:
+    inset 0 0 0 1px oklch(0 0 0 / 0.035), inset 0 1px 4px oklch(0 0 0 / 0.02);
 
   /* The sixth, and `hollow` cut through something saturated rather than pressed
      into the wall. Two differences, both forced by the ground: it is roughly
@@ -117,8 +119,90 @@
      the fill reading as a sticker; and it is thrown in the panel's own hue
      rather than in neutral black, so the edge reads as the thickness of the
      yellow being cut through instead of a grey line drawn on it. */
-  --shadow-cutout: inset 0 0 0 1px oklch(0.55 0.12 92 / 0.18),
+  --shadow-cutout:
+    inset 0 0 0 1px oklch(0.55 0.12 92 / 0.18),
     inset 0 2px 5px oklch(0.45 0.1 92 / 0.16);
+
+  /* The mdxcn graph frame (`src/components/graph`) is vendored from its shadcn
+     registry and asks for its own token names. They are not a third ramp: each
+     one is aliased to the step of graphite or cadmium that plays that part
+     here, so the frame is drawn in the wall's own pencil and its accent is the
+     paint tube. The accent is 700 rather than the 500 at the middle of the
+     mark: a glyph the size of a full stop, printed once per row, needs the
+     step that was mixed to carry text, not the one mixed to be a hot spot.
+     Muted is the wall's own quiet grey for the same reason — these labels are
+     read, not glanced at. `background` and `foreground` are the shadcn names
+     the registry's markup uses to knock the corner marks and the title out of
+     the dashed rule; both point at the wall. */
+  --color-background: var(--color-cadmium-50);
+  --color-foreground: var(--color-graphite-900);
+
+  --color-graph-accent: var(--color-cadmium-700);
+  --color-graph-accent-2: var(--color-cadmium-900);
+  --color-graph-accent-3: var(--color-graphite-700);
+  --color-graph-frame: var(--color-graphite-300);
+  --color-graph-muted: var(--color-graphite-700);
+  --color-graph-faint: var(--color-graphite-200);
+  --color-contrast-14: var(--color-graphite-200);
+  --color-contrast-23: var(--color-graphite-300);
+  --color-contrast-45: var(--color-graphite-500);
+  --color-contrast-70: var(--color-graphite-700);
+}
+
+/* The dashes the registry draws its frame and rules with: four repeating
+   gradients, one per edge, rather than a border, so the line is dashed at a
+   fixed 2px-on 5px-off rhythm that does not stretch with the box. */
+@utility graph-frame {
+  background-image:
+    repeating-linear-gradient(
+      to right,
+      var(--color-graph-frame) 0 2px,
+      transparent 2px 7px
+    ),
+    repeating-linear-gradient(
+      to bottom,
+      var(--color-graph-frame) 0 2px,
+      transparent 2px 7px
+    ),
+    repeating-linear-gradient(
+      to right,
+      var(--color-graph-frame) 0 2px,
+      transparent 2px 7px
+    ),
+    repeating-linear-gradient(
+      to bottom,
+      var(--color-graph-frame) 0 2px,
+      transparent 2px 7px
+    );
+  background-repeat: repeat-x, repeat-y, repeat-x, repeat-y;
+  background-position:
+    0 0,
+    100% 0,
+    0 100%,
+    0 0;
+  background-size:
+    100% 1px,
+    1px 100%,
+    100% 1px,
+    1px 100%;
+}
+
+@utility graph-rule {
+  height: 1px;
+  background-image: repeating-linear-gradient(
+    to right,
+    var(--color-graph-frame) 0 2px,
+    transparent 2px 7px
+  );
+}
+
+@utility graph-rule-y {
+  width: 1px;
+  background-image: repeating-linear-gradient(
+    to bottom,
+    var(--color-graph-frame) 0 2px,
+    transparent 2px 7px
+  );
 }
 
 /* Inter 4.001 OpenType features applied to every glyph on the site.
@@ -139,13 +223,10 @@
    sinf, numr, dnom, dlig, salt, locl, aalt. */
 :root {
   --font-features:
-    "calt" 1, /* contextual alternates (Inter default) */
-    "cv06" 1, /* simplified u */
-    "cv10" 1, /* capital G with spur */
-    "ss01" 1, /* open digits: 3 4 6 9 */
-    "ss02" 1, /* disambiguation: I l ß 0 */
-    "ss03" 1, /* round quotes & commas */
-    "zero" 1; /* slashed zero */
+    "calt" 1, /* contextual alternates (Inter default) */ "cv06" 1,
+    /* simplified u */ "cv10" 1, /* capital G with spur */ "ss01" 1,
+    /* open digits: 3 4 6 9 */ "ss02" 1, /* disambiguation: I l ß 0 */ "ss03" 1,
+    /* round quotes & commas */ "zero" 1; /* slashed zero */
 }
 
 body {

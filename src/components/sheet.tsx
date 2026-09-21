@@ -12,7 +12,6 @@ export type SheetProps = {
   kind: SheetKind;
   title: string;
   size?: SheetSize;
-  eyebrow?: string;
   front?: ReactNode;
   frontKind?: SheetFront;
   link?: SheetLink;

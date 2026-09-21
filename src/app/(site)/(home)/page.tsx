@@ -2,6 +2,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { LINK, LINK_UNDERLINED } from "@/components/link";
 import { PersonSchema } from "@/components/person-schema";
+import { Changelog } from "@/components/graph/changelog";
 import { Sheet } from "@/components/sheet";
 import { WorkPile } from "@/components/work-pile";
 import { FIND_ME } from "@/content/socials";
@@ -15,7 +16,6 @@ import {
   PROSE,
   SECTION_HEADING,
   STRONG,
-  TITLE,
 } from "@/lib/type";
 
 const WORK_MEDIA = "pointer-events-none h-auto w-full select-none";
@@ -24,6 +24,11 @@ const WORK_SIZES = "(min-width: 1024px) 26rem, (min-width: 768px) 42vw, 100vw";
 const MUSEUMS = {
   href: "https://servico-museu.vercel.app",
   label: "servico-museu.vercel.app",
+};
+
+const COLOR_OF_WATER = {
+  href: "/writing/the-color-of-water",
+  label: "The color of water",
 };
 
 const PERSONAL_WORK: { title: string; href?: string; blurb: string }[] = [
@@ -171,11 +176,55 @@ export default async function Home() {
 
       <WorkPile>
         <Sheet
+          id="color-of-water-plates"
+          kind="personal"
+          title="Fishy components"
+          size="wide"
+          link={COLOR_OF_WATER}
+          front={
+            <Image
+              src="/work/color-of-water-plates.png"
+              alt="Six name plates from The color of water, each wearing a different palette: dark slabs, a glowing blue pill, a white card on yellow, a pale gradient, every one holding a portrait, a name and a role."
+              width={1920}
+              height={1080}
+              sizes={WORK_SIZES}
+              draggable={false}
+              className={WORK_MEDIA}
+            />
+          }
+        >
+          <p className="mt-3">
+            One component, six coats. Each palette hands the plate its own
+            corners, weight and glow, so the personality of a tank survives the
+            trip into a UI.
+          </p>
+        </Sheet>
+
+        <Sheet
+          id="color-of-water-copy"
+          kind="personal"
+          title="Copy palette component"
+          link={COLOR_OF_WATER}
+          front={
+            <video
+              aria-label="A screen recording from The color of water: a palette of sea colours, and the Copy palette button settling into Copied in place before it returns."
+              autoPlay
+              loop
+              muted
+              playsInline
+              preload="metadata"
+              className={`${WORK_MEDIA} aspect-square`}
+            >
+              <source src="/work/color-of-water-copy.mp4" type="video/mp4" />
+            </video>
+          }
+        />
+
+        <Sheet
           id="in-service-of-museums"
           kind="personal"
           title="In Service of Museums"
           size="wide"
-          eyebrow="Graphic Design thesis · UEMG"
           link={MUSEUMS}
           front={
             <video
@@ -207,8 +256,7 @@ export default async function Home() {
         <Sheet
           id="museu-mark"
           kind="personal"
-          title="Museum mark"
-          eyebrow="Research icon"
+          title="Icon for research thesis"
           link={MUSEUMS}
           front={
             <video
@@ -230,34 +278,27 @@ export default async function Home() {
           kind="professional"
           title="Stone Co. Product Designer"
           size="wide"
-          eyebrow="2022 — 2026"
           frontKind="words"
           front={
-            <ul className={TITLE}>
-              {[
-                "Improvement of Activation flow",
-                "Improvement of Cancelation application",
-                "Improvement of Reports application",
-                "Automation structure of News app",
-                "Self-servic of supplies",
-                "Pix NFC launch",
-                "Homolog and design of new devices",
-                "Redesign of Pre-Authorization app",
-                "Launch of the App Store",
-                "System updates to devices",
-                "Launch of the Ticketing app",
-              ].map((app) => (
-                <li key={app}>{app}</li>
-              ))}
-            </ul>
+            <Changelog className="@container text-left" version="2022 — 2026">
+              <ul>
+                <li>
+                  launched: App Store for terminals, Pix NFC flow, Ticketing
+                  app, News automation
+                </li>
+                <li>
+                  improved: Pre-authorization app, Activation flow, Sale
+                  cancelation flow
+                </li>
+              </ul>
+            </Changelog>
           }
         />
 
         <Sheet
           id="stone-talk"
           kind="professional"
-          title="Stone Co., on stage"
-          eyebrow="Presenting the Store on stage"
+          title="Presenting the App Store on Stone Stage"
           size="wide"
           front={
             <Image
@@ -279,9 +320,8 @@ export default async function Home() {
         <Sheet
           id="links-amarelos"
           kind="personal"
-          title="links amarelos"
+          title="linksamarelos.com"
           size="feature"
-          eyebrow="linksamarelos.com"
           link={{
             href: "https://linksamarelos.com",
             label: "linksamarelos.com",
@@ -308,8 +348,7 @@ export default async function Home() {
         <Sheet
           id="ondas-amarelas"
           kind="personal"
-          title="ondas amarelas"
-          eyebrow="Monthly curated podcast"
+          title="podcast"
           link={{
             href: "https://open.spotify.com/show/043Gs7eyY2KOlotEWSTSxB?si=651fe644a3234022",
             label: "Listen on Spotify",
@@ -330,8 +369,7 @@ export default async function Home() {
         <Sheet
           id="ondas-amarelas-episode"
           kind="personal"
-          title="ondas amarelas, episode three"
-          eyebrow="Monthly curated podcast"
+          title="podcast cover design"
           front={
             <Image
               src="/work/ondas-amarelas-episode.png"
@@ -348,9 +386,8 @@ export default async function Home() {
         <Sheet
           id="obsidian-graph"
           kind="personal"
-          title="Obsidian graph"
+          title="Personal Obsidian graph"
           size="wide"
-          eyebrow="Personal Obsidian graph"
           front={
             <Image
               src="/work/obsidian-graph.png"

@@ -15,6 +15,7 @@ import {
 import type { SheetFront, SheetLink, SheetSize } from "./sheet";
 import type { WorkView } from "@/lib/work-view";
 import type { Placement } from "@/lib/scatter";
+import { PRESS_BASE } from "@/lib/pressable";
 import { ANNOTATION, LABEL, PROSE, SECTION_HEADING } from "@/lib/type";
 
 const WIDTH: Record<SheetSize, string> = {
@@ -151,7 +152,6 @@ export type SheetFrameProps = {
   title: string;
   size: SheetSize;
   view: WorkView;
-  eyebrow?: string;
   front?: ReactNode;
   frontKind?: SheetFront;
   link?: SheetLink;
@@ -286,16 +286,20 @@ function SheetButton({
 const REVEALED_ON_HOVER =
   "can-hover:opacity-0 can-hover:group-hover:opacity-100 can-hover:group-focus-within:opacity-100";
 
+const CAPTION_VISIT_SLOT = [
+  "hidden shrink-0 can-hover:inline-flex",
+  "transition-opacity duration-(--motion-quick) ease-out-strong",
+  REVEALED_ON_HOVER,
+].join(" ");
+
 const CAPTION_VISIT = [
-  "relative z-20 shrink-0 cursor-pointer",
+  PRESS_BASE,
+  "relative z-20 -my-1 inline-flex cursor-pointer items-center rounded-sm px-2 py-1",
   `${ANNOTATION} text-graphite-700`,
-  "transition-[opacity,color] duration-(--motion-quick) ease-out-strong",
-  "can-hover:hover:text-graphite-900 focus-visible:text-graphite-900",
+  "can-hover:hover:bg-cadmium-200 focus-visible:bg-cadmium-200",
   "after:absolute after:left-1/2 after:top-1/2 after:content-['']",
   "after:h-11 after:w-[max(100%+1.5rem,2.75rem)]",
   "after:-translate-x-1/2 after:-translate-y-1/2",
-  "hidden can-hover:inline",
-  REVEALED_ON_HOVER,
 ].join(" ");
 
 const PEEK_LAYER = [
@@ -343,13 +347,15 @@ function Plate({
       >
         <h3 className={WALL_LABEL}>{title}</h3>
         {link ? (
-          <a href={link.href} className={CAPTION_VISIT}>
-            Visit
-            <span className="sr-only">
-              {" "}
-              {title} at {link.label}
-            </span>
-          </a>
+          <span className={CAPTION_VISIT_SLOT}>
+            <a href={link.href} data-pressable className={CAPTION_VISIT}>
+              Visit
+              <span className="sr-only">
+                {" "}
+                {title} at {link.label}
+              </span>
+            </a>
+          </span>
         ) : null}
       </div>
     </>
@@ -369,14 +375,12 @@ const LIGHTBOX_LABEL = [
 
 function Lightbox({
   title,
-  eyebrow,
   front,
   link,
   button,
   children,
 }: {
   title: string;
-  eyebrow?: string;
   front?: ReactNode;
   link?: SheetLink;
   button: ReactNode;
@@ -389,9 +393,6 @@ function Lightbox({
       </div>
       <aside data-sheet-chrome className={LIGHTBOX_LABEL}>
         {button}
-        {eyebrow ? (
-          <p className={`${ANNOTATION} text-graphite-700`}>{eyebrow}</p>
-        ) : null}
         <h3 className={`clear-right mt-5 ${LABEL} text-graphite-700`}>
           {title}
         </h3>
@@ -410,7 +411,6 @@ function Lightbox({
 
 function Card({
   onWall,
-  eyebrow,
   title,
   front,
   link,
@@ -418,7 +418,6 @@ function Card({
   children,
 }: {
   onWall: boolean;
-  eyebrow?: string;
   title: string;
   front?: ReactNode;
   link?: SheetLink;
@@ -427,9 +426,6 @@ function Card({
 }) {
   return (
     <>
-      {showsDetail && eyebrow ? (
-        <p className={`${ANNOTATION} text-graphite-700`}>{eyebrow}</p>
-      ) : null}
       <h3 className={onWall ? WALL_LABEL : `mt-1 ${SECTION_HEADING}`}>
         {title}
       </h3>
@@ -451,7 +447,6 @@ function SheetFrameImpl({
   title,
   size,
   view,
-  eyebrow,
   front,
   frontKind = "picture",
   link,
@@ -701,13 +696,7 @@ function SheetFrameImpl({
   let body;
   if (lightbox) {
     body = (
-      <Lightbox
-        title={title}
-        eyebrow={eyebrow}
-        front={front}
-        link={link}
-        button={button}
-      >
+      <Lightbox title={title} front={front} link={link} button={button}>
         {children}
       </Lightbox>
     );
@@ -717,7 +706,6 @@ function SheetFrameImpl({
     body = (
       <Card
         onWall={onWall}
-        eyebrow={eyebrow}
         title={title}
         front={front}
         link={link}

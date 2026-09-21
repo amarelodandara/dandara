@@ -32,7 +32,6 @@ type Item = {
   kind: SheetProps["kind"];
   title: string;
   size: SheetSize;
-  eyebrow?: string;
   front: ReactNode;
   frontKind: SheetProps["frontKind"];
   link: SheetProps["link"];
@@ -56,7 +55,6 @@ function readSheets(children: ReactNode): Item[] {
         kind: props.kind,
         title: props.title,
         size: props.size ?? "narrow",
-        eyebrow: props.eyebrow,
         front: props.front,
         frontKind: props.frontKind,
         link: props.link,
@@ -245,7 +243,6 @@ export function WorkPile({
             title={item.title}
             size={item.size}
             view={view}
-            eyebrow={item.eyebrow}
             front={item.front}
             frontKind={item.frontKind}
             link={item.link}

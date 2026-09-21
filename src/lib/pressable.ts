@@ -8,7 +8,9 @@ const FOCUS =
 
 const PRESSED = "active:scale-[0.99] active:duration-(--press)";
 
-export const PRESS = `${SHAPE} ${MOTION} ${FOCUS} ${PRESSED}`;
+export const PRESS_BASE = `${MOTION} ${FOCUS} ${PRESSED}`;
+
+export const PRESS = `${SHAPE} ${PRESS_BASE}`;
 
 export const SEAT = `${SHAPE} ${MOTION} ${FOCUS} px-3 py-3 focus-visible:bg-cadmium-200`;
 

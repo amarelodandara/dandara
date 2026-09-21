@@ -15,7 +15,9 @@ const house = {
         type: "problem",
         docs: { description: "Names carry the meaning; comments go stale." },
         schema: [],
-        messages: { found: "Comments are not allowed. Rename until the code says it." },
+        messages: {
+          found: "Comments are not allowed. Rename until the code says it.",
+        },
       },
       create(context) {
         return {
@@ -52,7 +54,10 @@ const eslintConfig = defineConfig([
       "sonarjs/todo-tag": "warn",
       complexity: ["warn", 10],
       "max-depth": ["warn", 4],
-      "max-lines": ["warn", { max: 250, skipBlankLines: true, skipComments: true }],
+      "max-lines": [
+        "warn",
+        { max: 250, skipBlankLines: true, skipComments: true },
+      ],
       "max-lines-per-function": [
         "warn",
         { max: 50, skipBlankLines: true, skipComments: true },
@@ -67,7 +72,10 @@ const eslintConfig = defineConfig([
       ],
       "id-length": [
         "warn",
-        { min: 2, exceptions: ["x", "y", "w", "h", "i", "j", "k", "n", "a", "b", "t"] },
+        {
+          min: 2,
+          exceptions: ["x", "y", "w", "h", "i", "j", "k", "n", "a", "b", "t"],
+        },
       ],
     },
   },
@@ -90,6 +98,26 @@ const eslintConfig = defineConfig([
   {
     files: ["src/components/sheet-frame.tsx"],
     rules: { "react/forbid-dom-props": "off" },
+  },
+  {
+    files: ["src/components/graph/**"],
+    rules: {
+      "better-tailwindcss/enforce-canonical-classes": "off",
+      "better-tailwindcss/no-unknown-classes": "off",
+      eqeqeq: "off",
+      "house/no-comments": "off",
+      "react/forbid-component-props": "off",
+      "react/forbid-dom-props": "off",
+      "sonarjs/no-nested-conditional": "off",
+      "sonarjs/super-linear-regex": "off",
+      "unicorn/no-array-callback-reference": "off",
+      "unicorn/no-nested-ternary": "off",
+      "unicorn/no-object-as-default-parameter": "off",
+      "unicorn/no-useless-undefined": "off",
+      "unicorn/prefer-includes-over-repeated-comparisons": "off",
+      "unicorn/prefer-split-limit": "off",
+      "unicorn/prefer-string-replace-all": "off",
+    },
   },
   {
     files: ["src/worlds/**"],
