@@ -1,12 +1,13 @@
 ---
 name: tailor-cv
-description: Tailor Nicoly's résumé to a specific job description and generate an ATS-clean PDF she can download from the gift shop. Use when given a job description, a job posting URL, or asked to "tailor my CV", "optimise my resume for this role", or "make a version for this job".
+description: Tailor Nicoly's résumé to a specific job description and generate an ATS-clean PDF, copied straight to ~/Downloads and also available from the gift shop. Use when given a job description, a job posting URL, or asked to "tailor my CV", "optimise my resume for this role", or "make a version for this job".
 ---
 
 # Tailor the CV to a job posting
 
 Paste a job description; get back a one-page, ATS-clean PDF written for it,
-downloadable from the gift shop on the local dev site.
+copied into `~/Downloads` ready to attach, and also on the gift shop shelf of
+the local dev site.
 
 **First, invoke the `resume-ats-optimizer` skill and follow its Keyword
 Optimization Process (Steps 1–4) and its Analysis Output Format.** That skill
@@ -159,11 +160,28 @@ browser is missing, the generator fails with a download instruction — run
    Skills or the oldest bullets. **Never reduce the type size**; below 10pt
    breaks `resume-ats-optimizer`'s own rule.
 
-9. **Confirm nothing tracked changed.** Run `git status --short`. Tailored
-   files are git-ignored, so the output should be no different from before the
-   run. Say so in the report.
+9. **Put it in `~/Downloads`.** Always, without being asked — the point of a
+   tailored CV is attaching it to an application, and walking to the gift shop
+   to click it is a step between here and there. Copy it under the same
+   filename the gift shop would have given it, which the generator already
+   wrote into the PDF's sidecar:
 
-10. **Report** in `resume-ats-optimizer`'s Analysis Output Format, plus:
+   ```bash
+   cp public/gift-shop/tailored/<slug>.<lang>.pdf \
+      ~/Downloads/"$(node -p "require('./public/gift-shop/tailored/<slug>.<lang>.json').download")"
+   ```
+
+   Only ever copy. Do not move it: the gift shop reads the file where the
+   generator left it, and removing it empties the shelf. If a file of that name
+   is already in `~/Downloads` it is a previous run of the same role, and
+   overwriting it is what should happen.
+
+10. **Confirm nothing tracked changed.** Run `git status --short`. Tailored
+    files are git-ignored, so the output should be no different from before the
+    run. The `~/Downloads` copy is outside the repo and shows up nowhere in it.
+    Say so in the report.
+
+11. **Report** in `resume-ats-optimizer`'s Analysis Output Format, plus:
     - the full keyword table from step 7, both tiers;
     - match score before → after;
     - which keywords were added, and where they landed;
@@ -171,8 +189,10 @@ browser is missing, the generator fails with a download instruction — run
     - which framing of 03/2026 – Present was used, and why;
     - anything the posting wanted that the master does not yet cover;
     - any requirement the résumé genuinely cannot meet;
-    - the output path and page count;
-    - "press `g` on the local site to take it from the gift shop."
+    - the page count, the `~/Downloads` path it was copied to, and the path it
+      was generated at;
+    - "it is in ~/Downloads, and press `g` on the local site to take it from
+      the gift shop again."
 
 ## What this never does
 
