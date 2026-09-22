@@ -181,6 +181,7 @@ export default async function Home() {
           title="Fishy components"
           size="wide"
           link={COLOR_OF_WATER}
+          full="/work/color-of-water-plates.full.webp"
           front={
             <Image
               src="/work/color-of-water-plates.png"
@@ -300,6 +301,7 @@ export default async function Home() {
           kind="professional"
           title="Presenting the App Store on Stone Stage"
           size="wide"
+          full="/work/stone-talk.full.webp"
           front={
             <Image
               src="/work/stone-talk.jpg"
@@ -353,6 +355,7 @@ export default async function Home() {
             href: "https://open.spotify.com/show/043Gs7eyY2KOlotEWSTSxB?si=651fe644a3234022",
             label: "Listen on Spotify",
           }}
+          full="/work/ondas-amarelas.full.webp"
           front={
             <Image
               src="/work/ondas-amarelas.png"
@@ -370,6 +373,7 @@ export default async function Home() {
           id="ondas-amarelas-episode"
           kind="personal"
           title="podcast cover design"
+          full="/work/ondas-amarelas-episode.full.webp"
           front={
             <Image
               src="/work/ondas-amarelas-episode.png"
@@ -388,6 +392,7 @@ export default async function Home() {
           kind="personal"
           title="Personal Obsidian graph"
           size="wide"
+          full="/work/obsidian-graph.full.webp"
           front={
             <Image
               src="/work/obsidian-graph.png"

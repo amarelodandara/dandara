@@ -33,6 +33,7 @@ type Item = {
   title: string;
   size: SheetSize;
   front: ReactNode;
+  full: SheetProps["full"];
   frontKind: SheetProps["frontKind"];
   link: SheetProps["link"];
   content: ReactNode;
@@ -56,6 +57,7 @@ function readSheets(children: ReactNode): Item[] {
         title: props.title,
         size: props.size ?? "narrow",
         front: props.front,
+        full: props.full,
         frontKind: props.frontKind,
         link: props.link,
         content: props.children,
@@ -244,6 +246,7 @@ export function WorkPile({
             size={item.size}
             view={view}
             front={item.front}
+            full={item.full}
             frontKind={item.frontKind}
             link={item.link}
             placement={placements[item.id]}
@@ -263,7 +266,7 @@ export function WorkPile({
         <div
           aria-hidden="true"
           onClick={close}
-          className="fixed inset-0 z-50 bg-cadmium-50/40"
+          className="fixed inset-0 z-50 h-[100lvh] bg-cadmium-50/40"
         />
       ) : null}
     </section>

@@ -12,11 +12,13 @@ import {
   type PointerEvent as ReactPointerEvent,
   type ReactNode,
 } from "react";
+import Link from "next/link";
 import type { SheetFront, SheetLink, SheetSize } from "./sheet";
 import type { WorkView } from "@/lib/work-view";
 import type { Placement } from "@/lib/scatter";
+import { Swap } from "./copy";
 import { PRESS_BASE } from "@/lib/pressable";
-import { ANNOTATION, LABEL, PROSE, SECTION_HEADING } from "@/lib/type";
+import { ANNOTATION, LABEL, PROSE, SECTION_HEADING, TITLE } from "@/lib/type";
 
 const WIDTH: Record<SheetSize, string> = {
   narrow: "clamp(9.5rem, 42vw, 18rem)",
@@ -153,6 +155,7 @@ export type SheetFrameProps = {
   size: SheetSize;
   view: WorkView;
   front?: ReactNode;
+  full?: string;
   frontKind?: SheetFront;
   link?: SheetLink;
   placement: Placement;
@@ -192,9 +195,10 @@ const FOCUSED_FRAME =
   "fixed left-1/2 top-1/2 z-[60] w-[88vw] -translate-x-1/2 -translate-y-1/2 md:w-[var(--sheet-w)]";
 
 const LIGHTBOX_FRAME = [
-  "fixed left-1/2 top-1/2 z-[60] w-screen -translate-x-1/2 -translate-y-1/2",
-  "md:w-max md:max-w-[96vw]",
-  "max-h-[92vh] overflow-y-auto md:max-h-none md:overflow-visible",
+  "fixed left-1/2 top-1/2 z-[60] -translate-x-1/2 -translate-y-1/2",
+  "w-[80vw] md:landscape:w-[70vw]",
+  "max-h-[92vh] overflow-x-clip overflow-y-auto",
+  "md:landscape:max-h-none md:landscape:overflow-visible",
 ].join(" ");
 
 const frameClass = ({ focused, onWall, dragging, lightbox }: Look) => {
@@ -252,27 +256,51 @@ const PILE_BUTTON = [
   "after:-translate-x-1/2 after:-translate-y-1/2",
 ].join(" ");
 
+type ButtonPlace = "wall" | "pile" | "strip";
+
+const buttonPlace = (onWall: boolean, lightbox: boolean): ButtonPlace => {
+  if (lightbox) return "strip";
+  if (onWall) return "wall";
+  return "pile";
+};
+
+const STRIP_BUTTON = [
+  "relative z-10 shrink-0 cursor-pointer rounded-sm px-3 py-2",
+  ANNOTATION,
+  "bg-cadmium-50 shadow-label",
+  "can-hover:hover:bg-cadmium-200 focus-visible:bg-cadmium-200",
+  "transition-[background-color,scale] duration-(--motion-quick) ease-out-strong",
+  "active:scale-[0.97] active:duration-(--press)",
+  "after:absolute after:left-1/2 after:top-1/2 after:content-['']",
+  "after:h-11 after:w-full",
+  "after:-translate-x-1/2 after:-translate-y-1/2",
+].join(" ");
+
 function SheetButton({
   ref,
   title,
   focused,
-  onWall,
+  place,
   onClick,
 }: {
   ref: RefObject<HTMLButtonElement | null>;
   title: string;
   focused: boolean;
-  onWall: boolean;
+  place: ButtonPlace;
   onClick: () => void;
 }) {
+  const onWall = place === "wall";
   const pileClass = `${PILE_BUTTON} ${focused ? "opacity-100" : REVEALED_ON_HOVER}`;
+  const className = { wall: WALL_BUTTON, pile: pileClass, strip: STRIP_BUTTON }[
+    place
+  ];
   return (
     <button
       ref={ref}
       type="button"
       data-pressable
       onClick={onClick}
-      className={onWall ? WALL_BUTTON : pileClass}
+      className={className}
     >
       {onWall ? null : (focused && "Close") || "Open"}
       <span className="sr-only">
@@ -363,48 +391,122 @@ function Plate({
 }
 
 const LIGHTBOX_MEDIA = [
-  "flex min-h-0 w-full items-center justify-center md:w-auto",
-  "[&>*]:max-h-[62vh] [&>*]:w-auto [&>*]:max-w-full [&>*]:object-contain",
-  "md:[&>*]:max-h-[78vh]",
+  "relative flex min-h-0 w-full items-center justify-center",
+  "md:landscape:min-w-0 md:landscape:flex-1",
+  "[&>*]:h-auto! [&>*]:w-auto! [&>*]:max-w-full [&>*]:object-contain",
+  "[&>*]:max-h-[58vh] md:landscape:[&>*]:max-h-[88vh]",
 ].join(" ");
 
-const LIGHTBOX_LABEL = [
-  "w-[86vw] shrink-0 bg-cadmium-50 p-5 shadow-raised",
-  "md:max-h-[78vh] md:w-[17rem] md:self-end md:overflow-y-auto md:p-6",
+const THUMBNAIL_LAYER = [
+  "absolute inset-0 flex items-center justify-center",
+  "[&>*]:h-full! [&>*]:w-full! [&>*]:max-h-none! [&>*]:object-contain",
 ].join(" ");
+
+const FULL_PICTURE =
+  "transition-opacity duration-(--motion-enter) ease-out-strong";
+
+const LIGHTBOX_COLUMN = [
+  "flex w-full flex-col items-stretch gap-3",
+  "md:landscape:w-[16rem] md:landscape:shrink-0 md:landscape:self-end",
+].join(" ");
+
+const LIGHTBOX_CREDIT = [
+  "rounded-sm bg-cadmium-50 px-4 py-4 shadow-label",
+  "md:landscape:max-h-[40vh] md:landscape:overflow-y-auto",
+  "md:landscape:px-5 md:landscape:py-5",
+].join(" ");
+
+const PLATE = [
+  "flex items-center rounded-sm px-4 py-3",
+  "md:landscape:px-5",
+].join(" ");
+
+const DOORWAY = `${PLATE} justify-between gap-3 bg-cadmium-400 shadow-chip`;
+
+const DOORWAY_OPEN = [
+  PRESS_BASE,
+  "relative shrink-0 cursor-pointer rounded-sm px-2 py-1",
+  "can-hover:hover:bg-cadmium-300 focus-visible:bg-cadmium-300",
+  "after:absolute after:left-1/2 after:top-1/2 after:content-['']",
+  "after:h-11 after:w-full",
+  "after:-translate-x-1/2 after:-translate-y-1/2",
+].join(" ");
+
+const OUTBOUND = `${PLATE} bg-cadmium-50 shadow-label ${PROSE}`;
+
+const onThisSite = (href: string) => href.startsWith("/");
+
+function Doorway({ link }: { link: SheetLink }) {
+  if (!onThisSite(link.href)) {
+    return (
+      <p className={OUTBOUND}>
+        <a href={link.href} className={DETAIL_LINK}>
+          {link.label}
+        </a>
+      </p>
+    );
+  }
+  return (
+    <div className={DOORWAY}>
+      <span className="min-w-0">
+        <span className={`block ${ANNOTATION} leading-none text-cadmium-900`}>
+          Read on
+        </span>
+        <span className={`mt-1.5 block ${TITLE}`}>{link.label}</span>
+      </span>
+      <Link href={link.href} data-pressable className={DOORWAY_OPEN}>
+        <Swap idle="Read" />
+        <span className="sr-only">Read {link.label}</span>
+      </Link>
+    </div>
+  );
+}
+
+function FullPicture({ full, front }: { full: string; front?: ReactNode }) {
+  const [arrived, setArrived] = useState(false);
+  return (
+    <>
+      <div className={THUMBNAIL_LAYER}>{front}</div>
+      <img
+        src={full}
+        alt=""
+        aria-hidden="true"
+        draggable={false}
+        onLoad={() => setArrived(true)}
+        className={`${FULL_PICTURE} ${arrived ? "opacity-100" : "opacity-0"}`}
+      />
+    </>
+  );
+}
 
 function Lightbox({
   title,
   front,
+  full,
   link,
   button,
   children,
 }: {
   title: string;
   front?: ReactNode;
+  full?: string;
   link?: SheetLink;
   button: ReactNode;
   children: ReactNode;
 }) {
   return (
-    <div className="flex w-full flex-col items-center gap-5 md:flex-row md:items-center md:justify-center md:gap-8">
+    <div className="flex w-full flex-col items-center gap-4 md:landscape:flex-row md:landscape:items-end md:landscape:justify-center md:landscape:gap-5">
       <div data-sheet-media className={LIGHTBOX_MEDIA}>
-        {front}
+        {full ? <FullPicture full={full} front={front} /> : front}
       </div>
-      <aside data-sheet-chrome className={LIGHTBOX_LABEL}>
-        {button}
-        <h3 className={`clear-right mt-5 ${LABEL} text-graphite-700`}>
-          {title}
-        </h3>
-        <div className={PROSE}>{children}</div>
-        {link ? (
-          <p className="mt-3">
-            <a href={link.href} className={DETAIL_LINK}>
-              {link.label}
-            </a>
-          </p>
-        ) : null}
-      </aside>
+      <div data-sheet-chrome className={LIGHTBOX_COLUMN}>
+        <span className="flex justify-end">{button}</span>
+        {link ? <Doorway link={link} /> : null}
+        <aside className={LIGHTBOX_CREDIT}>
+          <h3 className={`${LABEL} text-graphite-700`}>{title}</h3>
+          <div className={PROSE}>{children}</div>
+        </aside>
+      </div>
     </div>
   );
 }
@@ -448,6 +550,7 @@ function SheetFrameImpl({
   size,
   view,
   front,
+  full,
   frontKind = "picture",
   link,
   placement,
@@ -688,7 +791,7 @@ function SheetFrameImpl({
       ref={buttonRef}
       title={title}
       focused={focused}
-      onWall={onWall && !lightbox}
+      place={buttonPlace(onWall, lightbox)}
       onClick={() => (focused ? onClose() : take())}
     />
   );
@@ -696,7 +799,13 @@ function SheetFrameImpl({
   let body;
   if (lightbox) {
     body = (
-      <Lightbox title={title} front={front} link={link} button={button}>
+      <Lightbox
+        title={title}
+        front={front}
+        full={full}
+        link={link}
+        button={button}
+      >
         {children}
       </Lightbox>
     );

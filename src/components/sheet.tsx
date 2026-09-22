@@ -13,6 +13,7 @@ export type SheetProps = {
   title: string;
   size?: SheetSize;
   front?: ReactNode;
+  full?: string;
   frontKind?: SheetFront;
   link?: SheetLink;
   children?: ReactNode;
