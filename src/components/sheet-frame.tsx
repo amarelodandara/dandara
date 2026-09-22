@@ -256,11 +256,15 @@ const PILE_BUTTON = [
   "after:-translate-x-1/2 after:-translate-y-1/2",
 ].join(" ");
 
-type ButtonPlace = "wall" | "pile" | "strip";
+type ButtonPlace = "wall" | "picture" | "pile" | "strip";
 
-const buttonPlace = (onWall: boolean, lightbox: boolean): ButtonPlace => {
+const buttonPlace = (
+  onWall: boolean,
+  lightbox: boolean,
+  bare: boolean,
+): ButtonPlace => {
   if (lightbox) return "strip";
-  if (onWall) return "wall";
+  if (onWall) return bare ? "picture" : "wall";
   return "pile";
 };
 
@@ -289,11 +293,14 @@ function SheetButton({
   place: ButtonPlace;
   onClick: () => void;
 }) {
-  const onWall = place === "wall";
+  const onWall = place === "wall" || place === "picture";
   const pileClass = `${PILE_BUTTON} ${focused ? "opacity-100" : REVEALED_ON_HOVER}`;
-  const className = { wall: WALL_BUTTON, pile: pileClass, strip: STRIP_BUTTON }[
-    place
-  ];
+  const className = {
+    wall: WALL_BUTTON,
+    picture: `${WALL_BUTTON} hidden md:block`,
+    pile: pileClass,
+    strip: STRIP_BUTTON,
+  }[place];
   return (
     <button
       ref={ref}
@@ -315,9 +322,10 @@ const REVEALED_ON_HOVER =
   "can-hover:opacity-0 can-hover:group-hover:opacity-100 can-hover:group-focus-within:opacity-100";
 
 const CAPTION_VISIT_SLOT = [
-  "hidden shrink-0 can-hover:inline-flex",
+  "inline-flex shrink-0 md:hidden md:can-hover:inline-flex",
   "transition-opacity duration-(--motion-quick) ease-out-strong",
-  REVEALED_ON_HOVER,
+  "md:can-hover:opacity-0 md:can-hover:group-hover:opacity-100",
+  "md:can-hover:group-focus-within:opacity-100",
 ].join(" ");
 
 const CAPTION_VISIT = [
@@ -331,7 +339,7 @@ const CAPTION_VISIT = [
 ].join(" ");
 
 const PEEK_LAYER = [
-  "pointer-events-none absolute inset-0 grid place-items-center",
+  "pointer-events-none absolute inset-0 hidden place-items-center md:grid",
   "opacity-0",
   "transition-opacity duration-(--motion-quick) ease-out-strong",
   "can-hover:group-hover:opacity-100 group-focus-within:opacity-100",
@@ -377,7 +385,7 @@ function Plate({
         {link ? (
           <span className={CAPTION_VISIT_SLOT}>
             <a href={link.href} data-pressable className={CAPTION_VISIT}>
-              Visit
+              {onThisSite(link.href) ? "Read" : "Visit"}
               <span className="sr-only">
                 {" "}
                 {title} at {link.label}
@@ -791,7 +799,7 @@ function SheetFrameImpl({
       ref={buttonRef}
       title={title}
       focused={focused}
-      place={buttonPlace(onWall, lightbox)}
+      place={buttonPlace(onWall, lightbox, bare)}
       onClick={() => (focused ? onClose() : take())}
     />
   );
