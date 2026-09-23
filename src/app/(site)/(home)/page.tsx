@@ -7,7 +7,7 @@ import { Sheet } from "@/components/sheet";
 import { WorkPile } from "@/components/work-pile";
 import { FIND_ME } from "@/content/socials";
 import { UPCOMING } from "@/content/upcoming";
-import { loadPostList } from "@/lib/writing/posts";
+import { loadWritingList } from "@/lib/writing/posts";
 import {
   ACCENT_PROSE,
   ANNOTATION,
@@ -50,7 +50,7 @@ const PERSONAL_WORK: { title: string; href?: string; blurb: string }[] = [
 ];
 
 export default async function Home() {
-  const writing = await loadPostList();
+  const writing = await loadWritingList();
 
   return (
     <main className="mx-auto w-full max-w-[1400px] flex-1 px-[7vw] py-[14vh] sm:py-[18vh]">
@@ -148,16 +148,6 @@ export default async function Home() {
           </h2>
 
           <ul className="mt-6 space-y-2 md:mt-8">
-            {writing.map(({ slug, meta }) => (
-              <li key={slug}>
-                <h3 className={SECTION_HEADING}>
-                  <Link href={`/writing/${slug}`} className={LINK}>
-                    {meta.title}
-                  </Link>
-                </h3>
-              </li>
-            ))}
-
             {UPCOMING.map(({ title }) => (
               <li key={title}>
                 <h3
@@ -167,6 +157,27 @@ export default async function Home() {
                   <span className={`shrink-0 ${ANNOTATION} text-graphite-500`}>
                     soon
                   </span>
+                </h3>
+              </li>
+            ))}
+
+            {writing.map(({ key, title, href, venue }) => (
+              <li key={key}>
+                <h3 className={SECTION_HEADING}>
+                  {venue ? (
+                    <a href={href} className={LINK}>
+                      {title}
+                      <span
+                        className={`ml-2.5 inline-block ${ANNOTATION} text-graphite-500`}
+                      >
+                        {venue}
+                      </span>
+                    </a>
+                  ) : (
+                    <Link href={href} className={LINK}>
+                      {title}
+                    </Link>
+                  )}
                 </h3>
               </li>
             ))}

@@ -1,4 +1,5 @@
 import type { ComponentType } from "react";
+import { ELSEWHERE } from "@/content/elsewhere";
 import type { ArticleNote } from "@/lib/article-notes";
 
 export type PostMeta = {
@@ -40,6 +41,21 @@ export async function loadPostList() {
   );
 
   return listed.toSorted((a, b) => b.meta.date.localeCompare(a.meta.date));
+}
+
+export async function loadWritingList() {
+  const posts = await loadPostList();
+  const here = posts.map(({ slug, meta }) => ({
+    key: slug,
+    title: meta.title,
+    deck: meta.deck,
+    date: meta.date,
+    href: `/writing/${slug}`,
+    venue: undefined,
+  }));
+  const away = ELSEWHERE.map((piece) => ({ key: piece.href, ...piece }));
+
+  return [...here, ...away].toSorted((a, b) => b.date.localeCompare(a.date));
 }
 
 const READABLE_DATE = new Intl.DateTimeFormat("en-GB", {
