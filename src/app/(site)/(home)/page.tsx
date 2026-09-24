@@ -2,6 +2,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { LINK, LINK_UNDERLINED } from "@/components/link";
 import { PersonSchema } from "@/components/person-schema";
+import { ExperienceList } from "@/components/experience-list";
 import { Changelog } from "@/components/graph/changelog";
 import { Sheet } from "@/components/sheet";
 import { WorkPile } from "@/components/work-pile";
@@ -144,6 +145,14 @@ export default async function Home() {
       >
         <div className="md:col-start-2">
           <h2 className={`${ANNOTATION} leading-none text-graphite-700`}>
+            Experience
+          </h2>
+
+          <ExperienceList className="mt-6 md:mt-8" />
+
+          <h2
+            className={`mt-16 ${ANNOTATION} leading-none text-graphite-700 md:mt-20`}
+          >
             Writing
           </h2>
 
