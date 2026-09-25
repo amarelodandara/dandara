@@ -667,17 +667,12 @@ body[data-shop-open] [data-shop-panel] {
 }
 
 /* Quiet text is a choice about emphasis, not about legibility, so it holds only
-   while the reader has not asked for more contrast. The date, the resting state
-   of the nav link and the note markers all sit well under the ratio a body of
-   text would need; asked for contrast, they come back up to full strength. */
+   while the reader has not asked for more contrast. The date and the resting
+   state of the nav link both sit well under the ratio a body of text would
+   need; asked for contrast, they come back up to full strength. */
 @media (prefers-contrast: more) {
   [data-quiet] {
     color: var(--color-graphite-900);
-  }
-
-  [data-note-ref] [data-marker] {
-    border-color: var(--color-cadmium-700);
-    color: var(--color-cadmium-700);
   }
 }
 
