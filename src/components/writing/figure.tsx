@@ -69,3 +69,35 @@ export function Figure({
     </Frame>
   );
 }
+
+type Panel = {
+  src: string;
+  alt: string;
+  width: number;
+  height: number;
+  caption?: string;
+};
+
+export function FigurePair({ panels }: { panels: [Panel, Panel] }) {
+  return (
+    <figure className="my-12" data-measure="wide">
+      <div className="mx-auto grid max-w-4xl gap-8 sm:grid-cols-2 sm:gap-5">
+        {panels.map((panel) => (
+          <figure key={panel.src}>
+            <Image
+              src={panel.src}
+              alt={panel.alt}
+              width={panel.width}
+              height={panel.height}
+              sizes="(min-width: 60rem) 28rem, (min-width: 40rem) 46vw, 92vw"
+              className="h-auto w-full"
+            />
+            {panel.caption ? (
+              <figcaption className={CAPTION}>{panel.caption}</figcaption>
+            ) : null}
+          </figure>
+        ))}
+      </div>
+    </figure>
+  );
+}

@@ -2,7 +2,7 @@ import type { MDXComponents } from "mdx/types";
 import { isValidElement } from "react";
 import type { ComponentPropsWithoutRef, ReactNode } from "react";
 import { LINK_UNDERLINED } from "@/components/link";
-import { PROSE, SECTION_HEADING, STRONG } from "@/lib/type";
+import { MICRO, PROSE, SECTION_HEADING, STRONG } from "@/lib/type";
 import { Clip } from "@/components/writing/clip";
 import { Figure } from "@/components/writing/figure";
 import { Note } from "@/components/writing/note-ref";
@@ -28,10 +28,22 @@ function Heading({ children, ...rest }: ComponentPropsWithoutRef<"h2">) {
     <h2
       id={slug(children) || undefined}
       {...rest}
-      className={`mt-12 scroll-mt-16 ${SECTION_HEADING}`}
+      className={`mt-12 scroll-mt-16 [header+&]:mt-0 ${SECTION_HEADING}`}
     >
       {children}
     </h2>
+  );
+}
+
+function Subheading({ children, ...rest }: ComponentPropsWithoutRef<"h3">) {
+  return (
+    <h3
+      id={slug(children) || undefined}
+      {...rest}
+      className={`mt-10 scroll-mt-16 text-graphite-700 ${SECTION_HEADING}`}
+    >
+      {children}
+    </h3>
   );
 }
 
@@ -40,6 +52,36 @@ function Paragraph({ children, ...rest }: ComponentPropsWithoutRef<"p">) {
     <p {...rest} className={`mt-5 ${PROSE}`}>
       {children}
     </p>
+  );
+}
+
+function List({ children, ...rest }: ComponentPropsWithoutRef<"ul">) {
+  return (
+    <ul
+      {...rest}
+      className={`mt-5 list-disc pl-5 marker:text-graphite-400 [li>&]:mt-3 ${PROSE}`}
+    >
+      {children}
+    </ul>
+  );
+}
+
+function Item({ children, ...rest }: ComponentPropsWithoutRef<"li">) {
+  return (
+    <li {...rest} className="mt-4 pl-1 first:mt-0 [&>p]:mt-0">
+      {children}
+    </li>
+  );
+}
+
+function Code({ children, ...rest }: ComponentPropsWithoutRef<"code">) {
+  return (
+    <code
+      {...rest}
+      className={`rounded-xs bg-graphite-100 px-1 py-0.5 align-[0.1em] ${MICRO}`}
+    >
+      {children}
+    </code>
   );
 }
 
@@ -76,7 +118,11 @@ function Rule() {
 
 const components: MDXComponents = {
   h2: Heading,
+  h3: Subheading,
   p: Paragraph,
+  ul: List,
+  li: Item,
+  code: Code,
   a: Anchor,
   strong: Strong,
   blockquote: Quote,

@@ -20,6 +20,7 @@ export type Post = {
 const POSTS: Record<string, () => Promise<unknown>> = {
   "museums-and-websites": () =>
     import("@/content/writing/museums-and-websites.mdx"),
+  obsidian: () => import("@/content/writing/obsidian.mdx"),
   "the-color-of-water": () =>
     import("@/content/writing/the-color-of-water.mdx"),
 };
