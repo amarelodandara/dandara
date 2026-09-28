@@ -4,11 +4,25 @@ import { LINK } from "@/components/link";
 import { UPCOMING } from "@/content/upcoming";
 import { WritingNav } from "@/components/writing/writing-nav";
 import { formatPostDate, loadWritingList } from "@/lib/writing/posts";
+import { CARD, NAME } from "@/lib/site";
 import { ANNOTATION, PAGE_HEADING, PROSE, SECTION_HEADING } from "@/lib/type";
+
+const description = "Essays on design, and on the things built alongside it.";
 
 export const metadata: Metadata = {
   title: "Writing",
-  description: "Essays on design, and on the things built alongside it.",
+  description,
+  alternates: { canonical: "/writing" },
+  openGraph: {
+    type: "website",
+    url: "/writing",
+    siteName: NAME,
+    locale: "en_US",
+    title: "Writing",
+    description,
+    images: [CARD],
+  },
+  twitter: { title: "Writing", description, images: [CARD] },
 };
 
 export default async function WritingIndex() {

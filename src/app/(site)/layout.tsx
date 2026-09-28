@@ -4,7 +4,7 @@ import localFont from "next/font/local";
 import { Analytics } from "@vercel/analytics/next";
 import { SpeedInsights } from "@vercel/speed-insights/next";
 import { GiftShop } from "@/components/gift-shop";
-import { DESCRIPTION, NAME, SITE_URL, TITLE } from "@/lib/site";
+import { CARD, DESCRIPTION, NAME, SITE_URL, TITLE } from "@/lib/site";
 import { ANNOTATION } from "@/lib/type";
 import "../globals.css";
 
@@ -50,11 +50,13 @@ export const metadata: Metadata = {
     title: TITLE,
     description: DESCRIPTION,
     locale: "en_US",
+    images: [CARD],
   },
   twitter: {
     card: "summary_large_image",
     title: TITLE,
     description: DESCRIPTION,
+    images: [CARD],
   },
 };
 

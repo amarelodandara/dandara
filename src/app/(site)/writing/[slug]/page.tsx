@@ -4,6 +4,7 @@ import { ArticleNotes } from "@/components/writing/article-notes";
 import { PostFooter } from "@/components/writing/post-footer";
 import { PostSchema } from "@/components/writing/post-schema";
 import { WritingNav } from "@/components/writing/writing-nav";
+import { NAME } from "@/lib/site";
 import { formatPostMonth, loadPost, SLUGS } from "@/lib/writing/posts";
 import { ACCENT_PROSE, ANNOTATION, PAGE_HEADING } from "@/lib/type";
 
@@ -36,6 +37,8 @@ export async function generateMetadata({
     openGraph: {
       type: "article",
       url: `/writing/${slug}`,
+      siteName: NAME,
+      locale: "en_US",
       title: meta.title,
       description,
       publishedTime: meta.date,
