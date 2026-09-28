@@ -45,3 +45,6 @@ next-env.d.ts
 # gift shop's Tailored section has nothing to list on the deployed site.
 /src/content/cv/tailored/
 /public/gift-shop/tailored/
+
+# macOS custom folder icon
+Icon[]

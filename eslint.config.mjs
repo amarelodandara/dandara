@@ -109,6 +109,7 @@ const eslintConfig = defineConfig([
       "react/forbid-component-props": "off",
       "react/forbid-dom-props": "off",
       "sonarjs/no-nested-conditional": "off",
+      "unicorn/prefer-string-repeat": "off",
       "sonarjs/super-linear-regex": "off",
       "unicorn/no-array-callback-reference": "off",
       "unicorn/no-nested-ternary": "off",

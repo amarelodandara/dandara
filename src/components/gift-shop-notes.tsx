@@ -75,7 +75,7 @@ function LinkedNote({
       data-pressable
       className={seatFor(current, true)}
     >
-      <Marked note={note} meta={sourceOf(note.href as string)} />
+      <Marked note={note} meta={note.body ?? sourceOf(note.href as string)} />
       <span className={`${CHIP} self-center`}>
         <Verb idle="Open" />
       </span>
