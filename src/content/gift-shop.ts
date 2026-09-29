@@ -1,3 +1,5 @@
+import { SITE_URL } from "@/lib/site";
+
 type Common = {
   id: string;
   title: string;
@@ -31,6 +33,20 @@ export const amareloSection: GiftShopSection = {
       title: "Amarelo Dandara",
       hex: "#FFCC00",
       fill: "bg-cadmium-400",
+    },
+  ],
+};
+
+export const feedSection: GiftShopSection = {
+  id: "feed",
+  title: "Reading",
+  items: [
+    {
+      kind: "copy",
+      id: "rss",
+      title: "RSS feed",
+      meta: "Paste it into your reader",
+      text: `${SITE_URL}/feed.xml`,
     },
   ],
 };

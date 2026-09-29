@@ -1,6 +1,10 @@
 "use client";
 
-import { amareloSection, giftShopSections } from "@/content/gift-shop";
+import {
+  amareloSection,
+  feedSection,
+  giftShopSections,
+} from "@/content/gift-shop";
 import type { GiftShopSection } from "@/content/gift-shop";
 import type { Article } from "@/lib/article-notes";
 import { Kbd } from "./kbd";
@@ -14,24 +18,32 @@ const SHOP_SIGN: Sign = {
   closes: " gift shop",
 };
 
-export const shopContents = (article: Article | null) =>
-  article
-    ? {
-        sign: {
-          name: "References",
-          blurb: `Footnotes of ${article.title}`,
-          closes: " references",
-        },
-        shelves: [amareloSection],
-      }
-    : { sign: SHOP_SIGN, shelves: giftShopSections };
+const SHELVES_BY_PAGE: Record<string, GiftShopSection[]> = {
+  "/writing": [feedSection, amareloSection],
+};
 
-export const shelfSeat = (
-  section: GiftShopSection,
-  article: Article | null,
-) => {
+export const shopContents = (article: Article | null, pathname: string) => {
+  if (article) {
+    return {
+      sign: {
+        name: "References",
+        blurb: `Footnotes of ${article.title}`,
+        closes: " references",
+      },
+      shelves: [amareloSection],
+      full: false,
+    };
+  }
+
+  const shelves = SHELVES_BY_PAGE[pathname];
+  return shelves
+    ? { sign: SHOP_SIGN, shelves, full: false }
+    : { sign: SHOP_SIGN, shelves: giftShopSections, full: true };
+};
+
+export const shelfSeat = (section: GiftShopSection, full: boolean) => {
   if (section.title) return "mt-8";
-  return article ? "mt-auto pt-14" : "mt-14";
+  return full ? "mt-14" : "mt-auto pt-14";
 };
 
 export function GiftShopSign({
