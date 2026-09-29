@@ -7,7 +7,7 @@ import { DESCRIPTION, TITLE } from "../src/lib/site.ts";
 import { readPosts } from "../src/lib/writing/meta-source.ts";
 
 const ROOT = process.cwd();
-const OUT = path.join(ROOT, "src", "app", "(site)", "opengraph-image.png");
+const OUT = path.join(ROOT, "public", "og.png");
 const POST_DIR = path.join(ROOT, "public", "writing", "og");
 const FONT = path.join(ROOT, "src", "fonts", "InterVariable.woff2");
 
