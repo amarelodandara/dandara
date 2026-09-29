@@ -3,7 +3,7 @@
 import { useLayoutEffect, useRef } from "react";
 import { LINK } from "@/components/link";
 import { EXPERIENCE } from "@/content/experience";
-import { ANNOTATION, LABEL, SECTION_HEADING } from "@/lib/type";
+import { ANNOTATION, LABEL, PROSE, SECTION_HEADING } from "@/lib/type";
 
 function hidePeriodsIfAnyWraps(list: HTMLElement) {
   const periods = list.querySelectorAll<HTMLElement>("[data-period]");
@@ -35,30 +35,37 @@ export function ExperienceList({ className }: { className?: string }) {
 
   return (
     <ul ref={listRef} className={`group space-y-2 ${className ?? ""}`}>
-      {EXPERIENCE.map(({ company, href, role, period }) => (
-        <li key={company} className="flex items-baseline gap-6">
-          <h3
-            className={`flex h-[calc(1lh+0.2em)] min-w-0 flex-wrap items-baseline gap-x-2.5 gap-y-[1lh] overflow-hidden whitespace-nowrap ${SECTION_HEADING}`}
-          >
-            {href ? (
-              <a href={href} className={LINK}>
-                {company}
-              </a>
-            ) : (
-              company
-            )}
-            <span
-              data-period
-              className={`shrink-0 ${ANNOTATION} text-graphite-500 group-data-compact:invisible`}
+      {EXPERIENCE.map(({ company, href, role, period, description }) => (
+        <li key={company}>
+          <div className="flex items-baseline gap-6">
+            <h3
+              className={`flex h-[calc(1lh+0.2em)] min-w-0 flex-wrap items-baseline gap-x-2.5 gap-y-[1lh] overflow-hidden whitespace-nowrap ${SECTION_HEADING}`}
             >
-              {period}
+              {href ? (
+                <a href={href} className={LINK}>
+                  {company}
+                </a>
+              ) : (
+                company
+              )}
+              <span
+                data-period
+                className={`shrink-0 ${ANNOTATION} text-graphite-500 group-data-compact:invisible`}
+              >
+                {period}
+              </span>
+            </h3>
+            <span
+              className={`ml-auto shrink-0 whitespace-nowrap ${LABEL} text-graphite-700`}
+            >
+              {role}
             </span>
-          </h3>
-          <span
-            className={`ml-auto shrink-0 whitespace-nowrap ${LABEL} text-graphite-700`}
-          >
-            {role}
-          </span>
+          </div>
+          {description ? (
+            <p className={`mt-2 mb-6 ${PROSE} text-graphite-700`}>
+              {description}
+            </p>
+          ) : null}
         </li>
       ))}
     </ul>
