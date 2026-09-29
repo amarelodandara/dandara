@@ -1,6 +1,7 @@
 "use client";
 
 import dynamic from "next/dynamic";
+import { usePathname } from "next/navigation";
 import { useCallback, useEffect, useRef } from "react";
 import { GiftShopNotes } from "./gift-shop-notes";
 import { GiftShopSign, shelfSeat, shopContents } from "./gift-shop-sign";
@@ -100,7 +101,7 @@ export function GiftShop() {
   const article = useArticle();
   const plaqueWanted = usePlaqueWanted(article !== null);
   const plaqueVisible = active === null && plaqueWanted;
-  const { sign, shelves } = shopContents(article);
+  const { sign, shelves, full } = shopContents(article, usePathname());
 
   const panelRef = useRef<HTMLElement>(null);
   const plaqueRef = useRef<HTMLButtonElement>(null);
@@ -115,10 +116,10 @@ export function GiftShop() {
   }, []);
 
   const close = useCallback(() => closeOverlay(ID), []);
-  const openShop = useCallback(() => {
-    rememberFocus();
-    openOverlay(ID);
-  }, [rememberFocus]);
+
+  useEffect(() => {
+    if (open) rememberFocus();
+  }, [open, rememberFocus]);
 
   useEffect(() => {
     const page = document.querySelector("[data-page]");
@@ -167,7 +168,6 @@ export function GiftShop() {
     if (somethingElseHoldsTheScreen) return;
 
     event.preventDefault();
-    rememberFocus();
     openOverlay(ID);
   });
 
@@ -212,10 +212,10 @@ export function GiftShop() {
 
         <GiftShopNotes titled={!article} />
 
-        {Tailored && !article ? <Tailored /> : null}
+        {Tailored && full ? <Tailored /> : null}
 
         {shelves.map((section) => (
-          <section key={section.id} className={shelfSeat(section, article)}>
+          <section key={section.id} className={shelfSeat(section, full)}>
             {section.title ? (
               <h3 className={`px-3 ${ANNOTATION} text-cadmium-900`}>
                 {section.title}
@@ -236,7 +236,7 @@ export function GiftShop() {
         ref={plaqueRef}
         visible={plaqueVisible}
         label={article ? sign.name : "Visit the gift shop"}
-        onOpen={openShop}
+        onOpen={() => openOverlay(ID)}
       />
     </>
   );

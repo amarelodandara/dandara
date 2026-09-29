@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { LINK } from "@/components/link";
 import { PostFooter } from "@/components/writing/post-footer";
+import { ShopCallout } from "@/components/writing/shop-callout";
 import { WritingNav } from "@/components/writing/writing-nav";
 import { loadWritingList } from "@/lib/writing/posts";
 import { CARD, NAME } from "@/lib/site";
@@ -70,6 +71,11 @@ export default async function WritingIndex() {
       <main className="mx-auto w-full max-w-[1400px] flex-1 px-[7vw] pt-[9vh] sm:pt-[12vh]">
         <div data-landing className="mx-auto w-full max-w-2xl">
           <h1 className={PAGE_HEADING}>Writing</h1>
+          <div className="mt-10">
+            <ShopCallout>
+              Looking for the RSS feed? It&rsquo;s waiting in the gift shop!
+            </ShopCallout>
+          </div>
 
           {byYear(entries).map(([year, pieces]) => (
             <section key={year} className="mt-16 first-of-type:mt-8">
