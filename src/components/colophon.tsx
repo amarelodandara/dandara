@@ -1,3 +1,4 @@
+import { LINK } from "@/components/link";
 import { ANNOTATION, LABEL, SECTION_HEADING, TITLE } from "@/lib/type";
 
 export function Colophon() {
@@ -22,6 +23,12 @@ export function Colophon() {
               2026 —
             </span>
           </p>
+          <a
+            href="https://github.com/amarelodandara/dandara"
+            className={`${LABEL} text-graphite-700 ${LINK}`}
+          >
+            Source on GitHub
+          </a>
         </div>
       </div>
     </footer>
