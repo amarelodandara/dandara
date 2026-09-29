@@ -7,7 +7,6 @@ import { Changelog } from "@/components/graph/changelog";
 import { Sheet } from "@/components/sheet";
 import { WorkPile } from "@/components/work-pile";
 import { FIND_ME } from "@/content/socials";
-import { UPCOMING } from "@/content/upcoming";
 import { loadWritingList } from "@/lib/writing/posts";
 import {
   ACCENT_PROSE,
@@ -21,6 +20,8 @@ import {
 
 const WORK_MEDIA = "pointer-events-none h-auto w-full select-none";
 const WORK_SIZES = "(min-width: 1024px) 26rem, (min-width: 768px) 42vw, 100vw";
+
+const HOME_WRITING = 3;
 
 const MUSEUMS = {
   href: "https://servico-museu.vercel.app",
@@ -157,40 +158,36 @@ export default async function Home() {
           </h2>
 
           <ul className="mt-6 space-y-2 md:mt-8">
-            {UPCOMING.map(({ title }) => (
-              <li key={title}>
-                <h3
-                  className={`flex items-baseline gap-2.5 ${SECTION_HEADING} text-graphite-500`}
-                >
-                  {title}
-                  <span className={`shrink-0 ${ANNOTATION} text-graphite-500`}>
-                    soon
-                  </span>
-                </h3>
-              </li>
-            ))}
-
-            {writing.map(({ key, title, href, venue }) => (
-              <li key={key}>
-                <h3 className={SECTION_HEADING}>
-                  {venue ? (
-                    <a href={href} className={LINK}>
-                      {title}
-                      <span
-                        className={`ml-2.5 inline-block ${ANNOTATION} text-graphite-500`}
-                      >
-                        {venue}
-                      </span>
-                    </a>
-                  ) : (
-                    <Link href={href} className={LINK}>
-                      {title}
-                    </Link>
-                  )}
-                </h3>
-              </li>
-            ))}
+            {writing
+              .slice(0, HOME_WRITING)
+              .map(({ key, title, href, venue }) => (
+                <li key={key}>
+                  <h3 className={SECTION_HEADING}>
+                    {venue ? (
+                      <a href={href} className={LINK}>
+                        {title}
+                        <span
+                          className={`ml-2.5 inline-block ${ANNOTATION} text-graphite-500`}
+                        >
+                          {venue}
+                        </span>
+                      </a>
+                    ) : (
+                      <Link href={href} className={LINK}>
+                        {title}
+                      </Link>
+                    )}
+                  </h3>
+                </li>
+              ))}
           </ul>
+
+          <Link
+            href="/writing"
+            className={`mt-2 inline-block ${LABEL} text-graphite-700 ${LINK}`}
+          >
+            All writing
+          </Link>
         </div>
       </section>
 
