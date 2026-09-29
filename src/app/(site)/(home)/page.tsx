@@ -86,9 +86,14 @@ export default async function Home() {
                 ))}
               </ul>
 
-              <h2 className={`mt-8 ${ANNOTATION} text-graphite-700`}>
-                Find me
-              </h2>
+              <div className="mt-8 flex items-center gap-2">
+                <h2 className={`${ANNOTATION} text-graphite-700`}>Find me</h2>
+                <span
+                  className={`rounded-sm bg-cadmium-100 px-1.5 py-1 leading-none ${ANNOTATION} text-cadmium-900`}
+                >
+                  Open for work
+                </span>
+              </div>
               <ul
                 className={`mt-2 flex flex-wrap gap-x-5 gap-y-1 ${LABEL} text-graphite-700`}
               >
