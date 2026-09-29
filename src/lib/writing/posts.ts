@@ -59,13 +59,6 @@ export async function loadWritingList() {
   return [...here, ...away].toSorted((a, b) => b.date.localeCompare(a.date));
 }
 
-const READABLE_DATE = new Intl.DateTimeFormat("en-GB", {
-  day: "numeric",
-  month: "long",
-  year: "numeric",
-  timeZone: "UTC",
-});
-
 const READABLE_MONTH = new Intl.DateTimeFormat("en-GB", {
   month: "long",
   year: "numeric",
@@ -73,9 +66,6 @@ const READABLE_MONTH = new Intl.DateTimeFormat("en-GB", {
 });
 
 const asDate = (date: string) => new Date(`${date}T00:00:00Z`);
-
-export const formatPostDate = (date: string) =>
-  READABLE_DATE.format(asDate(date));
 
 export const formatPostMonth = (date: string) =>
   READABLE_MONTH.format(asDate(date));

@@ -1,9 +1,9 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { LINK } from "@/components/link";
-import { UPCOMING } from "@/content/upcoming";
+import { PostFooter } from "@/components/writing/post-footer";
 import { WritingNav } from "@/components/writing/writing-nav";
-import { formatPostDate, loadWritingList } from "@/lib/writing/posts";
+import { loadWritingList } from "@/lib/writing/posts";
 import { CARD, NAME } from "@/lib/site";
 import { ANNOTATION, PAGE_HEADING, PROSE, SECTION_HEADING } from "@/lib/type";
 
@@ -25,52 +25,73 @@ export const metadata: Metadata = {
   twitter: { title: "Writing", description, images: [CARD] },
 };
 
+type Entry = Awaited<ReturnType<typeof loadWritingList>>[number];
+
+function byYear(entries: Entry[]) {
+  const years = new Map<string, Entry[]>();
+  for (const entry of entries) {
+    const [year = ""] = entry.date.split("-");
+    years.set(year, [...(years.get(year) ?? []), entry]);
+  }
+  return [...years];
+}
+
+function Piece({ title, deck, href, venue }: Entry) {
+  return (
+    <li>
+      <h3 className={SECTION_HEADING}>
+        {venue ? (
+          <a href={href} className={LINK}>
+            {title}
+            <span
+              className={`ml-2.5 inline-block ${ANNOTATION} text-graphite-500`}
+            >
+              {venue}
+            </span>
+          </a>
+        ) : (
+          <Link href={href} className={LINK}>
+            {title}
+          </Link>
+        )}
+      </h3>
+      <p className={`mt-1.5 ${PROSE} text-graphite-700`}>{deck}</p>
+    </li>
+  );
+}
+
 export default async function WritingIndex() {
   const entries = await loadWritingList();
 
   return (
     <>
-      <WritingNav />
+      <WritingNav current="writing" />
 
-      <main className="mx-auto w-full max-w-[1400px] flex-1 px-[7vw] pt-[9vh] pb-[14vh] sm:pt-[12vh]">
+      <main className="mx-auto w-full max-w-[1400px] flex-1 px-[7vw] pt-[9vh] sm:pt-[12vh]">
         <div data-landing className="mx-auto w-full max-w-2xl">
           <h1 className={PAGE_HEADING}>Writing</h1>
 
-          <ul className="mt-12 space-y-10">
-            {UPCOMING.map(({ title }) => (
-              <li key={title}>
-                <p data-quiet className={`${ANNOTATION} text-graphite-400`}>
-                  Coming soon
-                </p>
-                <h2 className={`mt-1.5 ${SECTION_HEADING} text-graphite-500`}>
-                  {title}
-                </h2>
-              </li>
-            ))}
+          {byYear(entries).map(([year, pieces]) => (
+            <section key={year} className="mt-16 first-of-type:mt-8">
+              <h2 className={`${ANNOTATION} leading-none text-graphite-700`}>
+                {year}
+              </h2>
 
-            {entries.map(({ key, title, deck, date, href, venue }) => (
-              <li key={key}>
-                <p data-quiet className={`${ANNOTATION} text-graphite-400`}>
-                  <time dateTime={date}>{formatPostDate(date)}</time>
-                  {venue && <> · {venue}</>}
-                </p>
-                <h2 className={`mt-1.5 ${SECTION_HEADING}`}>
-                  {venue ? (
-                    <a href={href} className={LINK}>
-                      {title}
-                    </a>
-                  ) : (
-                    <Link href={href} className={LINK}>
-                      {title}
-                    </Link>
-                  )}
-                </h2>
-                <p className={`mt-1.5 ${PROSE} text-graphite-700`}>{deck}</p>
-              </li>
-            ))}
-          </ul>
+              <ul className="mt-8 space-y-10">
+                {pieces.map((piece) => (
+                  <Piece {...piece} key={piece.key} />
+                ))}
+              </ul>
+            </section>
+          ))}
         </div>
       </main>
+
+      <div className="mx-auto w-full max-w-[1400px] px-[7vw] pb-[10vh]">
+        <div className="mx-auto w-full max-w-2xl">
+          <PostFooter />
+        </div>
+      </div>
     </>
   );
 }
