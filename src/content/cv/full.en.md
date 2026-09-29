@@ -31,8 +31,10 @@ a fact; it may never change the fact.
   ships in English; this site, its README, and its documentation are hers).
 
 **Employment**
-- Stone Co. — Product Designer — Remote, Brazil — 06/2022 – 03/2026.
-- QuintoAndar — Product Designer — Remote, Brazil — 12/2021 – 04/2022.
+- Stone Co. — Product Designer — Remote, Brazil — 06/2022 – 03/2026. Joined as
+  Junior; promoted to Mid-level (Pleno in Portuguese) in 04/2024.
+- QuintoAndar — Junior Product Designer (Product Designer Júnior) — Remote,
+  Brazil — 12/2021 – 04/2022.
 - 03/2026 – Present — self-directed. See *The current period* below for the
   three ways it can honestly be written.
 
@@ -48,6 +50,11 @@ a fact; it may never change the fact.
 - 22+ Android device models her Stone work ran across.
 - 4.5M+ active payment terminals running it.
 - 2 zero-to-one product launches at Stone, across 3 platforms and 4 organizations.
+  One of them is the Stone Terminal Store, still live as of 2026-09.
+- 40%+ of Stone's partner base adopted the Pix NFC flow within 6 months of
+  launch. Her one lift number (per Nicoly, 2026-09-29). It was a team result on
+  a flow she designed as sole designer: write it as the flow's adoption, never
+  as her personal achievement, and never round it up.
 - 14 named apps in the Stone terminal suite she worked across: Activation Flow,
   Cancelation, Closing, News, Paper Roll Orders, Payment, Pix and Pix NFC,
   Pre-Authorization, Receipts, Sales Reports, Sales Simulation, Store, System
@@ -164,7 +171,7 @@ publishing and editorial
 ## Professional Experience
 
 ### Stone Co. — Product Designer
-Remote, Brazil | 06/2022 - 03/2026
+Remote, Brazil | 06/2022 - 03/2026 | Promoted from Junior to Mid-level, 04/2024
 
 Stone is one of Brazil's largest payments companies. Nicoly designed the
 software running on its credit card machines — an in-house consumer product at
@@ -190,7 +197,8 @@ consumer of the system, it did not fully cover her area of the company, and
 these were an earlier draft's inference rather than her account.
 
 **Ownership, zero-to-one, and scope**
-- Led 2 zero-to-one product launches across 3 platforms and 4 organizations,
+- Led 2 zero-to-one product launches, including the Stone Terminal Store, still
+  live, across 3 platforms and 4 organizations,
   scoping and proposing the work, distilling ambiguous problems into focused
   solutions, and aligning cross-functional stakeholders.
 - Proposed work that was not assigned to her, carried it through approval, and
@@ -201,9 +209,9 @@ these were an earlier draft's inference rather than her account.
   share a roadmap.
 
 **Craft under time pressure**
-- Refined key screens and flows for a new payment technology as sole designer,
-  defining success criteria and delivering production-ready specs under a
-  compressed timeline, combining speed with craft.
+- Designed the Pix NFC payment flow as sole designer, defining its success
+  criteria and delivering production-ready specs under a compressed timeline;
+  40%+ of the partner base adopted it within 6 months.
 - Was the only designer on that surface: framing, exploration, interaction
   detail, spec, and hand-through to engineering all sat with her.
 - Held quality on details a rushed process usually drops — states, edge cases,
@@ -254,7 +262,7 @@ depends on the posting, and one of the three options is to leave it out.
 - Used Claude Code as the daily working environment across both products, from
   first sketch to production deploy.
 
-### QuintoAndar — Product Designer
+### QuintoAndar — Junior Product Designer
 Remote, Brazil | 12/2021 - 04/2022
 
 QuintoAndar is Brazil's largest rental platform.
@@ -287,9 +295,9 @@ the right one depends on the posting.
    03/2026 – Present*, as written above. Best for design engineering and
    generalist roles, where the shipped code is the strongest evidence in the
    whole résumé. It also removes the gap without a word of explanation.
-   **This is the default. Nicoly chose it on 2026-08-26, and `base.en.md` and
-   `base.pt.md` now carry it.** Depart from it only when the posting gives a
-   reason, and say so in the report.
+   Retired as the default on 2026-09-29: outside feedback read it as filler
+   covering a gap, since it starts the month Stone ends and its two "production
+   websites" are a portfolio and a thesis site.
 2. **As projects only** — leave the experience section ending at Stone and let
    adandara.com and *In Service of Museums* carry the period from the Projects
    section. Best for conservative product design postings that read an
@@ -297,6 +305,16 @@ the right one depends on the posting.
 3. **Named plainly** — *Sabbatical, 03/2026 – Present*, with a single line on
    what shipped during it. Best where the culture rewards directness and where a
    cover letter or screen will raise it anyway.
+   **This is the default. Nicoly chose it on 2026-09-29, and `base.en.md` and
+   `base.pt.md` now carry it:** a *Sabbatical* entry with one line, and
+   adandara.com and *In Service of Museums* moved into Projects as `###`
+   entries that keep their technical bullets. Depart from it only when the
+   posting gives a reason, and say so in the report.
+
+Whichever framing is used, **AI tooling is named twice at most**, in the
+summary and the skills. Outside feedback (2026-09-29) found that a third
+mention made it read as a large share of her identity and discounted the solo
+engineering work.
 
 Never disguise it, never stretch the Stone end date, and never describe the
 period as freelance or contract work — no client work was sold.
@@ -456,7 +474,9 @@ strengths that are real.
 - **Not 7+ years of product design.** ~4 years 4 months in full-time product
   design roles (12/2021 – 03/2026), and 5+ years designing overall counting
   independent and pre-professional work. Nothing above that.
-- **Never held a Senior title.** Both roles were Product Designer. Seniority can
+- **Never held a Senior title.** Junior at QuintoAndar, Junior then Mid-level
+  (Pleno) at Stone, promoted 04/2024. The promotion is worth showing; the
+  highest title she can write is Mid-level. Seniority can
   be argued from scope — sole designer on a payment technology, self-scoped
   zero-to-one launches — but the title cannot be written down.
 - **Stone is national, not global.** Massive consumer scale inside Brazil.
@@ -477,9 +497,10 @@ strengths that are real.
   code. Design system depth is a gap for design engineering postings that ask
   for token layering or primitive-vs-semantic naming — say so plainly.
 - **Most Stone impact numbers are scale, not lift.** She can say 4.5M+ terminals
-  and 22+ device models because those are the surface she owned. She does not
-  have a public conversion or revenue delta to attach to a specific change, and
-  one must never be invented to fill the shape of a metrics bullet.
+  and 22+ device models because those are the surface she owned. The one lift
+  number is Pix NFC adoption (40%+ of partners in 6 months). She has no
+  conversion or revenue delta, and one must never be invented to fill the
+  shape of a metrics bullet.
 
 ---
 
@@ -501,9 +522,8 @@ Code as a daily instrument. adandara.com belongs here too — a developer-facing
 company will read a designer who ships her own code as craft, not as a
 distraction.
 
-Watch: the posting asks for metric movement. She has scale, not lift. Write
-ownership and success-criteria language honestly and do not manufacture a
-percentage.
+Watch: the posting asks for metric movement. Lead with the Pix NFC adoption
+number, the one lift figure she has, and do not manufacture another.
 
 ### DuckDuckGo — Senior Product Design Engineer (design engineering track)
 Wants: 7+ years including 2+ senior at global consumer brands, prototyping in
