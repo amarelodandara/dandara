@@ -49,7 +49,9 @@ import { PROSE, SECTION_HEADING } from "@/lib/type";
   900), 50 to 900. Reach for a step, not an opacity: `text-graphite-400`, not
   `text-graphite-900/35`. Opacity is kept for what has to stay translucent:
   focus rings (they sit on the wall and on yellow), scrims, and lines drawn on
-  the yellow panel.
+  the yellow panel. The one colour outside the ramps is the changelog's area
+  tags: their `area-*` tokens in `globals.css` are for those tags and nothing
+  else.
 
 ## Exceptions
 
