@@ -238,6 +238,18 @@ body {
   font-optical-sizing: auto;
 }
 
+/* Selected text is lit by the shop's yellow rather than painted with it: 200,
+   the light that lands on the panel. The text keeps its own colour. On the panel
+   itself a yellow would vanish into its own ground, so there selection lifts
+   to the wall's tint instead. */
+::selection {
+  background-color: var(--color-cadmium-200);
+}
+
+[data-shop-panel] ::selection {
+  background-color: var(--color-cadmium-50);
+}
+
 /* Focusing a sheet pushes the rest of the page back. The blur is per element,
    never on a shared ancestor — a filter there would blur the focused sheet too
    and turn itself into a containing block for its fixed positioning.
