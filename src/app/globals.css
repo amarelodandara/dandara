@@ -147,6 +147,27 @@
   --color-contrast-23: var(--color-graphite-300);
   --color-contrast-45: var(--color-graphite-500);
   --color-contrast-70: var(--color-graphite-700);
+
+  /* The changelog's area tags are the one place colour sorts things, so they
+     are the one place colour comes from outside the two ramps. Home keeps the
+     house yellow and Site-wide the wall's pencil, both aliased to their ramps:
+     Site-wide is not a room, so it takes no hue. The other three are new hues
+     held to the same two stops: a ground at L 0.92 with only as much chroma as
+     each hue can carry there inside sRGB, and an ink at L 0.42, so no tag
+     shouts louder than another. Each ink clears 6.5:1 on its own ground. Work
+     is green (150°), Blog is ink blue (245°), Gift shop is violet (300°):
+     spread round the wheel, away from cadmium's 50° to 100°. They are for the
+     tags only; nothing else on the site reaches for them. */
+  --color-area-home: var(--color-cadmium-200);
+  --color-area-home-ink: var(--color-cadmium-900);
+  --color-area-work: oklch(0.92 0.05 150);
+  --color-area-work-ink: oklch(0.42 0.09 150);
+  --color-area-blog: oklch(0.92 0.035 245);
+  --color-area-blog-ink: oklch(0.42 0.1 250);
+  --color-area-shop: oklch(0.92 0.04 300);
+  --color-area-shop-ink: oklch(0.42 0.1 300);
+  --color-area-site: var(--color-graphite-200);
+  --color-area-site-ink: var(--color-graphite-700);
 }
 
 /* The dashes the registry draws its frame and rules with: four repeating

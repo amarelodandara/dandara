@@ -1,8 +1,9 @@
 import type { MDXComponents } from "mdx/types";
 import { isValidElement } from "react";
 import type { ComponentPropsWithoutRef, ReactNode } from "react";
+import { INLINE_CODE } from "@/components/code";
 import { LINK_UNDERLINED } from "@/components/link";
-import { MICRO, PROSE, SECTION_HEADING, STRONG } from "@/lib/type";
+import { PROSE, SECTION_HEADING, STRONG } from "@/lib/type";
 import { Clip } from "@/components/writing/clip";
 import { Figure } from "@/components/writing/figure";
 import { Note } from "@/components/writing/note-ref";
@@ -76,10 +77,7 @@ function Item({ children, ...rest }: ComponentPropsWithoutRef<"li">) {
 
 function Code({ children, ...rest }: ComponentPropsWithoutRef<"code">) {
   return (
-    <code
-      {...rest}
-      className={`rounded-xs bg-graphite-100 px-1 py-0.5 align-[0.1em] ${MICRO}`}
-    >
+    <code {...rest} className={INLINE_CODE}>
       {children}
     </code>
   );
