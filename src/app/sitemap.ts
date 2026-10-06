@@ -19,6 +19,11 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       changeFrequency: "monthly",
       priority: 0.8,
     },
+    {
+      url: `${SITE_URL}/changelog`,
+      changeFrequency: "weekly",
+      priority: 0.3,
+    },
     ...posts.map(({ slug, meta }) => ({
       url: `${SITE_URL}/writing/${slug}`,
       lastModified: meta.date,

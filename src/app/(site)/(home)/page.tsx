@@ -55,7 +55,7 @@ export default async function Home() {
   const writing = await loadWritingList();
 
   return (
-    <main className="mx-auto w-full max-w-[1400px] flex-1 px-[7vw] py-[14vh] sm:py-[18vh]">
+    <main className="mx-auto w-full max-w-[1400px] flex-1 px-[7vw] pt-[9vh] pb-[14vh] sm:pt-[12vh] sm:pb-[18vh]">
       <PersonSchema />
 
       <div data-dim-on-focus data-landing>

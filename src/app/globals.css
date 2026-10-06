@@ -70,6 +70,12 @@
      is too weak to read as deliberate at these durations. */
   --ease-out-strong: cubic-bezier(0.2, 0, 0, 1);
 
+  /* The one exception: something loose coming to rest. It runs a few percent
+     past its mark and settles back, the way a hanging pointer does. Only for
+     a thing that is free to swing; never for anything the user drags, opens
+     or dismisses, which keeps `out-strong`. */
+  --ease-settle: cubic-bezier(0.34, 1.4, 0.64, 1);
+
   /* Opening is the deliberate act and can take its time; dismissing is the
      system getting out of the way, so it snaps. */
   --motion-enter: 280ms;
@@ -156,8 +162,9 @@
      each hue can carry there inside sRGB, and an ink at L 0.42, so no tag
      shouts louder than another. Each ink clears 6.5:1 on its own ground. Work
      is green (150°), Blog is ink blue (245°), Gift shop is violet (300°):
-     spread round the wheel, away from cadmium's 50° to 100°. They are for the
-     tags only; nothing else on the site reaches for them. */
+     spread round the wheel, away from cadmium's 50° to 100°. They name a part
+     of the site, so they are for the changelog's tags and the signposts that
+     lead to those parts; nothing else on the site reaches for them. */
   --color-area-home: var(--color-cadmium-200);
   --color-area-home-ink: var(--color-cadmium-900);
   --color-area-work: oklch(0.92 0.05 150);
@@ -168,6 +175,19 @@
   --color-area-shop-ink: oklch(0.42 0.1 300);
   --color-area-site: var(--color-graphite-200);
   --color-area-site-ink: var(--color-graphite-700);
+
+  /* `cutout` for a signpost picked up off the wall. The arrow sits in a hole
+     through the sign, and what shows through it is the wall; once the sign
+     stands off it, the wall seen through the hole is in the sign's shadow.
+     Thrown in the sign's own hue for the same reason the shop's is thrown in
+     yellow, so it reads as the thickness of the sign, not a grey line drawn on
+     it. Site-wide, having no hue, throws neutral. Flush, a sign has none. */
+  --shadow-cutout-blog-lifted:
+    inset 0 0 0 1px oklch(0.55 0.08 245 / 0.18),
+    inset 0 5px 9px oklch(0.45 0.07 245 / 0.24);
+  --shadow-cutout-site-lifted:
+    inset 0 0 0 1px oklch(0.55 0 0 / 0.18),
+    inset 0 5px 9px oklch(0.45 0 0 / 0.24);
 }
 
 /* The dashes the registry draws its frame and rules with: four repeating
@@ -371,6 +391,18 @@ html {
 
 [data-appear="4"] {
   animation-delay: 240ms;
+}
+
+/* The site's navigation is not part of a page's arrival; it is the way out of
+   it, and it waits until the page has finished arriving: the last block's delay
+   plus its whole run. Only on a page that has an arrival, and only on the load
+   that brought you there. The layout keeps the nav mounted across client
+   navigation, so a plain `:has()` rule would make it vanish and come back
+   every time you clicked Home; `data-arriving` is dropped by the nav itself
+   the moment its own animation ends or the page changes. */
+[data-page]:has([data-appear]) > [data-site-nav][data-arriving] {
+  animation: appear var(--motion-appear) var(--ease-out-strong) backwards;
+  animation-delay: calc(240ms + var(--motion-appear));
 }
 
 /* Opening the shop slides the page aside to make room; the shop itself floats
@@ -641,6 +673,127 @@ body[data-shop-open] [data-shop-panel] {
   background-repeat: repeat-x;
 }
 
+/* Signposts answer in elevation, never in colour. At rest a sign is flush with
+   the wall and casts nothing: no shadow, no hairline, not even inside its hole.
+   Pointed at or focused, it comes off the wall: `card`, and 2px up. Not
+   `raised`; that is a thing held in the hand, and a sign only stands out from
+   its fixing. Pressed, it goes back down flush and gives a little (scale
+   0.99), the way a sign does under a thumb.
+
+   The arrow sits in a hole cut through the sign, and the hole gains an inner
+   shadow once the sign lifts, because the wall behind it is now in the sign's
+   shadow. Flush, there is no gap for a shadow to fall into. The hole is never
+   filled; that would make it a button printed on the sign instead of a cut.
+
+   The arrow hangs loose. Each one is knocked to one of the eighths of a turn
+   when the page loads (`--tilt`, set by `SignpostArrow` after mount): 45°, 90°,
+   135° or 180°, either way, never level. It swings level when the sign is
+   picked up. It turns about its centre and never travels.
+
+   The server can only send it level, so until the tilt is written the arrow
+   is not shown at all; it fades in already at its angle, and only then does
+   its rotation start to transition. Gated on `scripting`, so without
+   JavaScript the arrow is simply there, level. Getting level is `settle`, a
+   pointer coming to rest; going back is the plain decelerate at exit speed,
+   because that is the sign being put down.
+
+   The sign moves with the strong decelerate at `motion-quick`; the press is
+   quicker, at `press`, because it answers a hand. Box-shadow is not a
+   compositor property, but there are two or three of these at the foot of one
+   page, and a crossfaded pseudo-element would double the hairline ring. */
+[data-signpost] {
+  --hole-lifted: var(--shadow-cutout-site-lifted);
+  box-shadow: none;
+  transition:
+    box-shadow var(--motion-quick) var(--ease-out-strong),
+    translate var(--motion-quick) var(--ease-out-strong),
+    scale var(--press) var(--ease-out-strong);
+}
+
+[data-signpost="blog"] {
+  --hole-lifted: var(--shadow-cutout-blog-lifted);
+}
+
+[data-signpost-hole] {
+  box-shadow: none;
+  transition: box-shadow var(--motion-quick) var(--ease-out-strong);
+}
+
+[data-signpost-arrow] {
+  rotate: var(--tilt, 0deg);
+}
+
+@media (scripting: enabled) {
+  [data-signpost-arrow]:not([data-settled]) {
+    opacity: 0;
+  }
+}
+
+[data-signpost-arrow][data-settled] {
+  transition:
+    rotate var(--motion-exit) var(--ease-out-strong),
+    opacity var(--motion-quick) var(--ease-out-strong);
+}
+
+[data-signpost]:focus-visible {
+  box-shadow: var(--shadow-card);
+  translate: 0 -2px;
+}
+
+[data-signpost]:focus-visible [data-signpost-hole] {
+  box-shadow: var(--hole-lifted);
+}
+
+[data-signpost]:focus-visible [data-signpost-arrow] {
+  rotate: 0deg;
+  transition-duration: var(--motion-enter);
+  transition-timing-function: var(--ease-settle);
+}
+
+@media (hover: hover) and (pointer: fine) {
+  [data-signpost]:hover {
+    box-shadow: var(--shadow-card);
+    translate: 0 -2px;
+  }
+
+  [data-signpost]:hover [data-signpost-hole] {
+    box-shadow: var(--hole-lifted);
+  }
+
+  [data-signpost]:hover [data-signpost-arrow] {
+    rotate: 0deg;
+    transition-duration: var(--motion-enter);
+    transition-timing-function: var(--ease-settle);
+  }
+}
+
+[data-signpost]:active {
+  box-shadow: none;
+  translate: 0 0;
+  scale: 0.99;
+}
+
+[data-signpost]:active [data-signpost-hole] {
+  box-shadow: none;
+}
+
+/* Reduced motion keeps the light and loses the travel: the shadows still
+   change and the arrow still comes level, which is enough to say the sign
+   heard you, but nothing moves to get there. */
+@media (prefers-reduced-motion: reduce) {
+  [data-signpost],
+  [data-signpost]:hover,
+  [data-signpost]:focus-visible,
+  [data-signpost]:active {
+    translate: none !important;
+    scale: 1 !important;
+  }
+
+  [data-signpost] [data-signpost-arrow] {
+    transition: none !important;
+  }
+}
+
 /* Recessed: pressed into the wall rather than mounted on it. The shadow falls
    inward, and the surface carries the grain the shop panel used to have — same
    generated turbulence, an inline SVG, so no asset and no request.
@@ -671,8 +824,9 @@ body[data-shop-open] [data-shop-panel] {
      nothing — the page is fully readable the instant it is painted — so what is
      left once the movement is removed is decoration with a delay attached, and a
      visitor who asked for less motion should simply get the page. */
-  [data-appear] {
-    animation: none;
+  [data-appear],
+  [data-site-nav] {
+    animation: none !important;
   }
 
   /* The peek pill's fade is opacity and stays; only its arrival scale goes. */
