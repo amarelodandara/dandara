@@ -3,7 +3,6 @@ import { notFound } from "next/navigation";
 import { ArticleNotes } from "@/components/writing/article-notes";
 import { PostFooter } from "@/components/writing/post-footer";
 import { PostSchema } from "@/components/writing/post-schema";
-import { WritingNav } from "@/components/writing/writing-nav";
 import { NAME } from "@/lib/site";
 import { formatPostMonth, loadPost, SLUGS } from "@/lib/writing/posts";
 import { ACCENT_PROSE, ANNOTATION, PAGE_HEADING } from "@/lib/type";
@@ -65,7 +64,6 @@ export default async function ArticlePage({
   return (
     <>
       <PostSchema slug={slug} meta={meta} />
-      <WritingNav />
 
       <main className="mx-auto w-full max-w-[1400px] flex-1 px-[7vw] pt-[9vh] pb-[14vh] sm:pt-[12vh]">
         <ArticleNotes title={meta.title} notes={notes} />

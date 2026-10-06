@@ -393,6 +393,18 @@ html {
   animation-delay: 240ms;
 }
 
+/* The site's navigation is not part of a page's arrival; it is the way out of
+   it, and it waits until the page has finished arriving: the last block's delay
+   plus its whole run. Only on a page that has an arrival, and only on the load
+   that brought you there. The layout keeps the nav mounted across client
+   navigation, so a plain `:has()` rule would make it vanish and come back
+   every time you clicked Home; `data-arriving` is dropped by the nav itself
+   the moment its own animation ends or the page changes. */
+[data-page]:has([data-appear]) > [data-site-nav][data-arriving] {
+  animation: appear var(--motion-appear) var(--ease-out-strong) backwards;
+  animation-delay: calc(240ms + var(--motion-appear));
+}
+
 /* Opening the shop slides the page aside to make room; the shop itself floats
    above the plane rather than hiding beneath it.
 
@@ -812,8 +824,9 @@ body[data-shop-open] [data-shop-panel] {
      nothing — the page is fully readable the instant it is painted — so what is
      left once the movement is removed is decoration with a delay attached, and a
      visitor who asked for less motion should simply get the page. */
-  [data-appear] {
-    animation: none;
+  [data-appear],
+  [data-site-nav] {
+    animation: none !important;
   }
 
   /* The peek pill's fade is opacity and stays; only its arrival scale goes. */

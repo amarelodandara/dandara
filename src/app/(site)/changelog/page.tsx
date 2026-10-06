@@ -1,7 +1,6 @@
 import type { Metadata } from "next";
 import { INLINE_CODE } from "@/components/code";
 import { PostFooter } from "@/components/writing/post-footer";
-import { WritingNav } from "@/components/writing/writing-nav";
 import {
   loadChangelog,
   type Area,
@@ -83,8 +82,6 @@ export default async function ChangelogPage() {
 
   return (
     <>
-      <WritingNav />
-
       <main className="mx-auto w-full max-w-[1400px] flex-1 px-[7vw] pt-[9vh] sm:pt-[12vh]">
         <div data-landing className="mx-auto w-full max-w-2xl">
           <h1 className={PAGE_HEADING}>Changelog</h1>
