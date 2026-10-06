@@ -10,6 +10,9 @@ Every entry starts with the area it affects: `[Home]`, `[Work]`, `[Blog]`, `[Gif
 - [Home] **Links to Writing and Changelog** added at the bottom of the home page, as rounded panels in each area's colour. They lift with a small shadow on hover, and the arrow in each one turns from a random angle to point right.
 - [Site-wide] **Changelog** at `/changelog` is now public: linked from the home page, listed in the sitemap and open to search engines.
 
+### Improved
+- [Home] **Footer panel** now lines up with the links above it: same width (30rem) and corner radius, and 12px below them instead of 6% of the screen height.
+
 ## Week of September 28, 2026
 
 ### New
