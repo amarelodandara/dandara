@@ -4,6 +4,12 @@ What changed on the site, newest first. Internal work (refactors, tooling, deplo
 
 Every entry starts with the area it affects: `[Home]`, `[Work]`, `[Blog]`, `[Gift shop]` or `[Site-wide]`.
 
+## Week of October 5, 2026
+
+### New
+- [Home] **Links to Writing and Changelog** added at the bottom of the home page, as rounded panels in each area's colour. They lift with a small shadow on hover, and the arrow in each one turns from a random angle to point right.
+- [Site-wide] **Changelog** at `/changelog` is now public: linked from the home page, listed in the sitemap and open to search engines.
+
 ## Week of September 28, 2026
 
 ### New

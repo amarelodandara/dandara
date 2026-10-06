@@ -27,7 +27,6 @@ export const metadata: Metadata = {
   title: "Changelog",
   description,
   alternates: { canonical: "/changelog" },
-  robots: { index: false, follow: false },
   openGraph: {
     type: "website",
     url: "/changelog",
