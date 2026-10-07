@@ -23,6 +23,7 @@ const POSTS: Record<string, () => Promise<unknown>> = {
   obsidian: () => import("@/content/writing/obsidian.mdx"),
   "the-color-of-water": () =>
     import("@/content/writing/the-color-of-water.mdx"),
+  "three-vows": () => import("@/content/writing/three-vows.mdx"),
 };
 
 export const SLUGS = Object.keys(POSTS);

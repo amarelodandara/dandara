@@ -4,6 +4,11 @@ What changed on the site, newest first. Internal work (refactors, tooling, deplo
 
 Every entry starts with the area it affects: `[Home]`, `[Work]`, `[Blog]`, `[Gift shop]` or `[Site-wide]`.
 
+## Week of October 5, 2026
+
+### New
+- [Blog] **"3 vows of an intellectual life"** published, a rewrite of a post from the previous version of the site, first up on 30 May 2026.
+
 ## Week of September 28, 2026
 
 ### New
