@@ -7,6 +7,7 @@ Every entry starts with the area it affects: `[Home]`, `[Work]`, `[Blog]`, `[Gif
 ## Week of October 5, 2026
 
 ### New
+- [Blog] **"3 vows of an intellectual life"** published, a rewrite of a post from the previous version of the site, first up on 30 May 2026.
 - [Home] **Links to Writing and Changelog** added at the bottom of the home page, as rounded panels in each area's colour. They lift with a small shadow on hover, and the arrow in each one turns from a random angle to point right.
 - [Site-wide] **Navigation bar** with Home and Writing now appears on every page, including the home page and the 404 page. Before, only the writing pages and the changelog had it. On the home page it fades in once the rest of the page has finished appearing, about 0.8 seconds after load.
 - [Site-wide] **Changelog** at `/changelog` is now public: linked from the home page, listed in the sitemap and open to search engines.
