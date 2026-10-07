@@ -4,6 +4,7 @@ import localFont from "next/font/local";
 import { Analytics } from "@vercel/analytics/next";
 import { SpeedInsights } from "@vercel/speed-insights/next";
 import { GiftShop } from "@/components/gift-shop";
+import { SiteNav } from "@/components/site-nav";
 import { CARD, DESCRIPTION, NAME, SITE_URL, TITLE } from "@/lib/site";
 import { ANNOTATION } from "@/lib/type";
 import "../globals.css";
@@ -74,6 +75,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
           tabIndex={-1}
           className="relative z-10 flex min-h-full flex-col bg-cadmium-50 outline-none"
         >
+          <SiteNav />
           {children}
         </div>
 

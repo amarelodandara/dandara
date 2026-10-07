@@ -14,7 +14,7 @@ const OPEN = [
 
 export function ShopCallout({ children }: { children: ReactNode }) {
   return (
-    <div className="flex flex-wrap items-center justify-between gap-x-6 gap-y-3 rounded-md bg-cadmium-100 py-3 pr-3 pl-4">
+    <div className="flex flex-col items-center gap-3 rounded-md bg-cadmium-100 p-4 text-center text-balance sm:flex-row sm:justify-between sm:gap-6 sm:py-3 sm:pr-3 sm:pl-4 sm:text-left">
       <p className={LABEL}>{children}</p>
       <button
         type="button"

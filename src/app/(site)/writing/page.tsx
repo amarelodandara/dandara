@@ -3,7 +3,6 @@ import Link from "next/link";
 import { LINK } from "@/components/link";
 import { PostFooter } from "@/components/writing/post-footer";
 import { ShopCallout } from "@/components/writing/shop-callout";
-import { WritingNav } from "@/components/writing/writing-nav";
 import { loadWritingList } from "@/lib/writing/posts";
 import { CARD, NAME } from "@/lib/site";
 import { ANNOTATION, PAGE_HEADING, PROSE, SECTION_HEADING } from "@/lib/type";
@@ -66,8 +65,6 @@ export default async function WritingIndex() {
 
   return (
     <>
-      <WritingNav current="writing" />
-
       <main className="mx-auto w-full max-w-[1400px] flex-1 px-[7vw] pt-[9vh] sm:pt-[12vh]">
         <div data-landing className="mx-auto w-full max-w-2xl">
           <h1 className={PAGE_HEADING}>Writing</h1>

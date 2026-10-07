@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import localFont from "next/font/local";
 import { LINK } from "@/components/link";
+import { SiteNav } from "@/components/site-nav";
 import { ACCENT_PROSE, ANNOTATION, PAGE_HEADING, PROSE } from "@/lib/type";
 import "./globals.css";
 
@@ -25,7 +26,6 @@ const ELSEWHERE = [
     label: "Writing",
     blurb: "essays on design and building",
   },
-  { href: "/cv", label: "CV", blurb: "the full history, printable" },
   { href: "/feed.xml", label: "Feed", blurb: "RSS for the writing" },
   { href: "/sitemap.xml", label: "Sitemap", blurb: "every page on this site" },
 ];
@@ -34,6 +34,7 @@ export default function GlobalNotFound() {
   return (
     <html lang="en" className={`${inter.variable} h-full antialiased`}>
       <body className="min-h-full bg-cadmium-50">
+        <SiteNav />
         <main className="mx-auto w-full max-w-[1400px] px-[7vw] pt-[9vh] pb-[14vh] sm:pt-[12vh]">
           <div className="mx-auto w-full max-w-2xl">
             <p className={`${ANNOTATION} text-graphite-700`}>404</p>
