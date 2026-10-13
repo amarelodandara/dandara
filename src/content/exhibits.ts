@@ -267,16 +267,16 @@ export const ARTICLE_EXHIBITS: ArticleExhibit[] = [
   {
     article: "the-color-of-water",
     explains: ["color-of-water"],
-    rooms: ["main"],
+    rooms: [],
   },
   {
     article: "museums-and-websites",
     explains: ["museums"],
-    rooms: ["main"],
+    rooms: [],
   },
   {
     article: "obsidian",
     explains: ["obsidian"],
-    rooms: ["main"],
+    rooms: [],
   },
 ];

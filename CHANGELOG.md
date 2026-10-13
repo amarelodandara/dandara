@@ -10,7 +10,6 @@ Every entry starts with the area it affects: `[Home]`, `[Work]`, `[Blog]`, `[Gif
 - [Work] **Work page** added at `/work`: every piece in one full-width grid, newest first. Three columns on wide screens, one on phones.
 - [Work] **Sketchbook room** added at `/work/sketchbook`: pages from my sketchbooks in one grid, a few of them turning between two spreads.
 - [Work] **Photography room** added at `/work/photography`: five series of photographs, each with a short note on where it was shot and which camera took it.
-- [Work] **Articles in the exhibition**: design and technology posts hang on the wall next to the work they explain.
 - [Work] **Every piece is captioned** with its name, when it was made, and a "Live" link when you can see it in production.
 - [Home] **Selected work** now runs the full width of the page and shows a few chosen pieces, ending in a sign to the full exhibition.
 
