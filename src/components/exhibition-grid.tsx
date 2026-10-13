@@ -7,11 +7,10 @@ import { Changelog } from "@/components/graph/changelog";
 import { ExhibitVideo } from "@/components/exhibit-video";
 import type { ExhibitMedia } from "@/content/exhibits";
 import type { Tile } from "@/lib/exhibition";
-import { useLooseDrag } from "@/lib/loose-drag";
 import { PRESS_BASE } from "@/lib/pressable";
 import { ANNOTATION, LABEL } from "@/lib/type";
 
-const MEDIA = "pointer-events-none h-auto w-full select-none";
+const MEDIA = "h-auto w-full";
 const SIZES = "(min-width: 768px) 33vw, 100vw";
 
 const CAPTION_LINK = [
@@ -27,16 +26,6 @@ const CAPTION_LINK = [
 const HERO_COLUMN = "mx-auto w-full max-w-[1400px] px-[7vw]";
 const WALL_GUTTER = "px-[max(1.5rem,4vw)]";
 
-const RESET = [
-  PRESS_BASE,
-  "relative cursor-pointer rounded-sm px-2 py-1",
-  `${ANNOTATION} leading-none text-graphite-700`,
-  "can-hover:hover:bg-graphite-200 focus-visible:bg-graphite-200",
-  "after:absolute after:left-1/2 after:top-1/2 after:content-['']",
-  "after:h-11 after:w-full",
-  "after:-translate-x-1/2 after:-translate-y-1/2",
-].join(" ");
-
 type FlipMedia = Extract<ExhibitMedia, { kind: "flip" }>;
 
 function Flip({ media }: { media: FlipMedia }) {
@@ -49,7 +38,6 @@ function Flip({ media }: { media: FlipMedia }) {
         width={media.width}
         height={media.height}
         sizes={SIZES}
-        draggable={false}
         className={MEDIA}
       />
       <Image
@@ -59,7 +47,6 @@ function Flip({ media }: { media: FlipMedia }) {
         width={media.width}
         height={media.height}
         sizes={SIZES}
-        draggable={false}
         className={`absolute inset-0 ${MEDIA}`}
       />
     </div>
@@ -100,7 +87,7 @@ function Media({ media }: { media: ExhibitMedia }) {
       width={media.width}
       height={media.height}
       sizes={SIZES}
-      draggable={false}
+
       className={MEDIA}
     />
   );
@@ -116,7 +103,7 @@ function Caption({ title, when, live, read }: Tile) {
         ) : null}
       </span>
       {live ? (
-        <a href={live.href} draggable={false} className={CAPTION_LINK}>
+        <a href={live.href} className={CAPTION_LINK}>
           Live
           <span aria-hidden="true">&nbsp;↗</span>
           <span className="sr-only">
@@ -126,7 +113,7 @@ function Caption({ title, when, live, read }: Tile) {
         </a>
       ) : null}
       {read ? (
-        <Link href={read} draggable={false} className={CAPTION_LINK}>
+        <Link href={read} className={CAPTION_LINK}>
           Read
           <span className="sr-only"> {title}</span>
         </Link>
@@ -135,49 +122,28 @@ function Caption({ title, when, live, read }: Tile) {
   );
 }
 
-type Drag = ReturnType<typeof useLooseDrag>;
-
 function Exhibit({
   tile,
   receded,
-  lifted,
-  loose,
-  drag,
   onLook,
 }: {
   tile: Tile;
   receded: boolean;
-  lifted: boolean;
-  loose: boolean;
-  drag: Omit<Drag, "moved" | "dragging" | "reset">;
   onLook: (id: string | null) => void;
 }) {
   const look = () => onLook(tile.id);
   return (
     <div
-      ref={drag.register(tile.id)}
       data-exhibit={tile.id}
       data-receded={receded ? "" : undefined}
-      data-lifted={lifted ? "" : undefined}
       style={{ order: tile.rank }}
-      onPointerDown={
-        loose ? (event) => drag.onPointerDown(tile.id, event) : undefined
-      }
-      onPointerMove={loose ? drag.onPointerMove : undefined}
-      onPointerUp={loose ? drag.onPointerEnd : undefined}
-      onPointerCancel={loose ? drag.onPointerEnd : undefined}
-      onClickCapture={loose ? drag.onClickCapture : undefined}
       onPointerEnter={(event) => event.pointerType === "mouse" && look()}
       onPointerLeave={() => onLook(null)}
-      className={
-        loose
-          ? "relative touch-pan-y md:cursor-grab md:select-none"
-          : "relative"
-      }
+      className="relative"
     >
       <figure>
         {tile.read ? (
-          <Link href={tile.read} draggable={false} tabIndex={-1}>
+          <Link href={tile.read} tabIndex={-1}>
             <Media media={tile.media} />
           </Link>
         ) : (
@@ -192,19 +158,16 @@ function Exhibit({
 export function ExhibitionGrid({
   label,
   column,
-  loose = true,
   tiles,
   columns,
   coda,
 }: {
   label?: string;
   column?: string;
-  loose?: boolean;
   tiles: Tile[];
   columns: string[][];
   coda?: ReactNode;
 }) {
-  const { moved, dragging, reset, ...drag } = useLooseDrag();
   const [looking, setLooking] = useState<string | null>(null);
   const byId = useMemo(
     () => new Map(tiles.map((tile) => [tile.id, tile])),
@@ -231,36 +194,23 @@ export function ExhibitionGrid({
     };
   }, []);
 
-  const focus = dragging ?? looking;
   const kept = useMemo(
     () =>
-      focus ? new Set([focus, ...(byId.get(focus)?.related ?? [])]) : null,
-    [focus, byId],
+      looking
+        ? new Set([looking, ...(byId.get(looking)?.related ?? [])])
+        : null,
+    [looking, byId],
   );
 
   return (
     <section className="relative">
-      {label || loose ? (
+      {label ? (
         <div
-          className={`mb-8 flex min-h-7 items-center justify-between gap-6 md:mb-12 ${column ?? HERO_COLUMN}`}
+          className={`mb-8 flex min-h-7 items-center md:mb-12 ${column ?? HERO_COLUMN}`}
         >
-          {label ? (
-            <h2 className={`${ANNOTATION} leading-none text-graphite-700`}>
-              {label}
-            </h2>
-          ) : null}
-          <div className="ml-auto hidden items-center gap-4 md:flex">
-            {loose ? (
-              <p className={`${ANNOTATION} leading-none text-cadmium-900`}>
-                it&rsquo;s art, please touch
-              </p>
-            ) : null}
-            {moved ? (
-              <button type="button" onClick={reset} className={RESET}>
-                Put it all back
-              </button>
-            ) : null}
-          </div>
+          <h2 className={`${ANNOTATION} leading-none text-graphite-700`}>
+            {label}
+          </h2>
         </div>
       ) : null}
 
@@ -281,9 +231,6 @@ export function ExhibitionGrid({
                   key={id}
                   tile={tile}
                   receded={kept !== null && !kept.has(id)}
-                  lifted={dragging === id}
-                  loose={loose}
-                  drag={drag}
                   onLook={setLooking}
                 />
               );

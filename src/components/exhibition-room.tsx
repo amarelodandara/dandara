@@ -41,19 +41,14 @@ export function ExhibitionRoom({ room }: { room: Room }) {
                   </p>
                 </header>
                 <div className="mt-6">
-                  <Exhibition
-                    room={room}
-                    series={id}
-                    column={COLUMN}
-                    loose={false}
-                  />
+                  <Exhibition room={room} series={id} column={COLUMN} />
                 </div>
               </section>
             ))}
           </div>
         ) : (
           <div className="mt-[10vh] pb-[12vh]">
-            <Exhibition room={room} column={COLUMN} loose={room === "main"} />
+            <Exhibition room={room} column={COLUMN} />
           </div>
         )}
 

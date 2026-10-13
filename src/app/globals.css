@@ -387,8 +387,7 @@ body {
 
 /* THE EXHIBITION is a row-order masonry: the server deals each piece, newest
    first, into whichever of three columns is shortest, using the aspect ratio
-   written in its data. Nothing is measured in the browser, so there is nothing
-   to re-measure while a piece is dragged.
+   written in its data. Nothing is measured in the browser.
 
    Below `md` the three columns are `display: contents` and every piece carries
    its date rank as `order`, so a phone gets one column in true date order from
@@ -428,13 +427,6 @@ body {
 [data-flip] > :last-child {
   opacity: 0;
   animation: sketchbook-flip 2.4s step-end infinite;
-}
-
-/* A piece is pushed around in place, never zoomed. It lifts above its
-   neighbours from the inline z-index the drag writes, and keeps the grab
-   cursor while held even when the pointer runs ahead of it. */
-[data-exhibit][data-lifted] {
-  cursor: grabbing;
 }
 
 :root {
@@ -778,7 +770,7 @@ body[data-shop-open] [data-shop-panel] {
 
 @media (prefers-reduced-motion: reduce) {
   /* Reduced, not removed. Everything that moves through space snaps: these are
-     the transitions that travel. Putting the exhibition back snaps in JS. */
+     the transitions that travel. */
   [data-shop-panel],
   [data-page],
   [data-plaque] {

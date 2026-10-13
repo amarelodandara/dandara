@@ -17,10 +17,10 @@ Every entry starts with the area it affects: `[Home]`, `[Work]`, `[Blog]`, `[Gif
 - [Site-wide] **Signposts** wipe their paper grain away under the cursor in a soft spot, and the clean patch spreads across the whole sign when you click, just before the page changes. On hover the sign now sinks into the wall with the same inset as the footer panel instead of lifting off it with a large shadow.
 - [Work] **Signs between exhibitions** call the main room "Main work" in green; the themed rooms are grey.
 - [Work] **Hovering a piece** keeps the pieces from the same project, and the article about it, sharp while the rest of the wall blurs.
-- [Work] **Pieces can be dragged** around the main exhibition's grid on desktop, and one button puts everything back. This replaces the separate pile view and its toggle. The themed rooms stay still.
 - [Work] **Videos** play only while they are on screen, and stay still if you have reduced motion turned on.
 
 ### Removed
+- [Work] **Pile view** and its toggle. Every exhibition is one still grid.
 - [Work] **Expanded project view.** Pieces are already shown at full detail, so clicking no longer zooms.
 
 ## Week of October 5, 2026
