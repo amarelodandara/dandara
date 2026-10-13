@@ -1,6 +1,7 @@
 import { PHOTOS } from "@/content/photography";
+import { SKETCHES } from "@/content/sketchbook";
 
-export type Room = "main" | "graphic-design" | "photography";
+export type Room = "main" | "sketchbook" | "photography";
 
 export type ExhibitLink = { href: string; label: string };
 
@@ -21,6 +22,13 @@ export type ExhibitMedia =
       label: string;
     }
   | {
+      kind: "flip";
+      frames: [string, string];
+      width: number;
+      height: number;
+      alt: string;
+    }
+  | {
       kind: "changelog";
       version: string;
       lines: string[];
@@ -29,7 +37,7 @@ export type ExhibitMedia =
 export type Exhibit = {
   id: string;
   title: string;
-  date: string;
+  date?: string;
   live?: ExhibitLink;
   project?: string;
   series?: string;
@@ -47,17 +55,21 @@ export type ArticleExhibit = {
 
 export const ROOMS: Record<
   Room,
-  { title: string; href: string; description: string }
+  { title: string; href: string; description: string; intro?: string[] }
 > = {
   main: {
     title: "Work",
     href: "/work",
     description: "The main exhibition: product, interface and brand work.",
   },
-  "graphic-design": {
-    title: "Graphic design",
-    href: "/work/graphic-design",
-    description: "Posters, covers and printed matter.",
+  sketchbook: {
+    title: "Sketchbook",
+    href: "/work/sketchbook",
+    description: "Pages from my sketchbooks: ideas worked out by hand first.",
+    intro: [
+      "Draw to discover what you see, write to discover what you think.",
+      "Nothing will ever beat putting pen to paper, so I carry an A6 Cicero notebook with me at all times. Every time an opportunity to sit down and focus comes up, I push an A5 ring notebook close to me too.",
+    ],
   },
   photography: {
     title: "Photography",
@@ -208,7 +220,7 @@ const WORK: Exhibit[] = [
     date: "2025",
     live: ONDAS_AMARELAS,
     project: "amarelos",
-    rooms: ["main", "graphic-design"],
+    rooms: ["main"],
     featured: true,
     media: {
       kind: "image",
@@ -224,7 +236,7 @@ const WORK: Exhibit[] = [
     date: "2025",
     live: ONDAS_AMARELAS,
     project: "amarelos",
-    rooms: ["main", "graphic-design"],
+    rooms: ["main"],
     media: {
       kind: "image",
       src: "/work/ondas-amarelas-episode.png",
@@ -249,7 +261,7 @@ const WORK: Exhibit[] = [
   },
 ];
 
-export const EXHIBITS: Exhibit[] = [...WORK, ...PHOTOS];
+export const EXHIBITS: Exhibit[] = [...WORK, ...PHOTOS, ...SKETCHES];
 
 export const ARTICLE_EXHIBITS: ArticleExhibit[] = [
   {

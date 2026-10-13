@@ -151,8 +151,8 @@ async function browsePages(posts: Posts) {
   await visit(browser, { path: "/writing", contains: titles });
   await visit(browser, { path: "/work", contains: ["Work"] });
   await visit(browser, {
-    path: "/work/graphic-design",
-    contains: ["Graphic design"],
+    path: "/work/sketchbook",
+    contains: ["Sketchbook"],
   });
 
   for (const post of posts) {

@@ -7,7 +7,7 @@ import { ANNOTATION, PAGE_HEADING, PROSE, SECTION_HEADING } from "@/lib/type";
 const COLUMN = "mx-auto w-full max-w-[calc(42rem+14vw)] px-[7vw]";
 
 export function ExhibitionRoom({ room }: { room: Room }) {
-  const { title } = ROOMS[room];
+  const { title, intro } = ROOMS[room];
   const elsewhere = roomsWithWork().filter((other) => other !== room);
   const series = seriesIn(room);
 
@@ -16,6 +16,14 @@ export function ExhibitionRoom({ room }: { room: Room }) {
       <main className="flex-1 pt-[9vh] sm:pt-[12vh]">
         <header data-landing className={COLUMN}>
           <h1 className={PAGE_HEADING}>{title}</h1>
+          {intro?.map((line, index) => (
+            <p
+              key={line}
+              className={`${index === 0 ? "mt-6" : "mt-4"} ${PROSE} text-graphite-700`}
+            >
+              {line}
+            </p>
+          ))}
         </header>
 
         {series.length > 0 ? (

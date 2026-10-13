@@ -37,6 +37,35 @@ const RESET = [
   "after:-translate-x-1/2 after:-translate-y-1/2",
 ].join(" ");
 
+type FlipMedia = Extract<ExhibitMedia, { kind: "flip" }>;
+
+function Flip({ media }: { media: FlipMedia }) {
+  const [first, second] = media.frames;
+  return (
+    <div data-flip="" className="relative">
+      <Image
+        src={first}
+        alt={media.alt}
+        width={media.width}
+        height={media.height}
+        sizes={SIZES}
+        draggable={false}
+        className={MEDIA}
+      />
+      <Image
+        src={second}
+        alt=""
+        aria-hidden="true"
+        width={media.width}
+        height={media.height}
+        sizes={SIZES}
+        draggable={false}
+        className={`absolute inset-0 ${MEDIA}`}
+      />
+    </div>
+  );
+}
+
 function Media({ media }: { media: ExhibitMedia }) {
   if (media.kind === "changelog") {
     return (
@@ -63,6 +92,7 @@ function Media({ media }: { media: ExhibitMedia }) {
       />
     );
   }
+  if (media.kind === "flip") return <Flip media={media} />;
   return (
     <Image
       src={media.src}
@@ -81,7 +111,9 @@ function Caption({ title, when, live, read }: Tile) {
     <figcaption className="mt-3 flex items-baseline justify-between gap-4">
       <span className="min-w-0">
         <span className={`${LABEL} text-graphite-700`}>{title}</span>
-        <span className={`ml-2 ${ANNOTATION} text-graphite-500`}>{when}</span>
+        {when ? (
+          <span className={`ml-2 ${ANNOTATION} text-graphite-500`}>{when}</span>
+        ) : null}
       </span>
       {live ? (
         <a href={live.href} draggable={false} className={CAPTION_LINK}>

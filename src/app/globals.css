@@ -415,6 +415,21 @@ body {
   }
 }
 
+/* A sketchbook piece that turns its page: two spreads of the same size, the
+   second laid over the first and shown for every other beat, like a two-frame
+   gif. It loops always, reduced motion included: the swap is a cut in place,
+   nothing travels, and a gif would not ask either. */
+@keyframes sketchbook-flip {
+  50% {
+    opacity: 1;
+  }
+}
+
+[data-flip] > :last-child {
+  opacity: 0;
+  animation: sketchbook-flip 2.4s step-end infinite;
+}
+
 /* A piece is pushed around in place, never zoomed. It lifts above its
    neighbours from the inline z-index the drag writes, and keeps the grab
    cursor while held even when the pointer runs ahead of it. */

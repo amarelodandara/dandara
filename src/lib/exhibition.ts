@@ -18,7 +18,7 @@ const SIGN_SHARE = 0.25;
 export type Tile = {
   id: string;
   title: string;
-  when: string;
+  when?: string;
   live?: ExhibitLink;
   read?: string;
   media: ExhibitMedia;
@@ -27,7 +27,7 @@ export type Tile = {
 };
 
 type Draft = Omit<Tile, "related" | "rank"> & {
-  date: string;
+  date?: string;
   groups: string[];
 };
 
@@ -83,7 +83,7 @@ async function drafts(
       id,
       title,
       date,
-      when: formatWhen(date),
+      when: date ? formatWhen(date) : undefined,
       live,
       media,
       groups: project ? [project] : [],
@@ -125,7 +125,9 @@ async function drafts(
 
 export async function loadExhibition(room: Room, filter: Filter = {}) {
   const found = await drafts(room, filter);
-  const sorted = found.toSorted((a, b) => b.date.localeCompare(a.date));
+  const sorted = found.toSorted((a, b) =>
+    (b.date ?? "").localeCompare(a.date ?? ""),
+  );
 
   const tiles: Tile[] = sorted.map(
     ({ id, title, when, live, read, media, groups }, rank) => ({
@@ -158,7 +160,7 @@ export const roomsWithWork = (): Room[] =>
 
 const newestIn = (series: string) =>
   EXHIBITS.filter((entry) => entry.series === series)
-    .map((entry) => entry.date)
+    .map((entry) => entry.date ?? "")
     .toSorted()
     .at(-1) ?? "";
 
