@@ -188,6 +188,9 @@
   --shadow-cutout-site-lifted:
     inset 0 0 0 1px oklch(0.55 0 0 / 0.18),
     inset 0 5px 9px oklch(0.45 0 0 / 0.24);
+  --shadow-cutout-work-lifted:
+    inset 0 0 0 1px oklch(0.55 0.08 150 / 0.18),
+    inset 0 5px 9px oklch(0.45 0.07 150 / 0.24);
 }
 
 /* The dashes the registry draws its frame and rules with: four repeating
@@ -291,48 +294,6 @@ body {
   background-color: var(--color-cadmium-50);
 }
 
-/* Focusing a sheet pushes the rest of the page back. The blur is per element,
-   never on a shared ancestor — a filter there would blur the focused sheet too
-   and turn itself into a containing block for its fixed positioning.
-
-   Which is also why it is desktop-only. Per element means every element: open
-   one card on the wall and a phone is asked to blur the six others, the landing
-   and the colophon, and to animate all of it for 240ms. That is a full-screen
-   filter pass per frame on the hardware least able to pay for one, and it was
-   the reason the open felt like it fell. Below `md` the recede is the fade
-   alone, taken further to carry the weight the blur was carrying, with the
-   scrim above it doing the rest. */
-[data-dimmed],
-[data-dim-on-focus] {
-  transition: opacity 240ms var(--ease-out-strong);
-}
-
-[data-dimmed],
-body[data-sheet-focused] [data-dim-on-focus] {
-  opacity: 0.35;
-}
-
-@media (min-width: 768px) {
-  [data-dimmed],
-  [data-dim-on-focus] {
-    transition:
-      filter 240ms var(--ease-out-strong),
-      opacity 240ms var(--ease-out-strong);
-  }
-
-  [data-dimmed],
-  body[data-sheet-focused] [data-dim-on-focus] {
-    filter: blur(6px);
-    opacity: 0.5;
-  }
-}
-
-/* `html` is the scroller (it carries h-full), so the lock has to reach it. */
-html:has(> body[data-sheet-focused]),
-body[data-sheet-focused] {
-  overflow: hidden;
-}
-
 /* Elastic overscroll drags the page plane past the viewport edge. Nothing
    leaks now that the shop floats above rather than below, but the plane sliding
    against a fixed card still reads as slippage, so the bounce stays off. Must
@@ -359,10 +320,9 @@ html {
 
    The filter is also why the attribute stays on the header. An element with a
    `filter` is the containing block for every `position: fixed` descendant — the
-   same trap the shop's translate documents below, and the work's focused sheet
-   is fixed. Here the filter exists only while the animation runs and the header
-   holds nothing fixed, so it costs nothing. On the work it would be a bug that
-   surfaced only in the first second of a page load. */
+   same trap the shop's translate documents below. Here the filter exists only
+   while the animation runs and the header holds nothing fixed, so it costs
+   nothing. */
 @keyframes appear {
   from {
     opacity: 0;
@@ -410,9 +370,9 @@ html {
 
    The translate is declared ONLY in the open state, and that is load-bearing: a
    transform on an element makes it the containing block for every
-   `position: fixed` descendant, and the work pile's focused sheet is one. A
-   `translate: 0` at rest would silently re-anchor it to the page instead of the
-   viewport. No transform at rest means no containing block at rest. */
+   `position: fixed` descendant. A `translate: 0` at rest would silently
+   re-anchor any of them to the page instead of the viewport. No transform at
+   rest means no containing block at rest. */
 body[data-shop-open] [data-page] {
   translate: var(--shop-w) 0;
   transition-duration: var(--motion-enter);
@@ -434,124 +394,48 @@ body[data-shop-open] [data-page] {
    translated plane and the page can be panned sideways to the parked shop.
    Declaring it on `html` makes the propagated value the root's own, and lets
    the body's clip finally apply to the body's own box. Neither clips the shop
-   panel or a focused sheet — `overflow` only clips a fixed descendant when the
+   panel — `overflow` only clips a fixed descendant when the
    element is also its containing block, and no transform makes one here. */
 html,
 body {
   overflow-x: clip;
 }
 
-/* The work is shown two ways above `md`, and the visitor picks: hung on a wall,
-   or tipped into a pile. They are separate layouts for the same DOM — the same
-   seven frames, re-placed — which is what lets one FLIP carry every card
-   between them.
+/* THE EXHIBITION is a row-order masonry: the server deals each piece, newest
+   first, into whichever of three columns is shortest, using the aspect ratio
+   written in its data. Nothing is measured in the browser, so there is nothing
+   to re-measure while a piece is dragged.
 
-   Below `md` there is only the wall. A pile is a thing you push around, and a
-   phone has neither the room to spread seven sheets nor a cursor to shove them
-   with; what survived the narrowing was a heap collapsed to almost a column.
-   The toggle goes with it — `WorkPile` pins the view to the wall under that
-   width rather than leaving a control that no longer earns its place.
+   Below `md` the three columns are `display: contents` and every piece carries
+   its date rank as `order`, so a phone gets one column in true date order from
+   the same DOM, with no second render.
 
-   THE PILE is therefore a desktop layout, and one scattered heap at every width
-   it appears at — never a column and never a grid. `--pile-spread` is how much
-   of each sheet's horizontal offset from centre actually gets used; there is
-   nothing narrow left to scale it down for, so it is 1 and the heap is as wide
-   as it was designed.
-
-   On THE WALL a card is treated by what it holds, which is where the rhythm
-   comes from: a picture hangs directly on the page — no ground, no border, no
-   padding, its title a caption underneath — while a card that is only words
-   gets a boundary drawn around it, because type with nothing behind it is not
-   hung, it is spilled. Six plates and one label, in this set. The rule is the
-   wall's alone: tipped into the pile, every card is the same sheet of paper
-   again.
-
-   The wall runs one column below `md`, which is the same `md` the pile and its
-   toggle disappear at: on a phone the wall is not one of two views any more, it
-   is the whole of the work, and each piece gets the full measure rather than
-   half of it. Two columns is what a phone has room to draw, not what this work
-   has room to be read at.
-
-   THE WALL is CSS multi-column, not a grid and not a measured masonry. The
-   cards are different heights because the work is, and `columns` is the one
-   layout that packs uneven heights without anyone measuring anything — which
-   matters here, because the morph animates a transform on each card and a JS
-   masonry would be re-measuring mid-flight. The cost is column-major reading
-   order; for seven pieces with no ranking, there is no order to lose. */
-[data-pile] {
-  --pile-spread: 1;
-  position: relative;
-  min-height: 46rem;
-}
-
-/* `translate` is left to the drag handler, which writes it inline on every
-   frame and already carries the -50% that centres the sheet on its point.
-
-   `pan-y` rather than `none` is the whole of the touch story: the page still
-   scrolls under a finger moving up or down, and the sheet only claims the
-   gesture once the movement is more sideways than vertical. `none` here would
-   make the pile a dead zone that swallows every scroll that started on a card,
-   which on a phone is most of them. */
-[data-pile] > [data-sheet-frame] {
-  position: absolute;
-  top: var(--sheet-y);
-  left: calc(50% + (var(--sheet-x) - 50%) * var(--pile-spread));
-  width: var(--sheet-w);
-  touch-action: pan-y;
-}
-
-/* A card on the wall is placed by the column, not by the scatter: no absolute
-   position, no `--sheet-w`, and its width is whatever the column is. Nothing
-   here is media-gated except the column count — the card is the same object it
-   was in the pile, only put down straight. */
-[data-wall] {
-  columns: 1;
-  column-gap: var(--wall-gap);
-}
-
-@media (min-width: 768px) {
-  [data-wall] {
-    columns: 2;
-  }
-}
-
-@media (min-width: 1024px) {
-  [data-wall] {
-    columns: 3;
-  }
-}
-
-/* Hovering one piece on the wall pulls the rest back out of focus. The gallery
-   reading of it: you step up to a picture and the room goes soft around it.
-
-   The trigger is `:has(> [data-sheet-frame]:hover)` and not a plain `:hover` on
-   the wall, because the wall is wider than its cards — a cursor resting in the
-   gutter between two columns is hovering the wall and nothing in it, and that
-   should not blur the whole room.
-
-   The blur is lighter than the focused-sheet dim (3px against 6px, 0.62 against
-   0.5): this is a passing glance, not a state you entered, and it has to read as
-   the weaker of the two when a visitor does both in a row. Touch is excluded
-   entirely — with no hover there is no unhovered rest, so every card would blur
-   the moment a finger landed. */
-[data-wall] > [data-sheet-frame] {
-  break-inside: avoid;
-  margin-bottom: var(--wall-gap);
-}
-
+   Hovering a piece pulls the rest out of focus, except the pieces that belong
+   with it: the same project, or the article that explains it. The gallery
+   reading: you step up to a picture and the room goes soft around it, but the
+   wall it hangs on stays sharp. The sign at the end of the home wall recedes
+   with everything else: it belongs to no piece. Touch is excluded, since with no hover there is
+   no unhovered rest. */
 @media (hover: hover) and (pointer: fine) {
-  [data-wall] > [data-sheet-frame] {
+  [data-exhibit],
+  [data-exhibit-coda] {
     transition:
       filter 200ms var(--ease-out-strong),
       opacity 200ms var(--ease-out-strong);
   }
 
-  [data-wall]:has(> [data-sheet-frame]:hover) > [data-sheet-frame]:not(:hover),
-  [data-wall]:has(> [data-sheet-frame]:focus-within)
-    > [data-sheet-frame]:not(:focus-within):not(:hover) {
+  [data-exhibit][data-receded],
+  [data-exhibit-coda][data-receded] {
     filter: blur(3px);
     opacity: 0.62;
   }
+}
+
+/* A piece is pushed around in place, never zoomed. It lifts above its
+   neighbours from the inline z-index the drag writes, and keeps the grab
+   cursor while held even when the pointer runs ahead of it. */
+[data-exhibit][data-lifted] {
+  cursor: grabbing;
 }
 
 :root {
@@ -714,6 +598,10 @@ body[data-shop-open] [data-shop-panel] {
   --hole-lifted: var(--shadow-cutout-blog-lifted);
 }
 
+[data-signpost="work"] {
+  --hole-lifted: var(--shadow-cutout-work-lifted);
+}
+
 [data-signpost-hole] {
   box-shadow: none;
   transition: box-shadow var(--motion-quick) var(--ease-out-strong);
@@ -807,16 +695,11 @@ body[data-shop-open] [data-shop-panel] {
 }
 
 @media (prefers-reduced-motion: reduce) {
-  /* Reduced, not removed. Everything that moves through space snaps: the FLIP
-     animation is already skipped in JS, and these are the transitions that
-     travel. The card is named explicitly because closing removes the body
-     attribute in the same commit, so an ancestor-based selector would miss the
-     way back down. */
-  [data-sheet-card],
+  /* Reduced, not removed. Everything that moves through space snaps: these are
+     the transitions that travel. Putting the exhibition back snaps in JS. */
   [data-shop-panel],
   [data-page],
-  [data-plaque],
-  [data-flavour] {
+  [data-plaque] {
     transition-duration: 0.01ms !important;
   }
 
@@ -827,20 +710,6 @@ body[data-shop-open] [data-shop-panel] {
   [data-appear],
   [data-site-nav] {
     animation: none !important;
-  }
-
-  /* The peek pill's fade is opacity and stays; only its arrival scale goes. */
-  [data-peek] span {
-    transition-duration: 0.01ms !important;
-    scale: 1;
-  }
-
-  /* The dim stays. It changes no position — it is opacity and blur telling you
-     which sheet you are in, and cutting it would remove the explanation rather
-     than the movement. */
-  [data-dimmed],
-  [data-dim-on-focus] {
-    transition-duration: 150ms !important;
   }
 
   /* Press feedback is a scale, so it goes entirely — killing only its

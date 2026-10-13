@@ -18,8 +18,12 @@ const NAV_LINK = [
 
 const PAGES = [
   { href: "/", name: "Home" },
+  { href: "/work", name: "Work" },
   { href: "/writing", name: "Writing" },
 ];
+
+const here = (pathname: string, href: string) =>
+  href === "/" ? pathname === href : pathname.startsWith(href);
 
 export function SiteNav() {
   const pathname = usePathname();
@@ -43,7 +47,7 @@ export function SiteNav() {
         <Link
           key={href}
           href={href}
-          aria-current={pathname === href ? "page" : undefined}
+          aria-current={here(pathname, href) ? "page" : undefined}
           data-quiet
           data-pressable
           className={NAV_LINK}

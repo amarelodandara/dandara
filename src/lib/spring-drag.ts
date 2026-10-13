@@ -49,7 +49,7 @@ const pullBehindTravel = (travel: number) => {
   );
 };
 
-function springToRest({
+export function springToRest({
   from,
   velocity,
   onFrame,

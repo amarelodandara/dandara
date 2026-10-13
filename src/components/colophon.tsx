@@ -1,11 +1,10 @@
 import { LINK } from "@/components/link";
 import { ANNOTATION, LABEL, SECTION_HEADING, TITLE } from "@/lib/type";
 
-export function Colophon() {
+export function Colophon({ apart = false }: { apart?: boolean }) {
   return (
     <footer
-      data-dim-on-focus
-      className="mx-auto flex w-full max-w-[1400px] justify-end px-[7vw] pt-3 pb-[10vh]"
+      className={`mx-auto flex w-full max-w-[1400px] justify-end px-[7vw] pb-[10vh] ${apart ? "pt-[10vh]" : "pt-3"}`}
     >
       <div
         data-recessed

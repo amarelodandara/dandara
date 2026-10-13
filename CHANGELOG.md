@@ -4,6 +4,24 @@ What changed on the site, newest first. Internal work (refactors, tooling, deplo
 
 Every entry starts with the area it affects: `[Home]`, `[Work]`, `[Blog]`, `[Gift shop]` or `[Site-wide]`.
 
+## Week of October 12, 2026
+
+### New
+- [Work] **Work page** added at `/work`: every piece in one full-width grid, newest first. Three columns on wide screens, one on phones.
+- [Work] **Graphic design room** added at `/work/graphic-design`, the first themed exhibition.
+- [Work] **Photography room** added at `/work/photography`: five series of photographs, each with a short note on where it was shot and which camera took it.
+- [Work] **Articles in the exhibition**: design and technology posts hang on the wall next to the work they explain.
+- [Work] **Every piece is captioned** with its name, when it was made, and a "Live" link when you can see it in production.
+- [Home] **Selected work** now runs the full width of the page and shows a few chosen pieces, ending in a sign to the full exhibition.
+
+### Improved
+- [Work] **Hovering a piece** keeps the pieces from the same project, and the article about it, sharp while the rest of the wall blurs.
+- [Work] **Pieces can be dragged** around the main exhibition's grid on desktop, and one button puts everything back. This replaces the separate pile view and its toggle. The themed rooms stay still.
+- [Work] **Videos** play only while they are on screen, and stay still if you have reduced motion turned on.
+
+### Removed
+- [Work] **Expanded project view.** Pieces are already shown at full detail, so clicking no longer zooms.
+
 ## Week of October 5, 2026
 
 ### New
