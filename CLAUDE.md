@@ -50,9 +50,8 @@ import { PROSE, SECTION_HEADING } from "@/lib/type";
   `text-graphite-900/35`. Opacity is kept for what has to stay translucent:
   focus rings (they sit on the wall and on yellow), scrims, and lines drawn on
   the yellow panel. The one colour outside the ramps is the site's areas:
-  their `area-*` tokens (and the `cutout-*` shadow that goes with each) in
-  `globals.css` are for the changelog's tags and the signposts that lead to
-  those areas, and nothing else.
+  their `area-*` tokens in `globals.css` are for the changelog's tags and
+  the signposts that lead to those areas, and nothing else.
 
 ## Exceptions
 

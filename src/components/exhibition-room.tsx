@@ -66,8 +66,8 @@ export function ExhibitionRoom({ room }: { room: Room }) {
                   <li key={other}>
                     <Signpost
                       href={ROOMS[other].href}
-                      name={ROOMS[other].title}
-                      area="work"
+                      name={other === "main" ? "Main work" : ROOMS[other].title}
+                      area={other === "main" ? "work" : "site"}
                     />
                   </li>
                 ))}

@@ -175,22 +175,6 @@
   --color-area-shop-ink: oklch(0.42 0.1 300);
   --color-area-site: var(--color-graphite-200);
   --color-area-site-ink: var(--color-graphite-700);
-
-  /* `cutout` for a signpost picked up off the wall. The arrow sits in a hole
-     through the sign, and what shows through it is the wall; once the sign
-     stands off it, the wall seen through the hole is in the sign's shadow.
-     Thrown in the sign's own hue for the same reason the shop's is thrown in
-     yellow, so it reads as the thickness of the sign, not a grey line drawn on
-     it. Site-wide, having no hue, throws neutral. Flush, a sign has none. */
-  --shadow-cutout-blog-lifted:
-    inset 0 0 0 1px oklch(0.55 0.08 245 / 0.18),
-    inset 0 5px 9px oklch(0.45 0.07 245 / 0.24);
-  --shadow-cutout-site-lifted:
-    inset 0 0 0 1px oklch(0.55 0 0 / 0.18),
-    inset 0 5px 9px oklch(0.45 0 0 / 0.24);
-  --shadow-cutout-work-lifted:
-    inset 0 0 0 1px oklch(0.55 0.08 150 / 0.18),
-    inset 0 5px 9px oklch(0.45 0.07 150 / 0.24);
 }
 
 /* The dashes the registry draws its frame and rules with: four repeating
@@ -439,6 +423,10 @@ body {
 }
 
 :root {
+  --paper-grain: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='f'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='1' numOctaves='1' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3CfeComponentTransfer%3E%3CfeFuncR type='linear' slope='4' intercept='-1.5'/%3E%3CfeFuncG type='linear' slope='4' intercept='-1.5'/%3E%3CfeFuncB type='linear' slope='4' intercept='-1.5'/%3E%3CfeFuncA type='linear' slope='0' intercept='1'/%3E%3C/feComponentTransfer%3E%3C/filter%3E%3Crect width='180' height='180' filter='url(%23f)' opacity='0.1'/%3E%3C/svg%3E");
+}
+
+:root {
   --wall-gap: 1.25rem;
 }
 
@@ -525,7 +513,7 @@ body[data-shop-open] [data-shop-panel] {
    One octave, not four. At this frequency the finer octaves land under a pixel
    and only cost time. */
 [data-paper] {
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='f'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='1' numOctaves='1' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3CfeComponentTransfer%3E%3CfeFuncR type='linear' slope='4' intercept='-1.5'/%3E%3CfeFuncG type='linear' slope='4' intercept='-1.5'/%3E%3CfeFuncB type='linear' slope='4' intercept='-1.5'/%3E%3CfeFuncA type='linear' slope='0' intercept='1'/%3E%3C/feComponentTransfer%3E%3C/filter%3E%3Crect width='180' height='180' filter='url(%23f)' opacity='0.1'/%3E%3C/svg%3E");
+  background-image: var(--paper-grain);
   background-size: 180px 180px;
 }
 
@@ -559,15 +547,16 @@ body[data-shop-open] [data-shop-panel] {
 
 /* Signposts answer in elevation, never in colour. At rest a sign is flush with
    the wall and casts nothing: no shadow, no hairline, not even inside its hole.
-   Pointed at or focused, it comes off the wall: `card`, and 2px up. Not
-   `raised`; that is a thing held in the hand, and a sign only stands out from
-   its fixing. Pressed, it goes back down flush and gives a little (scale
-   0.99), the way a sign does under a thumb.
+   Pointed at or focused, it sinks into the wall: `hollow`, the inset the
+   colophon right below it already wears, so the foot of the page reads as
+   one surface. It does not move; a sign cannot rise while it sinks, and the
+   clean spot under the cursor is the motion now. Pressed, it gives a little
+   (scale 0.99), the way a sign does under a thumb.
 
-   The arrow sits in a hole cut through the sign, and the hole gains an inner
-   shadow once the sign lifts, because the wall behind it is now in the sign's
-   shadow. Flush, there is no gap for a shadow to fall into. The hole is never
-   filled; that would make it a button printed on the sign instead of a cut.
+   The arrow sits in a hole cut through the sign, and the hole stays flat.
+   An inset on the hole as well would be a second depth inside the first,
+   and the two read as one sign pressed in twice. The hole is never filled;
+   that would make it a button printed on the sign instead of a cut.
 
    The arrow hangs loose. Each one is knocked to one of the eighths of a turn
    when the page loads (`--tilt`, set by `SignpostArrow` after mount): 45°, 90°,
@@ -586,25 +575,123 @@ body[data-shop-open] [data-shop-panel] {
    compositor property, but there are two or three of these at the foot of one
    page, and a crossfaded pseudo-element would double the hairline ring. */
 [data-signpost] {
-  --hole-lifted: var(--shadow-cutout-site-lifted);
   box-shadow: none;
   transition:
     box-shadow var(--motion-quick) var(--ease-out-strong),
-    translate var(--motion-quick) var(--ease-out-strong),
     scale var(--press) var(--ease-out-strong);
 }
 
-[data-signpost="blog"] {
-  --hole-lifted: var(--shadow-cutout-blog-lifted);
+/* THE CLEAN SPOT. A signpost is long enough to be brushed past, so the
+   cursor wipes the grain off where it rests: the grain is its own layer under
+   the words, masked by a radial spot that follows the pointer, and pressing
+   the sign grows the spot past its farthest corner until the whole sign is
+   clean, which is the moment it takes you somewhere.
+
+   The falloff is smoothstep, not linear: a flat core, then eight stops on
+   3t² − 2t³, so the edge of the spot has no visible ring. Position, strength
+   and reach are registered properties, so each eases on its own clock: the
+   spot trails the cursor (`follow`), fades in and out (`fade`), and swells on
+   press (`grow`). On press the flat core opens to the whole spot while the
+   radius travels only to the farthest corner, so the clean edge is seen
+   crossing the sign, and the link waits for it before it navigates. `placing` drops the position transition for one frame on
+   entry, or the spot would slide in from the corner. The knobs are the
+   `--signpost-spot-*` values on `:root`. */
+@property --signpost-spot-x {
+  syntax: "<length>";
+  inherits: false;
+  initial-value: 0px;
 }
 
-[data-signpost="work"] {
-  --hole-lifted: var(--shadow-cutout-work-lifted);
+@property --signpost-spot-y {
+  syntax: "<length>";
+  inherits: false;
+  initial-value: 0px;
 }
 
-[data-signpost-hole] {
-  box-shadow: none;
-  transition: box-shadow var(--motion-quick) var(--ease-out-strong);
+@property --signpost-spot-r {
+  syntax: "<length>";
+  inherits: false;
+  initial-value: 0px;
+}
+
+@property --signpost-spot-t {
+  syntax: "<number>";
+  inherits: false;
+  initial-value: 0;
+}
+
+@property --signpost-spot-a {
+  syntax: "<number>";
+  inherits: false;
+  initial-value: 1;
+}
+
+:root {
+  --signpost-spot-size: 80px;
+  --signpost-spot-dim: 0.25;
+  --signpost-spot-core: 0.15;
+  --signpost-spot-follow: 0ms;
+  --signpost-spot-fade: 600ms;
+  --signpost-spot-grow: 340ms;
+  --signpost-spot-grow-ease: cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+[data-signpost] {
+  isolation: isolate;
+  position: relative;
+}
+
+[data-signpost-grain] {
+  --t: var(--signpost-spot-t);
+  --a: var(--signpost-spot-a);
+  --signpost-spot-t: var(--signpost-spot-core);
+  --signpost-spot-r: var(--signpost-spot-size);
+  background-image: var(--paper-grain);
+  background-size: 180px 180px;
+  mask-image: radial-gradient(
+    circle var(--signpost-spot-r) at var(--signpost-spot-x)
+      var(--signpost-spot-y),
+    rgb(0 0 0 / var(--a)) calc(var(--t) * 100%),
+    rgb(0 0 0 / calc(var(--a) + (1 - var(--a)) * 0.043))
+      calc((var(--t) + (1 - var(--t)) * 0.125) * 100%),
+    rgb(0 0 0 / calc(var(--a) + (1 - var(--a)) * 0.156))
+      calc((var(--t) + (1 - var(--t)) * 0.25) * 100%),
+    rgb(0 0 0 / calc(var(--a) + (1 - var(--a)) * 0.316))
+      calc((var(--t) + (1 - var(--t)) * 0.375) * 100%),
+    rgb(0 0 0 / calc(var(--a) + (1 - var(--a)) * 0.5))
+      calc((var(--t) + (1 - var(--t)) * 0.5) * 100%),
+    rgb(0 0 0 / calc(var(--a) + (1 - var(--a)) * 0.684))
+      calc((var(--t) + (1 - var(--t)) * 0.625) * 100%),
+    rgb(0 0 0 / calc(var(--a) + (1 - var(--a)) * 0.844))
+      calc((var(--t) + (1 - var(--t)) * 0.75) * 100%),
+    rgb(0 0 0 / calc(var(--a) + (1 - var(--a)) * 0.957))
+      calc((var(--t) + (1 - var(--t)) * 0.875) * 100%),
+    #000 100%
+  );
+  transition:
+    --signpost-spot-x var(--signpost-spot-follow) var(--ease-out-strong),
+    --signpost-spot-y var(--signpost-spot-follow) var(--ease-out-strong),
+    --signpost-spot-a var(--signpost-spot-fade) var(--ease-out-strong),
+    --signpost-spot-r var(--signpost-spot-grow) var(--signpost-spot-grow-ease),
+    --signpost-spot-t var(--signpost-spot-grow) var(--signpost-spot-grow-ease);
+}
+
+[data-signpost-grain][data-spot="placing"] {
+  --signpost-spot-a: var(--signpost-spot-dim);
+  transition:
+    --signpost-spot-a var(--signpost-spot-fade) var(--ease-out-strong),
+    --signpost-spot-r var(--signpost-spot-grow) var(--signpost-spot-grow-ease),
+    --signpost-spot-t var(--signpost-spot-grow) var(--signpost-spot-grow-ease);
+}
+
+[data-signpost-grain][data-spot="on"] {
+  --signpost-spot-a: var(--signpost-spot-dim);
+}
+
+[data-signpost-grain][data-spot="pressed"] {
+  --signpost-spot-a: var(--signpost-spot-dim);
+  --signpost-spot-t: 1;
+  --signpost-spot-r: var(--signpost-spot-reach);
 }
 
 [data-signpost-arrow] {
@@ -624,12 +711,7 @@ body[data-shop-open] [data-shop-panel] {
 }
 
 [data-signpost]:focus-visible {
-  box-shadow: var(--shadow-card);
-  translate: 0 -2px;
-}
-
-[data-signpost]:focus-visible [data-signpost-hole] {
-  box-shadow: var(--hole-lifted);
+  box-shadow: var(--shadow-hollow);
 }
 
 [data-signpost]:focus-visible [data-signpost-arrow] {
@@ -640,12 +722,7 @@ body[data-shop-open] [data-shop-panel] {
 
 @media (hover: hover) and (pointer: fine) {
   [data-signpost]:hover {
-    box-shadow: var(--shadow-card);
-    translate: 0 -2px;
-  }
-
-  [data-signpost]:hover [data-signpost-hole] {
-    box-shadow: var(--hole-lifted);
+    box-shadow: var(--shadow-hollow);
   }
 
   [data-signpost]:hover [data-signpost-arrow] {
@@ -656,24 +733,14 @@ body[data-shop-open] [data-shop-panel] {
 }
 
 [data-signpost]:active {
-  box-shadow: none;
-  translate: 0 0;
   scale: 0.99;
 }
 
-[data-signpost]:active [data-signpost-hole] {
-  box-shadow: none;
-}
-
-/* Reduced motion keeps the light and loses the travel: the shadows still
-   change and the arrow still comes level, which is enough to say the sign
+/* Reduced motion keeps the light and loses the travel: the inset still
+   arrives and the arrow still comes level, which is enough to say the sign
    heard you, but nothing moves to get there. */
 @media (prefers-reduced-motion: reduce) {
-  [data-signpost],
-  [data-signpost]:hover,
-  [data-signpost]:focus-visible,
   [data-signpost]:active {
-    translate: none !important;
     scale: 1 !important;
   }
 

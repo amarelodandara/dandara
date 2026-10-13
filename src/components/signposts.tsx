@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { SignpostArrow } from "@/components/signpost-arrow";
+import { SignpostGrain } from "@/components/signpost-grain";
 import { SECTION_HEADING } from "@/lib/type";
 
 type Area = "blog" | "site" | "work";
@@ -24,10 +25,10 @@ export function Signpost({ href, name, area }: Sign) {
   return (
     <Link
       href={href}
-      data-paper
       data-signpost={area}
       className={`flex items-center justify-between gap-3 rounded-(--shop-radius) px-8 pt-7 pb-6 ${SIGN_COLOR[area]} ${FOCUS}`}
     >
+      <SignpostGrain />
       <span className={`min-w-0 ${SECTION_HEADING}`}>{name}</span>
       <span
         data-signpost-hole
