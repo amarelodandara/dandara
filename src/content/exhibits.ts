@@ -233,6 +233,38 @@ const WORK: Exhibit[] = [
     },
   },
   {
+    id: "caiu-na-rede",
+    title: "caiu na rede, é link!",
+    date: "2025",
+    live: LINKS_AMARELOS,
+    project: "amarelos",
+    rooms: ["main"],
+    media: {
+      kind: "video",
+      sources: [{ src: "/work/caiu-na-rede.mp4", type: MP4 }],
+      width: 1080,
+      height: 1350,
+      label:
+        "A white wireframe net floating on yellow, between two pale bands where caiu na rede, é link! scrolls past. A small ball drops into it, the net stretches into a deep funnel around the ball, then shrinks away.",
+    },
+  },
+  {
+    id: "cascata-erro",
+    title: "Recommendation cascade",
+    date: "2025",
+    live: LINKS_AMARELOS,
+    project: "amarelos",
+    rooms: ["main"],
+    media: {
+      kind: "video",
+      sources: [{ src: "/work/cascata-erro.mp4", type: MP4 }],
+      width: 1080,
+      height: 1920,
+      label:
+        "A vertical story on yellow where a recomendação especial pop-up, recommending onde dá pra conversar, opens and cascades into stacks of copies, more stacks spawning until they fill the screen.",
+    },
+  },
+  {
     id: "ondas-amarelas-covers",
     title: "ondas amarelas covers",
     date: "2025",
