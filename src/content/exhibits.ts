@@ -177,6 +177,22 @@ const WORK: Exhibit[] = [
     },
   },
   {
+    id: "stone-store",
+    title: "Stone Terminal Store",
+    date: "2023",
+    project: "stone",
+    rooms: ["main"],
+    featured: true,
+    media: {
+      kind: "video",
+      sources: [{ src: "/work/stone-store.mp4", type: MP4 }],
+      width: 1920,
+      height: 1080,
+      label:
+        "A green slide typed out line by line: Stone's 212 partners processed R$ 9.6M a month, yet their apps only reached merchants through a sales visit and a manual unlock. Then the self-serve app store on a green payment terminal, its screen moving from browsing to installing and opening an app. Then the result: in six months, 40% of partners had moved to the self-serve store, with 33 apps live.",
+    },
+  },
+  {
     id: "stone-talk",
     title: "Presenting the App Store on Stone Stage",
     date: "2024",
