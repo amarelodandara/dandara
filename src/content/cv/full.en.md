@@ -16,6 +16,10 @@ canonical wording. This file is the pool itself. Pick the bullets whose angle
 matches the posting, keep the numbers exactly as written in *Fixed facts*, and
 never write a line that is not derivable from something below.
 
+Pick from the *Accomplishments bank (STAR)* first. Its rule governs every
+tailored line: never change the meaning of the words, never diminish or
+enlarge a feat, but play with the target words to hit the ATS.
+
 ---
 
 ## Fixed facts — never alter these
@@ -35,13 +39,15 @@ a fact; it may never change the fact.
   Junior; promoted to Mid-level (Pleno in Portuguese) in 04/2024.
 - QuintoAndar — Junior Product Designer (Product Designer Júnior) — Remote,
   Brazil — 12/2021 – 04/2022.
+- TeamHub — Front End Developer, intern — 02/2021 – 11/2021. HR tech
+  platform; React front end.
 - 03/2026 – Present — self-directed. See *The current period* below for the
   three ways it can honestly be written.
 
 **Education**
 - Universidade Estadual de Minas Gerais — Bachelor's in Graphic Design —
   05/2021 – Present. **Not yet graduated.** Thesis in progress; field research
-  runs 09/2026 – 10/2026, defence after that.
+  runs 09/2026 – 10/2026; defence scheduled for the end of 11/2026.
 - Centro Federal de Educação Tecnológica de Minas Gerais — Technical Degree in
   Computing — 05/2017 – 03/2021. Conclusion project: Serase, a mobile personal
   finance app for low-income users.
@@ -51,14 +57,36 @@ a fact; it may never change the fact.
 - 4.5M+ active payment terminals running it.
 - 2 zero-to-one product launches at Stone, across 3 platforms and 4 organizations.
   One of them is the Stone Terminal Store, still live as of 2026-09.
-- 40%+ of Stone's partner base adopted the Pix NFC flow within 6 months of
-  launch. Her one lift number (per Nicoly, 2026-09-29). It was a team result on
-  a flow she designed as sole designer: write it as the flow's adoption, never
-  as her personal achievement, and never round it up.
+- 40% of Stone's ~212 partners (about 85) had fully moved to the Stone
+  Terminal Store within 6 months of launch (per the bank, 2026-10-14; earlier
+  drafts said 40%+ and attached it to Pix NFC — both superseded). Her one lift
+  number. It was a team result on a product she led: write it as the Store's
+  adoption, never as her personal achievement, and never round it up. Never
+  attach it to Pix NFC or any other flow.
 - 14 named apps in the Stone terminal suite she worked across: Activation Flow,
   Cancelation, Closing, News, Paper Roll Orders, Payment, Pix and Pix NFC,
   Pre-Authorization, Receipts, Sales Reports, Sales Simulation, Store, System
   Launcher, Tickets.
+- R$ 9,590,793.58 (R$ 9.6M) monthly TPV processed by the full Store partner
+  base through merchants' partner apps. The base's size, not her result.
+- 7 users in the Store's usability tests.
+- Ticketing app: 8th most downloaded and accessed of 33 apps on the terminal
+  App Store.
+- News automation: four teams down to one (marketing); about a week of
+  cross-team sign-off removed per campaign; 2 typefaces and 3 images per issue.
+- Pix NFC: live on day one of the Central Bank mandate (2025-02-28) after a
+  3-month pilot (testing from 11/2024); Stone and Ton brands.
+- Stone Stage talk: audience of about 100.
+- 3-person design team (at its peak); 10 designers in the tribe.
+- QuintoAndar: 8 buyer interviews, run with a senior designer.
+- TeamHub: 50+ client companies, including one major statewide hospital
+  network.
+- In Service of Museums: 8 interviews with museum professionals (2 to 12 years
+  of experience) in two weeks.
+- Links Amarelos and Ondas Amarelas: monthly since 09/2025; 5-star rating on
+  Spotify. No audience numbers, ever.
+- Serase: 6-student team; full marks in every evaluation.
+- #1 Junior UI/UX Designer, UI/UX Junior 15-day design challenge, late 2021.
 - QuintoAndar is Brazil's largest rental platform.
 - 200+ vetted venues in the Belo Rolê directory.
 - 5+ years designing overall (her own public phrasing on adandara.com);
@@ -75,6 +103,7 @@ a fact; it may never change the fact.
 - servico-museu.vercel.app · github.com/amarelodandara/servico-museu
 - linksamarelos.com · nydndr.substack.com
 - open.spotify.com/show/043Gs7eyY2KOlotEWSTSxB
+- medium.com/design-bootcamp/the-designer-archetype-b3027b2ec995
 - nydndr.notion.site/belo-role
 
 ---
@@ -165,6 +194,528 @@ public speaking
 Payments and fintech · point-of-sale and terminal hardware · Pix · marketplaces
 and rentals · consumer scale · museology and cultural institutions ·
 publishing and editorial
+
+---
+
+## Accomplishments bank (STAR) — the canonical bullets
+
+Written by Nicoly, 2026-10-14, and imported here from her *STAR
+Accomplishments Bank*. **Where this bank and anything older in this file
+disagree, the bank wins.** It is the first place to pick bullets from; the
+*Professional Experience* section below is the older pool and still holds
+wording the bank does not cover.
+
+**The tailoring rule, in Nicoly's words:** never change the meaning of the
+words, never diminish or enlarge the feat, but play with the target words to
+hit the ATS. In practice:
+
+- Pick items by matching their **Tags** to the posting.
+- Start from the item's **Resumé bullet**. Swap vocabulary for the posting's
+  own terms where they mean the same thing (*cross-functional* for
+  *multidisciplinary*, *self-serve* for *self-service*, *tap to pay* for
+  *NFC*), shorten by cutting clauses, and reorder clauses so the posting's
+  keyword lands early.
+- Never change who did it (sole designer, with a senior designer, as the junior
+  designer, as an intern), the scope (partner side, not the whole Store), a
+  number, or a result. Never turn a team result into a personal one, a
+  contribution into ownership, or a qualitative result into a metric.
+- The **STAR** lines are for interviews and longer LinkedIn entries. A tailored
+  bullet may draw a detail from them, as long as the detail is stated there.
+- Each **Note** is load-bearing. Read it before using its item.
+- Bracketed *[optional: …]* lines are open slots Nicoly has not filled. Never
+  fill them by guessing.
+
+### Stone Co. — App Store for payment terminals
+
+**1. Replaced an in-person sales process with a self-serve partner app store**
+- Resumé bullet: Led service and product design for the partner side of Stone's
+  App Store for payment terminals, replacing an in-person, manually unlocked
+  distribution process; within 6 months of launch, 40% of Stone's ~212 partners
+  had fully moved to the new self-serve flow.
+- Alt. bullet (with TPV): Designed the partner experience of Stone's App Store
+  for payment terminals; in 6 months, 40% of a ~212-partner base processing R$
+  9.6M in monthly TPV through their apps committed fully to the store.
+- S: Merchants could only get partner apps through a commercial agent who
+  pitched them in-store, then filed a manual request to unlock that app on that
+  merchant's specific device.
+- T: Design the internal workings of a new App Store: how partners submit and
+  manage apps, and the service behind it.
+- A: Designed the partner submission and management flows and the end-to-end
+  service, working with a senior designer who owned the merchant-facing side,
+  two cross-functional squads (PMs, front-end and back-end engineers), QA, Data
+  and Content. Launched with two first-party Stone apps as showcases, ran
+  usability tests with 7 users, and followed the new system closely with
+  internal teams after launch.
+- R: Within the first 6 months, 40% of the ~212 partners (about 85) were fully
+  committed to the new flow and live on the store. The full partner base
+  processes R$ 9,590,793.58 in monthly TPV through merchants' partner apps.
+- Tags: service design, multi-sided marketplace, partner / developer
+  experience, adoption, measurable outcomes, end-to-end ownership, usability
+  testing, cross-functional collaboration, fintech, payments, POS
+- Note: the TPV is the size of the partner base, not something the Store
+  produced. Write it as the base's volume, never as revenue she generated. The
+  merchant-facing side was a senior designer's; hers is the partner side.
+
+**2. Created the partner quality rules that kept the store scalable**
+- Resumé bullet: Pushed for and wrote the App Store's partner requirements
+  (data use, brand use, differentiation from Stone's own apps) against team
+  pressure to focus on screens, preventing a QA bottleneck that would have
+  stalled the launch.
+- S: The team wanted to spend design time on screens, not on a written rule
+  system for what partner apps must and must not do.
+- T: Make sure the store could scale without flooding QA with reviews or
+  confusing merchants.
+- A: Argued the case and defined the quality bar: what apps must include, what
+  they must not do, and how far partners could use Stone's brand without
+  merchants mistaking them for Stone products.
+- R: The store launched without rolling back and grew to about 85 partners (40%
+  of the base) in its first 6 months under these rules.
+- Tags: platform policy, design leadership, stakeholder influence, systems
+  thinking, trust and safety, brand governance, ambiguity
+
+**3. Designed around hard device and support constraints**
+- Resumé bullet: Designed app distribution within a strict mobile-data budget
+  on payment terminals and kept partner apps visibly distinct from Stone's own,
+  so partner problems didn't land on Stone's customer support.
+- S: Terminals ran on a very limited data budget, and merchants called Stone's
+  support for any problem on the device, including partner offers.
+- T: Let merchants install partner apps without blowing the data budget or
+  overloading support.
+- A: Designed distribution so merchants could not download apps freely,
+  protecting the data budget, and defined how partner apps had to differ from
+  Stone apps in brand and content.
+- R: Partner apps reached merchants within the terminals' data limits and with
+  a clear line between Stone's offer and partners' offers.
+- Tags: constraints, edge cases, service design, support deflection, hardware /
+  embedded UI, payments
+
+**4. Presented the App Store to Stone's design and management teams**
+- Resumé bullet: Presented the App Store's design and service model on Stone
+  Stage, an internal event for the design and management teams, to an audience
+  of about 100 people.
+- S: Stone Stage is an internal showcase where teams present work to the design
+  and management organization.
+- T: Explain the App Store's design and the service behind it to designers and
+  managers outside the project.
+- A: Prepared and delivered the talk, presenting the terminal App Store on
+  stage.
+- R: Shared the work with roughly 100 people in the auditorium. *[optional: any
+  follow-up, e.g. other teams adopting the rules or reaching out]*
+- Tags: communication, storytelling, presenting to leadership, design advocacy
+
+### Stone Co. — Pix NFC payment flow
+
+**5. Shipped Pix by NFC across 22+ terminal models, ahead of competitors**
+- Resumé bullet: Took over as sole designer and shipped Pix by NFC (tap to pay)
+  for the whole Stone Co. group, across 22+ terminal models of its Stone and Ton
+  brands, live on day one of the Central Bank mandate after a 3-month pilot;
+  competitors copied the flow and press coverage used Stone's interface as the
+  reference example.
+- S: Pix was already Brazil's main digital payment method, and NFC was about to
+  become a new way to pay with it. Stone learned early and wanted to launch
+  before competitors.
+- T: Inherited the project when the previous designer left the team, and had to
+  ship it across Stone's whole terminal fleet on a tight timeline.
+- A: Designed the flow for the whole Stone Co. group, covering both terminal
+  brands (Stone and Ton) across more than 22 device models with different
+  sizes, orientations, physical keys and color rendering, working with Product
+  Managers and a core engineer. Handled the regulatory side too, including
+  retiring devices that could no longer support NFC payments under the new
+  rules.
+- R: Stone was one of the first to market. Competitors visibly copied the
+  design, and media coverage of Pix NFC used Stone's interface as its example,
+  giving the company earned marketing.
+- Tags: first to market, speed, multi-device design, design systems across
+  hardware, regulatory constraints, ownership, payments, Pix, NFC, fintech, POS
+- Note: adoption of Pix NFC stayed low across the whole market, so lead with
+  speed and influence, never volume. The Store's 40% is not this flow's number.
+- Proof: cover images showing a Stone terminal running the flow —
+  https://www.serasaexperian.com.br/conteudos/pix-por-aproximacao/ (Serasa
+  Experian, 2025-02-28, a major Brazilian credit bureau) and
+  https://www.iugu.com/blog/pix-por-aproximacao (iugu, first published 2025-06,
+  updated 2026-06, a competing payments company).
+- Timeline proof:
+  https://braziljournal.com/brands/como-a-stone-transformou-o-pix-em-uma-oportunidade-de-ganhos-para-os-mpmes
+  (Brazil Journal, 2025-01-09): Stone began testing Pix NFC in 11/2024, about
+  three months before it went live nationally on 2025-02-28. It runs in the
+  Brands section as Stone-sponsored content — cite it for dates, never as
+  independent praise.
+- Partnership context:
+  https://agenciabrasil.ebc.com.br/economia/noticia/2025-02/entenda-como-funcionara-pix-por-aproximacao
+  (Agência Brasil, 2025-02-27) lists Stone among the 12 terminal brands that
+  partnered with Google on tap-to-pay for Pix. **The Google partnership was
+  coordinated by engineering and the C-level, not by Nicoly. Never claim it as
+  her work.**
+- Launch proof:
+  https://www.cnnbrasil.com.br/economia/money/macroeconomia/stone-informa-que-pix-por-aproximacao-ja-esta-disponivel-em-maquininhas-stone-e-ton/
+  (CNN Brasil via Estadão Conteúdo, 2025-02-28): Stone enabled Pix by NFC on
+  both Stone and Ton terminals the day it became mandatory, for most merchants
+  already accepting Pix, after a testing phase.
+
+**6. Chose market validation over up-front research to hit the launch window**
+- Resumé bullet: Made the case to build on users' existing tap-to-pay habits
+  instead of running lengthy up-front research, validating in the market to hit
+  the launch window, and pushed support and marketing to teach merchants and
+  consumers the new payment option.
+- S: Being first to market mattered more than a perfect first version, and NFC
+  card payments were already familiar to merchants and consumers.
+- T: Decide how much research was needed before shipping, and make sure people
+  would understand a new way to pay.
+- A: Argued that the team could rely on the existing tap-to-pay mental model and
+  learn faster from market testing than from extensive research. Also made the
+  case that support and marketing needed to educate merchants and consumers,
+  since most were not following Pix NFC closely.
+- R: Stone shipped among the first, and the launch was supported by customer
+  education from support and marketing. *[optional: any support ticket or
+  onboarding data after launch]*
+- Tags: product judgment, research strategy, risk tradeoffs, speed vs
+  certainty, cross-functional influence, customer education, go-to-market
+
+### Stone Co. — Ticketing app
+
+**7. Designed and owned a ticketing app that became the store's 8th most downloaded**
+- Resumé bullet: As sole designer, owned Stone's ticketing app for events end to
+  end (UX, interface, roadmap and user feedback), giving merchants a free
+  in-terminal alternative to bloated subscription apps; it became the 8th most
+  downloaded and accessed of 33 apps on the terminal App Store, ahead of
+  established partner apps.
+- S: At events like fairs, customers buy tickets first and redeem them later,
+  for food for example. Merchants who ran events only part of the time (about
+  20% of their activity, not their main revenue) relied on bloated,
+  subscription-based partner apps, and smaller ones used paper.
+- T: Give these merchants a simple ticketing tool that runs entirely on the
+  payment terminal.
+- A: Sole designer, owning interface design, user experience, the roadmap of
+  future additions, and monitoring and collecting user feedback. Designed setup
+  and catalog management to happen directly on the terminal, with no other
+  device needed.
+- R: Became the 8th most downloaded and accessed app out of 33 on the store,
+  counting Stone's own apps and established partner apps.
+- Tags: 0-to-1, end-to-end ownership, product strategy, roadmap, user feedback
+  loops, POS, embedded UI, events, small business
+
+**8. Shipped a deliberately minimal first version to learn from real use**
+- Resumé bullet: Shipped the ticketing app's first version as a deliberately
+  simple, CRUD-like tool to test demand, then used the flood of user feedback to
+  learn how merchants actually ran their events and shape the roadmap.
+- S: The team didn't yet know how merchants would really use an in-terminal
+  ticketing app.
+- T: Decide how much to build before learning from real users.
+- A: Chose to release a first version as close to a plain
+  create-read-update-delete tool as possible, with no extra features, and set up
+  feedback collection from users.
+- R: The feedback showed the first tickets were too easy to counterfeit. The
+  next version added cheap, visual ways to authenticate them: QR codes, a
+  prominent establishment name, and unique public data on each ticket.
+- Tags: MVP, product judgment, iterative design, hypothesis-driven, user
+  feedback, scope control, speed to learn
+
+### Stone Co. — In-terminal news automation
+
+**9. Turned a four-team campaign pipeline into a self-serve tool for marketing**
+- Resumé bullet: Redesigned how in-terminal news campaigns reach merchants,
+  replacing a hand-off across marketing, content design, product design and
+  engineering with a self-serve portal where marketing publishes campaigns in
+  markdown, cutting about a week of cross-team sign-off from every campaign and
+  removing design and engineering from the process entirely.
+- S: Stone's terminals show merchants short news issues (new technologies,
+  promotions) through an in-device app. Each campaign needed marketing to write
+  and document it, content design to review it, product design to assemble it
+  in Figma, and developers to send it to devices as an image.
+- T: Remove the bottleneck so campaigns could ship without design and
+  engineering work every time.
+- A: Audited every past news campaign and built an inventory of the elements
+  they needed, documenting the constraints that keep them working on every
+  device. Worked with the network team to keep it within the data budget, and
+  with the front-end team to build a portal where marketing uploads campaigns
+  themselves in markdown.
+- R: Went from four teams involved in every campaign to marketing running
+  campaigns on its own. Since launch, campaign work stopped showing up in
+  design, engineering and PM reviews. Designing a campaign used to take
+  minutes, but getting sign-off from everyone involved took about a week; that
+  approval loop is gone.
+- Tags: service design, process automation, self-serve tooling, internal tools,
+  operational efficiency, design systems, cross-functional collaboration,
+  content operations
+- Note: the portal was built by the front-end team. She designed the system and
+  the service; never write that she built the portal.
+
+**10. Designed a constraint system that renders reliably on every terminal**
+- Resumé bullet: Defined a content system for news on 22+ low-end terminal
+  models with different screens, color rendering and file support, limiting each
+  issue to 2 typefaces and 3 images so any campaign displays correctly without
+  design review.
+- S: Terminals have small screens and low-end hardware, colors look different
+  from device to device, and not all of them accept the same file formats.
+- T: Make sure any campaign marketing publishes looks right on every device,
+  with no designer checking it.
+- A: Worked closely with development to assess every device and the
+  technologies each one supports, then set hard limits: at most 2 typefaces and
+  3 images per news issue, since anything more could not be controlled on
+  screens that size.
+- R: Campaigns published by marketing render consistently across the fleet
+  without design or engineering involvement.
+- Tags: design systems, constraints, multi-device design, hardware limits,
+  accessibility of content, scalability, embedded UI
+- Note: this content system is hers. It is not Stone's Android design system,
+  which she used and did not build (see *What Nicoly cannot claim*). Never let
+  the *design systems* tag on #9, #10 or #5 read as authorship of that one.
+
+### Stone Co. — Core payment flows
+
+**11. Maintained and improved core payment flows across the whole terminal fleet**
+- Resumé bullet: Shipped ongoing improvements to core payment flows
+  (pre-authorization, terminal activation, sale cancelation) across 22+
+  terminal models of the Stone and Ton brands, working across many product
+  contexts at once.
+- S: Beyond larger launches, Stone's terminals needed a steady stream of small
+  features and fixes in the flows merchants use every day.
+- T: Keep those flows working and improving on every device in the fleet.
+- A: Designed small features and improvements to pre-authorization, activation
+  and sale cancelation, adapting each to the screens, keys and constraints of
+  every terminal model.
+- R: Kept core flows consistent across the fleet while covering a wide range of
+  product areas at the same time.
+- Tags: breadth, context switching, core flows, maintenance and iteration,
+  multi-device design, payments, POS
+- Note: a supporting bullet to show range. Pair it with a flagship story (#1,
+  #5, #7 or #9); never lead with it.
+
+### Stone Co. — Team practices
+
+**12. Started the team's weekly critique and documentation rituals**
+- Resumé bullet: Started a weekly critique and live-help ritual for my 3-person
+  design team, then led a tribe-wide initiative with 10 designers to define
+  shared documentation patterns in Confluence and Figma.
+- S: The team had no regular moment to share work in progress or ask each other
+  for help, and documentation across the tribe followed no common pattern.
+- T: Improve collaboration and make the team's work easier to find and reuse.
+- A: Created a weekly show-and-tell with time set aside for live help requests
+  in my team, then led a second, tribe-wide ritual to agree on documentation
+  patterns for Confluence and Figma.
+- R: The weekly ritual ran with the full team (3 designers at its peak), and the
+  documentation patterns were adopted across the tribe's 10 designers.
+- Tags: design culture, collaboration, critique, documentation, design
+  operations, initiative, leadership without authority
+- Note: "my 3-person design team" is the team she sat in, not one she managed.
+  On a résumé write "my 3-person design team" or "a 3-person design team",
+  never "led a team of 3".
+
+### QuintoAndar — Junior Product Designer (12/2021 – 04/2022)
+
+Context: closing team for property sales, at the moment buyers sign the
+purchase contract. The team mainly owned the internal system analysts use to
+check that the people and the property in a sale are in order.
+
+**13. Redesigned the due-diligence report buyers receive before signing**
+- Resumé bullet: Redesigned QuintoAndar's due-diligence report for home buyers
+  (a PDF covering the sellers and registry findings), turning a document buyers
+  called confusing and stern into a clear one, based on 8 interviews run with a
+  senior designer.
+- S: Before signing, buyers received a PDF with everything known about the
+  sellers and what registries had found. Buyers said it was confusing and
+  stern, at one of the most stressful moments of their lives.
+- T: Redesign the document so buyers understand what matters at a tense moment.
+- A: As the junior designer, paired with a senior designer to run 8 interviews
+  with buyers to learn what they actually needed to know at that point, then
+  redesigned the document around it.
+- R: Shipped the redesigned document. (Left the company before post-launch data
+  was available.)
+- Tags: user research, interviews, information design, content design, trust,
+  high-stakes moments, proptech, real estate, document design
+- Note: no post-launch data exists. Never write an outcome beyond "shipped".
+
+**14. Introduced a risk scale and aligned it with Legal**
+- Resumé bullet: Designed a scale showing buyers how safe or risky a purchase
+  was based on registry findings, and worked with Legal to define how
+  QuintoAndar could say it without taking on liability.
+- S: Buyers struggled to judge what the findings in their report meant for their
+  purchase.
+- T: Give buyers a quick read on risk without exposing the company legally.
+- A: Proposed a scale from safe to risky based on what checks found, and amended
+  the wording with Legal so it informed buyers without creating liability for
+  the company.
+- R: Buyers responded positively to the scale in user interviews.
+- Tags: product judgment, legal and compliance collaboration, risk
+  communication, trust, data visualization, stakeholder alignment
+
+**15. Sped up analysts' work in the internal closing dashboard**
+- Resumé bullet: Improved the internal dashboard analysts use to review each
+  property sale, making case data easier to read and adding in-panel
+  calculation tools so analysts could check figures without leaving the screen.
+- S: Analysts reviewed each sale in an internal dashboard that was hard to read,
+  and had to leave it to verify numbers.
+- T: Help analysts review cases faster and with fewer interruptions.
+- A: Fixed typography and layout to make each case easier to scan, and added
+  quick calculation tools inside the panel.
+- R: Analysts could verify figures without leaving the panel, removing a step
+  from every case review.
+- Tags: internal tools, B2B / back-office, operational efficiency, information
+  hierarchy, typography, dashboards, small iterative improvements
+
+### TeamHub — Front End Developer, intern (02/2021 – 11/2021)
+
+Context: HR tech platform covering hiring, performance and team engagement.
+Small team: one full-time back-end developer, one full-time full-stack
+developer, and Nicoly as front-end intern. All-JavaScript stack, React on the
+front end.
+
+**16. Built an anonymous team-satisfaction survey tool in React**
+- Resumé bullet: As a front-end intern, built TeamHub's anonymous pulse-survey
+  feature in React, used by 50+ client companies, from small businesses to a
+  major statewide hospital network, to check in on team satisfaction, company
+  sentiment and employee wellbeing.
+- S: TeamHub's HR platform needed a way for companies to regularly check how
+  their teams felt.
+- T: Build the front end of a periodic, anonymous survey tool.
+- A: Implemented the survey experience in React, with questions about the team,
+  the company and employees' wellbeing, working with a back-end and a
+  full-stack developer.
+- R: Shipped to TeamHub's 50+ client companies, mostly small businesses plus one
+  major statewide hospital network.
+- Tags: front-end development, React, JavaScript, HR tech, surveys, anonymity
+  and trust, shipping production code
+
+**17. Spotted that users answered on their phones and adapted the design**
+- Resumé bullet: Learned in client meetings that most employees answered
+  surveys on their phones while commuting, though the product had only been
+  designed for desktop, and designed and built a mobile-friendly version,
+  joining client meetings and working in Figma to shape it.
+- S: The company only had desktop designs, but most employees filled in surveys
+  on their phones on the way to or from work.
+- T: Make the survey work for how people actually used it.
+- A: Joined client meetings to gather context and user needs, which is where the
+  mobile pattern surfaced, designed the mobile experience in Figma, and
+  implemented it in React.
+- R: Shipped a survey that fit how employees actually answered it, on their
+  phones, across 50+ client companies.
+- Tags: design engineering, mobile-first, responsive design, user needs, client
+  research, Figma, React, bridging design and code
+- Note: this is the first recorded place for *responsive design*. It may sit
+  in a TeamHub bullet.
+
+### Personal projects — Links Amarelos and Ondas Amarelas
+
+**18. Created and run a curated newsletter and podcast end to end**
+- Resumé bullet: Have published Links Amarelos, a monthly curated newsletter,
+  and its podcast version Ondas Amarelas every month since September 2025,
+  handling curation, writing, recording, production, editing and distribution
+  alone; the podcast holds a 5-star rating on Spotify.
+- S: Since 2018, Nicoly has kept a personal Obsidian knowledge vault of links,
+  references and notes.
+- T: Turn that collection into regular public content people want to follow.
+- A: Curates every edition from the vault, then writes the newsletter and
+  records, produces and edits the podcast herself, managing the whole project
+  solo. Designed and built the project's site, linksamarelos.com, in Next.js
+  with AI-assisted coding.
+- R: A monthly publishing streak unbroken since September 2025 and a 5-star
+  rating on Spotify.
+- Tags: content creation, curation, writing, audio production, editorial
+  design, knowledge management, Obsidian, consistency, solo ownership, Next.js
+- Note: Nicoly deliberately doesn't track audience metrics, so never add
+  subscriber or listener numbers. Lead with consistency and end-to-end
+  ownership. "AI-assisted coding" counts toward the two-mentions cap on AI in
+  *The current period*.
+
+### Personal projects — In Service of Museums (Graphic Design thesis, UEMG)
+
+**19. Applied service design to the museum-going experience**
+- Resumé bullet: Co-leading a Graphic Design thesis that applies service design
+  to museum visits, a gap the research found unexplored, as the project's lead
+  museology researcher; defense scheduled for November 2026.
+- S: Service design thinking had not been applied to the museum-going
+  experience. Visitors don't know what's on, can't tell who to contact to book
+  group visits, never hear from the museum again after leaving, and often find
+  exhibitions boring.
+- T: Research where the museum experience breaks down and design a solution,
+  combining museology and service design.
+- A: Led the museology research in the first phase; now co-designing the
+  solution artifact with a project partner as service and information
+  designers.
+- R: Solution artifact in progress, with the thesis defense scheduled for the
+  end of November 2026. *[update after the defense: grade, feedback, any museum
+  interest]*
+- Tags: service design, research, museology, information design, cultural
+  sector, journey mapping, academic research, collaboration
+
+**20. Used a public research site to recruit 8 expert interviews in two weeks**
+- Resumé bullet: Designed, wrote and built a public website (Next.js, Tailwind
+  CSS, Paper Shaders) explaining the thesis research to recruit participants,
+  securing 8 interviews with museum professionals (2 to 12 years of experience)
+  in two weeks, online and in person.
+- S: The research needed interviews with museum professionals, who are hard to
+  reach without connections.
+- T: Make the research visible and credible enough that professionals would
+  volunteer their time.
+- A: Designed the site in Paper, wrote all its content and built it in Next.js
+  with Tailwind CSS and Paper Shaders (servico-museu.vercel.app), then shared
+  it online and through personal networks.
+- R: 8 interviews in two weeks with professionals ranging from 2 to 12 years of
+  experience in the field, online and in person.
+- Tags: research recruitment, user interviews, qualitative research, outreach,
+  web design, front-end development, Next.js, Tailwind CSS, Paper, design and
+  code, communication, initiative
+
+### Writing
+
+**21. Pitched and published a design essay in Bootcamp (UX Collective)**
+- Resumé bullet: Wrote and pitched "The Designer Archetype", accepted and
+  published by Bootcamp, the UX Collective publication on Medium (September
+  2026). https://medium.com/design-bootcamp/the-designer-archetype-b3027b2ec995
+- S: Nicoly writes about design on Medium and shares her posts on LinkedIn and
+  X.
+- T: Get her thinking in front of a wider design audience than her own channels
+  reach.
+- A: Wrote the essay and pitched it to Bootcamp herself. *[optional: the essay's
+  main argument in one line]*
+- R: Accepted and published by Bootcamp. Also writes on her own site, including
+  "How I Obsidian" and "Museums and websites".
+- Tags: writing, design thinking, communication, thought leadership,
+  self-initiative
+- Note: readership is still small, so lead with the editorial acceptance, never
+  with reach.
+
+Not yet in the bank: The color of water, Routiny, the teaser studio and the
+Emicida dataviz. Add them once they ship.
+
+### Education, competitions and recognition
+
+**22. Led a 6-person team building a personal finance app for low-income users (CEFET-MG)**
+- Resumé bullet: Led a 6-student team building Serase, a personal finance app
+  for low-income people, as team lead, designer and front-end developer (React
+  Native, with a Python/Django back end); earned full marks in every
+  evaluation.
+- S: Final project of the Computing Technician program at CEFET-MG, completed in
+  early 2021.
+- T: Build a working app with a team of 6 students, for an audience usually
+  ignored by finance products.
+- A: Led the team, designed the app in Figma and built its front end in React
+  Native, with a Python/Django back end.
+- R: Full marks in every evaluation.
+- Tags: leadership, design and code, React Native, Figma, fintech, financial
+  inclusion, teamwork
+- Note: a student team, not direct reports. It does not change *No management*
+  below.
+
+**23. Won #1 Junior UI/UX Designer in a 15-day design challenge**
+- Resumé bullet: Ranked #1 Junior UI/UX Designer in a 15-day design challenge
+  run by the UI/UX Junior design community (late 2021), designing the
+  onboarding flow for Fin, a personal finance app, from interviews with
+  participants recruited on Twitter, and presented the case at the online
+  awards ceremony.
+- S: A 15-day design challenge run in late 2021 by UI/UX Junior, a design
+  community still active today, asking participants to design a personal
+  finance app's onboarding.
+- T: Design an onboarding flow for Fin grounded in real user needs.
+- A: Revisited lessons from Serase, recruited interview participants on
+  Twitter, ran the interviews and designed the onboarding flow from what they
+  revealed.
+- R: Awarded #1 Junior UI/UX Designer and invited to present the case at the
+  online ceremony.
+- Tags: award, onboarding, user research, recruiting participants, fintech,
+  presentation, speed
+
+No courses, certifications or language credentials to list. Never add any.
 
 ---
 
@@ -425,8 +976,9 @@ Writing, editorial, and design. https://linksamarelos.com · https://nydndr.subs
 
 - Self-published monthly newsletter of curated link roundups and original essays
   on media and internet culture, written and shipped async.
-- Four years of a shipping cadence held alone, which is the evidence behind any
-  claim about written communication.
+- A monthly shipping cadence held alone since 09/2025, which is the evidence
+  behind any claim about written communication. (Corrected 2026-10-14: an
+  earlier draft said "four years"; the bank dates it to 09/2025.)
 
 ### ondas amarelas — podcast
 Production, sound design, and cover art. https://open.spotify.com/show/043Gs7eyY2KOlotEWSTSxB
@@ -489,6 +1041,12 @@ strengths that are real.
   during the sabbatical.
 - **No formal accessibility certification.** The practice is real — ARIA modals,
   inert backgrounds, semantic markup — the credential is not.
+- **No courses, certifications or language credentials.** Never add any.
+- **Never claim the Google tap-to-pay partnership.** Engineering and the
+  C-level coordinated it.
+- **No post-launch data for QuintoAndar.** She left before it existed.
+- **No audience numbers for the newsletter, podcast or essays.** She does not
+  track them, by choice.
 - **The museum research figures are cited, not achieved.** They belong to the
   study; they are not her outcomes.
 - **She did not build or own Stone's design system.** She used it where it
@@ -498,7 +1056,9 @@ strengths that are real.
   for token layering or primitive-vs-semantic naming — say so plainly.
 - **Most Stone impact numbers are scale, not lift.** She can say 4.5M+ terminals
   and 22+ device models because those are the surface she owned. The one lift
-  number is Pix NFC adoption (40%+ of partners in 6 months). She has no
+  number is Stone Terminal Store adoption (40% of ~212 partners in 6 months);
+  the bank adds outcome-shaped results (8th of 33 apps, a week of sign-off
+  removed, four teams down to one) that may be cited as written. She has no
   conversion or revenue delta, and one must never be invented to fill the
   shape of a metrics bullet.
 
