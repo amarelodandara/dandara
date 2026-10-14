@@ -99,7 +99,8 @@ const FIN: ExhibitLink = {
 };
 
 const MP4 = "video/mp4";
-const AV1 = (level: string) => `video/mp4; codecs="av01.0.${level}.08"`;
+const AV1 = (level: string, depth = "08") =>
+  `video/mp4; codecs="av01.0.${level}.${depth}"`;
 
 const WORK: Exhibit[] = [
   {
@@ -143,11 +144,17 @@ const WORK: Exhibit[] = [
     featured: true,
     media: {
       kind: "video",
-      sources: [{ src: "/work/servico-museu-interactions.mp4", type: MP4 }],
+      sources: [
+        {
+          src: "/work/servico-museu-interactions.av1.mp4",
+          type: AV1("09M", "10"),
+        },
+        { src: "/work/servico-museu-interactions.mp4", type: MP4 },
+      ],
       width: 1920,
       height: 1080,
       label:
-        "Close-ups of the In Service of Museums site: the Ler resumo button pressed under the cursor, the two reading buttons with their word counts, a search that finds a museum in the research list as you type, and sidenotes that sit beside the paragraph they annotate.",
+        "Four interface details from the In Service of Museums site, each set alone on a pale grey stage: the Ler resumo button pressed, the two reading buttons with their word counts as the pointer moves between them, a search that finds the Museu da Imagem e do Som as you type, and sidenotes that light up when their number is pressed.",
     },
   },
   {
