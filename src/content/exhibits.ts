@@ -129,7 +129,7 @@ const WORK: Exhibit[] = [
     },
   },
   {
-    id: "in-service-of-museums",
+    id: "servico-museu-interactions",
     title: "In Service of Museums",
     date: "2026-08",
     live: MUSEUMS,
@@ -138,14 +138,11 @@ const WORK: Exhibit[] = [
     featured: true,
     media: {
       kind: "video",
-      sources: [
-        { src: "/work/servico-museu.av1.mp4", type: AV1("09M") },
-        { src: "/work/servico-museu.mp4", type: MP4 },
-      ],
+      sources: [{ src: "/work/servico-museu-interactions.mp4", type: MP4 }],
       width: 1920,
       height: 1080,
       label:
-        "A screen recording of the In Service of Museums site: a long scrolling essay on service design in museums, set in wide measure on white.",
+        "Close-ups of the In Service of Museums site: the Ler resumo button pressed under the cursor, the two reading buttons with their word counts, a search that finds a museum in the research list as you type, and sidenotes that sit beside the paragraph they annotate.",
     },
   },
   {

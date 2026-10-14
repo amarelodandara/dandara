@@ -103,8 +103,8 @@
   --shadow-chip: 0 0 0 1px oklch(0 0 0 / 0.059), 0 1px 3px oklch(0 0 0 / 0.102);
 
   /* The fourth note, and the only one that is not an object above the wall.
-     Nothing on the exhibition wall floats: a picture is printed straight onto
-     the page and a block of words is printed inside a drawn boundary. So this
+     Nothing on the exhibition wall floats: a picture is set into the page and
+     a block of words is printed inside a drawn boundary. So this
      is the hairline from `card` with the light taken away — no blur, no lift,
      just the edge. It is a little darker than the ring inside `card` because
      there it sits on top of a shadow doing half the work, and here it is doing
@@ -114,8 +114,8 @@
   /* The fifth note, and the only one that falls inward. `card` inverted: a
      hairline ring plus a short throw of light, both turned back on themselves,
      so the surface reads as a hollow pressed into the wall rather than an
-     object resting on it. The colophon is one, and so is the track a toggle
-     knob sits in. */
+     object resting on it. The colophon is one, so is the track a toggle knob
+     sits in, and so is every picture on the exhibition wall. */
   --shadow-hollow:
     inset 0 0 0 1px oklch(0 0 0 / 0.035), inset 0 1px 4px oklch(0 0 0 / 0.02);
 
@@ -412,6 +412,18 @@ body {
     filter: blur(3px);
     opacity: 0.62;
   }
+}
+
+/* A piece on the wall wears `hollow`, so it reads as set into the wall rather
+   than printed on it. The shadow is drawn on a layer above the picture: an
+   inset shadow on the wrapper itself would be painted under the image and
+   never seen. */
+[data-inset]::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  box-shadow: var(--shadow-hollow);
+  pointer-events: none;
 }
 
 /* A sketchbook piece that turns its page: two spreads of the same size, the

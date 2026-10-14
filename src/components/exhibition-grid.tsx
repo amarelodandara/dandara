@@ -93,6 +93,15 @@ function Media({ media }: { media: ExhibitMedia }) {
   );
 }
 
+function Mat({ media }: { media: ExhibitMedia }) {
+  if (media.kind === "changelog") return <Media media={media} />;
+  return (
+    <div data-inset="" className="relative">
+      <Media media={media} />
+    </div>
+  );
+}
+
 function Caption({ title, when, live, read }: Tile) {
   return (
     <figcaption className="mt-3 flex items-baseline justify-between gap-4">
@@ -144,10 +153,10 @@ function Exhibit({
       <figure>
         {tile.read ? (
           <Link href={tile.read} tabIndex={-1}>
-            <Media media={tile.media} />
+            <Mat media={tile.media} />
           </Link>
         ) : (
-          <Media media={tile.media} />
+          <Mat media={tile.media} />
         )}
         <Caption {...tile} />
       </figure>
