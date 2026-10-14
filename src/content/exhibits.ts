@@ -93,6 +93,11 @@ const ONDAS_AMARELAS: ExhibitLink = {
   label: "Spotify",
 };
 
+const FIN: ExhibitLink = {
+  href: "https://www.behance.net/gallery/123564241/Fin-Financas-Jovem",
+  label: "Behance",
+};
+
 const MP4 = "video/mp4";
 const AV1 = (level: string) => `video/mp4; codecs="av01.0.${level}.08"`;
 
@@ -270,6 +275,37 @@ const WORK: Exhibit[] = [
       width: 2000,
       height: 1446,
       alt: "The graph view of a personal Obsidian vault: thousands of notes as pale dots, linked into one dense sphere with a few bright hubs.",
+    },
+  },
+  {
+    id: "serase",
+    title: "Serase",
+    date: "2020",
+    project: "serase",
+    rooms: ["main"],
+    media: {
+      kind: "video",
+      sources: [{ src: "/work/serase.mp4", type: MP4 }],
+      width: 1920,
+      height: 1080,
+      label:
+        "Four phones drifting past in a loop, each showing a screen of Serase, a personal finance app: its dollar-sign icon, a form adding R$ 100,00 of income, weekly analyses with a calendar of spending, and a home screen with the balance and recent transactions.",
+    },
+  },
+  {
+    id: "fin-challenge",
+    title: "Fin onboarding, design challenge",
+    date: "2021",
+    live: FIN,
+    project: "fin",
+    rooms: ["main"],
+    media: {
+      kind: "video",
+      sources: [{ src: "/work/fin-challenge.mp4", type: MP4 }],
+      width: 1920,
+      height: 1080,
+      label:
+        "Five phones showing the onboarding of Fin, a personal finance app, slide into a staggered row from above and below: choosing a sign-up method, creating a password, entering bank login details, choosing a bank and a bank account connected. As they slide away, text rises in: #1 Winner of Junior UI/UX Designer challenge. Fin's onboarding, designed in 15 days and awarded by a committee of industry names.",
     },
   },
 ];
