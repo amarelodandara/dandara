@@ -16,6 +16,7 @@ export type GiftShopItem = Common &
       }
     | { kind: "copy"; meta: string; text: string }
     | { kind: "swatch"; hex: string; fill: string }
+    | { kind: "badge"; slug: string }
   );
 
 export type GiftShopSection = {
@@ -36,6 +37,14 @@ export const amareloSection: GiftShopSection = {
     },
   ],
 };
+
+export const ticketSection = (
+  slug: string,
+  title: string,
+): GiftShopSection => ({
+  id: "ticket",
+  items: [{ kind: "badge", id: "ticket", title, slug }],
+});
 
 export const feedSection: GiftShopSection = {
   id: "feed",

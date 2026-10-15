@@ -43,6 +43,12 @@ browser is missing, the generator fails with a download instruction — run
    — a **Fixed facts** section and a **What Nicoly cannot claim** section.
    Read both of those before writing a single line.
 
+   Its **Accomplishments bank (STAR)** is the canonical source of bullets:
+   23 numbered items, each with a résumé bullet, its STAR, its tags and, often,
+   a load-bearing note. Where the bank and older wording in the master
+   disagree, the bank wins. `full.pt.md` carries the same items, same numbers,
+   as Portuguese résumé bullets only.
+
    `base.<lang>.md` is one already-tuned selection from that pool. Read it for
    shape and for canonical wording, and do not edit it.
 
@@ -102,10 +108,17 @@ browser is missing, the generator fails with a download instruction — run
    - take the **Summary** whose angle matches the posting and bend it toward the
      posting's vocabulary, so it carries the five to eight highest-priority
      keywords as natural prose — do not stack two summaries together;
-   - **choose the bullets from the master** whose theme the posting rewards, and
-     order them so the most relevant land first within each role. The master
-     holds far more bullets than fit; picking is the job. Rewording a chosen
-     bullet toward the posting's language is expected;
+   - **choose the bullets from the bank first**, by matching each item's tags
+     to the posting, then fill from the master's older pool. Order them so the
+     most relevant land first within each role. The master holds far more
+     bullets than fit; picking is the job;
+   - **reword under Nicoly's rule: never change the meaning of the words,
+     never diminish or enlarge a feat, but play with the target words to hit
+     the ATS.** Swap a word for the posting's synonym, cut clauses, move the
+     keyword forward. Never change who did it (sole designer, with a senior
+     designer, as an intern), the scope, a number or a result, never turn a
+     team result into a personal one, and never fill an *[optional: …]* slot.
+     Read the item's note before using it;
    - decide how to present **03/2026 – Present** using the master's *The current
      period* section, and say in the report which of the three framings you
      chose and why;
@@ -185,7 +198,10 @@ browser is missing, the generator fails with a download instruction — run
     - the full keyword table from step 7, both tiers;
     - match score before → after;
     - which keywords were added, and where they landed;
-    - which bullets were selected from the master, reordered or reworded, and why;
+    - which bullets were selected (bank item numbers, or the master's older
+      pool), reordered or reworded, and why — for every reworded bullet, the
+      bank's original wording next to the tailored one, so a change of meaning
+      is visible;
     - which framing of 03/2026 – Present was used, and why;
     - anything the posting wanted that the master does not yet cover;
     - any requirement the résumé genuinely cannot meet;
