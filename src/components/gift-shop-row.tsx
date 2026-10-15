@@ -11,6 +11,7 @@ import {
   Verb,
   type Settled,
 } from "./copy";
+import { GiftShopBadge } from "./gift-shop-badge";
 import { GiftShopSwatch } from "./gift-shop-swatch";
 import { ROW } from "@/lib/pressable";
 import { ANNOTATION, TITLE } from "@/lib/type";
@@ -54,6 +55,10 @@ export function GiftShopRow({ item }: { item: GiftShopItem }) {
     return (
       <GiftShopSwatch title={item.title} hex={item.hex} fill={item.fill} />
     );
+  }
+
+  if (item.kind === "badge") {
+    return <GiftShopBadge slug={item.slug} />;
   }
 
   if (item.kind === "file") {

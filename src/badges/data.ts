@@ -1,0 +1,103 @@
+import type { Badge } from "./shape";
+
+export const BADGES: Record<string, Badge> = {
+  "museums-and-websites": {
+    title: "Museums and websites: anticipating visitors’ needs",
+    href: "/writing/museums-and-websites",
+    words: 924,
+    scale: 0.7208,
+    lobes: [
+      [-1.5708, 1.0975, 2.5516],
+      [-0.8712, 1.0721, 5.9473],
+      [-0.1011, 1.0827, 3.8545],
+      [0.7913, 0.9821, 1.7184],
+      [1.4446, 1.0837, 0.4586],
+      [2.329, 0.8745, 4.3185],
+      [3.2769, 0.9865, 4],
+      [4.0033, 1.1526, 2.33],
+    ],
+    stops: [
+      "oklch(0.970 0.032 86.0)",
+      "oklch(0.840 0.070 39.0)",
+      "oklch(0.740 0.128 248.0)",
+    ],
+    ink: "oklch(0.420 0.086 86.0)",
+  },
+  obsidian: {
+    title: "How I Obsidian",
+    href: "/writing/obsidian",
+    words: 1764,
+    scale: 0.8,
+    lobes: [
+      [-1.5708, 0.9241, 2.3442],
+      [-0.551, 1.1029, 6.0782],
+      [0.5679, 0.9547, 4.1735],
+      [1.6948, 0.8709, 5.7764],
+      [2.7634, 1.1228, 5.7552],
+      [3.6865, 1.0819, 4.9266],
+    ],
+    stops: [
+      "oklch(0.980 0.018 81.0)",
+      "oklch(0.875 0.080 77.0)",
+    ],
+    ink: "oklch(0.420 0.086 81.0)",
+  },
+  "the-color-of-water": {
+    title: "The color of water",
+    href: "/writing/the-color-of-water",
+    words: 343,
+    scale: 0.5778,
+    lobes: [
+      [-1.5708, 0.9476, 4.2394],
+      [-0.3049, 1.0921, 6.1649],
+      [0.8874, 1.0689, 1.9867],
+      [2.192, 1.0065, 1.1346],
+      [3.4995, 1.1097, 1.8055],
+    ],
+    stops: [
+      "oklch(0.980 0.020 86.0)",
+      "oklch(0.917 0.100 89.0)",
+    ],
+    ink: "oklch(0.420 0.086 86.0)",
+  },
+  "the-designer-archetype": {
+    title: "The Designer archetype",
+    href: "https://medium.com/design-bootcamp/the-designer-archetype-b3027b2ec995?sharedUserId=nicolydandara",
+    words: 1500,
+    scale: 0.7907,
+    lobes: [
+      [-1.5708, 0.8498, 5.054],
+      [-0.6735, 0.9581, 4.6868],
+      [0.1849, 1.0072, 5.936],
+      [1.0599, 1.1228, 0.7654],
+      [2.0001, 0.9658, 2.0419],
+      [2.8175, 0.9483, 0.4622],
+      [3.9584, 1.0014, 1.7857],
+    ],
+    stops: [
+      "oklch(0.970 0.032 86.0)",
+      "oklch(0.840 0.070 149.0)",
+    ],
+    ink: "oklch(0.420 0.086 86.0)",
+  },
+  "three-vows": {
+    title: "3 vows of an intellectual life",
+    href: "/writing/three-vows",
+    words: 1219,
+    scale: 0.7608,
+    lobes: [
+      [-1.5708, 0.9885, 3.1739],
+      [-0.5888, 1.1548, 4.1247],
+      [0.3101, 1.1002, 3.6375],
+      [1.1184, 1.0296, 1.4812],
+      [2.0042, 1.1054, 0.99],
+      [2.8979, 0.8983, 6.1298],
+      [3.9458, 1.0826, 5.1564],
+    ],
+    stops: [
+      "oklch(0.980 0.018 81.0)",
+      "oklch(0.875 0.080 77.0)",
+    ],
+    ink: "oklch(0.420 0.086 81.0)",
+  },
+};

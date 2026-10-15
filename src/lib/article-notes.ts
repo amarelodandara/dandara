@@ -8,6 +8,7 @@ export type ArticleNote = {
 };
 
 export type Article = {
+  slug: string;
   title: string;
   notes: ArticleNote[];
 };

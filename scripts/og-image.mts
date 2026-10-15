@@ -4,7 +4,10 @@ import process from "node:process";
 import { chromium } from "playwright";
 import type { Page } from "playwright";
 import { DESCRIPTION, TITLE } from "../src/lib/site.ts";
+import { BADGES } from "../src/badges/data.ts";
+import { badgeMarkup, LOOK, type Badge } from "../src/badges/shape.ts";
 import { readPosts } from "../src/lib/writing/meta-source.ts";
+import { hash, seeded } from "./seeded.mts";
 
 const ROOT = process.cwd();
 const OUT = path.join(ROOT, "public", "og.png");
@@ -24,11 +27,26 @@ const SUN_EDGE = "#ffcc00";
 const FEATURES = `"calt" 1, "cv06" 1, "cv10" 1, "ss01" 1, "ss02" 1, "ss03" 1, "zero" 1`;
 
 const CARD = { left: 33, top: 40, width: 293, height: 550, radius: 14 };
+
+const STICKERS = {
+  count: 7,
+  scale: 0.9,
+  tiltDegrees: 25,
+  apart: 0.75,
+  overhang: 0.5,
+  shuffle: 2_654_435_761,
+  tries: 40,
+  breathStepMs: 700,
+  deepestLobe: 1.16,
+};
 const TEXT_LEFT = 378;
 const ROLE_SECOND_LINE = "and relentless taste";
 
 const escape = (value: string) =>
-  value.replaceAll("&", "&amp;").replaceAll("<", "&lt;").replaceAll(">", "&gt;");
+  value
+    .replaceAll("&", "&amp;")
+    .replaceAll("<", "&lt;")
+    .replaceAll(">", "&gt;");
 
 function roleMarkup(description: string) {
   if (!description.endsWith(ROLE_SECOND_LINE)) {
@@ -40,7 +58,54 @@ function roleMarkup(description: string) {
   return `${escape(first)}<br />${escape(ROLE_SECOND_LINE)}`;
 }
 
-function shell(font: string, sizes: string, text: string) {
+type Spot = { x: number; y: number };
+
+function stickers(slug: string, badge: Badge) {
+  const size = LOOK.box * STICKERS.scale;
+  const radius =
+    (size / LOOK.box) *
+    (LOOK.box / 2 - LOOK.margin) *
+    badge.scale *
+    STICKERS.deepestLobe;
+  const hang = radius * STICKERS.overhang;
+  const apart = 2 * radius * STICKERS.apart;
+  const next = seeded(hash(slug) ^ STICKERS.shuffle);
+  const placed: Spot[] = [];
+  const nearest = (spot: Spot) =>
+    Math.min(
+      Infinity,
+      ...placed.map((other) => Math.hypot(other.x - spot.x, other.y - spot.y)),
+    );
+
+  return Array.from({ length: STICKERS.count }, (_, index) => {
+    let best: Spot = { x: CARD.width / 2, y: CARD.height / 2 };
+    let bestGap = -1;
+    for (let attempt = 0; attempt < STICKERS.tries; attempt++) {
+      const spot = {
+        x: -hang + next() * (CARD.width + 2 * hang),
+        y: -hang + next() * (CARD.height + 2 * hang),
+      };
+      const gap = nearest(spot);
+      if (gap >= apart) {
+        best = spot;
+        break;
+      }
+      if (gap > bestGap) {
+        bestGap = gap;
+        best = spot;
+      }
+    }
+    placed.push(best);
+    const tilt = (next() * 2 - 1) * STICKERS.tiltDegrees;
+    const inner = badgeMarkup(badge, {
+      id: `sticker${index}`,
+      ms: index * STICKERS.breathStepMs,
+    });
+    return `<svg class="sticker" viewBox="0 0 ${LOOK.box} ${LOOK.box}" width="${size}" height="${size}" overflow="visible" style="left:${(best.x - size / 2).toFixed(1)}px;top:${(best.y - size / 2).toFixed(1)}px;transform:rotate(${tilt.toFixed(1)}deg)">${inner}</svg>`;
+  }).join("");
+}
+
+function shell(font: string, sizes: string, text: string, card = "") {
   return `<!doctype html>
 <html>
   <head>
@@ -76,6 +141,8 @@ function shell(font: string, sizes: string, text: string) {
           ${SUN_EDGE} 100%
         );
       }
+      .card { overflow: hidden; }
+      .sticker { position: absolute; }
       .text {
         position: absolute;
         left: ${TEXT_LEFT}px;
@@ -91,7 +158,7 @@ function shell(font: string, sizes: string, text: string) {
     </style>
   </head>
   <body>
-    <div class="card"></div>
+    <div class="card">${card}</div>
     <div class="text">${text}</div>
   </body>
 </html>`;
@@ -112,7 +179,10 @@ const homeCard = (font: string) =>
      <div class="role">${roleMarkup(DESCRIPTION)}</div>`,
   );
 
-const postCard = (font: string, meta: { title: string; deck: string }) =>
+const postCard = (
+  font: string,
+  { slug, meta }: { slug: string; meta: { title: string; deck: string } },
+) =>
   shell(
     font,
     `.title { font-size: 76px; line-height: 1.02; }
@@ -125,11 +195,42 @@ const postCard = (font: string, meta: { title: string; deck: string }) =>
      }`,
     `<div class="title">${escape(meta.title)}</div>
      <div class="deck">${escape(meta.deck)}</div>`,
+    stickers(slug, badgeOf(slug)),
   );
+
+function badgeOf(slug: string) {
+  const badge = BADGES[slug];
+  if (!badge) {
+    throw new Error(
+      `No badge baked for "${slug}". Run "npm run badges" first.`,
+    );
+  }
+  return badge;
+}
+
+function setLines(gap: number) {
+  for (const svg of document.querySelectorAll("svg.sticker")) {
+    const ring = svg.querySelector<SVGPathElement>("[data-ring]");
+    const line = svg.querySelector<SVGPathElement>("[data-line]");
+    const text = svg.querySelector<SVGTextContentElement>("[data-text]");
+    if (!ring || !line || !text) continue;
+    const length = ring.getTotalLength() / 2;
+    const lineLength = line.getTotalLength() / 2;
+    const scale = lineLength / length;
+    const from = (text.getComputedTextLength() + gap) * scale;
+    const to = (length - gap) * scale;
+    line.setAttribute(
+      "stroke-dasharray",
+      `${Math.max(0, to - from)} ${4 * lineLength}`,
+    );
+    line.setAttribute("stroke-dashoffset", `${-from}`);
+  }
+}
 
 async function shoot(page: Page, card: { markup: string; out: string }) {
   await page.setContent(card.markup, { waitUntil: "load" });
   await page.evaluate(() => document.fonts.ready);
+  await page.evaluate(setLines, LOOK.lineGap);
 
   const loaded = await page.evaluate(() => ({
     inter: document.fonts.check('700 88px "Inter"'),
@@ -145,7 +246,9 @@ async function shoot(page: Page, card: { markup: string; out: string }) {
   await writeFile(card.out, shot);
 
   const kb = (shot.byteLength / KB).toFixed(1);
-  console.log(`✓ ${path.relative(ROOT, card.out)}  ${WIDTH}x${HEIGHT}  ${kb} kB`);
+  console.log(
+    `✓ ${path.relative(ROOT, card.out)}  ${WIDTH}x${HEIGHT}  ${kb} kB`,
+  );
 }
 
 const there = async (file: string) => {
@@ -196,7 +299,10 @@ async function main() {
 
   const cards = new Map<string, string>([[OUT, homeCard(font)]]);
   for (const { slug, meta } of posts) {
-    cards.set(path.join(POST_DIR, `${slug}.png`), postCard(font, meta));
+    cards.set(
+      path.join(POST_DIR, `${slug}.png`),
+      postCard(font, { slug, meta }),
+    );
   }
 
   const browserIsThere = await there(chromium.executablePath());

@@ -1,4 +1,5 @@
 import type { ComponentType } from "react";
+import type { Tag } from "@/badges/tags";
 import { ELSEWHERE } from "@/content/elsewhere";
 import type { ArticleNote } from "@/lib/article-notes";
 
@@ -9,6 +10,7 @@ export type PostMeta = {
   description?: string;
   blurb: string;
   date: string;
+  tags: Tag[];
 };
 
 export type Post = {
@@ -23,6 +25,7 @@ const POSTS: Record<string, () => Promise<unknown>> = {
   obsidian: () => import("@/content/writing/obsidian.mdx"),
   "the-color-of-water": () =>
     import("@/content/writing/the-color-of-water.mdx"),
+  "three-vows": () => import("@/content/writing/three-vows.mdx"),
 };
 
 export const SLUGS = Object.keys(POSTS);
@@ -52,9 +55,18 @@ export async function loadWritingList() {
     deck: meta.deck,
     date: meta.date,
     href: `/writing/${slug}`,
+    badge: slug,
     venue: undefined,
   }));
-  const away = ELSEWHERE.map((piece) => ({ key: piece.href, ...piece }));
+  const away = ELSEWHERE.map(({ slug, title, deck, href, venue, date }) => ({
+    key: href,
+    title,
+    deck,
+    date,
+    href,
+    badge: slug,
+    venue,
+  }));
 
   return [...here, ...away].toSorted((a, b) => b.date.localeCompare(a.date));
 }

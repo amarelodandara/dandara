@@ -1,4 +1,6 @@
 import Link from "next/link";
+import { BadgeHover } from "@/badges/hover";
+import { badgesFor } from "@/badges/pick";
 import { Exhibition } from "@/components/exhibition";
 import { LINK, LINK_UNDERLINED } from "@/components/link";
 import { PersonSchema } from "@/components/person-schema";
@@ -154,30 +156,32 @@ export default async function Home() {
               Writing
             </h2>
 
-            <ul className="mt-6 space-y-2 md:mt-8">
-              {writing
-                .slice(0, HOME_WRITING)
-                .map(({ key, title, href, venue }) => (
-                  <li key={key}>
-                    <h3 className={SECTION_HEADING}>
-                      {venue ? (
-                        <a href={href} className={LINK}>
-                          {title}
-                          <span
-                            className={`ml-2.5 inline-block ${ANNOTATION} text-graphite-500`}
-                          >
-                            {venue}
-                          </span>
-                        </a>
-                      ) : (
-                        <Link href={href} className={LINK}>
-                          {title}
-                        </Link>
-                      )}
-                    </h3>
-                  </li>
-                ))}
-            </ul>
+            <BadgeHover badges={badgesFor(writing.slice(0, HOME_WRITING))}>
+              <ul className="mt-6 space-y-2 md:mt-8">
+                {writing
+                  .slice(0, HOME_WRITING)
+                  .map(({ key, title, href, venue, badge }) => (
+                    <li key={key} data-badge={badge}>
+                      <h3 className={SECTION_HEADING}>
+                        {venue ? (
+                          <a href={href} className={LINK}>
+                            {title}
+                            <span
+                              className={`ml-2.5 inline-block ${ANNOTATION} text-graphite-500`}
+                            >
+                              {venue}
+                            </span>
+                          </a>
+                        ) : (
+                          <Link href={href} className={LINK}>
+                            {title}
+                          </Link>
+                        )}
+                      </h3>
+                    </li>
+                  ))}
+              </ul>
+            </BadgeHover>
 
             <Link
               href="/writing"
