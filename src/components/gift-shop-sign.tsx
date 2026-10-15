@@ -4,6 +4,7 @@ import {
   amareloSection,
   feedSection,
   giftShopSections,
+  ticketSection,
 } from "@/content/gift-shop";
 import type { GiftShopSection } from "@/content/gift-shop";
 import type { Article } from "@/lib/article-notes";
@@ -30,7 +31,7 @@ export const shopContents = (article: Article | null, pathname: string) => {
         blurb: `Footnotes of ${article.title}`,
         closes: " references",
       },
-      shelves: [amareloSection],
+      shelves: [ticketSection(article.slug, article.title)],
       full: false,
     };
   }

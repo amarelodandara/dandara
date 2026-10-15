@@ -4,6 +4,14 @@ What changed on the site, newest first. Internal work (refactors, tooling, deplo
 
 Every entry starts with the area it affects: `[Home]`, `[Work]`, `[Blog]`, `[Gift shop]` or `[Site-wide]`.
 
+## Week of October 12, 2026
+
+### New
+- [Blog] **Article badges.** Every article now has its own badge: a soft blob coloured by the article's tags, sized by its word count, with the title running round the inside of its edge. The shape breathes, the title drifts slowly round, and a gloss follows the pointer.
+- [Blog] **Badges on hover.** Hovering a title in the writing lists, on the home page and at `/writing`, brings out that article's badge beside the pointer. It follows on a spring and leans into the movement. Posts on other sites have one too.
+- [Gift shop] **Ticket on the References shelf.** On an article, the gift shop's shelf now holds that article's badge instead of the Amarelo Dandara swatch. It floats on the shelf and drags like the swatch did.
+- [Blog] **Share cards** for each post now have the post's badge scattered across the yellow panel like stickers.
+
 ## Week of October 5, 2026
 
 ### New

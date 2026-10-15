@@ -1,6 +1,8 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { LINK } from "@/components/link";
+import { BadgeHover } from "@/badges/hover";
+import { badgesFor } from "@/badges/pick";
 import { PostFooter } from "@/components/writing/post-footer";
 import { ShopCallout } from "@/components/writing/shop-callout";
 import { loadWritingList } from "@/lib/writing/posts";
@@ -36,9 +38,9 @@ function byYear(entries: Entry[]) {
   return [...years];
 }
 
-function Piece({ title, deck, href, venue }: Entry) {
+function Piece({ title, deck, href, venue, badge }: Entry) {
   return (
-    <li>
+    <li data-badge={badge}>
       <h3 className={SECTION_HEADING}>
         {venue ? (
           <a href={href} className={LINK}>
@@ -74,19 +76,21 @@ export default async function WritingIndex() {
             </ShopCallout>
           </div>
 
-          {byYear(entries).map(([year, pieces]) => (
-            <section key={year} className="mt-16 first-of-type:mt-8">
-              <h2 className={`${ANNOTATION} leading-none text-graphite-700`}>
-                {year}
-              </h2>
+          <BadgeHover badges={badgesFor(entries)}>
+            {byYear(entries).map(([year, pieces]) => (
+              <section key={year} className="mt-16 first-of-type:mt-8">
+                <h2 className={`${ANNOTATION} leading-none text-graphite-700`}>
+                  {year}
+                </h2>
 
-              <ul className="mt-8 space-y-10">
-                {pieces.map((piece) => (
-                  <Piece {...piece} key={piece.key} />
-                ))}
-              </ul>
-            </section>
-          ))}
+                <ul className="mt-8 space-y-10">
+                  {pieces.map((piece) => (
+                    <Piece {...piece} key={piece.key} />
+                  ))}
+                </ul>
+              </section>
+            ))}
+          </BadgeHover>
         </div>
       </main>
 

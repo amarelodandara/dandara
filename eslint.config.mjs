@@ -133,6 +133,15 @@ const eslintConfig = defineConfig([
     },
   },
   {
+    files: ["src/badges/**"],
+    rules: {
+      "better-tailwindcss/no-unknown-classes": "off",
+      "no-magic-numbers": "off",
+      "react/forbid-dom-props": "off",
+      "react/forbid-component-props": "off",
+    },
+  },
+  {
     files: ["src/lib/cv/load.ts"],
     rules: { "security/detect-non-literal-fs-filename": "off" },
   },

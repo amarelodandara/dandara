@@ -8,16 +8,18 @@ import {
 } from "@/lib/article-notes";
 
 export function ArticleNotes({
+  slug,
   title,
   notes,
 }: {
+  slug: string;
   title: string;
   notes: ArticleNote[];
 }) {
   useEffect(() => {
-    publishArticle({ title, notes });
+    publishArticle({ slug, title, notes });
     return withdrawArticle;
-  }, [title, notes]);
+  }, [slug, title, notes]);
 
   return null;
 }

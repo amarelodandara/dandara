@@ -56,7 +56,7 @@ import { PROSE, SECTION_HEADING } from "@/lib/type";
 
 ## Exceptions
 
-There are two. The first is the whole CV flow: `src/app/(cv)/**` and
+There are three. The first is the whole CV flow: `src/app/(cv)/**` and
 `src/components/cv/**` are set in Arial at point sizes, because they have to
 survive an applicant tracking system and a printer. Leave them alone. They are
 not part of this scale and must not import from `src/lib/type.ts`.
@@ -64,6 +64,9 @@ not part of this scale and must not import from `src/lib/type.ts`.
 The second is a world (below). A world may borrow these roles, but it is not
 bound by them, and it never adds one: a variant a single post wants lives in
 that post's folder, not in `type.ts`.
+
+The third is the article badges (below). They are free of the scale and
+of the colour rules entirely.
 
 Everywhere else has none. If a design seems to need one, the answer is a role it
 already fits — check `LABEL` before inventing a quiet variant of a heading.
@@ -127,6 +130,30 @@ literals, and the code that derived them is deleted:
 
 How the numbers were reached goes in the commit message that bakes them. To
 change a baked world, edit the literals. Do not bring back the derivation.
+
+# Badges
+
+Every article, here or elsewhere, has a badge: an organic blob in its tags'
+colours with its title running round the inside of the edge. It breathes,
+the title drifts, and the gloss follows the pointer. Badges are a novelty
+item, so they sit outside the house rules on purpose: their own text size,
+tracking, raw `oklch` colours and inline styles. Everything they need lives
+in `src/badges/`. The rest of the site only mounts them (`BadgeHover`,
+`ArticleBadge`); it never borrows their colours or sizes for anything else.
+
+- **Tags** live in each post's `meta` (`tags: ["design"]`, one to three) and
+  on each `ELSEWHERE` entry, which also carries a hand-typed `words`. The
+  colour of every tag is in `src/badges/tags.ts`.
+- **Baked.** `npm run badges` (`scripts/badges.mts`) counts words, seeds the
+  shape from the slug and mixes the colours, then writes
+  `src/badges/data.ts`. Never edit that file by hand; it runs before every
+  build. A post without a baked badge throws.
+- **Drawn** by `shape.ts`, which both the live component and the OG script
+  use, so a change to the look lands everywhere at once.
+- **Where they appear:** following the pointer over the writing lists
+  (`hover.tsx`), on the References shelf of the gift shop, where it can
+  be dragged like the swatch it replaces (`gift-shop-badge.tsx`), and as stickers scattered
+  in the yellow panel of each post's OG card (`scripts/og-image.mts`).
 
 # House style
 
