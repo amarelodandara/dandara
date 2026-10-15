@@ -7,10 +7,26 @@ Every entry starts with the area it affects: `[Home]`, `[Work]`, `[Blog]`, `[Gif
 ## Week of October 12, 2026
 
 ### New
+- [Work] **Work page** added at `/work`: every piece in one full-width grid, in alphabetical order. Three columns on wide screens, one on phones.
+- [Work] **Sketchbook room** added at `/work/sketchbook`: pages from my sketchbooks in one grid, a few of them turning between two spreads.
+- [Work] **Photography room** added at `/work/photography`: five series of photographs, each with a short note on where it was shot and which camera took it.
+- [Work] **Every piece is captioned** with its name, when it was made, and a "Live" link when you can see it in production.
+- [Home] **Selected work** now runs the full width of the page and shows a few chosen pieces, ending in a sign to the full exhibition.
 - [Blog] **Article badges.** Every article now has its own badge: a soft blob coloured by the article's tags, sized by its word count, with the title running round the inside of its edge. The shape breathes, the title drifts slowly round, and a gloss follows the pointer.
 - [Blog] **Badges on hover.** Hovering a title in the writing lists, on the home page and at `/writing`, brings out that article's badge beside the pointer. It follows on a spring and leans into the movement. Posts on other sites have one too.
 - [Gift shop] **Ticket on the References shelf.** On an article, the gift shop's shelf now holds that article's badge instead of the Amarelo Dandara swatch. It floats on the shelf and drags like the swatch did.
 - [Blog] **Share cards** for each post now have the post's badge scattered across the yellow panel like stickers.
+- [Work] **Articles on the wall.** Every article tagged design or engineering now hangs in the main exhibition as a wide frame scattered with copies of its badge, like its share card, dated like the other pieces, with a "Read" link. Hovering one keeps the work it explains sharp.
+
+### Improved
+- [Site-wide] **Signposts** wipe their paper grain away under the cursor in a soft spot, and the clean patch spreads across the whole sign when you click, just before the page changes. On hover the sign now sinks into the wall with the same inset as the footer panel instead of lifting off it with a large shadow.
+- [Work] **Signs between exhibitions** call the main room "Main work" in green; the themed rooms are grey. A blue "Writing" sign at the end leads to the writing index.
+- [Work] **Hovering a piece** keeps the pieces from the same project, and the article about it, sharp while the rest of the wall blurs.
+- [Work] **Videos** play only while they are on screen, and stay still if you have reduced motion turned on.
+
+### Removed
+- [Work] **Pile view** and its toggle. Every exhibition is one still grid.
+- [Work] **Expanded project view.** Pieces are already shown at full detail, so clicking no longer zooms.
 
 ## Week of October 5, 2026
 

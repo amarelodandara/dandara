@@ -96,7 +96,7 @@ const eslintConfig = defineConfig([
     rules: { "better-tailwindcss/no-unknown-classes": "off" },
   },
   {
-    files: ["src/components/sheet-frame.tsx"],
+    files: ["src/components/exhibition-grid.tsx"],
     rules: { "react/forbid-dom-props": "off" },
   },
   {

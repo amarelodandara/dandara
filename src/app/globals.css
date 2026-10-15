@@ -103,8 +103,8 @@
   --shadow-chip: 0 0 0 1px oklch(0 0 0 / 0.059), 0 1px 3px oklch(0 0 0 / 0.102);
 
   /* The fourth note, and the only one that is not an object above the wall.
-     Nothing on the exhibition wall floats: a picture is printed straight onto
-     the page and a block of words is printed inside a drawn boundary. So this
+     Nothing on the exhibition wall floats: a picture is set into the page and
+     a block of words is printed inside a drawn boundary. So this
      is the hairline from `card` with the light taken away — no blur, no lift,
      just the edge. It is a little darker than the ring inside `card` because
      there it sits on top of a shadow doing half the work, and here it is doing
@@ -114,8 +114,8 @@
   /* The fifth note, and the only one that falls inward. `card` inverted: a
      hairline ring plus a short throw of light, both turned back on themselves,
      so the surface reads as a hollow pressed into the wall rather than an
-     object resting on it. The colophon is one, and so is the track a toggle
-     knob sits in. */
+     object resting on it. The colophon is one, so is the track a toggle knob
+     sits in, and so is every picture on the exhibition wall. */
   --shadow-hollow:
     inset 0 0 0 1px oklch(0 0 0 / 0.035), inset 0 1px 4px oklch(0 0 0 / 0.02);
 
@@ -175,19 +175,6 @@
   --color-area-shop-ink: oklch(0.42 0.1 300);
   --color-area-site: var(--color-graphite-200);
   --color-area-site-ink: var(--color-graphite-700);
-
-  /* `cutout` for a signpost picked up off the wall. The arrow sits in a hole
-     through the sign, and what shows through it is the wall; once the sign
-     stands off it, the wall seen through the hole is in the sign's shadow.
-     Thrown in the sign's own hue for the same reason the shop's is thrown in
-     yellow, so it reads as the thickness of the sign, not a grey line drawn on
-     it. Site-wide, having no hue, throws neutral. Flush, a sign has none. */
-  --shadow-cutout-blog-lifted:
-    inset 0 0 0 1px oklch(0.55 0.08 245 / 0.18),
-    inset 0 5px 9px oklch(0.45 0.07 245 / 0.24);
-  --shadow-cutout-site-lifted:
-    inset 0 0 0 1px oklch(0.55 0 0 / 0.18),
-    inset 0 5px 9px oklch(0.45 0 0 / 0.24);
 }
 
 /* The dashes the registry draws its frame and rules with: four repeating
@@ -291,48 +278,6 @@ body {
   background-color: var(--color-cadmium-50);
 }
 
-/* Focusing a sheet pushes the rest of the page back. The blur is per element,
-   never on a shared ancestor — a filter there would blur the focused sheet too
-   and turn itself into a containing block for its fixed positioning.
-
-   Which is also why it is desktop-only. Per element means every element: open
-   one card on the wall and a phone is asked to blur the six others, the landing
-   and the colophon, and to animate all of it for 240ms. That is a full-screen
-   filter pass per frame on the hardware least able to pay for one, and it was
-   the reason the open felt like it fell. Below `md` the recede is the fade
-   alone, taken further to carry the weight the blur was carrying, with the
-   scrim above it doing the rest. */
-[data-dimmed],
-[data-dim-on-focus] {
-  transition: opacity 240ms var(--ease-out-strong);
-}
-
-[data-dimmed],
-body[data-sheet-focused] [data-dim-on-focus] {
-  opacity: 0.35;
-}
-
-@media (min-width: 768px) {
-  [data-dimmed],
-  [data-dim-on-focus] {
-    transition:
-      filter 240ms var(--ease-out-strong),
-      opacity 240ms var(--ease-out-strong);
-  }
-
-  [data-dimmed],
-  body[data-sheet-focused] [data-dim-on-focus] {
-    filter: blur(6px);
-    opacity: 0.5;
-  }
-}
-
-/* `html` is the scroller (it carries h-full), so the lock has to reach it. */
-html:has(> body[data-sheet-focused]),
-body[data-sheet-focused] {
-  overflow: hidden;
-}
-
 /* Elastic overscroll drags the page plane past the viewport edge. Nothing
    leaks now that the shop floats above rather than below, but the plane sliding
    against a fixed card still reads as slippage, so the bounce stays off. Must
@@ -359,10 +304,9 @@ html {
 
    The filter is also why the attribute stays on the header. An element with a
    `filter` is the containing block for every `position: fixed` descendant — the
-   same trap the shop's translate documents below, and the work's focused sheet
-   is fixed. Here the filter exists only while the animation runs and the header
-   holds nothing fixed, so it costs nothing. On the work it would be a bug that
-   surfaced only in the first second of a page load. */
+   same trap the shop's translate documents below. Here the filter exists only
+   while the animation runs and the header holds nothing fixed, so it costs
+   nothing. */
 @keyframes appear {
   from {
     opacity: 0;
@@ -410,9 +354,9 @@ html {
 
    The translate is declared ONLY in the open state, and that is load-bearing: a
    transform on an element makes it the containing block for every
-   `position: fixed` descendant, and the work pile's focused sheet is one. A
-   `translate: 0` at rest would silently re-anchor it to the page instead of the
-   viewport. No transform at rest means no containing block at rest. */
+   `position: fixed` descendant. A `translate: 0` at rest would silently
+   re-anchor any of them to the page instead of the viewport. No transform at
+   rest means no containing block at rest. */
 body[data-shop-open] [data-page] {
   translate: var(--shop-w) 0;
   transition-duration: var(--motion-enter);
@@ -434,124 +378,71 @@ body[data-shop-open] [data-page] {
    translated plane and the page can be panned sideways to the parked shop.
    Declaring it on `html` makes the propagated value the root's own, and lets
    the body's clip finally apply to the body's own box. Neither clips the shop
-   panel or a focused sheet — `overflow` only clips a fixed descendant when the
+   panel — `overflow` only clips a fixed descendant when the
    element is also its containing block, and no transform makes one here. */
 html,
 body {
   overflow-x: clip;
 }
 
-/* The work is shown two ways above `md`, and the visitor picks: hung on a wall,
-   or tipped into a pile. They are separate layouts for the same DOM — the same
-   seven frames, re-placed — which is what lets one FLIP carry every card
-   between them.
+/* THE EXHIBITION is a row-order masonry: the server deals each piece, newest
+   first, into whichever of three columns is shortest, using the aspect ratio
+   written in its data. Nothing is measured in the browser.
 
-   Below `md` there is only the wall. A pile is a thing you push around, and a
-   phone has neither the room to spread seven sheets nor a cursor to shove them
-   with; what survived the narrowing was a heap collapsed to almost a column.
-   The toggle goes with it — `WorkPile` pins the view to the wall under that
-   width rather than leaving a control that no longer earns its place.
+   Below `md` the three columns are `display: contents` and every piece carries
+   its date rank as `order`, so a phone gets one column in true date order from
+   the same DOM, with no second render.
 
-   THE PILE is therefore a desktop layout, and one scattered heap at every width
-   it appears at — never a column and never a grid. `--pile-spread` is how much
-   of each sheet's horizontal offset from centre actually gets used; there is
-   nothing narrow left to scale it down for, so it is 1 and the heap is as wide
-   as it was designed.
-
-   On THE WALL a card is treated by what it holds, which is where the rhythm
-   comes from: a picture hangs directly on the page — no ground, no border, no
-   padding, its title a caption underneath — while a card that is only words
-   gets a boundary drawn around it, because type with nothing behind it is not
-   hung, it is spilled. Six plates and one label, in this set. The rule is the
-   wall's alone: tipped into the pile, every card is the same sheet of paper
-   again.
-
-   The wall runs one column below `md`, which is the same `md` the pile and its
-   toggle disappear at: on a phone the wall is not one of two views any more, it
-   is the whole of the work, and each piece gets the full measure rather than
-   half of it. Two columns is what a phone has room to draw, not what this work
-   has room to be read at.
-
-   THE WALL is CSS multi-column, not a grid and not a measured masonry. The
-   cards are different heights because the work is, and `columns` is the one
-   layout that packs uneven heights without anyone measuring anything — which
-   matters here, because the morph animates a transform on each card and a JS
-   masonry would be re-measuring mid-flight. The cost is column-major reading
-   order; for seven pieces with no ranking, there is no order to lose. */
-[data-pile] {
-  --pile-spread: 1;
-  position: relative;
-  min-height: 46rem;
-}
-
-/* `translate` is left to the drag handler, which writes it inline on every
-   frame and already carries the -50% that centres the sheet on its point.
-
-   `pan-y` rather than `none` is the whole of the touch story: the page still
-   scrolls under a finger moving up or down, and the sheet only claims the
-   gesture once the movement is more sideways than vertical. `none` here would
-   make the pile a dead zone that swallows every scroll that started on a card,
-   which on a phone is most of them. */
-[data-pile] > [data-sheet-frame] {
-  position: absolute;
-  top: var(--sheet-y);
-  left: calc(50% + (var(--sheet-x) - 50%) * var(--pile-spread));
-  width: var(--sheet-w);
-  touch-action: pan-y;
-}
-
-/* A card on the wall is placed by the column, not by the scatter: no absolute
-   position, no `--sheet-w`, and its width is whatever the column is. Nothing
-   here is media-gated except the column count — the card is the same object it
-   was in the pile, only put down straight. */
-[data-wall] {
-  columns: 1;
-  column-gap: var(--wall-gap);
-}
-
-@media (min-width: 768px) {
-  [data-wall] {
-    columns: 2;
-  }
-}
-
-@media (min-width: 1024px) {
-  [data-wall] {
-    columns: 3;
-  }
-}
-
-/* Hovering one piece on the wall pulls the rest back out of focus. The gallery
-   reading of it: you step up to a picture and the room goes soft around it.
-
-   The trigger is `:has(> [data-sheet-frame]:hover)` and not a plain `:hover` on
-   the wall, because the wall is wider than its cards — a cursor resting in the
-   gutter between two columns is hovering the wall and nothing in it, and that
-   should not blur the whole room.
-
-   The blur is lighter than the focused-sheet dim (3px against 6px, 0.62 against
-   0.5): this is a passing glance, not a state you entered, and it has to read as
-   the weaker of the two when a visitor does both in a row. Touch is excluded
-   entirely — with no hover there is no unhovered rest, so every card would blur
-   the moment a finger landed. */
-[data-wall] > [data-sheet-frame] {
-  break-inside: avoid;
-  margin-bottom: var(--wall-gap);
-}
-
+   Hovering a piece pulls the rest out of focus, except the pieces that belong
+   with it: the same project, or the article that explains it. The gallery
+   reading: you step up to a picture and the room goes soft around it, but the
+   wall it hangs on stays sharp. The sign at the end of the home wall recedes
+   with everything else: it belongs to no piece. Touch is excluded, since with no hover there is
+   no unhovered rest. */
 @media (hover: hover) and (pointer: fine) {
-  [data-wall] > [data-sheet-frame] {
+  [data-exhibit],
+  [data-exhibit-coda] {
     transition:
       filter 200ms var(--ease-out-strong),
       opacity 200ms var(--ease-out-strong);
   }
 
-  [data-wall]:has(> [data-sheet-frame]:hover) > [data-sheet-frame]:not(:hover),
-  [data-wall]:has(> [data-sheet-frame]:focus-within)
-    > [data-sheet-frame]:not(:focus-within):not(:hover) {
+  [data-exhibit][data-receded],
+  [data-exhibit-coda][data-receded] {
     filter: blur(3px);
     opacity: 0.62;
   }
+}
+
+/* A piece on the wall wears `hollow`, so it reads as set into the wall rather
+   than printed on it. The shadow is drawn on a layer above the picture: an
+   inset shadow on the wrapper itself would be painted under the image and
+   never seen. */
+[data-inset]::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  box-shadow: var(--shadow-hollow);
+  pointer-events: none;
+}
+
+/* A sketchbook piece that turns its page: two spreads of the same size, the
+   second laid over the first and shown for every other beat, like a two-frame
+   gif. It loops always, reduced motion included: the swap is a cut in place,
+   nothing travels, and a gif would not ask either. */
+@keyframes sketchbook-flip {
+  50% {
+    opacity: 1;
+  }
+}
+
+[data-flip] > :last-child {
+  opacity: 0;
+  animation: sketchbook-flip 2.4s step-end infinite;
+}
+
+:root {
+  --paper-grain: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='f'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='1' numOctaves='1' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3CfeComponentTransfer%3E%3CfeFuncR type='linear' slope='4' intercept='-1.5'/%3E%3CfeFuncG type='linear' slope='4' intercept='-1.5'/%3E%3CfeFuncB type='linear' slope='4' intercept='-1.5'/%3E%3CfeFuncA type='linear' slope='0' intercept='1'/%3E%3C/feComponentTransfer%3E%3C/filter%3E%3Crect width='180' height='180' filter='url(%23f)' opacity='0.1'/%3E%3C/svg%3E");
 }
 
 :root {
@@ -641,7 +532,7 @@ body[data-shop-open] [data-shop-panel] {
    One octave, not four. At this frequency the finer octaves land under a pixel
    and only cost time. */
 [data-paper] {
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='f'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='1' numOctaves='1' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3CfeComponentTransfer%3E%3CfeFuncR type='linear' slope='4' intercept='-1.5'/%3E%3CfeFuncG type='linear' slope='4' intercept='-1.5'/%3E%3CfeFuncB type='linear' slope='4' intercept='-1.5'/%3E%3CfeFuncA type='linear' slope='0' intercept='1'/%3E%3C/feComponentTransfer%3E%3C/filter%3E%3Crect width='180' height='180' filter='url(%23f)' opacity='0.1'/%3E%3C/svg%3E");
+  background-image: var(--paper-grain);
   background-size: 180px 180px;
 }
 
@@ -675,15 +566,16 @@ body[data-shop-open] [data-shop-panel] {
 
 /* Signposts answer in elevation, never in colour. At rest a sign is flush with
    the wall and casts nothing: no shadow, no hairline, not even inside its hole.
-   Pointed at or focused, it comes off the wall: `card`, and 2px up. Not
-   `raised`; that is a thing held in the hand, and a sign only stands out from
-   its fixing. Pressed, it goes back down flush and gives a little (scale
-   0.99), the way a sign does under a thumb.
+   Pointed at or focused, it sinks into the wall: `hollow`, the inset the
+   colophon right below it already wears, so the foot of the page reads as
+   one surface. It does not move; a sign cannot rise while it sinks, and the
+   clean spot under the cursor is the motion now. Pressed, it gives a little
+   (scale 0.99), the way a sign does under a thumb.
 
-   The arrow sits in a hole cut through the sign, and the hole gains an inner
-   shadow once the sign lifts, because the wall behind it is now in the sign's
-   shadow. Flush, there is no gap for a shadow to fall into. The hole is never
-   filled; that would make it a button printed on the sign instead of a cut.
+   The arrow sits in a hole cut through the sign, and the hole stays flat.
+   An inset on the hole as well would be a second depth inside the first,
+   and the two read as one sign pressed in twice. The hole is never filled;
+   that would make it a button printed on the sign instead of a cut.
 
    The arrow hangs loose. Each one is knocked to one of the eighths of a turn
    when the page loads (`--tilt`, set by `SignpostArrow` after mount): 45°, 90°,
@@ -702,21 +594,123 @@ body[data-shop-open] [data-shop-panel] {
    compositor property, but there are two or three of these at the foot of one
    page, and a crossfaded pseudo-element would double the hairline ring. */
 [data-signpost] {
-  --hole-lifted: var(--shadow-cutout-site-lifted);
   box-shadow: none;
   transition:
     box-shadow var(--motion-quick) var(--ease-out-strong),
-    translate var(--motion-quick) var(--ease-out-strong),
     scale var(--press) var(--ease-out-strong);
 }
 
-[data-signpost="blog"] {
-  --hole-lifted: var(--shadow-cutout-blog-lifted);
+/* THE CLEAN SPOT. A signpost is long enough to be brushed past, so the
+   cursor wipes the grain off where it rests: the grain is its own layer under
+   the words, masked by a radial spot that follows the pointer, and pressing
+   the sign grows the spot past its farthest corner until the whole sign is
+   clean, which is the moment it takes you somewhere.
+
+   The falloff is smoothstep, not linear: a flat core, then eight stops on
+   3t² − 2t³, so the edge of the spot has no visible ring. Position, strength
+   and reach are registered properties, so each eases on its own clock: the
+   spot trails the cursor (`follow`), fades in and out (`fade`), and swells on
+   press (`grow`). On press the flat core opens to the whole spot while the
+   radius travels only to the farthest corner, so the clean edge is seen
+   crossing the sign, and the link waits for it before it navigates. `placing` drops the position transition for one frame on
+   entry, or the spot would slide in from the corner. The knobs are the
+   `--signpost-spot-*` values on `:root`. */
+@property --signpost-spot-x {
+  syntax: "<length>";
+  inherits: false;
+  initial-value: 0px;
 }
 
-[data-signpost-hole] {
-  box-shadow: none;
-  transition: box-shadow var(--motion-quick) var(--ease-out-strong);
+@property --signpost-spot-y {
+  syntax: "<length>";
+  inherits: false;
+  initial-value: 0px;
+}
+
+@property --signpost-spot-r {
+  syntax: "<length>";
+  inherits: false;
+  initial-value: 0px;
+}
+
+@property --signpost-spot-t {
+  syntax: "<number>";
+  inherits: false;
+  initial-value: 0;
+}
+
+@property --signpost-spot-a {
+  syntax: "<number>";
+  inherits: false;
+  initial-value: 1;
+}
+
+:root {
+  --signpost-spot-size: 80px;
+  --signpost-spot-dim: 0.25;
+  --signpost-spot-core: 0.15;
+  --signpost-spot-follow: 0ms;
+  --signpost-spot-fade: 600ms;
+  --signpost-spot-grow: 340ms;
+  --signpost-spot-grow-ease: cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+[data-signpost] {
+  isolation: isolate;
+  position: relative;
+}
+
+[data-signpost-grain] {
+  --t: var(--signpost-spot-t);
+  --a: var(--signpost-spot-a);
+  --signpost-spot-t: var(--signpost-spot-core);
+  --signpost-spot-r: var(--signpost-spot-size);
+  background-image: var(--paper-grain);
+  background-size: 180px 180px;
+  mask-image: radial-gradient(
+    circle var(--signpost-spot-r) at var(--signpost-spot-x)
+      var(--signpost-spot-y),
+    rgb(0 0 0 / var(--a)) calc(var(--t) * 100%),
+    rgb(0 0 0 / calc(var(--a) + (1 - var(--a)) * 0.043))
+      calc((var(--t) + (1 - var(--t)) * 0.125) * 100%),
+    rgb(0 0 0 / calc(var(--a) + (1 - var(--a)) * 0.156))
+      calc((var(--t) + (1 - var(--t)) * 0.25) * 100%),
+    rgb(0 0 0 / calc(var(--a) + (1 - var(--a)) * 0.316))
+      calc((var(--t) + (1 - var(--t)) * 0.375) * 100%),
+    rgb(0 0 0 / calc(var(--a) + (1 - var(--a)) * 0.5))
+      calc((var(--t) + (1 - var(--t)) * 0.5) * 100%),
+    rgb(0 0 0 / calc(var(--a) + (1 - var(--a)) * 0.684))
+      calc((var(--t) + (1 - var(--t)) * 0.625) * 100%),
+    rgb(0 0 0 / calc(var(--a) + (1 - var(--a)) * 0.844))
+      calc((var(--t) + (1 - var(--t)) * 0.75) * 100%),
+    rgb(0 0 0 / calc(var(--a) + (1 - var(--a)) * 0.957))
+      calc((var(--t) + (1 - var(--t)) * 0.875) * 100%),
+    #000 100%
+  );
+  transition:
+    --signpost-spot-x var(--signpost-spot-follow) var(--ease-out-strong),
+    --signpost-spot-y var(--signpost-spot-follow) var(--ease-out-strong),
+    --signpost-spot-a var(--signpost-spot-fade) var(--ease-out-strong),
+    --signpost-spot-r var(--signpost-spot-grow) var(--signpost-spot-grow-ease),
+    --signpost-spot-t var(--signpost-spot-grow) var(--signpost-spot-grow-ease);
+}
+
+[data-signpost-grain][data-spot="placing"] {
+  --signpost-spot-a: var(--signpost-spot-dim);
+  transition:
+    --signpost-spot-a var(--signpost-spot-fade) var(--ease-out-strong),
+    --signpost-spot-r var(--signpost-spot-grow) var(--signpost-spot-grow-ease),
+    --signpost-spot-t var(--signpost-spot-grow) var(--signpost-spot-grow-ease);
+}
+
+[data-signpost-grain][data-spot="on"] {
+  --signpost-spot-a: var(--signpost-spot-dim);
+}
+
+[data-signpost-grain][data-spot="pressed"] {
+  --signpost-spot-a: var(--signpost-spot-dim);
+  --signpost-spot-t: 1;
+  --signpost-spot-r: var(--signpost-spot-reach);
 }
 
 [data-signpost-arrow] {
@@ -736,12 +730,7 @@ body[data-shop-open] [data-shop-panel] {
 }
 
 [data-signpost]:focus-visible {
-  box-shadow: var(--shadow-card);
-  translate: 0 -2px;
-}
-
-[data-signpost]:focus-visible [data-signpost-hole] {
-  box-shadow: var(--hole-lifted);
+  box-shadow: var(--shadow-hollow);
 }
 
 [data-signpost]:focus-visible [data-signpost-arrow] {
@@ -752,12 +741,7 @@ body[data-shop-open] [data-shop-panel] {
 
 @media (hover: hover) and (pointer: fine) {
   [data-signpost]:hover {
-    box-shadow: var(--shadow-card);
-    translate: 0 -2px;
-  }
-
-  [data-signpost]:hover [data-signpost-hole] {
-    box-shadow: var(--hole-lifted);
+    box-shadow: var(--shadow-hollow);
   }
 
   [data-signpost]:hover [data-signpost-arrow] {
@@ -768,24 +752,14 @@ body[data-shop-open] [data-shop-panel] {
 }
 
 [data-signpost]:active {
-  box-shadow: none;
-  translate: 0 0;
   scale: 0.99;
 }
 
-[data-signpost]:active [data-signpost-hole] {
-  box-shadow: none;
-}
-
-/* Reduced motion keeps the light and loses the travel: the shadows still
-   change and the arrow still comes level, which is enough to say the sign
+/* Reduced motion keeps the light and loses the travel: the inset still
+   arrives and the arrow still comes level, which is enough to say the sign
    heard you, but nothing moves to get there. */
 @media (prefers-reduced-motion: reduce) {
-  [data-signpost],
-  [data-signpost]:hover,
-  [data-signpost]:focus-visible,
   [data-signpost]:active {
-    translate: none !important;
     scale: 1 !important;
   }
 
@@ -807,16 +781,11 @@ body[data-shop-open] [data-shop-panel] {
 }
 
 @media (prefers-reduced-motion: reduce) {
-  /* Reduced, not removed. Everything that moves through space snaps: the FLIP
-     animation is already skipped in JS, and these are the transitions that
-     travel. The card is named explicitly because closing removes the body
-     attribute in the same commit, so an ancestor-based selector would miss the
-     way back down. */
-  [data-sheet-card],
+  /* Reduced, not removed. Everything that moves through space snaps: these are
+     the transitions that travel. */
   [data-shop-panel],
   [data-page],
-  [data-plaque],
-  [data-flavour] {
+  [data-plaque] {
     transition-duration: 0.01ms !important;
   }
 
@@ -827,20 +796,6 @@ body[data-shop-open] [data-shop-panel] {
   [data-appear],
   [data-site-nav] {
     animation: none !important;
-  }
-
-  /* The peek pill's fade is opacity and stays; only its arrival scale goes. */
-  [data-peek] span {
-    transition-duration: 0.01ms !important;
-    scale: 1;
-  }
-
-  /* The dim stays. It changes no position — it is opacity and blur telling you
-     which sheet you are in, and cutting it would remove the explanation rather
-     than the movement. */
-  [data-dimmed],
-  [data-dim-on-focus] {
-    transition-duration: 150ms !important;
   }
 
   /* Press feedback is a scale, so it goes entirely — killing only its

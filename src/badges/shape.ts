@@ -122,7 +122,7 @@ const escapeText = (value: string) =>
 
 export function badgeMarkup(
   badge: Badge,
-  { id, ms }: { id: string; ms: number },
+  { id, ms, flat = false }: { id: string; ms: number; flat?: boolean },
 ) {
   const paths = outlines(badge, ms);
   const last = badge.stops.length - 1;
@@ -133,6 +133,7 @@ export function badgeMarkup(
     )
     .join("");
   const [gx, gy] = LOOK.glossRest;
+  const drop = flat ? "" : ' filter="url(#' + id + '-drop)"';
   const font = `font-family:var(--font-sans,Inter),Inter,system-ui,sans-serif`;
 
   return [
@@ -148,7 +149,7 @@ export function badgeMarkup(
     `<filter id="${id}-drop" x="-30%" y="-30%" width="160%" height="160%"><feDropShadow dx="0" dy="${LOOK.dropY}" stdDeviation="${LOOK.dropBlur}" flood-color="${LOOK.dropInk}" flood-opacity="${LOOK.drop}"/></filter>`,
     `<path id="${id}-ring" data-ring d="${paths.text}"/>`,
     "</defs>",
-    `<path data-blob filter="url(#${id}-drop)" fill="url(#${id}-fill)" d="${paths.blob}"/>`,
+    `<path data-blob${drop} fill="url(#${id}-fill)" d="${paths.blob}"/>`,
     `<g clip-path="url(#${id}-clip)">`,
     `<path data-blob fill="url(#${id}-gloss)" d="${paths.blob}"/>`,
     `<path data-blob fill="none" stroke="url(#${id}-rim)" stroke-width="${LOOK.rimWidth}" d="${paths.blob}"/>`,

@@ -56,17 +56,21 @@ export async function loadWritingList() {
     date: meta.date,
     href: `/writing/${slug}`,
     badge: slug,
+    tags: meta.tags,
     venue: undefined,
   }));
-  const away = ELSEWHERE.map(({ slug, title, deck, href, venue, date }) => ({
-    key: href,
-    title,
-    deck,
-    date,
-    href,
-    badge: slug,
-    venue,
-  }));
+  const away = ELSEWHERE.map(
+    ({ slug, title, deck, href, venue, date, tags }) => ({
+      key: href,
+      title,
+      deck,
+      date,
+      href,
+      badge: slug,
+      tags,
+      venue,
+    }),
+  );
 
   return [...here, ...away].toSorted((a, b) => b.date.localeCompare(a.date));
 }

@@ -13,11 +13,15 @@ export function ArticleBadge({
   badge,
   size = LOOK.box,
   playing = true,
+  startMs = 0,
+  flat = false,
   className,
 }: {
   badge: Badge;
   size?: number;
   playing?: boolean;
+  startMs?: number;
+  flat?: boolean;
   className?: string;
 }) {
   const id = `badge${useId().replaceAll(/\W/g, "")}`;
@@ -32,8 +36,8 @@ export function ArticleBadge({
     const [restX, restY] = LOOK.glossRest;
     const aim: { x: number; y: number } = { x: restX, y: restY };
     const shine: { x: number; y: number } = { x: restX, y: restY };
-    let drift = 0;
-    let clock = 0;
+    let clock = startMs;
+    let drift = (startMs / MS_PER_SECOND) * LOOK.driftPxPerSecond;
     let seen = true;
     let frame = 0;
     let previous = performance.now();
@@ -80,11 +84,11 @@ export function ArticleBadge({
       }
     });
 
-    placeAlong(svg, { badge, ms: 0, drift: 0 });
+    placeAlong(svg, { badge, ms: clock, drift });
     void document.fonts.ready.then(() =>
       placeAlong(svg, { badge, ms: clock, drift }),
     );
-    if (!still) {
+    if (!still && playing) {
       watch.observe(svg);
       window.addEventListener("pointermove", point, { passive: true });
     }
@@ -94,7 +98,7 @@ export function ArticleBadge({
       watch.disconnect();
       window.removeEventListener("pointermove", point);
     };
-  }, [badge, playing]);
+  }, [badge, playing, startMs]);
 
   return (
     <svg
@@ -105,7 +109,9 @@ export function ArticleBadge({
       aria-hidden="true"
       className={className}
       overflow="visible"
-      dangerouslySetInnerHTML={{ __html: badgeMarkup(badge, { id, ms: 0 }) }}
+      dangerouslySetInnerHTML={{
+        __html: badgeMarkup(badge, { id, ms: startMs, flat }),
+      }}
     />
   );
 }

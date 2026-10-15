@@ -50,9 +50,8 @@ import { PROSE, SECTION_HEADING } from "@/lib/type";
   `text-graphite-900/35`. Opacity is kept for what has to stay translucent:
   focus rings (they sit on the wall and on yellow), scrims, and lines drawn on
   the yellow panel. The one colour outside the ramps is the site's areas:
-  their `area-*` tokens (and the `cutout-*` shadow that goes with each) in
-  `globals.css` are for the changelog's tags and the signposts that lead to
-  those areas, and nothing else.
+  their `area-*` tokens in `globals.css` are for the changelog's tags and
+  the signposts that lead to those areas, and nothing else.
 
 ## Exceptions
 
@@ -152,8 +151,11 @@ in `src/badges/`. The rest of the site only mounts them (`BadgeHover`,
   use, so a change to the look lands everywhere at once.
 - **Where they appear:** following the pointer over the writing lists
   (`hover.tsx`), on the References shelf of the gift shop, where it can
-  be dragged like the swatch it replaces (`gift-shop-badge.tsx`), and as stickers scattered
-  in the yellow panel of each post's OG card (`scripts/og-image.mts`).
+  be dragged like the swatch it replaces (`gift-shop-badge.tsx`), as stickers scattered
+  in the yellow panel of each post's OG card (`scripts/og-image.mts`), and as
+  a still 3:2 tile on the main exhibition wall (`tile.tsx`), scattered the
+  same way as the OG card but kept inside the frame, for every article
+  tagged design or engineering. `scatter.ts` places the copies for both.
 
 # House style
 
