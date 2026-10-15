@@ -114,28 +114,23 @@ export default async function Home() {
 
               <div data-appear="4" className={`h-fit space-y-5 ${PROSE}`}>
                 <p>
-                  I am a designer with 5+ years of experience. I have designed
-                  for companies, for myself, for other people. I have designed
-                  with Figma, with code, with my bare hands and with very weird
-                  materials during my Graphic Design degree.
-                </p>
-                <p>
-                  Most of my professional experience has been designing software
-                  for credit card machines, at{" "}
+                  I am a designer with 5+ years of experience. I designed
+                  software for credit card machines at Brazil&rsquo;s biggest
+                  acquirer,{" "}
                   <a
                     href="https://www.stone.com.br/"
                     className={LINK_UNDERLINED}
                   >
                     Stone
                   </a>
-                  . You probably have a lot of questions about what that means —
-                  don&rsquo;t be afraid to ask, I enjoy talking about it.
+                  , and you probably have a lot of questions about what that
+                  means — don&rsquo;t be afraid to ask, I love to talk about it.
                 </p>
                 <p>
-                  More than a designer, I am a human: a human who rides
-                  motorcycles, models for friends&rsquo; brands and gets paid in
-                  tattoos, desperately hopes to get a Pantone shade named after
-                  her someday, and absolutely treasures her girlfriend, Jade.
+                  More than a designer I am also a human who loves to ride her
+                  motorcycle, model for friends, draw plans to get a shade of
+                  yellow named after her and live to truly and absolutely
+                  treasure her girlfriend, Jade.
                 </p>
               </div>
             </div>
@@ -153,7 +148,26 @@ export default async function Home() {
             <h2
               className={`mt-16 ${ANNOTATION} leading-none text-graphite-700 md:mt-20`}
             >
-              Writing
+              <Link
+                href="/writing"
+                className={`group inline-flex items-center gap-0.5 ${LINK}`}
+              >
+                Writing
+                <svg
+                  viewBox="0 0 16 16"
+                  fill="none"
+                  aria-hidden="true"
+                  className="size-3 -translate-x-1 opacity-0 transition-[opacity,translate] duration-(--motion-quick) ease-out-strong group-focus-visible:translate-x-0 group-focus-visible:opacity-100 motion-reduce:transition-none can-hover:group-hover:translate-x-0 can-hover:group-hover:opacity-100"
+                >
+                  <path
+                    d="M6 3.5 10.5 8 6 12.5"
+                    stroke="currentColor"
+                    strokeWidth="1.5"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  />
+                </svg>
+              </Link>
             </h2>
 
             <BadgeHover badges={badgesFor(writing.slice(0, HOME_WRITING))}>
@@ -182,19 +196,12 @@ export default async function Home() {
                   ))}
               </ul>
             </BadgeHover>
-
-            <Link
-              href="/writing"
-              className={`mt-2 inline-block ${LABEL} text-graphite-700 ${LINK}`}
-            >
-              All writing
-            </Link>
           </div>
         </section>
       </div>
 
       <div id="work" className="mt-[18vh]">
-        <Exhibition room="main" label="Selected work" featured />
+        <Exhibition room="main" label="Work" featured />
       </div>
     </main>
   );

@@ -3,7 +3,7 @@
 import { useLayoutEffect, useRef } from "react";
 import { LINK } from "@/components/link";
 import { EXPERIENCE } from "@/content/experience";
-import { ANNOTATION, LABEL, PROSE, SECTION_HEADING } from "@/lib/type";
+import { ANNOTATION, LABEL, SECTION_HEADING } from "@/lib/type";
 
 function hidePeriodsIfAnyWraps(list: HTMLElement) {
   const periods = list.querySelectorAll<HTMLElement>("[data-period]");
@@ -35,7 +35,7 @@ export function ExperienceList({ className }: { className?: string }) {
 
   return (
     <ul ref={listRef} className={`group space-y-2 ${className ?? ""}`}>
-      {EXPERIENCE.map(({ company, href, role, period, description }) => (
+      {EXPERIENCE.map(({ company, href, role, period }) => (
         <li key={company}>
           <div className="flex items-baseline gap-6">
             <h3
@@ -61,11 +61,6 @@ export function ExperienceList({ className }: { className?: string }) {
               {role}
             </span>
           </div>
-          {description ? (
-            <p className={`mt-2 mb-6 ${PROSE} text-graphite-700`}>
-              {description}
-            </p>
-          ) : null}
         </li>
       ))}
     </ul>
