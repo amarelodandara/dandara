@@ -7,7 +7,7 @@ import { DESCRIPTION, TITLE } from "../src/lib/site.ts";
 import { BADGES } from "../src/badges/data.ts";
 import { badgeMarkup, LOOK, type Badge } from "../src/badges/shape.ts";
 import { readPosts } from "../src/lib/writing/meta-source.ts";
-import { hash, seeded } from "./seeded.mts";
+import { scatter, STICKERS } from "../src/badges/scatter.ts";
 
 const ROOT = process.cwd();
 const OUT = path.join(ROOT, "public", "og.png");
@@ -28,17 +28,7 @@ const FEATURES = `"calt" 1, "cv06" 1, "cv10" 1, "ss01" 1, "ss02" 1, "ss03" 1, "z
 
 const CARD = { left: 33, top: 40, width: 293, height: 550, radius: 14 };
 
-const STICKERS = {
-  count: 7,
-  scale: 0.9,
-  tiltDegrees: 25,
-  apart: 0.75,
-  overhang: 0.5,
-  shuffle: 2_654_435_761,
-  tries: 40,
-  breathStepMs: 700,
-  deepestLobe: 1.16,
-};
+const STICKER_OVERHANG = 0.5;
 const TEXT_LEFT = 378;
 const ROLE_SECOND_LINE = "and relentless taste";
 
@@ -58,51 +48,19 @@ function roleMarkup(description: string) {
   return `${escape(first)}<br />${escape(ROLE_SECOND_LINE)}`;
 }
 
-type Spot = { x: number; y: number };
-
 function stickers(slug: string, badge: Badge) {
   const size = LOOK.box * STICKERS.scale;
-  const radius =
-    (size / LOOK.box) *
-    (LOOK.box / 2 - LOOK.margin) *
-    badge.scale *
-    STICKERS.deepestLobe;
-  const hang = radius * STICKERS.overhang;
-  const apart = 2 * radius * STICKERS.apart;
-  const next = seeded(hash(slug) ^ STICKERS.shuffle);
-  const placed: Spot[] = [];
-  const nearest = (spot: Spot) =>
-    Math.min(
-      Infinity,
-      ...placed.map((other) => Math.hypot(other.x - spot.x, other.y - spot.y)),
-    );
-
-  return Array.from({ length: STICKERS.count }, (_, index) => {
-    let best: Spot = { x: CARD.width / 2, y: CARD.height / 2 };
-    let bestGap = -1;
-    for (let attempt = 0; attempt < STICKERS.tries; attempt++) {
-      const spot = {
-        x: -hang + next() * (CARD.width + 2 * hang),
-        y: -hang + next() * (CARD.height + 2 * hang),
-      };
-      const gap = nearest(spot);
-      if (gap >= apart) {
-        best = spot;
-        break;
-      }
-      if (gap > bestGap) {
-        bestGap = gap;
-        best = spot;
-      }
-    }
-    placed.push(best);
-    const tilt = (next() * 2 - 1) * STICKERS.tiltDegrees;
-    const inner = badgeMarkup(badge, {
-      id: `sticker${index}`,
-      ms: index * STICKERS.breathStepMs,
-    });
-    return `<svg class="sticker" viewBox="0 0 ${LOOK.box} ${LOOK.box}" width="${size}" height="${size}" overflow="visible" style="left:${(best.x - size / 2).toFixed(1)}px;top:${(best.y - size / 2).toFixed(1)}px;transform:rotate(${tilt.toFixed(1)}deg)">${inner}</svg>`;
-  }).join("");
+  return scatter(slug, {
+    badge,
+    width: CARD.width,
+    height: CARD.height,
+    overhang: STICKER_OVERHANG,
+  })
+    .map(({ x, y, tilt, ms }, index) => {
+      const inner = badgeMarkup(badge, { id: `sticker${index}`, ms });
+      return `<svg class="sticker" viewBox="0 0 ${LOOK.box} ${LOOK.box}" width="${size}" height="${size}" overflow="visible" style="left:${(x - size / 2).toFixed(1)}px;top:${(y - size / 2).toFixed(1)}px;transform:rotate(${tilt.toFixed(1)}deg)">${inner}</svg>`;
+    })
+    .join("");
 }
 
 function shell(font: string, sizes: string, text: string, card = "") {

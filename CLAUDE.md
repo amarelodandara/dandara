@@ -151,8 +151,11 @@ in `src/badges/`. The rest of the site only mounts them (`BadgeHover`,
   use, so a change to the look lands everywhere at once.
 - **Where they appear:** following the pointer over the writing lists
   (`hover.tsx`), on the References shelf of the gift shop, where it can
-  be dragged like the swatch it replaces (`gift-shop-badge.tsx`), and as stickers scattered
-  in the yellow panel of each post's OG card (`scripts/og-image.mts`).
+  be dragged like the swatch it replaces (`gift-shop-badge.tsx`), as stickers scattered
+  in the yellow panel of each post's OG card (`scripts/og-image.mts`), and as
+  a still 3:2 tile on the main exhibition wall (`tile.tsx`), scattered the
+  same way as the OG card but kept inside the frame, for every article
+  tagged design or engineering. `scatter.ts` places the copies for both.
 
 # House style
 

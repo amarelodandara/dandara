@@ -3,6 +3,7 @@
 import { useEffect, useMemo, useRef, useState, type ReactNode } from "react";
 import Image from "next/image";
 import Link from "next/link";
+import { BadgeTile } from "@/badges/tile";
 import { Changelog } from "@/components/graph/changelog";
 import { ExhibitVideo } from "@/components/exhibit-video";
 import type { ExhibitMedia } from "@/content/exhibits";
@@ -54,6 +55,7 @@ function Flip({ media }: { media: FlipMedia }) {
 }
 
 function Media({ media }: { media: ExhibitMedia }) {
+  if (media.kind === "badges") return <BadgeTile slug={media.slug} />;
   if (media.kind === "changelog") {
     return (
       <div className="bg-cadmium-50 p-4 shadow-label md:p-7">
@@ -102,7 +104,32 @@ function Mat({ media }: { media: ExhibitMedia }) {
   );
 }
 
-function Caption({ title, when, live, read }: Tile) {
+const isElsewhere = (href: string) => /^https?:\/\//.test(href);
+
+function ReadLink({ title, read, readAt }: Tile & { read: string }) {
+  if (isElsewhere(read)) {
+    return (
+      <a href={read} className={CAPTION_LINK}>
+        Read
+        <span aria-hidden="true">&nbsp;↗</span>
+        <span className="sr-only">
+          {" "}
+          {title}
+          {readAt ? ` at ${readAt}` : ""}
+        </span>
+      </a>
+    );
+  }
+  return (
+    <Link href={read} className={CAPTION_LINK}>
+      Read
+      <span className="sr-only"> {title}</span>
+    </Link>
+  );
+}
+
+function Caption(tile: Tile) {
+  const { title, when, live, read } = tile;
   return (
     <figcaption className="mt-3 flex items-baseline justify-between gap-4">
       <span className="min-w-0">
@@ -121,13 +148,24 @@ function Caption({ title, when, live, read }: Tile) {
           </span>
         </a>
       ) : null}
-      {read ? (
-        <Link href={read} className={CAPTION_LINK}>
-          Read
-          <span className="sr-only"> {title}</span>
-        </Link>
-      ) : null}
+      {read ? <ReadLink {...tile} read={read} /> : null}
     </figcaption>
+  );
+}
+
+function Framed({ read, children }: { read?: string; children: ReactNode }) {
+  if (!read) return children;
+  if (isElsewhere(read)) {
+    return (
+      <a href={read} tabIndex={-1}>
+        {children}
+      </a>
+    );
+  }
+  return (
+    <Link href={read} tabIndex={-1}>
+      {children}
+    </Link>
   );
 }
 
@@ -151,13 +189,9 @@ function Exhibit({
       className="relative"
     >
       <figure>
-        {tile.read ? (
-          <Link href={tile.read} tabIndex={-1}>
-            <Mat media={tile.media} />
-          </Link>
-        ) : (
+        <Framed read={tile.read}>
           <Mat media={tile.media} />
-        )}
+        </Framed>
         <Caption {...tile} />
       </figure>
     </div>

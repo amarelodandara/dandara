@@ -28,7 +28,7 @@ export async function Exhibition({
         featured ? (
           <Signpost
             href={ROOMS[room].href}
-            name="The whole exhibition"
+            name="All work"
             area="work"
           />
         ) : null

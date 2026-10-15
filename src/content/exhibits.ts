@@ -32,7 +32,8 @@ export type ExhibitMedia =
       kind: "changelog";
       version: string;
       lines: string[];
-    };
+    }
+  | { kind: "badges"; slug: string };
 
 export type Exhibit = {
   id: string;
@@ -49,7 +50,6 @@ export type Exhibit = {
 export type ArticleExhibit = {
   article: string;
   explains: string[];
-  rooms: Room[];
   featured?: boolean;
 };
 
@@ -108,8 +108,7 @@ const WORK: Exhibit[] = [
     title: "Fishy components",
     date: "2026-09-15",
     project: "color-of-water",
-    rooms: ["main"],
-    featured: true,
+    rooms: [],
     media: {
       kind: "image",
       src: "/work/color-of-water-plates.png",
@@ -123,8 +122,7 @@ const WORK: Exhibit[] = [
     title: "Copy palette component",
     date: "2026-09-15",
     project: "color-of-water",
-    rooms: ["main"],
-    featured: true,
+    rooms: [],
     media: {
       kind: "video",
       sources: [{ src: "/work/color-of-water-copy.mp4", type: MP4 }],
@@ -136,7 +134,7 @@ const WORK: Exhibit[] = [
   },
   {
     id: "servico-museu-interactions",
-    title: "In Service of Museums",
+    title: "In Service of Museums Website",
     date: "2026-08",
     live: MUSEUMS,
     project: "museums",
@@ -178,7 +176,7 @@ const WORK: Exhibit[] = [
     title: "Stone Co. Product Designer",
     date: "2026-03",
     project: "stone",
-    rooms: ["main"],
+    rooms: [],
     media: {
       kind: "changelog",
       version: "2022 — 2026",
@@ -190,7 +188,7 @@ const WORK: Exhibit[] = [
   },
   {
     id: "stone-store",
-    title: "Stone Terminal Store",
+    title: "App Store for credit card machines",
     date: "2023",
     project: "stone",
     rooms: ["main"],
@@ -221,12 +219,11 @@ const WORK: Exhibit[] = [
   },
   {
     id: "links-amarelos",
-    title: "linksamarelos.com",
+    title: "linksamarelos.com v0.1",
     date: "2025",
     live: LINKS_AMARELOS,
     project: "amarelos",
     rooms: ["main"],
-    featured: true,
     media: {
       kind: "video",
       sources: [
@@ -241,7 +238,7 @@ const WORK: Exhibit[] = [
   },
   {
     id: "caiu-na-rede",
-    title: "caiu na rede, é link!",
+    title: "Motion design for links amarelos",
     date: "2025",
     live: LINKS_AMARELOS,
     project: "amarelos",
@@ -257,7 +254,7 @@ const WORK: Exhibit[] = [
   },
   {
     id: "cascata-erro",
-    title: "Recommendation cascade",
+    title: "Motion for linksamarelos.com",
     date: "2025",
     live: LINKS_AMARELOS,
     project: "amarelos",
@@ -273,7 +270,7 @@ const WORK: Exhibit[] = [
   },
   {
     id: "ondas-amarelas-covers",
-    title: "ondas amarelas covers",
+    title: "Covers for podcast",
     date: "2025",
     live: ONDAS_AMARELAS,
     project: "amarelos",
@@ -293,7 +290,7 @@ const WORK: Exhibit[] = [
     title: "Personal Obsidian graph",
     date: "2026-09-27",
     project: "obsidian",
-    rooms: ["main"],
+    rooms: [],
     media: {
       kind: "image",
       src: "/work/obsidian-graph.png",
@@ -304,7 +301,7 @@ const WORK: Exhibit[] = [
   },
   {
     id: "serase",
-    title: "Serase",
+    title: "Conclusion piece for Computing Degree",
     date: "2020",
     project: "serase",
     rooms: ["main"],
@@ -319,7 +316,7 @@ const WORK: Exhibit[] = [
   },
   {
     id: "fin-challenge",
-    title: "Fin onboarding, design challenge",
+    title: "#1 Winner at design challenge",
     date: "2021",
     live: FIN,
     project: "fin",
@@ -341,16 +338,13 @@ export const ARTICLE_EXHIBITS: ArticleExhibit[] = [
   {
     article: "the-color-of-water",
     explains: ["color-of-water"],
-    rooms: [],
   },
   {
     article: "museums-and-websites",
     explains: ["museums"],
-    rooms: [],
   },
   {
     article: "obsidian",
     explains: ["obsidian"],
-    rooms: [],
   },
 ];

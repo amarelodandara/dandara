@@ -6,14 +6,23 @@ import {
   ROOMS,
   type Room,
 } from "@/content/exhibits";
+import type { Tag } from "@/badges/tags";
 import { SERIES } from "@/content/photography";
-import { loadPostList } from "@/lib/writing/posts";
+import { loadWritingList } from "@/lib/writing/posts";
 
 export const COLUMNS = 3;
 
 const CAPTION_SHARE = 0.12;
 const WORDS_SHARE = 0.55;
 const SIGN_SHARE = 0.25;
+const BADGES_SHARE = 2 / 3;
+
+const ALPHABETICAL = new Intl.Collator("en", {
+  sensitivity: "base",
+  numeric: true,
+});
+
+const EXHIBITED_TAGS: ReadonlySet<Tag> = new Set(["design", "engineering"]);
 
 export type Tile = {
   id: string;
@@ -21,6 +30,7 @@ export type Tile = {
   when?: string;
   live?: ExhibitLink;
   read?: string;
+  readAt?: string;
   media: ExhibitMedia;
   related: string[];
   rank: number;
@@ -47,9 +57,13 @@ export const formatWhen = (date: string) =>
         new Date(`${date.slice(0, YEAR_AND_MONTH)}-01T00:00:00Z`),
       );
 
-const height = (media: ExhibitMedia) =>
-  (media.kind === "changelog" ? WORDS_SHARE : media.height / media.width) +
-  CAPTION_SHARE;
+const share = (media: ExhibitMedia) => {
+  if (media.kind === "changelog") return WORDS_SHARE;
+  if (media.kind === "badges") return BADGES_SHARE;
+  return media.height / media.width;
+};
+
+const height = (media: ExhibitMedia) => share(media) + CAPTION_SHARE;
 
 export function deal(tiles: readonly Tile[], signed: boolean) {
   const stacks: string[][] = Array.from({ length: COLUMNS }, () => []);
@@ -90,52 +104,45 @@ async function drafts(
     }),
   );
 
-  const articles = series
-    ? []
-    : ARTICLE_EXHIBITS.filter((entry) => wanted(entry));
-  if (articles.length === 0) return works;
+  if (room !== "main" || series) return works;
 
-  const list = await loadPostList();
-  const posts = new Map(list.map(({ slug, meta }) => [slug, meta]));
-
-  const written = articles.flatMap(({ article, explains }) => {
-    const meta = posts.get(article);
-    if (!meta) return [];
-    return [
-      {
-        id: `article-${article}`,
-        title: meta.title,
-        date: meta.date,
-        when: formatWhen(meta.date),
-        read: `/writing/${article}`,
-        media: {
-          kind: "image" as const,
-          src: `/writing/og/${article}.png`,
-          width: 1200,
-          height: 630,
-          alt: `${meta.title} — ${meta.deck}`,
-        },
-        groups: explains,
-      },
-    ];
-  });
+  const exhibited = new Map(
+    ARTICLE_EXHIBITS.map((entry) => [entry.article, entry]),
+  );
+  const writing = await loadWritingList();
+  const written = writing
+    .filter(({ tags }) => tags.some((tag) => EXHIBITED_TAGS.has(tag)))
+    .filter(({ badge }) => !featured || exhibited.get(badge)?.featured === true)
+    .map(({ badge, title, date, href, venue }) => ({
+      id: `article-${badge}`,
+      title: title.split(":", 1)[0],
+      date,
+      when: formatWhen(date),
+      read: href,
+      readAt: venue,
+      media: { kind: "badges" as const, slug: badge },
+      groups: exhibited.get(badge)?.explains ?? [],
+    }));
 
   return [...works, ...written];
 }
 
 export async function loadExhibition(room: Room, filter: Filter = {}) {
   const found = await drafts(room, filter);
-  const sorted = found.toSorted((a, b) =>
-    (b.date ?? "").localeCompare(a.date ?? ""),
+  const sorted = found.toSorted(
+    room === "main"
+      ? (a, b) => ALPHABETICAL.compare(a.title, b.title)
+      : (a, b) => (b.date ?? "").localeCompare(a.date ?? ""),
   );
 
   const tiles: Tile[] = sorted.map(
-    ({ id, title, when, live, read, media, groups }, rank) => ({
+    ({ id, title, when, live, read, readAt, media, groups }, rank) => ({
       id,
       title,
       when,
       live,
       read,
+      readAt,
       media,
       rank,
       related: sorted
@@ -152,10 +159,8 @@ export async function loadExhibition(room: Room, filter: Filter = {}) {
 }
 
 export const roomsWithWork = (): Room[] =>
-  (Object.keys(ROOMS) as Room[]).filter(
-    (room) =>
-      EXHIBITS.some((entry) => entry.rooms.includes(room)) ||
-      ARTICLE_EXHIBITS.some((entry) => entry.rooms.includes(room)),
+  (Object.keys(ROOMS) as Room[]).filter((room) =>
+    EXHIBITS.some((entry) => entry.rooms.includes(room)),
   );
 
 const newestIn = (series: string) =>

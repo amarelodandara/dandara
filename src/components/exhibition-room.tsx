@@ -6,9 +6,20 @@ import { ANNOTATION, PAGE_HEADING, PROSE, SECTION_HEADING } from "@/lib/type";
 
 const COLUMN = "mx-auto w-full max-w-[calc(42rem+14vw)] px-[7vw]";
 
+const WRITING = { href: "/writing", name: "Writing", area: "blog" } as const;
+
 export function ExhibitionRoom({ room }: { room: Room }) {
   const { title, intro } = ROOMS[room];
-  const elsewhere = roomsWithWork().filter((other) => other !== room);
+  const elsewhere = [
+    ...roomsWithWork()
+      .filter((other) => other !== room)
+      .map((other) => ({
+        href: ROOMS[other].href,
+        name: other === "main" ? "Main work" : ROOMS[other].title,
+        area: other === "main" ? ("work" as const) : ("site" as const),
+      })),
+    WRITING,
+  ];
   const series = seriesIn(room);
 
   return (
@@ -52,32 +63,26 @@ export function ExhibitionRoom({ room }: { room: Room }) {
           </div>
         )}
 
-        {elsewhere.length > 0 ? (
-          <nav
-            aria-labelledby="more-work"
-            className="mx-auto flex w-full max-w-[1400px] justify-end px-[7vw]"
-          >
-            <div className="w-full sm:max-w-120">
-              <h2
-                id="more-work"
-                className={`${ANNOTATION} leading-none text-graphite-700`}
-              >
-                More work
-              </h2>
-              <ul className="mt-6 space-y-3">
-                {elsewhere.map((other) => (
-                  <li key={other}>
-                    <Signpost
-                      href={ROOMS[other].href}
-                      name={other === "main" ? "Main work" : ROOMS[other].title}
-                      area={other === "main" ? "work" : "site"}
-                    />
-                  </li>
-                ))}
-              </ul>
-            </div>
-          </nav>
-        ) : null}
+        <nav
+          aria-labelledby="more-work"
+          className="mx-auto flex w-full max-w-[1400px] justify-end px-[7vw]"
+        >
+          <div className="w-full sm:max-w-120">
+            <h2
+              id="more-work"
+              className={`${ANNOTATION} leading-none text-graphite-700`}
+            >
+              More work
+            </h2>
+            <ul className="mt-6 space-y-3">
+              {elsewhere.map((sign) => (
+                <li key={sign.href}>
+                  <Signpost {...sign} />
+                </li>
+              ))}
+            </ul>
+          </div>
+        </nav>
       </main>
     </>
   );

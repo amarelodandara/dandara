@@ -4,7 +4,7 @@ import process from "node:process";
 import { ELSEWHERE } from "../src/content/elsewhere.ts";
 import { TAGS, type Tag } from "../src/badges/tags.ts";
 import { readPosts } from "../src/lib/writing/meta-source.ts";
-import { hash, seeded } from "./seeded.mts";
+import { hash, seeded } from "../src/badges/seeded.ts";
 
 const ROOT = process.cwd();
 const CONTENT = path.join(ROOT, "src", "content", "writing");
