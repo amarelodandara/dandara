@@ -1,10 +1,7 @@
 "use client";
 
-import { motion, useReducedMotion } from "motion/react";
-
 import { Graph, GraphBody } from "./frame";
-import { fadeUp, staggerList, type GraphPalette } from "./motion";
-import { useReveal } from "./reveal";
+import type { GraphPalette } from "./motion";
 import { cn } from "../cn";
 
 type CheckItem = {
@@ -21,26 +18,14 @@ type GraphCheckProps = {
 };
 
 function GraphCheck({ title, items, corner, className }: GraphCheckProps) {
-  const reduce = useReducedMotion();
-  const [ref, revealed] = useReveal<HTMLUListElement>(reduce);
-  const item = fadeUp(reduce);
-  const list = staggerList(reduce, 0.08);
-
   return (
     <Graph title={title} className={className} corner={corner}>
       <GraphBody>
-        <motion.ul
-          className="flex flex-col gap-4"
-          ref={ref}
-          initial={false}
-          animate={revealed}
-          variants={list}
-        >
+        <ul className="flex flex-col gap-4">
           {items.map((entry, index) => (
-            <motion.li
+            <li
               key={`${entry.label}-${index}`}
               className="flex min-w-0 items-center gap-3"
-              variants={item}
             >
               <span
                 aria-hidden="true"
@@ -64,9 +49,9 @@ function GraphCheck({ title, items, corner, className }: GraphCheckProps) {
               <span className="sr-only">
                 {entry.done ? ", done" : ", still open"}
               </span>
-            </motion.li>
+            </li>
           ))}
-        </motion.ul>
+        </ul>
       </GraphBody>
     </Graph>
   );

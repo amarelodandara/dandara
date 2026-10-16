@@ -12,6 +12,7 @@ const TETHER_SNAP_PX = 260;
 const TETHER_LIMIT_SHARE = 0.999;
 
 const DRAG_START_THRESHOLD_PX = 4;
+const HELD_STILL_AFTER_MS = 80;
 
 const TILT_DEGREES_PER_PX = 0.06;
 const MAX_TILT_DEGREES = TETHER_LENGTH_PX * TILT_DEGREES_PER_PX;
@@ -144,13 +145,15 @@ export function useSpringDrag<Held extends HTMLElement = HTMLElement>() {
     ref.current?.releasePointerCapture?.(held.pointerId);
     if (!held.travelled) return;
 
+    const heldStill = performance.now() - held.at > HELD_STILL_AFTER_MS;
     const seconds = (held.at - held.previousAt) / MS_PER_SECOND;
-    const velocity = seconds
-      ? {
-          x: (held.x - held.previousX) / seconds,
-          y: (held.y - held.previousY) / seconds,
-        }
-      : { x: 0, y: 0 };
+    const velocity =
+      seconds && !heldStill
+        ? {
+            x: (held.x - held.previousX) / seconds,
+            y: (held.y - held.previousY) / seconds,
+          }
+        : { x: 0, y: 0 };
 
     stopSpring.current = springToRest({
       from: travel.current,
@@ -182,31 +185,28 @@ export function useSpringDrag<Held extends HTMLElement = HTMLElement>() {
     };
   }, [letGo]);
 
-  const onPointerDown = useCallback(
-    (event: ReactPointerEvent<HTMLElement>) => {
-      if (event.button !== 0) return;
-      if (window.matchMedia(REDUCED_MOTION).matches) return;
+  const onPointerDown = useCallback((event: ReactPointerEvent<HTMLElement>) => {
+    if (event.button !== 0) return;
+    if (window.matchMedia(REDUCED_MOTION).matches) return;
 
-      stopSpring.current?.();
-      stopSpring.current = null;
+    stopSpring.current?.();
+    stopSpring.current = null;
 
-      const now = performance.now();
-      grab.current = {
-        pointerId: event.pointerId,
-        originX: event.clientX - pullBehindTravel(travel.current.x),
-        originY: event.clientY - pullBehindTravel(travel.current.y),
-        x: travel.current.x,
-        y: travel.current.y,
-        at: now,
-        previousX: travel.current.x,
-        previousY: travel.current.y,
-        previousAt: now,
-        travelled: false,
-      };
-      event.currentTarget.setPointerCapture(event.pointerId);
-    },
-    [],
-  );
+    const now = performance.now();
+    grab.current = {
+      pointerId: event.pointerId,
+      originX: event.clientX - pullBehindTravel(travel.current.x),
+      originY: event.clientY - pullBehindTravel(travel.current.y),
+      x: travel.current.x,
+      y: travel.current.y,
+      at: now,
+      previousX: travel.current.x,
+      previousY: travel.current.y,
+      previousAt: now,
+      travelled: false,
+    };
+    event.currentTarget.setPointerCapture(event.pointerId);
+  }, []);
 
   const onPointerMove = useCallback(
     (event: ReactPointerEvent<HTMLElement>) => {

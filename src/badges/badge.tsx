@@ -1,7 +1,13 @@
 "use client";
 
 import { useEffect, useId, useRef } from "react";
-import { badgeMarkup, LOOK, placeAlong, type Badge } from "./shape";
+import {
+  badgeMarkup,
+  LOOK,
+  placeAlong,
+  titleLength,
+  type Badge,
+} from "./shape";
 
 const GLOSS_FOLLOW_PER_SECOND = 10;
 const LONGEST_FRAME_SECONDS = 1 / 30;
@@ -41,6 +47,7 @@ export function ArticleBadge({
     let seen = true;
     let frame = 0;
     let previous = performance.now();
+    let textLength = titleLength(svg);
 
     const draw = (now: number) => {
       const elapsed = Math.min(
@@ -61,7 +68,7 @@ export function ArticleBadge({
       ] as const) {
         gloss?.setAttribute(name, value.toFixed(3));
       }
-      placeAlong(svg, { badge, ms: clock, drift });
+      placeAlong(svg, { badge, ms: clock, drift, textLength });
     };
 
     const loop = (now: number) => {
@@ -84,10 +91,11 @@ export function ArticleBadge({
       }
     });
 
-    placeAlong(svg, { badge, ms: clock, drift });
-    void document.fonts.ready.then(() =>
-      placeAlong(svg, { badge, ms: clock, drift }),
-    );
+    placeAlong(svg, { badge, ms: clock, drift, textLength });
+    void document.fonts.ready.then(() => {
+      textLength = titleLength(svg);
+      placeAlong(svg, { badge, ms: clock, drift, textLength });
+    });
     if (!still && playing) {
       watch.observe(svg);
       window.addEventListener("pointermove", point, { passive: true });

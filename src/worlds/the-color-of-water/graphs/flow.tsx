@@ -1,16 +1,8 @@
 "use client";
 
-import { motion, useReducedMotion } from "motion/react";
-
 import { GraphArrow } from "./arrow";
 import { Graph, GraphBody } from "./frame";
-import {
-  fadeUp,
-  staggerList,
-  toneClass as paletteTone,
-  type GraphPalette,
-} from "./motion";
-import { useReveal } from "./reveal";
+import { toneClass as paletteTone, type GraphPalette } from "./motion";
 import { cn } from "../cn";
 
 type FlowTone = "default" | "accent" | "muted";
@@ -51,30 +43,19 @@ function GraphFlow({
   className,
 }: GraphFlowProps) {
   const column = direction === "column";
-  const reduce = useReducedMotion();
-  const [ref, revealed] = useReveal<HTMLDivElement>(reduce);
-  const item = fadeUp(reduce);
-  const list = staggerList(reduce, 0.08);
   const tones = nodeTone(palette);
 
   return (
     <Graph title={title} className={className} corner={corner}>
       <GraphBody className="flex flex-col gap-7">
-        <motion.div
-          className="flex flex-col gap-7"
-          ref={ref}
-          initial={false}
-          animate={revealed}
-          variants={list}
-        >
+        <div className="flex flex-col gap-7">
           {rows.map((row, rowIndex) => (
-            <motion.div
+            <div
               key={rowIndex}
               className={cn(
                 "flex min-w-0 gap-x-3 gap-y-2",
                 column ? "flex-col items-center" : "flex-wrap items-center",
               )}
-              variants={item}
             >
               {row.nodes.map((node, nodeIndex) => {
                 const tone = node.tone ?? "default";
@@ -104,9 +85,9 @@ function GraphFlow({
                   </div>
                 );
               })}
-            </motion.div>
+            </div>
           ))}
-        </motion.div>
+        </div>
       </GraphBody>
     </Graph>
   );

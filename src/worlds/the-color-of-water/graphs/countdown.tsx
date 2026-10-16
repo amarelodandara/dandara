@@ -1,11 +1,9 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { motion, useReducedMotion } from "motion/react";
 
 import { Graph, GraphBody } from "./frame";
-import { fadeUp, type GraphPalette } from "./motion";
-import { useReveal } from "./reveal";
+import type { GraphPalette } from "./motion";
 
 type GraphCountdownProps = {
   title: string;
@@ -40,9 +38,6 @@ export function GraphCountdown({
   corner,
   className,
 }: GraphCountdownProps) {
-  const reduce = useReducedMotion();
-  const [ref, revealed] = useReveal<HTMLDivElement>(reduce);
-  const item = fadeUp(reduce);
   const [reading, setReading] = useState(PENDING);
 
   useEffect(() => {
@@ -64,18 +59,12 @@ export function GraphCountdown({
   return (
     <Graph title={title} className={className} corner={corner}>
       <GraphBody>
-        <motion.div
-          className="flex flex-col gap-2"
-          ref={ref}
-          initial={false}
-          animate={revealed}
-          variants={item}
-        >
+        <div className="flex flex-col gap-2">
           <p className="tabular-nums text-(--graph-accent)">{reading}</p>
           {caption ? (
             <p className="truncate text-(--graph-muted)">{caption}</p>
           ) : null}
-        </motion.div>
+        </div>
       </GraphBody>
     </Graph>
   );

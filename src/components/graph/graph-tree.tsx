@@ -1,7 +1,6 @@
 "use client";
 
 import type { ReactNode } from "react";
-import { motion, useReducedMotion } from "motion/react";
 
 import {
   childItems,
@@ -14,11 +13,7 @@ import {
   nestedList,
   textOf,
 } from "@/components/graph/graph-frame";
-import {
-  DIM_OPACITY,
-  fadeUp,
-  staggerList,
-} from "@/components/graph/graph-motion";
+import { DIM_OPACITY } from "@/components/graph/graph-motion";
 import { cn } from "@/lib/utils";
 
 type TreeNode = {
@@ -127,32 +122,21 @@ function GraphTree({
   corner,
   className,
 }: GraphTreeProps) {
-  const reduce = useReducedMotion();
-  const item = fadeUp(reduce);
-  const list = staggerList(reduce, 0.03);
   const rows = flatten(nodes ?? nodesOf(children));
   const hasAccent = rows.some((row) => row.accent);
 
   return (
     <Graph title={title} className={className} corner={corner}>
       <GraphBody className="graph-scroll-x">
-        <motion.ul
-          role="list"
-          className="flex min-w-max flex-col gap-1"
-          initial={reduce ? false : "hidden"}
-          variants={list}
-          viewport={{ once: true, amount: 0.4 }}
-          whileInView="show"
-        >
+        <ul className="flex min-w-max flex-col gap-1">
           {rows.map((row) => {
             const dim = hasAccent && !row.accent;
 
             return (
-              <motion.li
+              <li
                 key={row.key}
                 className="grid grid-cols-[minmax(0,1fr)_auto] items-baseline gap-x-6"
                 style={dim ? { opacity: DIM_OPACITY } : undefined}
-                variants={item}
               >
                 <span className="whitespace-pre">
                   <span
@@ -176,10 +160,10 @@ function GraphTree({
                 ) : (
                   <span />
                 )}
-              </motion.li>
+              </li>
             );
           })}
-        </motion.ul>
+        </ul>
         <span className="sr-only">Tree with {rows.length} nodes</span>
       </GraphBody>
     </Graph>

@@ -3,7 +3,10 @@ const STILLNESS = "(prefers-reduced-motion: reduce)";
 const REST = { x: 50, y: 44 };
 const PULL = 26;
 const REACH = 900;
-const CHASE = 0.14;
+const CHASE_PER_FRAME = 0.14;
+const FRAMES_PER_SECOND = 60;
+const MS_PER_SECOND = 1000;
+const LONGEST_FRAME_SECONDS = 1 / 30;
 const SETTLED = 0.05;
 
 const gravitate = (distance: number) => {
@@ -16,17 +19,24 @@ export function chaseThePointer(sun: HTMLElement) {
   const at = { ...REST };
   const wanted = { ...REST };
   let frame = 0;
+  let previous = 0;
 
   const paint = () => {
     sun.style.setProperty("--sun-x", `${at.x}%`);
     sun.style.setProperty("--sun-y", `${at.y}%`);
   };
 
-  const chase = () => {
+  const chase = (now: number) => {
+    const elapsed = Math.min(
+      (now - previous) / MS_PER_SECOND,
+      LONGEST_FRAME_SECONDS,
+    );
+    previous = now;
+    const share = 1 - (1 - CHASE_PER_FRAME) ** (elapsed * FRAMES_PER_SECOND);
     const offX = wanted.x - at.x;
     const offY = wanted.y - at.y;
-    at.x += offX * CHASE;
-    at.y += offY * CHASE;
+    at.x += offX * share;
+    at.y += offY * share;
     paint();
 
     const arrived = Math.abs(offX) < SETTLED && Math.abs(offY) < SETTLED;
@@ -38,7 +48,9 @@ export function chaseThePointer(sun: HTMLElement) {
     const seat = sun.getBoundingClientRect();
     wanted.x = REST.x + gravitate(event.clientX - (seat.left + seat.width / 2));
     wanted.y = REST.y + gravitate(event.clientY - (seat.top + seat.height / 2));
-    frame ||= requestAnimationFrame(chase);
+    if (frame) return;
+    previous = performance.now();
+    frame = requestAnimationFrame(chase);
   };
 
   const settle = () => {
