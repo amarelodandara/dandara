@@ -183,6 +183,47 @@ in `src/badges/`. The rest of the site only mounts them (`BadgeHover`,
   same way as the OG card but kept inside the frame, for every article
   tagged design or engineering. `scatter.ts` places the copies for both.
 
+# Content limits
+
+What the components hold before they break. Found by stress-testing them
+with worst-case content (Portuguese included) on `/dev/break-ui`, a dev-only
+page with a Demo / Worst case / Empty / One toggle. Its fixtures live beside
+it in `src/app/(site)/dev/break-ui/`; when a component starts taking new
+content, add its worst case there and look at 320px, 768px and 1440px.
+
+- **Badge titles** run round the ring once, and the ring is sized by word
+  count. `npm run badges` throws when a title will not fit. Roughly:
+
+  | words | 100 | 150 | 200 | 300 | 500 | 800 | 1,200 | 1,600+ |
+  | --- | --- | --- | --- | --- | --- | --- | --- | --- |
+  | characters | 25 | 32 | 37 | 44 | 53 | 61 | 68 | 73 |
+
+  A short note needs a short title. An `ELSEWHERE` entry's `words` is typed
+  by hand; 0 still bakes, at the smallest size.
+- **Post meta** is read by a regex, not by JavaScript. Every field stays
+  on one line as `name: "value",` (Prettier keeps it there), and a title
+  or deck never contains a straight double quote, escaped or not: use
+  “curly quotes”. Breaking either stops the build with "has no title".
+- **Post titles and decks** also set the OG card, which grows upward from
+  the bottom with nothing to stop it. Keep titles under about 90
+  characters and decks under about 80, an estimate from the card's CSS.
+- **Headings and signposts** break a single word too long for the line
+  mid-word rather than overflowing, so a long Portuguese compound survives
+  at 320px. It will not look good; prefer ordinary words in names.
+- **Exhibit captions** stay on one line at 768px up to about 20 characters
+  with a link and 30 without. Longer titles wrap, and the Live / Read links
+  drop below the title together when they would squeeze it.
+- **The changelog card** (mdxcn's `Changelog`, also on the wall):
+  - Each line starts with `launched:`, `improved:`, `fixed:` or
+    `removed:` (or `add`, `change`, `fix`, `remove`, `+`, `~`, `*`, `-`).
+    Any other label, a Portuguese one included, silently becomes
+    "improved" and the word disappears.
+  - `version` stays under about 20 characters. It is centred in the
+    frame's top border with no truncation and runs out of both sides.
+  - No bare URLs in a line; they run out of the frame at every width.
+  - It needs a wide span. In a wall column at 768px (about 214px) it
+    collapses to one word per line.
+
 # House style
 
 - **No comments in `.ts` or `.tsx`.** `house/no-comments` is enforced on push.
