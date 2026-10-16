@@ -1,10 +1,7 @@
 "use client";
 
-import { motion, useReducedMotion } from "motion/react";
-
 import { Graph, GraphBody } from "./frame";
-import { fadeUp, staggerList, type GraphPalette } from "./motion";
-import { useReveal } from "./reveal";
+import type { GraphPalette } from "./motion";
 import { cn } from "../cn";
 
 type TreeTone = "accent" | "ink" | "muted" | "alt";
@@ -42,26 +39,14 @@ function branchOf(items: TreeItem[], index: number) {
 }
 
 function GraphTree({ title, items, corner, className }: GraphTreeProps) {
-  const reduce = useReducedMotion();
-  const [ref, revealed] = useReveal<HTMLUListElement>(reduce);
-  const item = fadeUp(reduce);
-  const list = staggerList(reduce, 0.06);
-
   return (
     <Graph title={title} className={className} corner={corner}>
       <GraphBody>
-        <motion.ul
-          className="flex flex-col gap-2"
-          ref={ref}
-          initial={false}
-          animate={revealed}
-          variants={list}
-        >
+        <ul className="flex flex-col gap-2">
           {items.map((entry, index) => (
-            <motion.li
+            <li
               key={`${entry.label}-${index}`}
               className="flex min-w-0 whitespace-pre"
-              variants={item}
             >
               <span aria-hidden="true" className="text-(--graph-frame)">
                 {branchOf(items, index)}
@@ -74,9 +59,9 @@ function GraphTree({ title, items, corner, className }: GraphTreeProps) {
               >
                 {entry.label}
               </span>
-            </motion.li>
+            </li>
           ))}
-        </motion.ul>
+        </ul>
       </GraphBody>
     </Graph>
   );

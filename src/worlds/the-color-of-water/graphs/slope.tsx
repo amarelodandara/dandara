@@ -1,10 +1,7 @@
 "use client";
 
-import { motion, useReducedMotion } from "motion/react";
-
 import { Graph, GraphBody } from "./frame";
-import { fadeUp, staggerList, type GraphPalette } from "./motion";
-import { useReveal } from "./reveal";
+import type { GraphPalette } from "./motion";
 import { cn } from "../cn";
 
 type SlopeItem = {
@@ -37,38 +34,24 @@ function GraphSlope({
   corner,
   className,
 }: GraphSlopeProps) {
-  const reduce = useReducedMotion();
-  const [ref, revealed] = useReveal<HTMLDivElement>(reduce);
-  const item = fadeUp(reduce);
-  const list = staggerList(reduce, 0.08);
-
   return (
     <Graph title={title} className={className} corner={corner}>
       <GraphBody className="px-4 py-6 sm:px-5 sm:py-7">
-        <motion.div
-          className="grid grid-cols-[1fr_auto_1rem_auto] gap-x-2 gap-y-3"
-          ref={ref}
-          initial={false}
-          animate={revealed}
-          variants={list}
-        >
+        <div className="grid grid-cols-[1fr_auto_1rem_auto] gap-x-2 gap-y-3">
           {fromLabel || toLabel ? (
-            <motion.div
-              className={`${ROW} text-(--graph-frame)`}
-              variants={item}
-            >
+            <div className={`${ROW} text-(--graph-frame)`}>
               <span />
               <span className="tabular-nums">{fromLabel}</span>
               <span />
               <span className="tabular-nums">{toLabel}</span>
-            </motion.div>
+            </div>
           ) : null}
 
           {items.map((entry) => {
             const rose = entry.to >= entry.from;
 
             return (
-              <motion.div key={entry.label} className={ROW} variants={item}>
+              <div key={entry.label} className={ROW}>
                 <span className="truncate text-(--graph-ink)">
                   {entry.label}
                 </span>
@@ -92,10 +75,10 @@ function GraphSlope({
                 >
                   {reading(entry.to)}
                 </span>
-              </motion.div>
+              </div>
             );
           })}
-        </motion.div>
+        </div>
       </GraphBody>
     </Graph>
   );
