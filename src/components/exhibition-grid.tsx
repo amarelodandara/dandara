@@ -161,13 +161,13 @@ function Framed({ read, children }: { read?: string; children: ReactNode }) {
   if (!read) return children;
   if (isElsewhere(read)) {
     return (
-      <a href={read} tabIndex={-1}>
+      <a href={read} tabIndex={-1} aria-hidden="true">
         {children}
       </a>
     );
   }
   return (
-    <Link href={read} tabIndex={-1}>
+    <Link href={read} tabIndex={-1} aria-hidden="true">
       {children}
     </Link>
   );
