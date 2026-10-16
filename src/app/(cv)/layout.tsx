@@ -1,7 +1,9 @@
 import type { Metadata } from "next";
+import { ICON } from "@/lib/site";
 
 export const metadata: Metadata = {
   title: "CV",
+  icons: { icon: ICON },
   robots: { index: false, follow: false },
 };
 

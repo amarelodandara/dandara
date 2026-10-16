@@ -1,9 +1,14 @@
 import type { Metadata } from "next";
+import dynamic from "next/dynamic";
 import localFont from "next/font/local";
-import { LINK } from "@/components/link";
-import { SiteNav } from "@/components/site-nav";
-import { ACCENT_PROSE, ANNOTATION, PAGE_HEADING, PROSE } from "@/lib/type";
+import { NotFoundWall } from "@/components/not-found-wall";
+import { BROKEN_ICON } from "@/lib/site";
 import "./globals.css";
+
+const Agentation =
+  process.env.NODE_ENV === "development"
+    ? dynamic(() => import("agentation").then((mod) => mod.Agentation))
+    : null;
 
 const inter = localFont({
   src: [
@@ -17,46 +22,15 @@ const inter = localFont({
 export const metadata: Metadata = {
   title: "Not found",
   description: "This address does not match a page on this site.",
+  icons: { icon: BROKEN_ICON },
 };
-
-const ELSEWHERE = [
-  { href: "/", label: "Home", blurb: "the selected work, and who I am" },
-  {
-    href: "/writing",
-    label: "Writing",
-    blurb: "essays on design and building",
-  },
-  { href: "/feed.xml", label: "Feed", blurb: "RSS for the writing" },
-  { href: "/sitemap.xml", label: "Sitemap", blurb: "every page on this site" },
-];
 
 export default function GlobalNotFound() {
   return (
     <html lang="en" className={`${inter.variable} h-full antialiased`}>
       <body className="min-h-full bg-cadmium-50">
-        <SiteNav />
-        <main className="mx-auto w-full max-w-[1400px] px-[7vw] py-[9vh] sm:py-[12vh]">
-          <div className="mx-auto w-full max-w-2xl">
-            <p className={`${ANNOTATION} text-graphite-700`}>404</p>
-            <h1 className={`mt-1.5 ${PAGE_HEADING}`}>Nothing hangs here</h1>
-            <p className={`mt-6 ${ACCENT_PROSE} text-graphite-700`}>
-              This address does not match a page on this site. It may have been
-              renamed, or it may never have existed. Everything that does exist
-              is one link away.
-            </p>
-
-            <ul className="mt-12 space-y-4">
-              {ELSEWHERE.map(({ href, label, blurb }) => (
-                <li key={href} className={PROSE}>
-                  <a href={href} className={LINK}>
-                    {label}
-                  </a>
-                  <span className="text-graphite-700"> — {blurb}</span>
-                </li>
-              ))}
-            </ul>
-          </div>
-        </main>
+        <NotFoundWall />
+        {Agentation ? <Agentation endpoint="http://localhost:4747" /> : null}
       </body>
     </html>
   );
