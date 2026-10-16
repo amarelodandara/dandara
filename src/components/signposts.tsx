@@ -27,7 +27,7 @@ export function Signpost({ href, name, area }: Sign) {
     <Link
       href={href}
       data-signpost={area}
-      className={`flex items-center justify-between gap-3 rounded-(--shop-radius) px-8 pt-8 pb-6 ${SIGN_COLOR[area]} ${FOCUS}`}
+      className={`flex items-center justify-between gap-3 rounded-(--shop-radius) px-8 py-6 ${SIGN_COLOR[area]} ${FOCUS}`}
     >
       <SignpostGrain />
       <span className={`min-w-0 wrap-break-word ${SECTION_HEADING}`}>
@@ -35,7 +35,7 @@ export function Signpost({ href, name, area }: Sign) {
       </span>
       <span
         data-signpost-hole
-        className="-mr-3 flex size-9 shrink-0 items-center justify-center rounded-full bg-cadmium-50"
+        className="-mr-2 flex size-9 shrink-0 items-center justify-center rounded-full bg-cadmium-50"
       >
         <SignpostArrow />
       </span>

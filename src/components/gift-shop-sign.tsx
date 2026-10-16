@@ -58,7 +58,7 @@ export function GiftShopSign({
     <header data-paper data-perforated className="-mx-6 -mt-8 bg-cadmium-400">
       <div
         data-perforated
-        className="flex items-center justify-between gap-3 px-8 pt-8 pb-6"
+        className="flex items-center justify-between gap-3 px-8 py-6"
       >
         <h2 className={`min-w-0 ${SECTION_HEADING}`}>{sign.name}</h2>
 
