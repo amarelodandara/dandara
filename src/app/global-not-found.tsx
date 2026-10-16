@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import dynamic from "next/dynamic";
 import localFont from "next/font/local";
 import { NotFoundWall } from "@/components/not-found-wall";
+import { BROKEN_ICON } from "@/lib/site";
 import "./globals.css";
 
 const Agentation =
@@ -21,6 +22,7 @@ const inter = localFont({
 export const metadata: Metadata = {
   title: "Not found",
   description: "This address does not match a page on this site.",
+  icons: { icon: BROKEN_ICON },
 };
 
 export default function GlobalNotFound() {

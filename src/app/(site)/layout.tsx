@@ -5,7 +5,7 @@ import { Analytics } from "@vercel/analytics/next";
 import { SpeedInsights } from "@vercel/speed-insights/next";
 import { GiftShop } from "@/components/gift-shop";
 import { SiteNav } from "@/components/site-nav";
-import { CARD, DESCRIPTION, NAME, SITE_URL, TITLE } from "@/lib/site";
+import { CARD, DESCRIPTION, ICON, NAME, SITE_URL, TITLE } from "@/lib/site";
 import { ANNOTATION } from "@/lib/type";
 import "../globals.css";
 
@@ -37,6 +37,7 @@ export const metadata: Metadata = {
   applicationName: NAME,
   authors: [{ name: NAME, url: SITE_URL }],
   creator: NAME,
+  icons: { icon: ICON },
   alternates: {
     canonical: "/",
     types: { "application/rss+xml": "/feed.xml" },

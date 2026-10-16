@@ -12,3 +12,7 @@ export const CARD = {
   height: 630,
   alt: "Dandara — product design, design engineering and relentless taste.",
 };
+
+export const ICON = { url: "/icon.svg", type: "image/svg+xml" };
+
+export const BROKEN_ICON = { url: "/icon-broken.svg", type: "image/svg+xml" };
