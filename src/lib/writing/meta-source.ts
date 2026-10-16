@@ -7,7 +7,7 @@ const CONTENT = path.join(process.cwd(), "src", "content", "writing");
 
 const META_BLOCK = /export const meta = \{([\S\s]*?)\n\};/;
 
-const FIELD = /^ +(\w+): "([^"]*)",$/gm;
+const FIELD = /^ +(\w+):\s*"([^"]*)",$/gm;
 
 const TAG_LIST = /^ +tags: \[([^\]]*)\],$/m;
 

@@ -200,10 +200,11 @@ content, add its worst case there and look at 320px, 768px and 1440px.
 
   A short note needs a short title. An `ELSEWHERE` entry's `words` is typed
   by hand; 0 still bakes, at the smallest size.
-- **Post meta** is read by a regex, not by JavaScript. Every field stays
-  on one line as `name: "value",` (Prettier keeps it there), and a title
-  or deck never contains a straight double quote, escaped or not: use
-  “curly quotes”. Breaking either stops the build with "has no title".
+- **Post meta** is read by a regex, not by JavaScript. Each field is
+  `name: "value",`, on one line or with the value on the next (Prettier
+  moves it there when it fits alone but not after its key). A title or
+  deck never contains a straight double quote, escaped or not: use
+  “curly quotes”. Breaking that stops the build with "has no title".
 - **Post titles and decks** also set the OG card, which grows upward from
   the bottom with nothing to stop it. Keep titles under about 90
   characters and decks under about 80, an estimate from the card's CSS.
