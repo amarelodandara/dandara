@@ -13,7 +13,7 @@ const PRESSABLE = [
   "group transition-[color] duration-(--motion-quick) ease-out-strong",
   "can-hover:hover:text-cadmium-700 focus-visible:text-cadmium-700 active:text-cadmium-700",
   "active:duration-(--press)",
-  "focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-graphite-900/40",
+  "focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-graphite-900/50",
 ].join(" ");
 
 const MARKER = [

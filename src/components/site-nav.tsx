@@ -10,12 +10,12 @@ import { ANNOTATION } from "@/lib/type";
 
 const NAV_LINK = [
   `rounded-lg px-2.5 py-2 ${ANNOTATION} leading-none`,
-  "text-graphite-500 aria-[current=page]:text-graphite-900",
+  "text-graphite-600 aria-[current=page]:text-graphite-900",
   "transition-[background-color,color,scale] duration-(--motion-quick) ease-out-strong",
   "can-hover:hover:bg-graphite-100 can-hover:hover:text-graphite-900",
   "focus-visible:bg-graphite-100 focus-visible:text-graphite-900",
   "active:scale-[0.97] active:duration-(--press)",
-  "focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-graphite-900/40",
+  "focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-graphite-900/50",
 ].join(" ");
 
 const MORE_POPUP = [

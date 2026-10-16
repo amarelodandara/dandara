@@ -51,7 +51,7 @@ export function ExperienceList({ className }: { className?: string }) {
               )}
               <span
                 data-period
-                className={`shrink-0 ${ANNOTATION} text-graphite-500 group-data-compact:hidden`}
+                className={`shrink-0 ${ANNOTATION} text-graphite-600 group-data-compact:hidden`}
               >
                 {period}
               </span>

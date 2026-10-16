@@ -46,7 +46,7 @@ function Piece({ title, deck, href, venue, badge }: Entry) {
           <a href={href} className={LINK}>
             {title}
             <span
-              className={`ml-2.5 inline-block ${ANNOTATION} text-graphite-500`}
+              className={`ml-2.5 inline-block ${ANNOTATION} text-graphite-600`}
             >
               {venue}
             </span>

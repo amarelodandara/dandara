@@ -4,7 +4,7 @@ const MOTION =
   "transition-[background-color,scale] duration-(--motion-quick) ease-out-strong";
 
 const FOCUS =
-  "focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-graphite-900/40";
+  "focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-graphite-900/50";
 
 const PRESSED = "active:scale-[0.99] active:duration-(--press)";
 
