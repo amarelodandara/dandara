@@ -70,6 +70,32 @@ of the colour rules entirely.
 Everywhere else has none. If a design seems to need one, the answer is a role it
 already fits — check `LABEL` before inventing a quiet variant of a heading.
 
+# The space scale
+
+Space has no roles, only allowed steps. Padding, margin, gap and space classes
+take a step from this table and nothing else; `better-tailwindcss/no-restricted-classes`
+rejects any other. `0`, `px` and `auto` are always allowed.
+
+| tier | steps | reach for it when |
+| --- | --- | --- |
+| inside one object | `0.5` `1` `1.5` `2` `2.5` `3` | padding inside a chip, key or nav link; the gap between a title and its date. Half steps live here and nowhere else. |
+| between the parts of a thing | `4` `6` `8` | a heading and its list, a sign's padding, the mat around an exhibit, paragraphs. |
+| between blocks | `12` `16` | rules and figures in a post, the post footer, the gap between the home header's columns. |
+| the page frame | `[7vw]` | the side gutter of every page. |
+| | `[max(1.5rem,4vw)]` | the exhibition wall's gutter. It runs wider than the text on purpose. |
+| | `[9vh]` → `sm:[12vh]` | the top and the bottom of every page: `py-[9vh] sm:py-[12vh]`, or the same pair split when the top and bottom sit on different elements. |
+| | `[18vh]` | a major break: between the movements of the home page, and down the hero's columns from `md`. |
+| | `[10vh]` | a minor break: between exhibition rooms, before the signposts and the colophon. |
+| | `[5vh]` | the nav's distance from the top of the window. |
+| optical | `[…em]` `[…lh]` | space that has to follow the text, not the grid. |
+| named | `(--wall-gap)` | the gap between pieces on a wall (1.5rem, 2rem from 768px). |
+
+`--shop-gap` (1rem, 1.25rem from 768px) insets the gift-shop panel and lives
+in `globals.css`. Positions (`top`, `left`, `inset`) are not checked; the
+gift-shop plaque floats in viewport units.
+
+A world and the badges are free of this table, like the type scale. So is the CV.
+
 # Worlds
 
 A world is a post (or project) that brings its own look: its own colours,

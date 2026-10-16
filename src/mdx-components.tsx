@@ -41,7 +41,7 @@ function Subheading({ children, ...rest }: ComponentPropsWithoutRef<"h3">) {
     <h3
       id={slug(children) || undefined}
       {...rest}
-      className={`mt-10 scroll-mt-16 text-graphite-700 ${SECTION_HEADING}`}
+      className={`mt-12 scroll-mt-16 text-graphite-700 ${SECTION_HEADING}`}
     >
       {children}
     </h3>
@@ -50,7 +50,7 @@ function Subheading({ children, ...rest }: ComponentPropsWithoutRef<"h3">) {
 
 function Paragraph({ children, ...rest }: ComponentPropsWithoutRef<"p">) {
   return (
-    <p {...rest} className={`mt-5 ${PROSE}`}>
+    <p {...rest} className={`mt-4 ${PROSE}`}>
       {children}
     </p>
   );
@@ -60,7 +60,7 @@ function List({ children, ...rest }: ComponentPropsWithoutRef<"ul">) {
   return (
     <ul
       {...rest}
-      className={`mt-5 list-disc pl-5 marker:text-graphite-400 [li>&]:mt-3 ${PROSE}`}
+      className={`mt-4 list-disc pl-6 marker:text-graphite-400 [li>&]:mt-3 ${PROSE}`}
     >
       {children}
     </ul>
@@ -103,7 +103,7 @@ function Quote({ children, ...rest }: ComponentPropsWithoutRef<"blockquote">) {
   return (
     <blockquote
       {...rest}
-      className="mt-8 border-l border-graphite-200 pl-5 text-graphite-700 [&>*:first-child]:mt-0"
+      className="mt-8 border-l border-graphite-200 pl-6 text-graphite-700 [&>*:first-child]:mt-0"
     >
       {children}
     </blockquote>
@@ -111,7 +111,7 @@ function Quote({ children, ...rest }: ComponentPropsWithoutRef<"blockquote">) {
 }
 
 function Rule() {
-  return <hr className="mt-14 border-0 border-t border-graphite-200" />;
+  return <hr className="mt-16 border-0 border-t border-graphite-200" />;
 }
 
 const components: MDXComponents = {

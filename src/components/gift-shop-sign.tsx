@@ -44,7 +44,7 @@ export const shopContents = (article: Article | null, pathname: string) => {
 
 export const shelfSeat = (section: GiftShopSection, full: boolean) => {
   if (section.title) return "mt-8";
-  return full ? "mt-14" : "mt-auto pt-14";
+  return full ? "mt-16" : "mt-auto pt-16";
 };
 
 export function GiftShopSign({
@@ -55,10 +55,10 @@ export function GiftShopSign({
   onClose: () => void;
 }) {
   return (
-    <header data-paper data-perforated className="-mx-5 -mt-8 bg-cadmium-400">
+    <header data-paper data-perforated className="-mx-6 -mt-8 bg-cadmium-400">
       <div
         data-perforated
-        className="flex items-center justify-between gap-3 px-8 pt-7 pb-6"
+        className="flex items-center justify-between gap-3 px-8 pt-8 pb-6"
       >
         <h2 className={`min-w-0 ${SECTION_HEADING}`}>{sign.name}</h2>
 

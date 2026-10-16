@@ -35,7 +35,7 @@ export default function GlobalNotFound() {
     <html lang="en" className={`${inter.variable} h-full antialiased`}>
       <body className="min-h-full bg-cadmium-50">
         <SiteNav />
-        <main className="mx-auto w-full max-w-[1400px] px-[7vw] pt-[9vh] pb-[14vh] sm:pt-[12vh]">
+        <main className="mx-auto w-full max-w-[1400px] px-[7vw] py-[9vh] sm:py-[12vh]">
           <div className="mx-auto w-full max-w-2xl">
             <p className={`${ANNOTATION} text-graphite-700`}>404</p>
             <h1 className={`mt-1.5 ${PAGE_HEADING}`}>Nothing hangs here</h1>
