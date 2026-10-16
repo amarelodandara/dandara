@@ -18,13 +18,18 @@ Every entry starts with the area it affects: `[Home]`, `[Work]`, `[Blog]`, `[Gif
 - [Blog] **Share cards** for each post now have the post's badge scattered across the yellow panel like stickers.
 - [Work] **Articles on the wall.** Every article tagged design or engineering now hangs in the main exhibition as a wide frame scattered with copies of its badge, like its share card, dated like the other pieces, with a "Read" link. Hovering one keeps the work it explains sharp.
 
+- [Site-wide] **More pages menu.** A ⋯ button at the end of the navigation opens small signposts to the pages it doesn't list, starting with the changelog.
+
 ### Improved
+- [Home] **Shorter introduction**, rewritten in two paragraphs.
+- [Home] **Writing heading** is now the link to every post: an arrow slides in beside it on hover. The section on the home page is called **Work** instead of Selected work, and the thesis icon now hangs there too.
 - [Site-wide] **Signposts** wipe their paper grain away under the cursor in a soft spot, and the clean patch spreads across the whole sign when you click, just before the page changes. On hover the sign now sinks into the wall with the same inset as the footer panel instead of lifting off it with a large shadow.
 - [Work] **Signs between exhibitions** call the main room "Main work" in green; the themed rooms are grey. A blue "Writing" sign at the end leads to the writing index.
 - [Work] **Hovering a piece** keeps the pieces from the same project, and the article about it, sharp while the rest of the wall blurs.
 - [Work] **Videos** play only while they are on screen, and stay still if you have reduced motion turned on.
 
 ### Removed
+- [Home] **"All writing" link** under the posts, now that the heading leads there, and the long description under Stone Co. in the experience list.
 - [Work] **Pile view** and its toggle. Every exhibition is one still grid.
 - [Work] **Expanded project view.** Pieces are already shown at full detail, so clicking no longer zooms.
 

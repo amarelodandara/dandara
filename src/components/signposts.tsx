@@ -1,13 +1,13 @@
 import Link from "next/link";
 import { SignpostArrow } from "@/components/signpost-arrow";
 import { SignpostGrain } from "@/components/signpost-grain";
-import { SECTION_HEADING } from "@/lib/type";
+import { LABEL, SECTION_HEADING } from "@/lib/type";
 
 type Area = "blog" | "site" | "work";
 
-type Sign = { href: string; name: string; area: Area };
+export type Sign = { href: string; name: string; area: Area };
 
-const SIGNPOSTS: Sign[] = [
+export const SIGNPOSTS: Sign[] = [
   { href: "/writing", name: "Writing", area: "blog" },
   { href: "/changelog", name: "Changelog", area: "site" },
 ];
@@ -33,6 +33,25 @@ export function Signpost({ href, name, area }: Sign) {
       <span
         data-signpost-hole
         className="-mr-3 flex size-9 shrink-0 items-center justify-center rounded-full bg-cadmium-50"
+      >
+        <SignpostArrow />
+      </span>
+    </Link>
+  );
+}
+
+export function SmallSignpost({ href, name, area }: Sign) {
+  return (
+    <Link
+      href={href}
+      data-signpost={area}
+      className={`flex items-center justify-between gap-3 rounded-lg py-2.5 pr-2.5 pl-3.5 ${SIGN_COLOR[area]} ${FOCUS}`}
+    >
+      <SignpostGrain />
+      <span className={`min-w-0 ${LABEL}`}>{name}</span>
+      <span
+        data-signpost-hole
+        className="flex size-6 shrink-0 items-center justify-center rounded-full bg-cadmium-50"
       >
         <SignpostArrow />
       </span>

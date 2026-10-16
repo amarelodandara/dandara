@@ -162,6 +162,7 @@ const WORK: Exhibit[] = [
     live: MUSEUMS,
     project: "museums",
     rooms: ["main"],
+    featured: true,
     media: {
       kind: "video",
       sources: [{ src: "/work/museu-mark.mp4", type: MP4 }],
