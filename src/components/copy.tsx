@@ -11,13 +11,13 @@ export type Settled = Exclude<Outcome, null>;
 
 export const COPIED_NOTE: Record<Settled, string> = {
   done: "Copied",
-  failed: "Not copied",
+  failed: "Not copied, try again",
 };
 
 export const COPIED_ANNOUNCEMENT: Record<Settled, (title: string) => string> = {
   done: (title) => `${title} copied.`,
   failed: (title) =>
-    `${title} could not be copied, the browser refused the clipboard.`,
+    `${title} could not be copied, the browser refused the clipboard. Try again.`,
 };
 
 const SWAPPED = [

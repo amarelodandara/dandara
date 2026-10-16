@@ -70,12 +70,12 @@ export function GiftShopRow({ item }: { item: GiftShopItem }) {
 
 const SAVED_NOTE: Record<Settled, string> = {
   done: "Saved",
-  failed: "Not saved",
+  failed: "Not saved, try again",
 };
 
 const SAVED_ANNOUNCEMENT: Record<Settled, (title: string) => string> = {
   done: (title) => `${title} saved.`,
-  failed: (title) => `${title} could not be saved.`,
+  failed: (title) => `${title} could not be saved. Try again.`,
 };
 
 async function fileIsThere(href: string) {
