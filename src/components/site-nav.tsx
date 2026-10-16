@@ -4,7 +4,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useState } from "react";
 import { Popover } from "@base-ui/react/popover";
-import { SIGNPOSTS, SmallSignpost } from "@/components/signposts";
+import { SmallSignpost, type Sign } from "@/components/signposts";
 import { SunMark } from "@/components/sun-mark";
 import { ANNOTATION } from "@/lib/type";
 
@@ -19,12 +19,15 @@ const NAV_LINK = [
 ].join(" ");
 
 const MORE_POPUP = [
-  "w-56 origin-(--transform-origin) rounded-(--shop-radius) bg-cadmium-50 p-1.5",
-  "shadow-raised outline-none",
-  "transition-[opacity,scale] duration-(--motion-quick) ease-out-strong",
-  "data-starting-style:scale-[0.97] data-starting-style:opacity-0",
-  "data-ending-style:scale-[0.97] data-ending-style:opacity-0",
-  "motion-reduce:transition-none",
+  "group w-56 outline-none",
+  "transition-opacity duration-(--motion-quick) ease-out-strong",
+  "data-ending-style:opacity-0 motion-reduce:transition-none",
+].join(" ");
+
+const MORE_SIGN = [
+  "transition-[opacity,translate] duration-(--motion-quick) ease-out-strong",
+  "group-data-starting-style:-translate-y-1 group-data-starting-style:opacity-0",
+  "nth-2:delay-40 nth-3:delay-80 motion-reduce:transition-none",
 ].join(" ");
 
 const PAGES = [
@@ -33,9 +36,11 @@ const PAGES = [
   { href: "/writing", name: "Writing" },
 ];
 
-const ELSEWHERE = SIGNPOSTS.filter(
-  (sign) => !PAGES.some(({ href }) => href === sign.href),
-);
+const ELSEWHERE: Sign[] = [
+  { href: "/work/sketchbook", name: "Sketchbook", area: "site" },
+  { href: "/work/photography", name: "Photography", area: "site" },
+  { href: "/changelog", name: "Changelog", area: "site" },
+];
 
 const here = (pathname: string, href: string) =>
   href === "/" ? pathname === href : pathname.startsWith(href);
@@ -71,7 +76,7 @@ export function SiteNav() {
         </Link>
       ))}
 
-      {ELSEWHERE.length > 0 ? <MorePages /> : null}
+      <MorePages />
     </nav>
   );
 }
@@ -99,9 +104,9 @@ function MorePages() {
           className="z-20"
         >
           <Popover.Popup className={MORE_POPUP}>
-            <ul className="space-y-1.5">
+            <ul className="space-y-2">
               {ELSEWHERE.map((sign) => (
-                <li key={sign.href}>
+                <li key={sign.href} className={MORE_SIGN}>
                   <SmallSignpost {...sign} />
                 </li>
               ))}

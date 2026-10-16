@@ -6,7 +6,7 @@ export const CAPTION = `mt-3 ${ANNOTATION} leading-normal text-graphite-700`;
 
 export type Measure = "wide" | "body" | "three-quarters";
 
-const MAT = "rounded-md bg-cadmium-50 p-3 md:p-5";
+const MAT = "rounded-md bg-cadmium-50 p-3 md:p-6";
 
 const SIZES: Record<Measure, string> = {
   wide: "(min-width: 68rem) 64rem, 92vw",
@@ -81,7 +81,7 @@ type Panel = {
 export function FigurePair({ panels }: { panels: [Panel, Panel] }) {
   return (
     <figure className="my-12" data-measure="wide">
-      <div className="mx-auto grid max-w-4xl gap-8 sm:grid-cols-2 sm:gap-5">
+      <div className="mx-auto grid max-w-4xl gap-8 sm:grid-cols-2 sm:gap-6">
         {panels.map((panel) => (
           <figure key={panel.src}>
             <Image

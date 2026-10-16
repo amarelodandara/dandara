@@ -65,7 +65,7 @@ export default async function ArticlePage({
     <>
       <PostSchema slug={slug} meta={meta} />
 
-      <main className="mx-auto w-full max-w-[1400px] flex-1 px-[7vw] pt-[9vh] pb-[14vh] sm:pt-[12vh]">
+      <main className="mx-auto w-full max-w-[1400px] flex-1 px-[7vw] py-[9vh] sm:py-[12vh]">
         <ArticleNotes slug={slug} title={meta.title} notes={notes} />
 
         <article data-article className="mx-auto w-full max-w-5xl">

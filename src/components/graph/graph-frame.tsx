@@ -65,7 +65,7 @@ function GraphTitle({
 function GraphBody({ className, ...props }: React.ComponentProps<"div">) {
   return (
     <div
-      className={cn("min-w-0 px-4 py-6 sm:px-5 sm:py-7", className)}
+      className={cn("min-w-0 px-4 py-6 sm:px-6 sm:py-8", className)}
       {...props}
     />
   )

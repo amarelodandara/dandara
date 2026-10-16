@@ -92,6 +92,29 @@ const eslintConfig = defineConfig([
     },
   },
   {
+    files: ["src/**/*.{ts,tsx}"],
+    ignores: [
+      "src/worlds/**",
+      "src/badges/**",
+      "src/components/cv/**",
+      "src/app/(cv)/**",
+    ],
+    rules: {
+      "better-tailwindcss/no-restricted-classes": [
+        "error",
+        {
+          restrict: [
+            {
+              pattern: String.raw`^(?:.+:)?-?(?:p[xytrblse]?|m[xytrblse]?|gap-[xy]|gap(?!-[xy]-)|space-[xy])-(?!(?:0|px|auto|0\.5|1|1\.5|2|2\.5|3|4|6|8|12|16|\[(?:7vw|max\(1\.5rem,4vw\)|5vh|9vh|10vh|12vh|18vh|-?[\d.]+(?:em|lh))\]|\(--[\w-]+\))$).+$`,
+              message:
+                "Off the space scale. Use a step from the table in CLAUDE.md.",
+            },
+          ],
+        },
+      ],
+    },
+  },
+  {
     files: ["src/components/cv/**"],
     rules: { "better-tailwindcss/no-unknown-classes": "off" },
   },

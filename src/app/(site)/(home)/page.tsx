@@ -42,17 +42,42 @@ const PERSONAL_WORK: { title: string; href?: string; blurb: string }[] = [
   },
 ];
 
+function SectionLink({ href, name }: { href: string; name: string }) {
+  return (
+    <Link
+      href={href}
+      className={`group inline-flex items-center gap-0.5 ${LINK}`}
+    >
+      {name}
+      <svg
+        viewBox="0 0 16 16"
+        fill="none"
+        aria-hidden="true"
+        className="size-3 -translate-x-1 opacity-0 transition-[opacity,translate] duration-(--motion-quick) ease-out-strong group-focus-visible:translate-x-0 group-focus-visible:opacity-100 motion-reduce:transition-none can-hover:group-hover:translate-x-0 can-hover:group-hover:opacity-100"
+      >
+        <path
+          d="M6 3.5 10.5 8 6 12.5"
+          stroke="currentColor"
+          strokeWidth="1.5"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+        />
+      </svg>
+    </Link>
+  );
+}
+
 export default async function Home() {
   const writing = await loadWritingList();
 
   return (
-    <main className="flex-1 pt-[9vh] pb-[14vh] sm:pt-[12vh] sm:pb-[18vh]">
+    <main className="flex-1 py-[9vh] sm:py-[12vh]">
       <PersonSchema />
 
       <div className="mx-auto w-full max-w-[1400px] px-[7vw]">
         <div data-landing>
           <header className="grid grid-cols-1 gap-12 md:grid-cols-2">
-            <div className="flex flex-col gap-20 md:h-full md:justify-between md:gap-24">
+            <div className="flex flex-col gap-16 md:h-full md:justify-between md:gap-[18vh]">
               <div data-appear="1" className="h-fit">
                 <h1 className={PAGE_HEADING}>Dandara</h1>
                 <p className={`mt-[0.08em] ${PAGE_HEADING}`}>Product Design</p>
@@ -88,7 +113,7 @@ export default async function Home() {
                   </span>
                 </div>
                 <ul
-                  className={`mt-2 flex flex-wrap gap-x-5 gap-y-1 ${LABEL} text-graphite-700`}
+                  className={`mt-2 flex flex-wrap gap-x-4 gap-y-1 ${LABEL} text-graphite-700`}
                 >
                   {FIND_ME.map(({ label, href }) => (
                     <li key={label}>
@@ -101,7 +126,7 @@ export default async function Home() {
               </div>
             </div>
 
-            <div className="flex flex-col gap-20 md:h-full md:justify-between md:gap-24">
+            <div className="flex flex-col gap-16 md:h-full md:justify-between md:gap-[18vh]">
               <div data-appear="3" className="h-fit">
                 <blockquote className={ACCENT_PROSE}>
                   The role of the designer is that of a good, thoughtful host
@@ -112,7 +137,10 @@ export default async function Home() {
                 </p>
               </div>
 
-              <div data-appear="4" className={`h-fit space-y-5 ${PROSE}`}>
+              <div
+                data-appear="4"
+                className={`h-fit space-y-4 text-pretty ${PROSE}`}
+              >
                 <p>
                   I am a designer with 5+ years of experience. I designed
                   software for credit card machines at Brazil&rsquo;s biggest
@@ -140,34 +168,15 @@ export default async function Home() {
         <section className="mt-[18vh] grid grid-cols-1 gap-12 md:grid-cols-2">
           <div className="md:col-start-2">
             <h2 className={`${ANNOTATION} leading-none text-graphite-700`}>
-              Experience
+              <SectionLink href="/work" name="Experience" />
             </h2>
 
             <ExperienceList className="mt-6 md:mt-8" />
 
             <h2
-              className={`mt-16 ${ANNOTATION} leading-none text-graphite-700 md:mt-20`}
+              className={`mt-16 ${ANNOTATION} leading-none text-graphite-700`}
             >
-              <Link
-                href="/writing"
-                className={`group inline-flex items-center gap-0.5 ${LINK}`}
-              >
-                Writing
-                <svg
-                  viewBox="0 0 16 16"
-                  fill="none"
-                  aria-hidden="true"
-                  className="size-3 -translate-x-1 opacity-0 transition-[opacity,translate] duration-(--motion-quick) ease-out-strong group-focus-visible:translate-x-0 group-focus-visible:opacity-100 motion-reduce:transition-none can-hover:group-hover:translate-x-0 can-hover:group-hover:opacity-100"
-                >
-                  <path
-                    d="M6 3.5 10.5 8 6 12.5"
-                    stroke="currentColor"
-                    strokeWidth="1.5"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                  />
-                </svg>
-              </Link>
+              <SectionLink href="/writing" name="Writing" />
             </h2>
 
             <BadgeHover badges={badgesFor(writing.slice(0, HOME_WRITING))}>

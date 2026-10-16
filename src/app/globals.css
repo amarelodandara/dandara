@@ -446,12 +446,12 @@ body {
 }
 
 :root {
-  --wall-gap: 1.25rem;
+  --wall-gap: 1.5rem;
 }
 
 @media (min-width: 768px) {
   :root {
-    --wall-gap: 1.75rem;
+    --wall-gap: 2rem;
   }
 }
 
@@ -466,7 +466,7 @@ body {
    viewport is what reintroduced the wrap in the first place. */
 :root {
   --shop-w: min(86vw, 23rem);
-  --shop-gap: 0.9rem;
+  --shop-gap: 1rem;
   --shop-radius: 0.875rem;
 }
 

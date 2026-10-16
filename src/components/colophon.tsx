@@ -8,7 +8,7 @@ export function Colophon({ apart = false }: { apart?: boolean }) {
     >
       <div
         data-recessed
-        className="flex w-full flex-col justify-center gap-4 rounded-(--shop-radius) bg-cadmium-50 px-8 py-10 sm:aspect-2/1 sm:max-w-120 sm:py-0"
+        className="flex w-full flex-col justify-center gap-4 rounded-(--shop-radius) bg-cadmium-50 px-8 py-12 sm:aspect-2/1 sm:max-w-120 sm:py-0"
       >
         <div>
           <p className={`${SECTION_HEADING} lowercase`}>Amarelo Dandara</p>
