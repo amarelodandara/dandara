@@ -349,6 +349,14 @@ html {
   animation-delay: calc(240ms + var(--motion-appear));
 }
 
+/* THE LOST WALL. A 404 is the whole page: no nav, only a wall of empty
+   frames with a signpost to every page hung in some of them. The global 404
+   never renders the nav; a `notFound()` inside the site layout does, so it is
+   taken away here. */
+[data-page]:has([data-lost-wall]) > [data-site-nav] {
+  display: none;
+}
+
 /* Opening the shop slides the page aside to make room; the shop itself floats
    above the plane rather than hiding beneath it.
 
@@ -446,12 +454,12 @@ body {
 }
 
 :root {
-  --wall-gap: 1.25rem;
+  --wall-gap: 1.5rem;
 }
 
 @media (min-width: 768px) {
   :root {
-    --wall-gap: 1.75rem;
+    --wall-gap: 2rem;
   }
 }
 
@@ -466,7 +474,7 @@ body {
    viewport is what reintroduced the wrap in the first place. */
 :root {
   --shop-w: min(86vw, 23rem);
-  --shop-gap: 0.9rem;
+  --shop-gap: 1rem;
   --shop-radius: 0.875rem;
 }
 

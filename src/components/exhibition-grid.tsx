@@ -58,7 +58,7 @@ function Media({ media }: { media: ExhibitMedia }) {
   if (media.kind === "badges") return <BadgeTile slug={media.slug} />;
   if (media.kind === "changelog") {
     return (
-      <div className="bg-cadmium-50 p-4 shadow-label md:p-7">
+      <div className="bg-cadmium-50 p-4 shadow-label md:p-8">
         <Changelog className="@container text-left" version={media.version}>
           <ul>
             {media.lines.map((line) => (

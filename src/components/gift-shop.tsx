@@ -206,7 +206,7 @@ export function GiftShop() {
         tabIndex={-1}
         inert={!open || undefined}
         data-shop-panel
-        className="flex flex-col px-5 py-8 outline-none"
+        className="flex flex-col px-6 py-8 outline-none"
       >
         <GiftShopSign sign={sign} onClose={close} />
 

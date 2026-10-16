@@ -6,14 +6,15 @@ import { EXPERIENCE } from "@/content/experience";
 import { ANNOTATION, LABEL, SECTION_HEADING } from "@/lib/type";
 
 function hidePeriodsIfAnyWraps(list: HTMLElement) {
+  delete list.dataset.compact;
   const periods = list.querySelectorAll<HTMLElement>("[data-period]");
   const anyWrapped = [...periods].some(
     (period) =>
       period.getBoundingClientRect().top >=
-      (period.parentElement?.getBoundingClientRect().bottom ?? Infinity),
+      (period.previousElementSibling?.getBoundingClientRect().bottom ??
+        Infinity),
   );
   if (anyWrapped) list.dataset.compact = "";
-  else delete list.dataset.compact;
 }
 
 export function ExperienceList({ className }: { className?: string }) {
@@ -39,18 +40,18 @@ export function ExperienceList({ className }: { className?: string }) {
         <li key={company}>
           <div className="flex items-baseline gap-6">
             <h3
-              className={`flex h-[calc(1lh+0.2em)] min-w-0 flex-wrap items-baseline gap-x-2.5 gap-y-[1lh] overflow-hidden whitespace-nowrap ${SECTION_HEADING}`}
+              className={`flex min-w-0 flex-wrap items-baseline gap-x-2.5 whitespace-nowrap ${SECTION_HEADING}`}
             >
               {href ? (
                 <a href={href} className={LINK}>
                   {company}
                 </a>
               ) : (
-                company
+                <span>{company}</span>
               )}
               <span
                 data-period
-                className={`shrink-0 ${ANNOTATION} text-graphite-500 group-data-compact:invisible`}
+                className={`shrink-0 ${ANNOTATION} text-graphite-500 group-data-compact:hidden`}
               >
                 {period}
               </span>

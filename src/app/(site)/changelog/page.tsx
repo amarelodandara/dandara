@@ -64,7 +64,7 @@ function Group({ title, items }: ChangeGroup) {
     <div className="mt-6">
       <h3 className={TITLE}>{title}</h3>
       <ul
-        className={`mt-3 list-disc space-y-2 pl-5 ${PROSE} marker:text-graphite-400`}
+        className={`mt-3 list-disc space-y-2 pl-6 ${PROSE} marker:text-graphite-400`}
       >
         {items.map(({ area, runs }, index) => (
           <li key={`${title}-${index}`} className="leading-relaxed">
@@ -108,7 +108,7 @@ export default async function ChangelogPage() {
         </div>
       </main>
 
-      <div className="mx-auto w-full max-w-[1400px] px-[7vw] pb-[10vh]">
+      <div className="mx-auto w-full max-w-[1400px] px-[7vw] pb-[9vh] sm:pb-[12vh]">
         <div className="mx-auto w-full max-w-2xl">
           <PostFooter />
         </div>

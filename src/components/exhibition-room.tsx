@@ -38,7 +38,7 @@ export function ExhibitionRoom({ room }: { room: Room }) {
         </header>
 
         {series.length > 0 ? (
-          <div className="pb-[12vh]">
+          <div className="pb-[9vh] sm:pb-[12vh]">
             {series.map(({ id, title: name, lines }) => (
               <section key={id} className="mt-[10vh]">
                 <header className={COLUMN}>
@@ -58,7 +58,7 @@ export function ExhibitionRoom({ room }: { room: Room }) {
             ))}
           </div>
         ) : (
-          <div className="mt-[10vh] pb-[12vh]">
+          <div className="mt-[10vh] pb-[9vh] sm:pb-[12vh]">
             <Exhibition room={room} column={COLUMN} />
           </div>
         )}

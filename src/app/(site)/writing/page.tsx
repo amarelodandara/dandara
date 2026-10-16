@@ -70,7 +70,7 @@ export default async function WritingIndex() {
       <main className="mx-auto w-full max-w-[1400px] flex-1 px-[7vw] pt-[9vh] sm:pt-[12vh]">
         <div data-landing className="mx-auto w-full max-w-2xl">
           <h1 className={PAGE_HEADING}>Writing</h1>
-          <div className="mt-10">
+          <div className="mt-12">
             <ShopCallout>
               Looking for the RSS feed? It&rsquo;s waiting in the gift shop!
             </ShopCallout>
@@ -83,7 +83,7 @@ export default async function WritingIndex() {
                   {year}
                 </h2>
 
-                <ul className="mt-8 space-y-10">
+                <ul className="mt-8 space-y-12">
                   {pieces.map((piece) => (
                     <Piece {...piece} key={piece.key} />
                   ))}
@@ -94,7 +94,7 @@ export default async function WritingIndex() {
         </div>
       </main>
 
-      <div className="mx-auto w-full max-w-[1400px] px-[7vw] pb-[10vh]">
+      <div className="mx-auto w-full max-w-[1400px] px-[7vw] pb-[9vh] sm:pb-[12vh]">
         <div className="mx-auto w-full max-w-2xl">
           <PostFooter />
         </div>
