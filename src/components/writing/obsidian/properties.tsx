@@ -42,46 +42,53 @@ function Mark({ cell }: { cell: Cell }) {
 
 export function Properties() {
   return (
-    <figure className="my-12 overflow-x-auto" data-measure="body">
-      <table className="w-full min-w-136 border-collapse">
-        <thead>
-          <tr>
-            <td />
-            {TYPES.map((kind) => (
-              <th
-                key={kind}
-                scope="col"
-                className="px-1 pb-3 [font-weight:inherit]"
-              >
-                <span className={TAG}>{kind}</span>
-              </th>
-            ))}
-          </tr>
-        </thead>
-        <tbody>
-          {PROPERTIES.map((property) => (
-            <tr key={property.name} className="border-t border-graphite-200">
-              <th
-                scope="row"
-                className={`py-2.5 pr-3 text-left [font-weight:inherit] text-graphite-700 ${LABEL}`}
-              >
-                {property.name}
-              </th>
-              {TYPES.map((kind) => {
-                const cell = property.in[kind];
-                return (
-                  <td
-                    key={kind}
-                    className={`px-1 py-2.5 text-center align-middle ${cell?.wikilink ? "bg-cadmium-100" : ""}`}
-                  >
-                    {cell ? <Mark cell={cell} /> : null}
-                  </td>
-                );
-              })}
+    <figure className="my-12" data-measure="body">
+      <div
+        role="region"
+        aria-label="Property types"
+        tabIndex={0}
+        className="overflow-x-auto"
+      >
+        <table className="w-full min-w-136 border-collapse">
+          <thead>
+            <tr>
+              <td />
+              {TYPES.map((kind) => (
+                <th
+                  key={kind}
+                  scope="col"
+                  className="px-1 pb-3 [font-weight:inherit]"
+                >
+                  <span className={TAG}>{kind}</span>
+                </th>
+              ))}
             </tr>
-          ))}
-        </tbody>
-      </table>
+          </thead>
+          <tbody>
+            {PROPERTIES.map((property) => (
+              <tr key={property.name} className="border-t border-graphite-200">
+                <th
+                  scope="row"
+                  className={`py-2.5 pr-3 text-left [font-weight:inherit] text-graphite-700 ${LABEL}`}
+                >
+                  {property.name}
+                </th>
+                {TYPES.map((kind) => {
+                  const cell = property.in[kind];
+                  return (
+                    <td
+                      key={kind}
+                      className={`px-1 py-2.5 text-center align-middle ${cell?.wikilink ? "bg-cadmium-100" : ""}`}
+                    >
+                      {cell ? <Mark cell={cell} /> : null}
+                    </td>
+                  );
+                })}
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
     </figure>
   );
 }

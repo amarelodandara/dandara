@@ -127,7 +127,12 @@ function GraphTree({
 
   return (
     <Graph title={title} className={className} corner={corner}>
-      <GraphBody className="graph-scroll-x">
+      <GraphBody
+        className="graph-scroll-x"
+        role="region"
+        aria-label={title}
+        tabIndex={0}
+      >
         <ul className="flex min-w-max flex-col gap-1">
           {rows.map((row) => {
             const dim = hasAccent && !row.accent;

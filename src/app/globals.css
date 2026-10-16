@@ -233,6 +233,13 @@
   );
 }
 
+/* mdxcn's GraphTree names this class for its body, but its registry ships no
+   rule for it, so a wide tree ran out of its frame and the body's clip cut it
+   off on a phone. */
+@utility graph-scroll-x {
+  overflow-x: auto;
+}
+
 /* Inter 4.001 OpenType features applied to every glyph on the site.
    Add or remove tags here; per-element exceptions get their own rule.
 
