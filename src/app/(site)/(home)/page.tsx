@@ -127,10 +127,10 @@ export default async function Home() {
                   means — don&rsquo;t be afraid to ask, I love to talk about it.
                 </p>
                 <p>
-                  More than a designer I am also a human who loves to ride her
-                  motorcycle, model for friends, draw plans to get a shade of
-                  yellow named after her and live to truly and absolutely
-                  treasure her girlfriend, Jade.
+                  More than a designer I am a human. I love riding my
+                  motorcycle, absolutely treasure my girlfriend Jade, am a
+                  museology enthusiast and will surely get a shade of yellow
+                  named after me.
                 </p>
               </div>
             </div>
