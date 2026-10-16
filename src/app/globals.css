@@ -443,8 +443,9 @@ body {
 
 /* A sketchbook piece that turns its page: two spreads of the same size, the
    second laid over the first and shown for every other beat, like a two-frame
-   gif. It loops always, reduced motion included: the swap is a cut in place,
-   nothing travels, and a gif would not ask either. */
+   gif. Under reduced motion it holds the first spread: the swap is only a
+   cut in place, but it repeats for as long as the page is open, and WCAG
+   2.2.2 asks for a way to stop anything that does. */
 @keyframes sketchbook-flip {
   50% {
     opacity: 1;
@@ -454,6 +455,12 @@ body {
 [data-flip] > :last-child {
   opacity: 0;
   animation: sketchbook-flip 2.4s step-end infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  [data-flip] > :last-child {
+    animation: none;
+  }
 }
 
 :root {
