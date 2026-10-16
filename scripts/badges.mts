@@ -5,6 +5,7 @@ import { ELSEWHERE } from "../src/content/elsewhere.ts";
 import { TAGS, type Tag } from "../src/badges/tags.ts";
 import { readPosts } from "../src/lib/writing/meta-source.ts";
 import { hash, seeded } from "../src/badges/seeded.ts";
+import { LOOK, outlines } from "../src/badges/shape.ts";
 
 const ROOT = process.cwd();
 const CONTENT = path.join(ROOT, "src", "content", "writing");
@@ -27,6 +28,10 @@ const INK_CHROMA_ON_DARK = 0.02;
 const DARK_GROUND_BELOW = 0.6;
 
 const TURN = Math.PI * 2;
+
+const AVERAGE_GLYPH_PX = 5.73;
+const BREATH_SAMPLES = 24;
+const SAMPLES_PER_CURVE = 16;
 
 const round = (value: number) => Math.round(value * 10_000) / 10_000;
 
@@ -169,6 +174,54 @@ function badgeFor(entry: {
   };
 }
 
+function curveLength([x0, y0, x1, y1, x2, y2, x3, y3]: number[]) {
+  let length = 0;
+  let [px, py] = [x0, y0];
+  for (let step = 1; step <= SAMPLES_PER_CURVE; step++) {
+    const t = step / SAMPLES_PER_CURVE;
+    const u = 1 - t;
+    const x =
+      u ** 3 * x0 + 3 * u ** 2 * t * x1 + 3 * u * t ** 2 * x2 + t ** 3 * x3;
+    const y =
+      u ** 3 * y0 + 3 * u ** 2 * t * y1 + 3 * u * t ** 2 * y2 + t ** 3 * y3;
+    length += Math.hypot(x - px, y - py);
+    [px, py] = [x, y];
+  }
+  return length;
+}
+
+function lapLength(d: string) {
+  const [start, ...curves] = d.replace(/Z$/, "").split("C");
+  let from = start.slice(1).trim().split(/\s+/).map(Number);
+  let length = 0;
+  for (const curve of curves) {
+    const points = curve.trim().split(/\s+/).map(Number);
+    length += curveLength([...from, ...points]);
+    from = points.slice(4);
+  }
+  return length;
+}
+
+function shortestLap(badge: ReturnType<typeof badgeFor>) {
+  const cycleMs = TURN * LOOK.breathPeriodMs;
+  let shortest = Infinity;
+  for (let sample = 0; sample < BREATH_SAMPLES; sample++) {
+    const { text } = outlines(badge, (sample / BREATH_SAMPLES) * cycleMs);
+    shortest = Math.min(shortest, lapLength(text) / 2);
+  }
+  return shortest;
+}
+
+function checkTitleFits(slug: string, badge: ReturnType<typeof badgeFor>) {
+  const room = shortestLap(badge) - 2 * LOOK.lineGap;
+  const holds = Math.floor(room / AVERAGE_GLYPH_PX);
+  if (badge.title.length > holds) {
+    throw new Error(
+      `${slug}: the title is ${badge.title.length} characters and a ${badge.words}-word badge holds about ${holds}. Shorten the title.`,
+    );
+  }
+}
+
 const key = (name: string) =>
   /^[A-Za-z_]\w*$/.test(name) ? name : JSON.stringify(name);
 
@@ -207,7 +260,13 @@ async function main() {
   const source = `import type { Badge } from "./shape";
 
 export const BADGES: Record<string, Badge> = {
-${entries.map((entry) => literal(entry.slug, badgeFor(entry))).join("")}};
+${entries
+  .map((entry) => {
+    const badge = badgeFor(entry);
+    checkTitleFits(entry.slug, badge);
+    return literal(entry.slug, badge);
+  })
+  .join("")}};
 `;
   await writeFile(OUT, source);
 
