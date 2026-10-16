@@ -64,7 +64,7 @@ export function GiftShopSwatch({
           `mx-auto flex aspect-[3/4] ${CHIP_W} touch-none motion-reduce:touch-auto flex-col select-none`,
           "bg-graphite-50 p-1 text-left will-change-transform",
           "transition-[scale,box-shadow] duration-(--motion-quick) ease-out-strong",
-          "focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-graphite-900/40",
+          "focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-graphite-900/50",
           lifted
             ? "scale-[1.04] cursor-grabbing shadow-card"
             : "cursor-grab shadow-chip",

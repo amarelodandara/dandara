@@ -15,7 +15,7 @@ const knock = () => {
   return TILTS[pick % TILTS.length];
 };
 
-export function SignpostArrow() {
+export function SignpostArrow({ weight }: { weight: number }) {
   const ref = useRef<SVGSVGElement>(null);
 
   useEffect(() => {
@@ -39,7 +39,7 @@ export function SignpostArrow() {
     >
       <g
         stroke="currentColor"
-        strokeWidth="1.25"
+        strokeWidth={weight}
         strokeLinecap="round"
         strokeLinejoin="round"
       >

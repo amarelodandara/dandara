@@ -20,14 +20,14 @@ const SIGN_COLOR: Record<Area, string> = {
 };
 
 const FOCUS =
-  "outline-none focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-graphite-900/40";
+  "focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-graphite-900/50";
 
 export function Signpost({ href, name, area }: Sign) {
   return (
     <Link
       href={href}
       data-signpost={area}
-      className={`flex items-center justify-between gap-3 rounded-(--shop-radius) px-8 pt-8 pb-6 ${SIGN_COLOR[area]} ${FOCUS}`}
+      className={`flex items-center justify-between gap-3 rounded-(--shop-radius) px-8 py-6 ${SIGN_COLOR[area]} ${FOCUS}`}
     >
       <SignpostGrain />
       <span className={`min-w-0 wrap-break-word ${SECTION_HEADING}`}>
@@ -35,9 +35,9 @@ export function Signpost({ href, name, area }: Sign) {
       </span>
       <span
         data-signpost-hole
-        className="-mr-3 flex size-9 shrink-0 items-center justify-center rounded-full bg-cadmium-50"
+        className="-mr-2 flex size-9 shrink-0 items-center justify-center rounded-full bg-cadmium-50"
       >
-        <SignpostArrow />
+        <SignpostArrow weight={2} />
       </span>
     </Link>
   );
@@ -56,7 +56,7 @@ export function SmallSignpost({ href, name, area }: Sign) {
         data-signpost-hole
         className="flex size-6 shrink-0 items-center justify-center rounded-full bg-cadmium-50"
       >
-        <SignpostArrow />
+        <SignpostArrow weight={1.5} />
       </span>
     </Link>
   );

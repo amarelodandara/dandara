@@ -135,7 +135,7 @@ function Caption(tile: Tile) {
       <span className="min-w-0 flex-[1_1_10rem]">
         <span className={`${LABEL} text-graphite-700`}>{title}</span>
         {when ? (
-          <span className={`ml-2 ${ANNOTATION} text-graphite-500`}>{when}</span>
+          <span className={`ml-2 ${ANNOTATION} text-graphite-600`}>{when}</span>
         ) : null}
       </span>
       {live || read ? (
@@ -161,13 +161,13 @@ function Framed({ read, children }: { read?: string; children: ReactNode }) {
   if (!read) return children;
   if (isElsewhere(read)) {
     return (
-      <a href={read} tabIndex={-1}>
+      <a href={read} tabIndex={-1} aria-hidden="true">
         {children}
       </a>
     );
   }
   return (
-    <Link href={read} tabIndex={-1}>
+    <Link href={read} tabIndex={-1} aria-hidden="true">
       {children}
     </Link>
   );

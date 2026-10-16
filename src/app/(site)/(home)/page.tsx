@@ -190,7 +190,7 @@ export default async function Home() {
                           <a href={href} className={LINK}>
                             {title}
                             <span
-                              className={`ml-2.5 inline-block ${ANNOTATION} text-graphite-500`}
+                              className={`ml-2.5 inline-block ${ANNOTATION} text-graphite-600`}
                             >
                               {venue}
                             </span>

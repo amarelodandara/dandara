@@ -233,6 +233,13 @@
   );
 }
 
+/* mdxcn's GraphTree names this class for its body, but its registry ships no
+   rule for it, so a wide tree ran out of its frame and the body's clip cut it
+   off on a phone. */
+@utility graph-scroll-x {
+  overflow-x: auto;
+}
+
 /* Inter 4.001 OpenType features applied to every glyph on the site.
    Add or remove tags here; per-element exceptions get their own rule.
 
@@ -436,8 +443,9 @@ body {
 
 /* A sketchbook piece that turns its page: two spreads of the same size, the
    second laid over the first and shown for every other beat, like a two-frame
-   gif. It loops always, reduced motion included: the swap is a cut in place,
-   nothing travels, and a gif would not ask either. */
+   gif. Under reduced motion it holds the first spread: the swap is only a
+   cut in place, but it repeats for as long as the page is open, and WCAG
+   2.2.2 asks for a way to stop anything that does. */
 @keyframes sketchbook-flip {
   50% {
     opacity: 1;
@@ -447,6 +455,12 @@ body {
 [data-flip] > :last-child {
   opacity: 0;
   animation: sketchbook-flip 2.4s step-end infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  [data-flip] > :last-child {
+    animation: none;
+  }
 }
 
 :root {
@@ -506,6 +520,7 @@ body {
   /* The shop scrolls; the bar just never shows. Hiding the bar is not the same
      as removing the scroller — the content still has to be reachable. */
   overflow-y: auto;
+  overscroll-behavior: contain;
   scrollbar-width: none;
   visibility: hidden;
   translate: calc(-100% - var(--shop-gap)) 0;
@@ -816,10 +831,9 @@ body[data-shop-open] [data-shop-panel] {
   }
 }
 
-/* Quiet text is a choice about emphasis, not about legibility, so it holds only
-   while the reader has not asked for more contrast. The date and the resting
-   state of the nav link both sit well under the ratio a body of text would
-   need; asked for contrast, they come back up to full strength. */
+/* Quiet text is a choice about emphasis, not about legibility. At rest the
+   date and the nav links are graphite 600, which still clears 4.5:1 on the
+   wall (5.55:1); asked for more contrast, they come back up to full strength. */
 @media (prefers-contrast: more) {
   [data-quiet] {
     color: var(--color-graphite-900);
