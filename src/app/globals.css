@@ -520,6 +520,7 @@ body {
   /* The shop scrolls; the bar just never shows. Hiding the bar is not the same
      as removing the scroller — the content still has to be reachable. */
   overflow-y: auto;
+  overscroll-behavior: contain;
   scrollbar-width: none;
   visibility: hidden;
   translate: calc(-100% - var(--shop-gap)) 0;

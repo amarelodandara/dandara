@@ -103,7 +103,7 @@ export function GiftShop() {
   const plaqueVisible = active === null && plaqueWanted;
   const { sign, shelves, full } = shopContents(article, usePathname());
 
-  const panelRef = useRef<HTMLElement>(null);
+  const panelRef = useRef<HTMLDivElement>(null);
   const plaqueRef = useRef<HTMLButtonElement>(null);
 
   const focusBefore = useRef<HTMLElement | null>(null);
@@ -200,8 +200,10 @@ export function GiftShop() {
 
   return (
     <>
-      <aside
+      <div
         ref={panelRef}
+        role="dialog"
+        aria-modal={(open && requested === null) || undefined}
         aria-label={sign.name}
         tabIndex={-1}
         inert={!open || undefined}
@@ -230,7 +232,7 @@ export function GiftShop() {
             </ul>
           </section>
         ))}
-      </aside>
+      </div>
 
       <GiftShopPlaque
         ref={plaqueRef}
