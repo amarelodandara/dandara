@@ -61,8 +61,8 @@ function Media({ media }: { media: ExhibitMedia }) {
       <div className="bg-cadmium-50 p-4 shadow-label md:p-8">
         <Changelog className="@container text-left" version={media.version}>
           <ul>
-            {media.lines.map((line) => (
-              <li key={line}>{line}</li>
+            {media.lines.map((line, index) => (
+              <li key={`${index}-${line}`}>{line}</li>
             ))}
           </ul>
         </Changelog>
@@ -131,24 +131,28 @@ function ReadLink({ title, read, readAt }: Tile & { read: string }) {
 function Caption(tile: Tile) {
   const { title, when, live, read } = tile;
   return (
-    <figcaption className="mt-3 flex items-baseline justify-between gap-4">
-      <span className="min-w-0">
+    <figcaption className="mt-3 flex flex-wrap items-baseline justify-between gap-x-4 gap-y-1">
+      <span className="min-w-0 flex-[1_1_10rem]">
         <span className={`${LABEL} text-graphite-700`}>{title}</span>
         {when ? (
           <span className={`ml-2 ${ANNOTATION} text-graphite-500`}>{when}</span>
         ) : null}
       </span>
-      {live ? (
-        <a href={live.href} className={CAPTION_LINK}>
-          Live
-          <span aria-hidden="true">&nbsp;↗</span>
-          <span className="sr-only">
-            {" "}
-            {title} at {live.label}
-          </span>
-        </a>
+      {live || read ? (
+        <span className="flex shrink-0 items-baseline gap-4">
+          {live ? (
+            <a href={live.href} className={CAPTION_LINK}>
+              Live
+              <span aria-hidden="true">&nbsp;↗</span>
+              <span className="sr-only">
+                {" "}
+                {title} at {live.label}
+              </span>
+            </a>
+          ) : null}
+          {read ? <ReadLink {...tile} read={read} /> : null}
+        </span>
       ) : null}
-      {read ? <ReadLink {...tile} read={read} /> : null}
     </figcaption>
   );
 }
@@ -263,7 +267,7 @@ export function ExhibitionGrid({
       >
         {columns.map((stack, column) => (
           <div
-            key={stack.join(" ")}
+            key={column}
             className="contents md:flex md:flex-col md:gap-(--wall-gap)"
           >
             {stack.map((id) => {

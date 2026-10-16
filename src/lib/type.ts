@@ -1,6 +1,6 @@
 export const PAGE_HEADING = [
   "ml-[-0.02em] text-[clamp(2rem,4.5vw,3.25rem)]",
-  "leading-[1.05] font-bold tracking-[-0.03em] text-balance",
+  "leading-[1.05] font-bold tracking-[-0.03em] text-balance wrap-break-word",
 ].join(" ");
 
 export const SECTION_HEADING = [
