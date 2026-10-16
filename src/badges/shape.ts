@@ -161,16 +161,26 @@ export function badgeMarkup(
   ].join("");
 }
 
+export const titleLength = (svg: SVGSVGElement) =>
+  svg
+    .querySelector<SVGTextContentElement>("[data-text]")
+    ?.getComputedTextLength() ?? 0;
+
 export function placeAlong(
   svg: SVGSVGElement,
-  { badge, ms, drift }: { badge: Badge; ms: number; drift: number },
+  {
+    badge,
+    ms,
+    drift,
+    textLength,
+  }: { badge: Badge; ms: number; drift: number; textLength: number },
 ) {
   const paths = outlines(badge, ms);
   for (const blob of svg.querySelectorAll("[data-blob]"))
     blob.setAttribute("d", paths.blob);
   const ring = svg.querySelector<SVGPathElement>("[data-ring]");
   const line = svg.querySelector<SVGPathElement>("[data-line]");
-  const text = svg.querySelector<SVGTextContentElement>("[data-text]");
+  const text = svg.querySelector("[data-text]");
   if (!ring || !line || !text) return;
 
   ring.setAttribute("d", paths.text);
@@ -182,7 +192,7 @@ export function placeAlong(
   const dash = lineDash({
     length,
     lineLength: line.getTotalLength() / 2,
-    textLength: text.getComputedTextLength(),
+    textLength,
     start,
   });
   line.setAttribute("stroke-dasharray", dash.array);

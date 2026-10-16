@@ -296,10 +296,12 @@
   }
 }
 
-/* All four are driven by a scroll timeline rather than a scroll listener: it
-   runs off the main thread, and every one of them is declared inherits: false,
-   so redrawing them each frame restyles the scroller alone and never the cards
-   inside it. Gated on support because without a timeline the same animation
+/* All four are driven by a scroll timeline rather than a scroll listener, so
+   no script runs per frame. The animation itself is not composited: animated
+   custom properties stay on the main thread, and the mask they feed is
+   repainted on every scroll frame. That is cheap for one scroller. Every one
+   of them is declared inherits: false, so redrawing them each frame restyles
+   the scroller alone and never the cards inside it. Gated on support because without a timeline the same animation
    would settle on its last keyframe, which is the far end of the scroll with
    the fades the wrong way round; browsers that lack one hold the initial values
    instead — right edge covered, left edge open. */
