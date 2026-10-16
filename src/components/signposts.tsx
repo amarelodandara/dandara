@@ -30,7 +30,9 @@ export function Signpost({ href, name, area }: Sign) {
       className={`flex items-center justify-between gap-3 rounded-(--shop-radius) px-8 pt-8 pb-6 ${SIGN_COLOR[area]} ${FOCUS}`}
     >
       <SignpostGrain />
-      <span className={`min-w-0 ${SECTION_HEADING}`}>{name}</span>
+      <span className={`min-w-0 wrap-break-word ${SECTION_HEADING}`}>
+        {name}
+      </span>
       <span
         data-signpost-hole
         className="-mr-3 flex size-9 shrink-0 items-center justify-center rounded-full bg-cadmium-50"
@@ -49,7 +51,7 @@ export function SmallSignpost({ href, name, area }: Sign) {
       className={`flex items-center justify-between gap-3 rounded-lg py-2.5 pr-2.5 pl-3 ${SIGN_COLOR[area]} ${FOCUS}`}
     >
       <SignpostGrain />
-      <span className={`min-w-0 ${LABEL}`}>{name}</span>
+      <span className={`min-w-0 wrap-break-word ${LABEL}`}>{name}</span>
       <span
         data-signpost-hole
         className="flex size-6 shrink-0 items-center justify-center rounded-full bg-cadmium-50"
