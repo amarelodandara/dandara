@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { type RefObject, useEffect, useRef, useState } from "react";
 import { PRESS_BASE } from "@/lib/pressable";
 import { ANNOTATION } from "@/lib/type";
 
@@ -14,6 +14,21 @@ const TOGGLE = [
   "can-hover:hover:bg-cadmium-200 focus-visible:bg-cadmium-200",
   "can-hover:opacity-0 can-hover:group-hover:opacity-100 focus-visible:opacity-100",
 ].join(" ");
+
+const playWhileInView = (video: HTMLVideoElement, held: RefObject<boolean>) => {
+  const observer = new IntersectionObserver(
+    ([entry]) => {
+      if (entry.isIntersecting && !held.current) {
+        video.play().catch(() => {});
+      } else {
+        video.pause();
+      }
+    },
+    { threshold: IN_VIEW },
+  );
+  observer.observe(video);
+  return observer;
+};
 
 export function ExhibitVideo({
   sources,
@@ -37,20 +52,27 @@ export function ExhibitVideo({
   useEffect(() => {
     const video = ref.current;
     if (!video) return;
-    if (window.matchMedia(REDUCED_MOTION).matches) return;
 
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        if (entry.isIntersecting && !held.current) {
-          video.play().catch(() => {});
-        } else {
-          video.pause();
-        }
-      },
-      { threshold: IN_VIEW },
-    );
-    observer.observe(video);
-    return () => observer.disconnect();
+    const still = window.matchMedia(REDUCED_MOTION);
+    let observer: IntersectionObserver | null = null;
+
+    const settle = () => {
+      observer?.disconnect();
+      observer = null;
+      if (still.matches) {
+        video.pause();
+        return;
+      }
+
+      observer = playWhileInView(video, held);
+    };
+
+    settle();
+    still.addEventListener("change", settle);
+    return () => {
+      still.removeEventListener("change", settle);
+      observer?.disconnect();
+    };
   }, []);
 
   const toggle = () => {

@@ -3,7 +3,7 @@ import { notFound } from "next/navigation";
 import { ArticleNotes } from "@/components/writing/article-notes";
 import { PostFooter } from "@/components/writing/post-footer";
 import { PostSchema } from "@/components/writing/post-schema";
-import { NAME } from "@/lib/site";
+import { FEED, NAME } from "@/lib/site";
 import { formatPostMonth, loadPost, SLUGS } from "@/lib/writing/posts";
 import { ACCENT_PROSE, ANNOTATION, PAGE_HEADING } from "@/lib/type";
 
@@ -32,7 +32,7 @@ export async function generateMetadata({
   return {
     title: meta.searchTitle ?? meta.title,
     description,
-    alternates: { canonical: `/writing/${slug}` },
+    alternates: { canonical: `/writing/${slug}`, types: FEED },
     openGraph: {
       type: "article",
       url: `/writing/${slug}`,

@@ -6,7 +6,7 @@ import { badgesFor } from "@/badges/pick";
 import { PostFooter } from "@/components/writing/post-footer";
 import { ShopCallout } from "@/components/writing/shop-callout";
 import { loadWritingList } from "@/lib/writing/posts";
-import { CARD, NAME } from "@/lib/site";
+import { CARD, FEED, NAME } from "@/lib/site";
 import { ANNOTATION, PAGE_HEADING, PROSE, SECTION_HEADING } from "@/lib/type";
 
 const description = "Essays on design, and on the things built alongside it.";
@@ -14,7 +14,7 @@ const description = "Essays on design, and on the things built alongside it.";
 export const metadata: Metadata = {
   title: "Writing",
   description,
-  alternates: { canonical: "/writing" },
+  alternates: { canonical: "/writing", types: FEED },
   openGraph: {
     type: "website",
     url: "/writing",
@@ -68,8 +68,10 @@ export default async function WritingIndex() {
   return (
     <>
       <main className="mx-auto w-full max-w-[1400px] flex-1 px-[7vw] pt-[9vh] sm:pt-[12vh]">
-        <div data-landing className="mx-auto w-full max-w-2xl">
-          <h1 className={PAGE_HEADING}>Writing</h1>
+        <div className="mx-auto w-full max-w-2xl">
+          <h1 data-landing className={PAGE_HEADING}>
+            Writing
+          </h1>
           <div className="mt-12">
             <ShopCallout>
               Looking for the RSS feed? It&rsquo;s waiting in the gift shop!

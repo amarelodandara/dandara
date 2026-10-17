@@ -1,14 +1,14 @@
 import type { Metadata } from "next";
 import { ExhibitionRoom } from "@/components/exhibition-room";
 import { ROOMS } from "@/content/exhibits";
-import { CARD, NAME } from "@/lib/site";
+import { CARD, FEED, NAME } from "@/lib/site";
 
 const { title, description } = ROOMS.main;
 
 export const metadata: Metadata = {
   title,
   description,
-  alternates: { canonical: "/work" },
+  alternates: { canonical: "/work", types: FEED },
   openGraph: {
     type: "website",
     url: "/work",

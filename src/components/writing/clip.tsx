@@ -5,6 +5,9 @@ import { Frame, type Measure } from "./figure";
 
 const STILLNESS = "(prefers-reduced-motion: reduce)";
 
+const isRefusal = (error: unknown) =>
+  error instanceof DOMException && error.name === "NotAllowedError";
+
 export function Clip({
   src,
   alt,
@@ -26,6 +29,7 @@ export function Clip({
 }) {
   const video = useRef<HTMLVideoElement>(null);
   const [held, setHeld] = useState(false);
+  const [refused, setRefused] = useState(false);
 
   useEffect(() => {
     const asked = window.matchMedia(STILLNESS);
@@ -34,7 +38,10 @@ export function Clip({
       setHeld(asked.matches);
       if (!video.current) return;
       if (asked.matches) video.current.pause();
-      else void video.current.play().catch(() => {});
+      else
+        void video.current.play().catch((error: unknown) => {
+          if (isRefusal(error)) setRefused(true);
+        });
     };
 
     settle();
@@ -53,7 +60,7 @@ export function Clip({
         loop
         muted
         playsInline
-        controls={held}
+        controls={held || refused}
         preload="metadata"
         className="h-auto w-full"
       >
