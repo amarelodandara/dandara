@@ -13,6 +13,8 @@ export const CARD = {
   alt: "Dandara — product design, design engineering and relentless taste.",
 };
 
+export const FEED = { "application/rss+xml": "/feed.xml" };
+
 export const ICON = { url: "/icon.svg", type: "image/svg+xml" };
 
 export const BROKEN_ICON = { url: "/icon-broken.svg", type: "image/svg+xml" };
