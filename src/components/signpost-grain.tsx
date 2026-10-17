@@ -5,12 +5,16 @@ import { useRouter } from "next/navigation";
 
 const PAST_THE_CORNER = 1.02;
 const HELD_CLEAN_MS = 60;
+const MS_PER_SECOND = 1000;
 const REDUCED_MOTION = "(prefers-reduced-motion: reduce)";
 
-const growMs = (el: HTMLElement) =>
-  Number.parseFloat(
-    getComputedStyle(el).getPropertyValue("--signpost-spot-grow"),
-  ) || 0;
+const growMs = (el: HTMLElement) => {
+  const value = getComputedStyle(el)
+    .getPropertyValue("--signpost-spot-grow")
+    .trim();
+  const amount = Number.parseFloat(value) || 0;
+  return value.endsWith("ms") ? amount : amount * MS_PER_SECOND;
+};
 
 const opensElsewhere = (event: MouseEvent) =>
   event.button !== 0 ||
