@@ -7,7 +7,7 @@ import {
   type ChangeGroup,
   type Run,
 } from "@/lib/changelog";
-import { CARD, NAME } from "@/lib/site";
+import { CARD, FEED, NAME } from "@/lib/site";
 import { ANNOTATION, PAGE_HEADING, PROSE, STRONG, TITLE } from "@/lib/type";
 
 const AREA_TAG = `mr-2 inline-block rounded-sm px-1.5 py-1 align-[0.1em] ${ANNOTATION} leading-none`;
@@ -25,7 +25,7 @@ const description = "What changed on the site, week by week.";
 export const metadata: Metadata = {
   title: "Changelog",
   description,
-  alternates: { canonical: "/changelog" },
+  alternates: { canonical: "/changelog", types: FEED },
   openGraph: {
     type: "website",
     url: "/changelog",
@@ -83,8 +83,10 @@ export default async function ChangelogPage() {
   return (
     <>
       <main className="mx-auto w-full max-w-[1400px] flex-1 px-[7vw] pt-[9vh] sm:pt-[12vh]">
-        <div data-landing className="mx-auto w-full max-w-2xl">
-          <h1 className={PAGE_HEADING}>Changelog</h1>
+        <div className="mx-auto w-full max-w-2xl">
+          <h1 data-landing className={PAGE_HEADING}>
+            Changelog
+          </h1>
 
           {weeks.map((week) => (
             <section
