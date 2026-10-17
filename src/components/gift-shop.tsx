@@ -94,6 +94,18 @@ const Tailored =
     ? dynamic(() => import("./gift-shop-tailored"))
     : null;
 
+const close = () => closeOverlay(ID);
+
+const useClosedByLeaving = () => {
+  const pathname = usePathname();
+  const lastPathname = useRef(pathname);
+  useEffect(() => {
+    if (lastPathname.current === pathname) return;
+    lastPathname.current = pathname;
+    closeOverlay(ID);
+  }, [pathname]);
+};
+
 export function GiftShop() {
   const active = useActiveOverlay();
   const open = active === ID;
@@ -115,7 +127,7 @@ export function GiftShop() {
         : null;
   }, []);
 
-  const close = useCallback(() => closeOverlay(ID), []);
+  useClosedByLeaving();
 
   useEffect(() => {
     if (open) rememberFocus();
