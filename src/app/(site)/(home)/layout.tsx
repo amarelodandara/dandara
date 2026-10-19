@@ -5,7 +5,7 @@ export default function HomeLayout({ children }: LayoutProps<"/">) {
   return (
     <>
       {children}
-      <Signposts here="/" />
+      <Signposts here="/" afterWall />
       <Colophon />
     </>
   );

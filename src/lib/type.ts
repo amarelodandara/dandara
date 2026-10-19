@@ -19,6 +19,8 @@ export const TITLE = "text-[0.9rem] leading-tight font-semibold";
 
 export const LABEL = "text-[0.85rem]";
 
+export const LABEL_FROM_MD = "text-[0.7rem] md:text-[0.85rem]";
+
 export const ANNOTATION = "text-[0.7rem]";
 
 export const MICRO = "font-mono text-[0.65rem] leading-none font-normal";

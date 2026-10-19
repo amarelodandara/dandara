@@ -48,6 +48,7 @@ export function SmallSignpost({ href, name, area }: Sign) {
     <Link
       href={href}
       data-signpost={area}
+      data-signpost-small
       className={`flex items-center justify-between gap-3 rounded-lg py-2.5 pr-2.5 pl-3 ${SIGN_COLOR[area]} ${FOCUS}`}
     >
       <SignpostGrain />
@@ -62,16 +63,33 @@ export function SmallSignpost({ href, name, area }: Sign) {
   );
 }
 
-export function Signposts({ here }: { here: string }) {
+const STANDALONE = {
+  nav: "px-[7vw] pt-[10vh]",
+  list: "sm:max-w-120",
+};
+
+const AFTER_WALL = {
+  nav: "px-[max(1.5rem,4vw)] pt-3 md:px-[7vw] md:pt-[10vh]",
+  list: "md:max-w-120",
+};
+
+export function Signposts({
+  here,
+  afterWall = false,
+}: {
+  here: string;
+  afterWall?: boolean;
+}) {
   const signs = SIGNPOSTS.filter(({ href }) => href !== here);
   if (signs.length === 0) return null;
+  const frame = afterWall ? AFTER_WALL : STANDALONE;
 
   return (
     <nav
       aria-label="Elsewhere on the site"
-      className="mx-auto flex w-full max-w-[1400px] justify-end px-[7vw] pt-[10vh]"
+      className={`mx-auto flex w-full max-w-[1400px] justify-end ${frame.nav}`}
     >
-      <ul className="w-full space-y-3 sm:max-w-120">
+      <ul className={`w-full space-y-3 ${frame.list}`}>
         {signs.map((sign) => (
           <li key={sign.href}>
             <Signpost {...sign} />

@@ -718,6 +718,33 @@ body[data-shop-open] [data-shop-panel] {
     --signpost-spot-t var(--signpost-spot-grow) var(--signpost-spot-grow-ease);
 }
 
+/* The grain is drawn for the big sign on a wide window. Two places carry
+   too much of it: the small signs in the ⋯ menu, where a speck is a large
+   share of a short line, and every sign on a phone, where the dense screen
+   turns each speck into a blot. Both get a finer tile and a fainter layer;
+   the clean spot works the same on top. */
+:root {
+  --signpost-grain-strength: 1;
+  --signpost-grain-tile: 180px;
+}
+
+[data-signpost-grain] {
+  opacity: var(--signpost-grain-strength);
+  background-size: var(--signpost-grain-tile) var(--signpost-grain-tile);
+}
+
+[data-signpost-small] > [data-signpost-grain] {
+  --signpost-grain-strength: 0.5;
+  --signpost-grain-tile: 120px;
+}
+
+@media (max-width: 767px) {
+  [data-signpost] > [data-signpost-grain] {
+    --signpost-grain-strength: 0.55;
+    --signpost-grain-tile: 120px;
+  }
+}
+
 [data-signpost-grain][data-spot="placing"] {
   --signpost-spot-a: var(--signpost-spot-dim);
   transition:
