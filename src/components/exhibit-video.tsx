@@ -2,15 +2,14 @@
 
 import { type RefObject, useEffect, useRef, useState } from "react";
 import { PRESS_BASE } from "@/lib/pressable";
-import { ANNOTATION } from "@/lib/type";
 
 const IN_VIEW = 0.25;
 const REDUCED_MOTION = "(prefers-reduced-motion: reduce)";
 
 const TOGGLE = [
   PRESS_BASE,
-  "absolute right-2 bottom-2 rounded-sm bg-cadmium-50 px-2 py-1 shadow-chip",
-  `${ANNOTATION} leading-none text-graphite-700`,
+  "absolute right-2 bottom-2 flex size-7 items-center justify-center rounded-sm",
+  "bg-cadmium-50 text-graphite-700 shadow-chip",
   "can-hover:hover:bg-cadmium-200 focus-visible:bg-cadmium-200",
   "can-hover:opacity-0 can-hover:group-hover:opacity-100 focus-visible:opacity-100",
 ].join(" ");
@@ -103,9 +102,26 @@ export function ExhibitVideo({
           <source key={src} src={src} type={type} />
         ))}
       </video>
-      <button type="button" onClick={toggle} className={TOGGLE}>
-        {playing ? "Pause" : "Play"}
-        <span className="sr-only"> video</span>
+      <button
+        type="button"
+        onClick={toggle}
+        aria-label={playing ? "Pause video" : "Play video"}
+        className={TOGGLE}
+      >
+        <svg
+          viewBox="0 0 16 16"
+          aria-hidden="true"
+          className="size-3 fill-current"
+        >
+          {playing ? (
+            <>
+              <rect x="3.5" y="2.5" width="3" height="11" rx="1" />
+              <rect x="9.5" y="2.5" width="3" height="11" rx="1" />
+            </>
+          ) : (
+            <path d="M4.5 2.75v10.5L13 8Z" />
+          )}
+        </svg>
       </button>
     </div>
   );
