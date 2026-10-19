@@ -4,6 +4,16 @@ What changed on the site, newest first. Internal work (refactors, tooling, deplo
 
 Every entry starts with the area it affects: `[Home]`, `[Work]`, `[Blog]`, `[Gift shop]` or `[Site-wide]`.
 
+## Week of October 19, 2026
+
+### Improved
+- [Site-wide] **Phone navigation.** On a phone the page links fold into the ⋯ button at the right, which opens every page as a full-size signpost over a blurred backdrop.
+- [Site-wide] **The sun** at the start of the navigation now takes you home.
+- [Work] **Video controls** are a pause and play icon instead of words.
+
+### Removed
+- [Site-wide] **Bluesky** is no longer linked anywhere.
+
 ## Week of October 12, 2026
 
 ### New
