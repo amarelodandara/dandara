@@ -53,7 +53,7 @@ function SectionLink({ href, name }: { href: string; name: string }) {
         viewBox="0 0 16 16"
         fill="none"
         aria-hidden="true"
-        className="size-3 -translate-x-1 opacity-0 transition-[opacity,translate] duration-(--motion-quick) ease-out-strong group-focus-visible:translate-x-0 group-focus-visible:opacity-100 motion-reduce:transition-none can-hover:group-hover:translate-x-0 can-hover:group-hover:opacity-100"
+        className="size-3 -translate-x-1 opacity-0 transition-[opacity,translate] duration-(--motion-quick) ease-out-strong group-focus-visible:translate-x-0 group-focus-visible:opacity-100 motion-reduce:transition-none max-md:translate-x-0 max-md:opacity-100 can-hover:group-hover:translate-x-0 can-hover:group-hover:opacity-100"
       >
         <path
           d="M6 3.5 10.5 8 6 12.5"
@@ -71,13 +71,13 @@ export default async function Home() {
   const writing = await loadWritingList();
 
   return (
-    <main className="flex-1 py-[9vh] sm:py-[12vh]">
+    <main className="flex-1 pt-[9vh] sm:pt-[12vh] md:pb-[12vh]">
       <PersonSchema />
 
       <div className="mx-auto w-full max-w-[1400px] px-[7vw]">
         <div data-landing>
-          <header className="grid grid-cols-1 gap-12 md:grid-cols-2">
-            <div className="flex flex-col gap-16 md:h-full md:justify-between md:gap-[18vh]">
+          <header className="grid grid-cols-1 gap-[18vh] md:grid-cols-2 md:gap-12">
+            <div className="flex flex-col gap-[18vh] md:h-full md:justify-between">
               <div data-appear="1" className="h-fit">
                 <h1 className={PAGE_HEADING}>Dandara</h1>
                 <p className={`mt-[0.08em] ${PAGE_HEADING}`}>Product Design</p>
@@ -139,7 +139,7 @@ export default async function Home() {
 
               <div
                 data-appear="4"
-                className={`h-fit space-y-4 text-pretty ${PROSE}`}
+                className={`h-fit space-y-4 text-pretty ${PROSE} max-md:leading-relaxed`}
               >
                 <p>
                   I am a designer with 5+ years of experience. I designed
@@ -190,7 +190,7 @@ export default async function Home() {
                           <a href={href} className={LINK}>
                             {title}
                             <span
-                              className={`ml-2.5 inline-block ${ANNOTATION} text-graphite-600`}
+                              className={`ml-2.5 inline-block ${ANNOTATION} text-graphite-600 max-md:hidden`}
                             >
                               {venue}
                             </span>

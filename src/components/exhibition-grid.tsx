@@ -9,7 +9,7 @@ import { ExhibitVideo } from "@/components/exhibit-video";
 import type { ExhibitMedia } from "@/content/exhibits";
 import type { Tile } from "@/lib/exhibition";
 import { PRESS_BASE } from "@/lib/pressable";
-import { ANNOTATION, LABEL } from "@/lib/type";
+import { ANNOTATION, LABEL_FROM_MD } from "@/lib/type";
 
 const MEDIA = "h-auto w-full";
 const SIZES = "(min-width: 768px) 33vw, 100vw";
@@ -133,7 +133,9 @@ function Caption(tile: Tile) {
   return (
     <figcaption className="mt-3 flex flex-wrap items-baseline justify-between gap-x-4 gap-y-1">
       <span className="min-w-0 flex-[1_1_10rem]">
-        <span className={`${LABEL} text-graphite-700`}>{title}</span>
+        <span className={`${LABEL_FROM_MD} text-graphite-700`}>
+          {title}
+        </span>
         {when ? (
           <span className={`ml-2 ${ANNOTATION} text-graphite-600`}>{when}</span>
         ) : null}
