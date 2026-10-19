@@ -1,6 +1,7 @@
 "use client";
 
 import { useCallback, useEffect, useRef, useState } from "react";
+import { play } from "cuelume";
 import { ANNOTATION } from "@/lib/type";
 
 const CONFIRMED_FOR = 1500;
@@ -39,6 +40,7 @@ export function useOutcome() {
   useEffect(() => () => clearTimeout(timer.current), []);
 
   const report = useCallback((next: Settled) => {
+    play(next === "done" ? "success" : "error", { emphasis: "subtle" });
     setOutcome(next);
     clearTimeout(timer.current);
     timer.current = setTimeout(

@@ -5,6 +5,7 @@ import {
   useState,
   type PointerEvent as ReactPointerEvent,
 } from "react";
+import { play } from "cuelume";
 
 const TETHER_LENGTH_PX = 70;
 const TETHER_RESISTANCE = 0.55;
@@ -144,6 +145,7 @@ export function useSpringDrag<Held extends HTMLElement = HTMLElement>() {
     setLifted(false);
     ref.current?.releasePointerCapture?.(held.pointerId);
     if (!held.travelled) return;
+    play("tap");
 
     const heldStill = performance.now() - held.at > HELD_STILL_AFTER_MS;
     const seconds = (held.at - held.previousAt) / MS_PER_SECOND;
@@ -208,6 +210,11 @@ export function useSpringDrag<Held extends HTMLElement = HTMLElement>() {
     event.currentTarget.setPointerCapture(event.pointerId);
   }, []);
 
+  const lift = useCallback(() => {
+    setLifted(true);
+    play("select");
+  }, []);
+
   const onPointerMove = useCallback(
     (event: ReactPointerEvent<HTMLElement>) => {
       const held = grab.current;
@@ -218,7 +225,7 @@ export function useSpringDrag<Held extends HTMLElement = HTMLElement>() {
       const pull = Math.hypot(pullX, pullY);
 
       if (!held.travelled && pull < DRAG_START_THRESHOLD_PX) return;
-      if (!held.travelled) setLifted(true);
+      if (!held.travelled) lift();
       held.travelled = true;
 
       if (pull > TETHER_SNAP_PX) {
@@ -238,7 +245,7 @@ export function useSpringDrag<Held extends HTMLElement = HTMLElement>() {
 
       paint(x, y);
     },
-    [letGo, paint],
+    [letGo, lift, paint],
   );
 
   return { ref, lifted, onPointerDown, onPointerMove };

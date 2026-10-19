@@ -27,6 +27,7 @@ export function Signpost({ href, name, area }: Sign) {
     <Link
       href={href}
       data-signpost={area}
+      data-cuelume-tap
       className={`flex items-center justify-between gap-3 rounded-(--shop-radius) px-8 py-6 ${SIGN_COLOR[area]} ${FOCUS}`}
     >
       <SignpostGrain />
@@ -49,6 +50,7 @@ export function SmallSignpost({ href, name, area }: Sign) {
       href={href}
       data-signpost={area}
       data-signpost-small
+      data-cuelume-tap
       className={`flex items-center justify-between gap-3 rounded-lg py-2.5 pr-2.5 pl-3 ${SIGN_COLOR[area]} ${FOCUS}`}
     >
       <SignpostGrain />

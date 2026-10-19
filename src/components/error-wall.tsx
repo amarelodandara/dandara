@@ -38,6 +38,7 @@ export function ErrorWall({ retry }: { retry: () => void }) {
           <button
             type="button"
             onClick={retry}
+            data-cuelume-tap
             data-quiet
             data-pressable
             className={RETRY}

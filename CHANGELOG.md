@@ -6,6 +6,9 @@ Every entry starts with the area it affects: `[Home]`, `[Work]`, `[Blog]`, `[Gif
 
 ## Week of October 19, 2026
 
+### New
+- [Site-wide] **Interaction sounds.** Following a link in the navigation or a signpost, opening the gift shop or the ⋯ menu, copying or downloading, playing a wall video and tugging a swatch now make a small sound. The speaker button in the navigation turns them off, and the site remembers.
+
 ### Improved
 - [Site-wide] **Phone navigation.** On a phone the page links fold into the ⋯ button at the right, which opens every page as a full-size signpost over a blurred backdrop.
 - [Site-wide] **The sun** at the start of the navigation now takes you home.
