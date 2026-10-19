@@ -2,10 +2,12 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { useState, useSyncExternalStore } from "react";
+import { useEffect, useState, useSyncExternalStore } from "react";
 import { Popover } from "@base-ui/react/popover";
+import { bind, play, setTheme } from "cuelume";
 import { Signpost, SmallSignpost, type Sign } from "@/components/signposts";
 import { SunMark } from "@/components/sun-mark";
+import { turnSound, useSound } from "@/lib/sound";
 import { ANNOTATION } from "@/lib/type";
 
 const NAV_LINK = [
@@ -81,6 +83,7 @@ export function SiteNav() {
       <Link
         href="/"
         aria-label="Home"
+        data-cuelume-tap
         className="block shrink-0 rounded-full focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-graphite-900/50"
       >
         <SunMark />
@@ -91,6 +94,7 @@ export function SiteNav() {
           key={href}
           href={href}
           aria-current={here(pathname, href) ? "page" : undefined}
+          data-cuelume-tap
           data-quiet
           data-pressable
           className={`${NAV_LINK} max-sm:hidden`}
@@ -99,6 +103,7 @@ export function SiteNav() {
         </Link>
       ))}
 
+      <SoundToggle />
       <MorePages key={pathname} />
     </nav>
   );
@@ -108,12 +113,16 @@ function MorePages() {
   const phone = useSyncExternalStore(watchPhone, onPhone, () => false);
 
   return (
-    <Popover.Root>
+    <Popover.Root
+      onOpenChange={(open) =>
+        play(open ? "open" : "close", { emphasis: "subtle" })
+      }
+    >
       <Popover.Trigger
         aria-label={phone ? "Pages" : "More pages"}
         data-quiet
         data-pressable
-        className={`${NAV_LINK} data-popup-open:bg-graphite-100 data-popup-open:text-graphite-900 max-sm:ml-auto`}
+        className={`${NAV_LINK} data-popup-open:bg-graphite-100 data-popup-open:text-graphite-900`}
       >
         <svg viewBox="0 0 16 16" aria-hidden="true" className="size-[1em]">
           <circle cx="3" cy="8" r="1.25" fill="currentColor" />
@@ -135,6 +144,47 @@ function MorePages() {
         </Popover.Positioner>
       </Popover.Portal>
     </Popover.Root>
+  );
+}
+
+function SoundToggle() {
+  const on = useSound();
+
+  useEffect(() => {
+    setTheme("press");
+    return bind();
+  }, []);
+
+  return (
+    <button
+      type="button"
+      aria-label="Sound"
+      aria-pressed={on}
+      onClick={() => turnSound(!on)}
+      data-quiet
+      data-pressable
+      className={`${NAV_LINK} ml-auto sm:order-last`}
+    >
+      <svg
+        viewBox="0 0 16 16"
+        aria-hidden="true"
+        className="size-[1em] fill-none stroke-current stroke-[1.5]"
+      >
+        <path
+          d="M2.5 6v4h2.5l3.5 3V3L5 6Z"
+          className="fill-current"
+          strokeLinejoin="round"
+        />
+        {on ? (
+          <path
+            d="M11 5.5a3.5 3.5 0 0 1 0 5M12.75 3.5a6 6 0 0 1 0 9"
+            strokeLinecap="round"
+          />
+        ) : (
+          <path d="m11 6 4 4m0-4-4 4" strokeLinecap="round" />
+        )}
+      </svg>
+    </button>
   );
 }
 

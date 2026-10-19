@@ -102,7 +102,7 @@ const useClosedByLeaving = () => {
   useEffect(() => {
     if (lastPathname.current === pathname) return;
     lastPathname.current = pathname;
-    closeOverlay(ID);
+    closeOverlay(ID, { quietly: true });
   }, [pathname]);
 };
 

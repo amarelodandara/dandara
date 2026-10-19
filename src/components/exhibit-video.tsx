@@ -1,6 +1,7 @@
 "use client";
 
 import { type RefObject, useEffect, useRef, useState } from "react";
+import { play } from "cuelume";
 import { PRESS_BASE } from "@/lib/pressable";
 
 const IN_VIEW = 0.25;
@@ -78,6 +79,7 @@ export function ExhibitVideo({
     const video = ref.current;
     if (!video) return;
     held.current = !video.paused;
+    play("toggle", { direction: video.paused ? "forward" : "back" });
     if (video.paused) video.play().catch(() => {});
     else video.pause();
   };

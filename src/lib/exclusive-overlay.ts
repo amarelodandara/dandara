@@ -1,4 +1,5 @@
 import { useSyncExternalStore } from "react";
+import { play } from "cuelume";
 
 export const SHOP_OVERLAY = "gift-shop";
 
@@ -18,12 +19,14 @@ export function openOverlay(id: string) {
   if (active === id) return;
   active = id;
   emit();
+  play("open", { emphasis: "subtle" });
 }
 
-export function closeOverlay(id: string) {
+export function closeOverlay(id: string, { quietly = false } = {}) {
   if (active !== id) return;
   active = null;
   emit();
+  if (!quietly) play("close");
 }
 
 export function useActiveOverlay() {
