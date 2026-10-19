@@ -48,6 +48,7 @@ export function SmallSignpost({ href, name, area }: Sign) {
     <Link
       href={href}
       data-signpost={area}
+      data-signpost-small
       className={`flex items-center justify-between gap-3 rounded-lg py-2.5 pr-2.5 pl-3 ${SIGN_COLOR[area]} ${FOCUS}`}
     >
       <SignpostGrain />
