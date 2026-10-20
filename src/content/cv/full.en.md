@@ -761,8 +761,8 @@ these were an earlier draft's inference rather than her account.
 
 **Craft under time pressure**
 - Designed the Pix NFC payment flow as sole designer, defining its success
-  criteria and delivering production-ready specs under a compressed timeline;
-  40%+ of the partner base adopted it within 6 months.
+  criteria and delivering production-ready specs under a compressed timeline.
+  (Superseded by bank item #5; the 40% belongs to the Store, never to this flow.)
 - Was the only designer on that surface: framing, exploration, interaction
   detail, spec, and hand-through to engineering all sat with her.
 - Held quality on details a rushed process usually drops — states, edge cases,
@@ -1082,7 +1082,7 @@ Code as a daily instrument. adandara.com belongs here too — a developer-facing
 company will read a designer who ships her own code as craft, not as a
 distraction.
 
-Watch: the posting asks for metric movement. Lead with the Pix NFC adoption
+Watch: the posting asks for metric movement. Lead with the Store adoption
 number, the one lift figure she has, and do not manufacture another.
 
 ### DuckDuckGo — Senior Product Design Engineer (design engineering track)
