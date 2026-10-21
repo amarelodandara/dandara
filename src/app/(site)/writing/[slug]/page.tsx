@@ -3,7 +3,7 @@ import { notFound } from "next/navigation";
 import { ArticleNotes } from "@/components/writing/article-notes";
 import { PostFooter } from "@/components/writing/post-footer";
 import { PostSchema } from "@/components/writing/post-schema";
-import { FEED, NAME } from "@/lib/site";
+import { FEED, NAME, SITE_URL } from "@/lib/site";
 import { formatPostMonth, loadPost, SLUGS } from "@/lib/writing/posts";
 import { ACCENT_PROSE, ANNOTATION, PAGE_HEADING } from "@/lib/type";
 
@@ -28,6 +28,12 @@ export async function generateMetadata({
     height: 630,
     alt: `${meta.title} — ${meta.deck}`,
   };
+  const video = {
+    url: `${SITE_URL}/writing/og/${slug}.mp4`,
+    width: 1200,
+    height: 630,
+    type: "video/mp4",
+  };
 
   return {
     title: meta.searchTitle ?? meta.title,
@@ -42,6 +48,7 @@ export async function generateMetadata({
       description,
       publishedTime: meta.date,
       images: [card],
+      videos: [video],
     },
     twitter: {
       card: "summary_large_image",

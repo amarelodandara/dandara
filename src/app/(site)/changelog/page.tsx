@@ -7,7 +7,7 @@ import {
   type ChangeGroup,
   type Run,
 } from "@/lib/changelog";
-import { CARD, FEED, NAME } from "@/lib/site";
+import { CARD, CARD_VIDEO, FEED, NAME } from "@/lib/site";
 import { ANNOTATION, PAGE_HEADING, PROSE, STRONG, TITLE } from "@/lib/type";
 
 const AREA_TAG = `mr-2 inline-block rounded-sm px-1.5 py-1 align-[0.1em] ${ANNOTATION} leading-none`;
@@ -34,6 +34,7 @@ export const metadata: Metadata = {
     title: "Changelog",
     description,
     images: [CARD],
+    videos: [CARD_VIDEO],
   },
   twitter: { title: "Changelog", description, images: [CARD] },
 };

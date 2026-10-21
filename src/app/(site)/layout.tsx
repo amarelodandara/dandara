@@ -7,6 +7,7 @@ import { GiftShop } from "@/components/gift-shop";
 import { SiteNav } from "@/components/site-nav";
 import {
   CARD,
+  CARD_VIDEO,
   DESCRIPTION,
   FEED,
   ICON,
@@ -58,6 +59,7 @@ export const metadata: Metadata = {
     description: DESCRIPTION,
     locale: "en_US",
     images: [CARD],
+    videos: [CARD_VIDEO],
   },
   twitter: {
     card: "summary_large_image",
