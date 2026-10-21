@@ -13,6 +13,7 @@ Every entry starts with the area it affects: `[Home]`, `[Work]`, `[Blog]`, `[Gif
 - [Site-wide] **Phone navigation.** On a phone the page links fold into the ⋯ button at the right, which opens every page as a full-size signpost over a blurred backdrop.
 - [Site-wide] **The sun** at the start of the navigation now takes you home.
 - [Work] **Video controls** are a pause and play icon instead of words.
+- [Gift shop] **Peek from the edge.** Resting the pointer at the left edge of the window draws a strip of the gift shop out from behind it; click it to open the shop. Clicking outside the open shop now closes it.
 
 ### Removed
 - [Site-wide] **Bluesky** is no longer linked anywhere.

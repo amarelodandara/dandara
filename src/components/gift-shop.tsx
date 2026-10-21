@@ -2,11 +2,13 @@
 
 import dynamic from "next/dynamic";
 import { usePathname } from "next/navigation";
-import { useCallback, useEffect, useRef } from "react";
+import { type RefObject, useEffect, useRef } from "react";
 import { GiftShopNotes } from "./gift-shop-notes";
 import { GiftShopSign, shelfSeat, shopContents } from "./gift-shop-sign";
 import { GiftShopRow } from "./gift-shop-row";
 import { GiftShopPlaque } from "./gift-shop-plaque";
+import { GiftShopEdge, useEdgePeek } from "./gift-shop-edge";
+import { useFocusRestored, useRememberedFocus } from "./gift-shop-focus";
 import {
   forgetRequestedNote,
   useArticle,
@@ -33,62 +35,6 @@ const isTypingTarget = (target: EventTarget | null) => {
   return /^(input|textarea|select)$/i.test(target.tagName);
 };
 
-const FRAMES_WAITED_FOR_THE_PANEL = 30;
-
-const onceThePanelIsVisible = (panel: HTMLElement | null, act: () => void) => {
-  let abandoned = false;
-  let framesLeft = FRAMES_WAITED_FOR_THE_PANEL;
-  let frame = 0;
-
-  const look = () => {
-    if (abandoned || !panel) return;
-    if (getComputedStyle(panel).visibility === "visible") {
-      act();
-      return;
-    }
-    framesLeft -= 1;
-    if (framesLeft > 0) frame = requestAnimationFrame(look);
-  };
-
-  frame = requestAnimationFrame(look);
-  return () => {
-    abandoned = true;
-    cancelAnimationFrame(frame);
-  };
-};
-
-const focusIsStillInside = (panel: HTMLElement | null) => {
-  const focused = document.activeElement;
-  return (
-    focused === null ||
-    focused === document.body ||
-    panel?.contains(focused) === true
-  );
-};
-
-const focusTheRequestedRow = (panel: HTMLElement | null, n: number | null) => {
-  const row =
-    n === null
-      ? null
-      : panel?.querySelector<HTMLElement>(
-          `[data-note-row="${CSS.escape(String(n))}"]`,
-        );
-
-  if (!row) {
-    panel?.focus();
-    return;
-  }
-
-  const held = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-  row.scrollIntoView({ block: "nearest", behavior: held ? "auto" : "smooth" });
-  row.focus({ preventScroll: true });
-};
-
-const focusThePageItself = () =>
-  document
-    .querySelector<HTMLElement>("[data-page]")
-    ?.focus({ preventScroll: true });
-
 const Tailored =
   process.env.NODE_ENV === "development"
     ? dynamic(() => import("./gift-shop-tailored"))
@@ -106,33 +52,17 @@ const useClosedByLeaving = () => {
   }, [pathname]);
 };
 
-export function GiftShop() {
-  const active = useActiveOverlay();
-  const open = active === ID;
-  const requested = useRequestedNote();
-  const article = useArticle();
-  const plaqueWanted = usePlaqueWanted(article !== null);
-  const plaqueVisible = active === null && plaqueWanted;
-  const { sign, shelves, full } = shopContents(article, usePathname());
+const Scrim = ({ shown }: { shown: boolean }) =>
+  shown ? (
+    <div
+      aria-hidden
+      data-shop-scrim
+      className="fixed inset-0 z-30"
+      onClick={close}
+    />
+  ) : null;
 
-  const panelRef = useRef<HTMLDivElement>(null);
-  const plaqueRef = useRef<HTMLButtonElement>(null);
-
-  const focusBefore = useRef<HTMLElement | null>(null);
-  const rememberFocus = useCallback(() => {
-    const focused = document.activeElement;
-    focusBefore.current =
-      focused instanceof HTMLElement && focused !== document.body
-        ? focused
-        : null;
-  }, []);
-
-  useClosedByLeaving();
-
-  useEffect(() => {
-    if (open) rememberFocus();
-  }, [open, rememberFocus]);
-
+const usePageHeldAside = (open: boolean, requested: number | null) => {
   useEffect(() => {
     const page = document.querySelector("[data-page]");
     const release = () => {
@@ -155,22 +85,30 @@ export function GiftShop() {
   useEffect(() => {
     if (!open) forgetRequestedNote();
   }, [open]);
+};
 
-  useEffect(() => {
-    if (requested !== null) rememberFocus();
-  }, [requested, rememberFocus]);
+const isShopKey = (event: KeyboardEvent) =>
+  (event.key === "g" || event.key === "G") &&
+  !isBrowserChord(event) &&
+  !isTypingTarget(event.target);
 
+const useShopKeys = ({
+  active,
+  endPeek,
+}: {
+  active: string | null;
+  endPeek: () => void;
+}) => {
   useKeydown((event) => {
     if (event.key === "Escape") {
+      endPeek();
       closeOverlay(ID);
       return;
     }
 
-    if (event.key !== "g" && event.key !== "G") return;
-    if (isBrowserChord(event)) return;
-    if (isTypingTarget(event.target)) return;
+    if (!isShopKey(event)) return;
 
-    if (open) {
+    if (active === ID) {
       event.preventDefault();
       closeOverlay(ID);
       return;
@@ -182,75 +120,104 @@ export function GiftShop() {
     event.preventDefault();
     openOverlay(ID);
   });
+};
 
-  const restoring = useRef({ held: false, fromTheText: false });
-  useEffect(() => {
-    if (open) {
-      return onceThePanelIsVisible(panelRef.current, () => {
-        focusTheRequestedRow(panelRef.current, requested);
-        restoring.current = {
-          held: panelRef.current?.contains(document.activeElement) === true,
-          fromTheText: requested !== null,
-        };
-      });
-    }
+type Contents = ReturnType<typeof shopContents>;
 
-    const { held, fromTheText } = restoring.current;
-    if (!held) return;
-    restoring.current = { held: false, fromTheText: false };
+const Shelves = ({ shelves, full }: Pick<Contents, "shelves" | "full">) =>
+  shelves.map((section) => (
+    <section key={section.id} className={shelfSeat(section, full)}>
+      {section.title ? (
+        <h3 className={`px-3 ${ANNOTATION} text-cadmium-900`}>
+          {section.title}
+        </h3>
+      ) : null}
+      <ul className={section.title ? "mt-2 space-y-0.5" : "space-y-0.5"}>
+        {section.items.map((item) => (
+          <li key={item.id}>
+            <GiftShopRow item={item} />
+          </li>
+        ))}
+      </ul>
+    </section>
+  ));
 
-    if (!focusIsStillInside(panelRef.current)) return;
+const ShopPanel = ({
+  ref,
+  open,
+  modal,
+  titled,
+  contents: { sign, shelves, full },
+}: {
+  ref: RefObject<HTMLDivElement | null>;
+  open: boolean;
+  modal: boolean;
+  titled: boolean;
+  contents: Contents;
+}) => (
+  <div
+    ref={ref}
+    role="dialog"
+    aria-modal={modal || undefined}
+    aria-label={sign.name}
+    tabIndex={-1}
+    inert={!open || undefined}
+    data-shop-panel
+    className="flex flex-col px-6 py-8 outline-none"
+  >
+    <GiftShopSign sign={sign} onClose={close} />
 
-    const marker =
-      focusBefore.current?.isConnected === true ? focusBefore.current : null;
-    const plaque = plaqueVisible ? plaqueRef.current : null;
-    const next = fromTheText ? (marker ?? plaque) : (plaque ?? marker);
+    <GiftShopNotes titled={titled} />
 
-    if (next) next.focus();
-    else focusThePageItself();
-  }, [open, plaqueVisible, requested]);
+    {Tailored && full ? <Tailored /> : null}
+
+    <Shelves shelves={shelves} full={full} />
+  </div>
+);
+
+const openTheShop = () => openOverlay(ID);
+
+export function GiftShop() {
+  const active = useActiveOverlay();
+  const open = active === ID;
+  const requested = useRequestedNote();
+  const article = useArticle();
+  const contents = shopContents(article, usePathname());
+  const { peeking, endPeek } = useEdgePeek(active === null);
+  const plaqueWanted = usePlaqueWanted(article !== null);
+  const plaqueVisible = active === null && !peeking && plaqueWanted;
+  const panelRef = useRef<HTMLDivElement>(null);
+  const plaqueRef = useRef<HTMLButtonElement>(null);
+  const focusBefore = useRememberedFocus(open, requested);
+
+  useClosedByLeaving();
+  usePageHeldAside(open, requested);
+  useShopKeys({ active, endPeek });
+  useFocusRestored({
+    open,
+    requested,
+    panelRef,
+    plaqueRef,
+    plaqueVisible,
+    focusBefore,
+  });
 
   return (
     <>
-      <div
+      <Scrim shown={open && requested === null} />
+      <ShopPanel
         ref={panelRef}
-        role="dialog"
-        aria-modal={(open && requested === null) || undefined}
-        aria-label={sign.name}
-        tabIndex={-1}
-        inert={!open || undefined}
-        data-shop-panel
-        className="flex flex-col px-6 py-8 outline-none"
-      >
-        <GiftShopSign sign={sign} onClose={close} />
-
-        <GiftShopNotes titled={!article} />
-
-        {Tailored && full ? <Tailored /> : null}
-
-        {shelves.map((section) => (
-          <section key={section.id} className={shelfSeat(section, full)}>
-            {section.title ? (
-              <h3 className={`px-3 ${ANNOTATION} text-cadmium-900`}>
-                {section.title}
-              </h3>
-            ) : null}
-            <ul className={section.title ? "mt-2 space-y-0.5" : "space-y-0.5"}>
-              {section.items.map((item) => (
-                <li key={item.id}>
-                  <GiftShopRow item={item} />
-                </li>
-              ))}
-            </ul>
-          </section>
-        ))}
-      </div>
-
+        open={open}
+        modal={open && requested === null}
+        titled={!article}
+        contents={contents}
+      />
+      <GiftShopEdge peeking={peeking} onOpen={openTheShop} />
       <GiftShopPlaque
         ref={plaqueRef}
         visible={plaqueVisible}
-        label={article ? sign.name : "Visit the gift shop"}
-        onOpen={() => openOverlay(ID)}
+        label={article ? contents.sign.name : "Visit the gift shop"}
+        onOpen={openTheShop}
       />
     </>
   );
