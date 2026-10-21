@@ -16,7 +16,7 @@
 
 ## Summary
 
-Product Designer, T-shaped across UX, UI, and code, designing software in-house at consumer scale and pairing directly with engineering rather than handing work off. Prototypes in Figma and in code, and uses AI tooling daily from discovery through production. Distils ambiguous problems and feedback into clear, focused solutions, and communicates them in writing.
+Product Designer, T-shaped across UX, UI, and code, designing software in-house at consumer scale and pairing directly with engineering rather than handing work off. Prototypes in Figma and in code, using AI tooling daily from discovery to production. Distils ambiguous problems into clear, focused solutions.
 
 ## Skills
 
@@ -33,13 +33,15 @@ Brazil | 03/2026 - Present
 Remote, Brazil | 06/2022 - 03/2026 | Promoted from Junior to Mid-level, 04/2024
 
 - Designed payment terminal software running across 22+ device models and 4.5M+ active payment terminals.
-- Designed the Pix NFC payment flow as sole designer, defining its success criteria and delivering production-ready specs under a compressed timeline; 40%+ of the partner base adopted it within 6 months.
-- Led 2 zero-to-one product launches, including the Stone Terminal Store, still live, across 3 platforms and 4 organizations, scoping and proposing the work and aligning cross-functional stakeholders.
+- Owned Stone's events ticketing app end to end as sole designer: 8th most downloaded of 33 terminal apps.
+- Led partner-side service and product design for Stone's terminal App Store, replacing manual, in-person app distribution; in 6 months, 40% of ~212 partners fully moved to the self-serve flow.
+- Took over as sole designer and shipped Pix by NFC (tap to pay) across 22+ terminal models, live on day one of the Central Bank mandate; competitors copied the flow and press used Stone's interface as the example.
+- Redesigned in-terminal news campaigns as a self-serve flow where marketing publishes in markdown, replacing a four-team hand-off and cutting about a week of sign-off per campaign.
 
 ### QuintoAndar — Junior Product Designer
 Remote, Brazil | 12/2021 - 04/2022
 
-- Designed and shipped production features for Brazil's largest rental platform, running usability experiments inside a squad with engineering and product.
+- Redesigned the due-diligence report buyers found confusing, from 8 interviews run with a senior designer.
 
 ## Education
 
@@ -56,9 +58,9 @@ Remote, Brazil | 12/2021 - 04/2022
 ### adandara.com — Personal site and document pipeline
 Design and front-end | 2026 | https://adandara.com
 
-- Built an interruptible Web Animations API zoom layer with ARIA modals and an inert background, and a Playwright pipeline that turns markdown résumés into PDFs and verifies their ATS text layer.
+- Built an interruptible zoom layer with ARIA modals, and a Playwright pipeline for ATS-checked PDF résumés.
 
 ### In Service of Museums — Thesis research site
 Research, design and front-end | 2026 | https://servico-museu.vercel.app
 
-- Published a service design study as a site in Next.js, TypeScript and MDX, with sidenotes, an inline glossary, and fuzzy search over the institutions in the study's scope.
+- Built a recruitment site for the thesis, securing 8 interviews with museum professionals in two weeks.
