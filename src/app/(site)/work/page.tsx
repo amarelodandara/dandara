@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { ExhibitionRoom } from "@/components/exhibition-room";
 import { ROOMS } from "@/content/exhibits";
-import { CARD, FEED, NAME } from "@/lib/site";
+import { CARD, CARD_VIDEO, FEED, NAME } from "@/lib/site";
 
 const { title, description } = ROOMS.main;
 
@@ -17,6 +17,7 @@ export const metadata: Metadata = {
     title,
     description,
     images: [CARD],
+    videos: [CARD_VIDEO],
   },
   twitter: { title, description, images: [CARD] },
 };

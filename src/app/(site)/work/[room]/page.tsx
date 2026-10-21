@@ -3,7 +3,7 @@ import { notFound } from "next/navigation";
 import { ExhibitionRoom } from "@/components/exhibition-room";
 import { ROOMS, type Room } from "@/content/exhibits";
 import { roomsWithWork } from "@/lib/exhibition";
-import { CARD, FEED, NAME } from "@/lib/site";
+import { CARD, CARD_VIDEO, FEED, NAME } from "@/lib/site";
 
 export const dynamicParams = false;
 
@@ -35,6 +35,7 @@ export async function generateMetadata({
       title,
       description,
       images: [CARD],
+      videos: [CARD_VIDEO],
     },
     twitter: { title, description, images: [CARD] },
   };

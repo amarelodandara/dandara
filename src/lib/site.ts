@@ -10,7 +10,14 @@ export const CARD = {
   url: "/og.png",
   width: 1200,
   height: 630,
-  alt: "Dandara — product design, design engineering and relentless taste.",
+  alt: "Dandara — product design, design engineering and relentless curation.",
+};
+
+export const CARD_VIDEO = {
+  url: `${SITE_URL}/og.mp4`,
+  width: 1200,
+  height: 630,
+  type: "video/mp4",
 };
 
 export const FEED = { "application/rss+xml": "/feed.xml" };

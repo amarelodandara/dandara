@@ -6,7 +6,7 @@ import { badgesFor } from "@/badges/pick";
 import { PostFooter } from "@/components/writing/post-footer";
 import { ShopCallout } from "@/components/writing/shop-callout";
 import { loadWritingList } from "@/lib/writing/posts";
-import { CARD, FEED, NAME } from "@/lib/site";
+import { CARD, CARD_VIDEO, FEED, NAME } from "@/lib/site";
 import { ANNOTATION, PAGE_HEADING, PROSE, SECTION_HEADING } from "@/lib/type";
 
 const description = "Essays on design, and on the things built alongside it.";
@@ -23,6 +23,7 @@ export const metadata: Metadata = {
     title: "Writing",
     description,
     images: [CARD],
+    videos: [CARD_VIDEO],
   },
   twitter: { title: "Writing", description, images: [CARD] },
 };

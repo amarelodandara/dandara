@@ -8,6 +8,7 @@ Every entry starts with the area it affects: `[Home]`, `[Work]`, `[Blog]`, `[Gif
 
 ### New
 - [Site-wide] **Interaction sounds.** Following a link in the navigation or a signpost, opening the gift shop or the ⋯ menu, copying or downloading, playing a wall video and tugging a swatch now make a small sound. The speaker button in the navigation turns them off, and the site remembers.
+- [Site-wide] **Moving link previews.** Where a link preview can play video, as in iMessage, an article's card now peels its badge stickers onto the yellow panel one by one, and the home card's sun wanders round its panel. Everywhere else the still card stays.
 
 ### Improved
 - [Site-wide] **Phone navigation.** On a phone the page links fold into the ⋯ button at the right, which opens every page as a full-size signpost over a blurred backdrop.
