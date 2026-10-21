@@ -534,6 +534,21 @@ body {
   display: none;
 }
 
+/* Peeking, after Arc's sidebar: the pointer resting near the window's left
+   edge draws a strip of the card out from behind it, enough to say something
+   is kept there and no more. The card stays inert; a click on the strip is
+   what opens the shop. The strip is the gap plus `--shop-peek`, and the
+   hover zone (2.5rem) is drawn wider than it so the click always lands. */
+:root {
+  --shop-peek: 0.75rem;
+}
+
+body[data-shop-peek] [data-shop-panel] {
+  visibility: visible;
+  translate: calc(-100% + var(--shop-peek)) 0;
+  transition-duration: var(--motion-enter);
+}
+
 body[data-shop-open] [data-shop-panel] {
   visibility: visible;
   translate: 0 0;
