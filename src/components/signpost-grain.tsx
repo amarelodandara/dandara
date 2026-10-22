@@ -65,9 +65,14 @@ export function SignpostGrain() {
     const move = (event: PointerEvent) => {
       if (grain.dataset.spot === "on") aim(event);
     };
-    const leave = () => {
+    const off = () => {
       cancelAnimationFrame(frame);
       set("off");
+    };
+    const leave = (event: PointerEvent) => {
+      if (event.pointerType !== "mouse" && grain.dataset.spot === "pressed")
+        return;
+      off();
     };
     const press = (event: PointerEvent) => {
       if (event.button !== 0) return;
@@ -94,6 +99,7 @@ export function SignpostGrain() {
     sign.addEventListener("pointermove", move);
     sign.addEventListener("pointerleave", leave);
     sign.addEventListener("pointerdown", press);
+    sign.addEventListener("pointercancel", off);
     sign.addEventListener("click", go);
     return () => {
       cancelAnimationFrame(frame);
@@ -103,6 +109,7 @@ export function SignpostGrain() {
       sign.removeEventListener("pointermove", move);
       sign.removeEventListener("pointerleave", leave);
       sign.removeEventListener("pointerdown", press);
+      sign.removeEventListener("pointercancel", off);
     };
   }, [router]);
 
