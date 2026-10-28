@@ -4,6 +4,12 @@ What changed on the site, newest first. Internal work (refactors, tooling, deplo
 
 Every entry starts with the area it affects: `[Home]`, `[Work]`, `[Blog]`, `[Gift shop]` or `[Site-wide]`.
 
+## Week of October 26, 2026
+
+### New
+- [Site-wide] **Links** added at `/links`: the references I keep sending friends and coming back to, filed A to Z in a rolodex. Drag it or use the arrow keys to roll it; a long trip takes longer than a short one, and it ticks as it turns. Type a letter to jump to it. Put a sticker on a sheet to add it to your list above the rolodex, or roll them all out at once.
+- [Gift shop] **Take the references home.** On `/links` the gift shop offers the whole rolodex as an RSS feed, a Markdown reading list, a bookmarks file and a spreadsheet, and the same files for only the sheets you picked.
+
 ## Week of October 19, 2026
 
 ### New

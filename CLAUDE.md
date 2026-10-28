@@ -183,6 +183,47 @@ in `src/badges/`. The rest of the site only mounts them (`BadgeHover`,
   same way as the OG card but kept inside the frame, for every article
   tagged design or engineering. `scatter.ts` places the copies for both.
 
+# Links
+
+`/links` is a rolodex of references, filed A to Z. Everything it needs lives
+in `src/links/`.
+
+- **Data** is baked. `npm run links` (`scripts/links.mts`) reads the
+  Obsidian vault at `$VAULT`, read-only: it opens files with `"r"` and
+  nothing else, skips symlinks and dot folders, and writes only
+  `src/links/data.ts`. A note joins only when its frontmatter says
+  `rolodex: <kind>` (with `url:`, and optionally `title:`, `by:`, `note:`);
+  nothing from its body leaves the vault. It also takes a JSON list
+  instead (`npm run links -- path/to/list.json`, entries shaped like
+  `Link`), read the same way. Only quotes may go without a `url`. It
+  also prints the biggest nodes by links in, so it is easy to see what is missing. Without `$VAULT` it
+  bakes the placeholder vault in `scripts/fixtures/vault/`. It is not part
+  of `npm run build`, because the vault is not on Vercel; commit the bake.
+  `npm run links -- --check` fails when the bake is over 30 days old.
+- **Order** is alphabetical by title and is the array order of `LINKS`.
+  Everything (the drum, the list, every export) reads that order.
+- **Kinds** are link, book, quote, movie and person (`kinds.ts`). Every
+  sheet is the same cream card (`cadmium-100`); the kind is data, not
+  colour. Only sheet 000, the introduction, is yellow. The first sheet of
+  each letter carries an index tab, placed along the top edge by its
+  place in the alphabet.
+- **Radius** is a percentage of the card (`CARD_SHAPE`), so the corners
+  shrink and grow with the card instead of staying a fixed size.
+- **Selecting** a sheet (the round button in the front sheet's corner;
+  there is no key for it) puts a sticker in that spot: the site's icon as a
+  round of foil. Every picked sheet is listed above the drum in the article
+  measure, title as a link and who made it, in the order they were picked,
+  and the page follows the newest one down while the drum stays fixed to the
+  bottom of the window. Roll all picks every sheet; Roll it back up restores
+  the selection from before. Export opens the gift shop.
+- **Motion:** `roll.ts` is the physics (fling, drag, travel whose
+  duration grows with the square root of the distance), `use-roll.ts`
+  paints the drum and wires the pointer (the wheel is left to the page, so
+  the list above can always be scrolled), `sound.ts` makes the ticks
+  with Web Audio.
+- **What you picked** is kept in localStorage (`picked.ts`), whole entries,
+  so the gift shop can export them without loading `LINKS` on every page.
+
 # Content limits
 
 What the components hold before they break. Found by stress-testing them
