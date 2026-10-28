@@ -22,18 +22,9 @@ import {
   SHOP_OVERLAY,
   useActiveOverlay,
 } from "@/lib/exclusive-overlay";
-import { useKeydown } from "@/lib/keydown";
+import { isBrowserChord, isTypingTarget, useKeydown } from "@/lib/keydown";
 
 const ID = SHOP_OVERLAY;
-
-const isBrowserChord = (event: KeyboardEvent) =>
-  event.metaKey || event.ctrlKey || event.altKey;
-
-const isTypingTarget = (target: EventTarget | null) => {
-  if (!(target instanceof HTMLElement)) return false;
-  if (target.isContentEditable) return true;
-  return /^(input|textarea|select)$/i.test(target.tagName);
-};
 
 const Tailored =
   process.env.NODE_ENV === "development"
