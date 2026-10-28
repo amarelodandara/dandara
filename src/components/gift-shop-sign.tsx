@@ -4,6 +4,7 @@ import {
   amareloSection,
   feedSection,
   giftShopSections,
+  linksSections,
   ticketSection,
 } from "@/content/gift-shop";
 import type { GiftShopSection } from "@/content/gift-shop";
@@ -21,6 +22,7 @@ const SHOP_SIGN: Sign = {
 
 const SHELVES_BY_PAGE: Record<string, GiftShopSection[]> = {
   "/writing": [feedSection, amareloSection],
+  "/links": linksSections,
 };
 
 export const shopContents = (article: Article | null, pathname: string) => {

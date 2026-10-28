@@ -1,0 +1,70 @@
+"use client";
+
+import { Announcement, useOutcome, Verb } from "@/components/copy";
+import {
+  Label,
+  SAVED_ANNOUNCEMENT,
+  SAVED_NOTE,
+} from "@/components/gift-shop-row";
+import { ROW } from "@/lib/pressable";
+import { EXPORTS, type Format } from "./export";
+import { usePicked } from "./picked";
+
+const FOLDER = "Picked at adandara.com/links";
+
+function save(file: string, type: string, body: string) {
+  const url = URL.createObjectURL(new Blob([body], { type }));
+  const anchor = document.createElement("a");
+  anchor.href = url;
+  anchor.download = file;
+  anchor.click();
+  setTimeout(() => URL.revokeObjectURL(url));
+}
+
+export function PickedRow({
+  title,
+  meta,
+  format,
+}: {
+  title: string;
+  meta: string;
+  format: Format;
+}) {
+  const picked = usePicked();
+  const [outcome, report] = useOutcome();
+  const { file, type, render } = EXPORTS[format];
+  const empty = picked.length === 0;
+
+  function download() {
+    try {
+      save(`picked-${file}`, type, render(picked, FOLDER));
+      report("done");
+    } catch {
+      report("failed");
+    }
+  }
+
+  const note = (() => {
+    if (outcome) return SAVED_NOTE[outcome];
+    if (empty) return "Select a sheet first";
+    return `${picked.length} ${picked.length === 1 ? "sheet" : "sheets"} · ${meta}`;
+  })();
+
+  return (
+    <>
+      <button
+        type="button"
+        onClick={download}
+        disabled={empty}
+        data-pressable
+        className={`${ROW} w-full items-center gap-3 disabled:cursor-default disabled:text-cadmium-900`}
+      >
+        <Label title={title} meta={note} />
+        <Verb idle="Download" done="✓" shown={outcome === "done"} />
+      </button>
+      <Announcement>
+        {outcome ? SAVED_ANNOUNCEMENT[outcome](title) : ""}
+      </Announcement>
+    </>
+  );
+}

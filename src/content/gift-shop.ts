@@ -1,3 +1,4 @@
+import type { Format } from "@/links/export";
 import { SITE_URL } from "@/lib/site";
 
 type Common = {
@@ -17,6 +18,7 @@ export type GiftShopItem = Common &
     | { kind: "copy"; meta: string; text: string }
     | { kind: "swatch"; hex: string; fill: string }
     | { kind: "badge"; slug: string }
+    | { kind: "picked"; meta: string; format: Format }
   );
 
 export type GiftShopSection = {
@@ -59,6 +61,73 @@ export const feedSection: GiftShopSection = {
     },
   ],
 };
+
+export const linksSections: GiftShopSection[] = [
+  {
+    id: "links-hung",
+    title: "Your selection",
+    items: [
+      {
+        kind: "picked",
+        id: "hung-checklist",
+        title: "Reading list",
+        meta: "Markdown · Notion, Obsidian, Todoist",
+        format: "markdown",
+      },
+      {
+        kind: "picked",
+        id: "hung-bookmarks",
+        title: "Bookmarks",
+        meta: "HTML · Shiori, Raindrop, any browser",
+        format: "bookmarks",
+      },
+      {
+        kind: "picked",
+        id: "hung-csv",
+        title: "Spreadsheet",
+        meta: "CSV · Notion, Capacities",
+        format: "csv",
+      },
+    ],
+  },
+  {
+    id: "links-all",
+    title: "The whole rolodex",
+    items: [
+      {
+        kind: "copy",
+        id: "links-rss",
+        title: "RSS feed",
+        meta: "New references arrive in your reader",
+        text: `${SITE_URL}/links/feed.xml`,
+      },
+      {
+        kind: "file",
+        id: "links-md",
+        title: "Reading list",
+        meta: "Markdown · Notion, Obsidian, Todoist",
+        href: "/links/links.md",
+        download: "dandara-links.md",
+      },
+      {
+        kind: "file",
+        id: "links-bookmarks",
+        title: "Bookmarks",
+        meta: "HTML · Shiori, Raindrop, any browser",
+        href: "/links/bookmarks.html",
+        download: "dandara-bookmarks.html",
+      },
+      {
+        kind: "file",
+        id: "links-csv",
+        title: "Spreadsheet",
+        meta: "CSV · Notion, Capacities",
+        href: "/links/links.csv",
+        download: "dandara-links.csv",
+      },
+    ],
+  },
+];
 
 export const giftShopSections: GiftShopSection[] = [
   {

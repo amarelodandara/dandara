@@ -13,12 +13,13 @@ import {
 } from "./copy";
 import { GiftShopBadge } from "./gift-shop-badge";
 import { GiftShopSwatch } from "./gift-shop-swatch";
+import { PickedRow } from "@/links/gift-shop-picked";
 import { ROW } from "@/lib/pressable";
 import { ANNOTATION, TITLE } from "@/lib/type";
 
 export const CHIP_W = "w-[9.5rem]";
 
-function Label({ title, meta }: { title: string; meta: string }) {
+export function Label({ title, meta }: { title: string; meta: string }) {
   return (
     <span className="min-w-0 flex-1">
       <span className={`block ${TITLE}`}>{title}</span>
@@ -65,15 +66,21 @@ export function GiftShopRow({ item }: { item: GiftShopItem }) {
     return <FileRow item={item} />;
   }
 
+  if (item.kind === "picked") {
+    return (
+      <PickedRow title={item.title} meta={item.meta} format={item.format} />
+    );
+  }
+
   return <CopyRow title={item.title} meta={item.meta} text={item.text} />;
 }
 
-const SAVED_NOTE: Record<Settled, string> = {
+export const SAVED_NOTE: Record<Settled, string> = {
   done: "Saved",
   failed: "Not saved, try again",
 };
 
-const SAVED_ANNOUNCEMENT: Record<Settled, (title: string) => string> = {
+export const SAVED_ANNOUNCEMENT: Record<Settled, (title: string) => string> = {
   done: (title) => `${title} saved.`,
   failed: (title) => `${title} could not be saved. Try again.`,
 };
