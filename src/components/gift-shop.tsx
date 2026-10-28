@@ -83,12 +83,16 @@ const isShopKey = (event: KeyboardEvent) =>
   !isBrowserChord(event) &&
   !isTypingTarget(event.target);
 
+const LETTERED_PAGES = new Set(["/links"]);
+
 const useShopKeys = ({
   active,
   endPeek,
+  lettered,
 }: {
   active: string | null;
   endPeek: () => void;
+  lettered: boolean;
 }) => {
   useKeydown((event) => {
     if (event.key === "Escape") {
@@ -97,7 +101,7 @@ const useShopKeys = ({
       return;
     }
 
-    if (!isShopKey(event)) return;
+    if (lettered || !isShopKey(event)) return;
 
     if (active === ID) {
       event.preventDefault();
@@ -173,7 +177,8 @@ export function GiftShop() {
   const open = active === ID;
   const requested = useRequestedNote();
   const article = useArticle();
-  const contents = shopContents(article, usePathname());
+  const pathname = usePathname();
+  const contents = shopContents(article, pathname);
   const { peeking, endPeek } = useEdgePeek(active === null);
   const plaqueWanted = usePlaqueWanted(article !== null);
   const plaqueVisible = active === null && !peeking && plaqueWanted;
@@ -183,7 +188,7 @@ export function GiftShop() {
 
   useClosedByLeaving();
   usePageHeldAside(open, requested);
-  useShopKeys({ active, endPeek });
+  useShopKeys({ active, endPeek, lettered: LETTERED_PAGES.has(pathname) });
   useFocusRestored({
     open,
     requested,
