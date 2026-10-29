@@ -188,18 +188,14 @@ in `src/badges/`. The rest of the site only mounts them (`BadgeHover`,
 `/links` is a rolodex of references, filed A to Z. Everything it needs lives
 in `src/links/`.
 
-- **Data** is baked. `npm run links` (`scripts/links.mts`) reads the
-  Obsidian vault at `$VAULT`, read-only: it opens files with `"r"` and
-  nothing else, skips symlinks and dot folders, and writes only
-  `src/links/data.ts`. A note joins only when its frontmatter says
-  `rolodex: <kind>` (with `url:`, and optionally `title:`, `by:`, `note:`);
-  nothing from its body leaves the vault. It also takes a JSON list
-  instead (`npm run links -- path/to/list.json`, entries shaped like
-  `Link`), read the same way. Only quotes may go without a `url`. It
-  also prints the biggest nodes by links in, so it is easy to see what is missing. Without `$VAULT` it
-  bakes the placeholder vault in `scripts/fixtures/vault/`. It is not part
-  of `npm run build`, because the vault is not on Vercel; commit the bake.
-  `npm run links -- --check` fails when the bake is over 30 days old.
+- **Data** is `src/links/data.ts`, and the site never reads the vault.
+  New references arrive as a JSON list Nicoly hands over, entries shaped
+  like `Link` (`title`, `url`, `tag`, and optionally `by`, `note`,
+  `slug`). `npm run links -- path/to/list.json` (`scripts/links.mts`)
+  checks each one, skips any already on the rolodex (same slug, or the
+  same URL give or take the protocol, `www.` and a trailing slash) and
+  names it, then adds the rest. Only quotes may go without a `url`. Do
+  not edit `data.ts` by hand; commit what the script writes.
 - **Order** is alphabetical by title and is the array order of `LINKS`.
   Everything (the drum, the list, every export) reads that order.
 - **Kinds** are link, book, quote, movie and person (`kinds.ts`). Every

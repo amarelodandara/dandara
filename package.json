@@ -17,7 +17,7 @@
     "og:image": "node scripts/og-image.mts",
     "smoke": "node scripts/smoke.mts",
     "badges": "node scripts/badges.mts",
-    "links": "node scripts/links.mts"
+    "links": "node --disable-warning=MODULE_TYPELESS_PACKAGE_JSON scripts/links.mts"
   },
   "dependencies": {
     "@base-ui/react": "^1.8.0",

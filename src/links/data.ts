@@ -1,7 +1,5 @@
 import type { Link } from "./link";
 
-export const PULLED_AT = "2026-10-28";
-
 export const LINKS: Link[] = [
   {
     slug: "a-brief-look-at-texting-and-the-internet-in-film",
