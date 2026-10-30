@@ -1087,3 +1087,12 @@ body:has([data-links]),
 body:has([data-links]) [data-page] {
   background: var(--color-graphite-50);
 }
+
+/* The drum is sticky to the bottom of the window, not fixed: opening the gift
+   shop translates the page plane, which re-anchors anything fixed inside it to
+   the plane. Sticky only holds at the window's bottom edge if the plane
+   reaches it, and `min-h-full` on the plane resolves to nothing under a body
+   whose own height is auto, so /links states the window's height outright. */
+body:has([data-links]) [data-page] {
+  min-height: 100dvh;
+}

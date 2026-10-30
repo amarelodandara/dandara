@@ -21,10 +21,7 @@ export function Fall() {
 
 export function Depth() {
   return (
-    <div
-      aria-hidden
-      className={`pointer-events-none fixed inset-x-0 bottom-0 z-10 ${DRUM_HEIGHT}`}
-    >
+    <div aria-hidden className="pointer-events-none absolute inset-0">
       {Array.from({ length: DEPTH_LAYERS }, (_, layer) => (
         <span key={layer} data-depth={layer} />
       ))}
@@ -59,9 +56,7 @@ export function Drum({
   ).toReversed();
 
   return (
-    <div
-      className={`pointer-events-none fixed inset-x-0 bottom-0 z-10 flex ${DRUM_HEIGHT} items-end justify-center pb-6 perspective-distant perspective-origin-[50%_20%]`}
-    >
+    <div className="pointer-events-none absolute inset-0 flex items-end justify-center pb-4 perspective-distant perspective-origin-[50%_20%]">
       <div
         ref={stage}
         className="pointer-events-auto relative w-[86vw] cursor-grab touch-none select-none active:cursor-grabbing max-sm:translate-y-1/6 sm:w-[min(24rem,76vw)]"

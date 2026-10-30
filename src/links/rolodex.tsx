@@ -17,6 +17,7 @@ import { randomIndex, wrap } from "./roll";
 import { Selection } from "./selection";
 import type { SheetLink } from "./sheet";
 import { land, quiet, tick, unlockTicks } from "./sound";
+import { shelve } from "./total";
 import { paint, useRoll } from "./use-roll";
 import { openOverlay, SHOP_OVERLAY } from "@/lib/exclusive-overlay";
 import { useSound } from "@/lib/sound";
@@ -91,6 +92,8 @@ export function Rolodex({ links }: { links: SheetLink[] }) {
   useLayoutEffect(() => {
     paint(stage.current, roll.position);
   }, [centre, roll]);
+
+  useEffect(() => shelve(count), [count]);
 
   useEffect(() => {
     const unlock = () => unlockTicks();
@@ -171,45 +174,53 @@ export function Rolodex({ links }: { links: SheetLink[] }) {
     <div
       ref={root}
       data-links
-      className="relative flex flex-1 flex-col pt-[9vh] sm:pt-[12vh]"
+      className="relative flex flex-1 flex-col overflow-y-clip pt-[9vh] sm:pt-[12vh]"
     >
-      <Selection refs={shown} all={rolled} rushing={rush !== null} />
+      <Selection
+        refs={shown}
+        all={rolled}
+        rushing={rush !== null}
+        onRemove={rush ? undefined : unpick}
+      />
 
-      <div aria-hidden className={`shrink-0 ${DRUM_HEIGHT}`} />
-      <Depth />
-      <Drum
-        stage={stage}
-        links={links}
-        letters={letters}
-        intro={<Intro count={count} />}
-        centre={centre}
-        selected={selected}
-        onSelect={select}
-        controls={
-          <>
-            <button type="button" onClick={rollAll} className={KEY}>
-              {rolled ? "Roll it back up" : "Roll all"}
-            </button>
-            <button
-              type="button"
-              onClick={() => toIndex(randomIndex(count))}
-              className={`${KEY} max-sm:hidden`}
-            >
-              Random
-            </button>
-            {picked.length > 0 ? (
+      <div
+        className={`pointer-events-none sticky bottom-0 z-10 mt-auto shrink-0 ${DRUM_HEIGHT}`}
+      >
+        <Depth />
+        <Drum
+          stage={stage}
+          links={links}
+          letters={letters}
+          intro={<Intro count={count} />}
+          centre={centre}
+          selected={selected}
+          onSelect={select}
+          controls={
+            <>
+              <button type="button" onClick={rollAll} className={KEY}>
+                {rolled ? "Roll it back up" : "Roll all"}
+              </button>
               <button
                 type="button"
-                onClick={() => openOverlay(SHOP_OVERLAY)}
-                aria-haspopup="dialog"
+                onClick={() => toIndex(randomIndex(count))}
                 className={`${KEY} max-sm:hidden`}
               >
-                Export
+                Random
               </button>
-            ) : null}
-          </>
-        }
-      />
+              {picked.length > 0 ? (
+                <button
+                  type="button"
+                  onClick={() => openOverlay(SHOP_OVERLAY)}
+                  aria-haspopup="dialog"
+                  className={`${KEY} max-sm:hidden`}
+                >
+                  Export
+                </button>
+              ) : null}
+            </>
+          }
+        />
+      </div>
 
       <p role="status" className="sr-only">
         {landed === null ? "" : announcement}
