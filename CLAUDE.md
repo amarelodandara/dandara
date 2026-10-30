@@ -245,6 +245,13 @@ content, add its worst case there and look at 320px, 768px and 1440px.
 - **Post titles and decks** also set the OG card, which grows upward from
   the bottom with nothing to stop it. Keep titles under about 90
   characters and decks under about 80, an estimate from the card's CSS.
+- **Rolodex sheets** never truncate or clamp: the text is written to fit a
+  320px phone, and the same text shows on every screen. `src/links/fit.ts`
+  estimates the wrap (about 28 characters a title line, 39 a note line):
+  title and note together take at most 6 lines on a phone and 5 on a wide
+  screen, and `by` stays under 39 characters, one line. `npm run links`
+  refuses an entry that does not fit, and `npm run links -- --check` lists
+  the sheets already on the rolodex that do not.
 - **Headings and signposts** break a single word too long for the line
   mid-word rather than overflowing, so a long Portuguese compound survives
   at 320px. It will not look good; prefer ordinary words in names.

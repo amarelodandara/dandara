@@ -2,14 +2,13 @@ import { readFile, writeFile } from "node:fs/promises";
 import path from "node:path";
 import process from "node:process";
 import { LINKS } from "../src/links/data.ts";
+import { misfits } from "../src/links/fit.ts";
 import { KINDS, type Kind } from "../src/links/kinds.ts";
 import type { Link } from "../src/links/link.ts";
 
 const ROOT = process.cwd();
 const OUT = path.join(ROOT, "src", "links", "data.ts");
 
-const LONGEST_TITLE = 240;
-const LONGEST_NOTE = 240;
 const SPELLED_OUT_FROM = 3;
 
 type Entry = {
@@ -60,15 +59,13 @@ function linkFrom(entry: Entry): Link {
   const title = tidy(entry.title) ?? "";
   const url = tidy(entry.url);
   const line = tidy(entry.note);
+  const by = respell(name, entry.by);
   const problems = [
     !isKind(tag) && `kind "${tag}" is not one of ${KINDS.join(", ")}`,
     !title && "title is missing",
     url !== undefined && !/^https?:\/\//.test(url) && "url is not http(s)",
     url === undefined && tag !== "quote" && "url is missing",
-    title.length > LONGEST_TITLE &&
-      `title runs past ${LONGEST_TITLE} characters`,
-    (line?.length ?? 0) > LONGEST_NOTE &&
-      `note runs past ${LONGEST_NOTE} characters`,
+    ...misfits({ title, note: line, by }),
   ].filter(Boolean);
   if (problems.length > 0) throw new Error(`${name}: ${problems.join("; ")}`);
   return {
@@ -76,7 +73,7 @@ function linkFrom(entry: Entry): Link {
     title,
     url,
     tag: tag as Kind,
-    by: respell(name, entry.by),
+    by,
     note: line,
   };
 }
@@ -116,6 +113,17 @@ async function fromList(file: string) {
   });
 }
 
+function check() {
+  const misfit = LINKS.filter((link) => misfits(link).length > 0);
+  for (const link of misfit) {
+    console.log(`· ${link.title}: ${misfits(link).join("; ")}`);
+  }
+  if (misfit.length > 0) {
+    throw new Error(`${misfit.length} sheets do not fit, rewrite them shorter`);
+  }
+  console.log(`✓ all ${LINKS.length} sheets fit`);
+}
+
 async function add() {
   const list = process.argv
     .slice(2)
@@ -127,7 +135,9 @@ async function add() {
   const urls = new Map(
     LINKS.flatMap((link) => (link.url ? [[sameUrl(link.url), link]] : [])),
   );
+  const updating = process.argv.includes("--update");
   const added: Link[] = [];
+  const updated: string[] = [];
   const skipped: string[] = [];
 
   for (const entry of await fromList(list)) {
@@ -135,6 +145,11 @@ async function add() {
     const already =
       slugs.get(link.slug) ??
       (link.url ? urls.get(sameUrl(link.url)) : undefined);
+    if (already && updating && slugs.has(link.slug)) {
+      slugs.set(link.slug, link);
+      updated.push(link.title);
+      continue;
+    }
     if (already) {
       skipped.push(`${link.title} (already in as "${already.title}")`);
       continue;
@@ -146,15 +161,23 @@ async function add() {
 
   for (const repair of repairs) console.log(`· ${repair}`);
   for (const skip of skipped) console.log(`· skipped ${skip}`);
+  for (const title of updated) console.log(`· updated ${title}`);
 
-  const links = [...LINKS, ...added].toSorted((a, b) =>
+  const links = [
+    ...LINKS.map((link) => slugs.get(link.slug) ?? link),
+    ...added,
+  ].toSorted((a, b) =>
     a.title.localeCompare(b.title, "en", { sensitivity: "base" }),
   );
   await writeFile(OUT, source(links));
-  console.log(`✓ added ${added.length}, ${links.length} references in all`);
+  console.log(
+    `✓ added ${added.length}, updated ${updated.length}, ${links.length} references in all`,
+  );
 }
 
-add().catch((error) => {
+const run = process.argv.includes("--check") ? async () => check() : add;
+
+run().catch((error) => {
   console.error(`✗ ${error instanceof Error ? error.message : error}`);
   process.exit(1);
 });
