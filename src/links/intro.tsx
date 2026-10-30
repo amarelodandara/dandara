@@ -34,7 +34,7 @@ export function Intro({
 
       <div className="min-w-0 can-hover:@min-[19rem]:grid can-hover:@min-[19rem]:grid-cols-[minmax(0,1fr)_auto] can-hover:@min-[19rem]:items-end can-hover:@min-[19rem]:gap-x-6">
         <div className="min-w-0">
-          <p className={look(parts.description)}>
+          <p className={`text-balance ${look(parts.description)}`}>
             All the links I keep sending friends and revisiting for references.
           </p>
           <p className={`mt-2 ${look(parts.hint)} can-hover:hidden`}>
