@@ -55,7 +55,7 @@ export const LINKS: Link[] = [
     url: "https://affidavit.art/articles/accumulation-and-appreciation",
     tag: "movie",
     by: "Sophia Haigney",
-    note: "\"But the point is that there are certain rocks that we choose, taking them into our hands and pockets and jars; rocks that become *our* rocks.\"",
+    note: "\"But the point is that there are certain rocks that we choose, taking them into our hands and pockets and jars; rocks that become our rocks.\"",
   },
   {
     slug: "adidas-megalizer-les-twins-bboy-lamine-bboy-mounir-yakfilms",
