@@ -38,8 +38,8 @@ export function useRolodexKeys(keys: Keys) {
     if (isBrowserChord(event) || isTypingTarget(event.target)) return;
 
     const commands: Record<string, () => void> = {
-      ArrowDown: () => keys.step(1),
-      ArrowUp: () => keys.step(-1),
+      ArrowDown: () => keys.step(-1),
+      ArrowUp: () => keys.step(1),
     };
     const command = commands[event.key];
     if (command) {
