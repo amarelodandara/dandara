@@ -129,6 +129,28 @@
     inset 0 0 0 1px oklch(0.55 0.12 92 / 0.18),
     inset 0 2px 5px oklch(0.45 0.1 92 / 0.16);
 
+  /* The seventh, eighth and ninth, and the only notes with a pressed state: a
+     small key you push. No hairline outside it and no tint: the edge is a
+     half-pixel ring drawn inward, and the face is shaded by a short inset
+     throw along its bottom, so a white key reads as a slab lit from above
+     without a drawn gradient. Everything is half a pixel because these are
+     interface-sized buttons; a full pixel reads as a frame at that size.
+     `lift` is the same key under the pointer. Only the shade changes, lighter,
+     so the face brightens; the ring and the drop stay put, because a longer
+     drop reads as the key growing taller.
+     Pressed, the drop goes and the shade turns to the top: the key is down
+     in the wall rather than standing on it. */
+  --shadow-key:
+    inset 0 0 0 0.5px oklch(0 0 0 / 0.1),
+    inset 0 -10px 12px -8px oklch(0 0 0 / 0.08),
+    0 0.5px 1px oklch(0 0 0 / 0.08), 0 2px 4px -2px oklch(0 0 0 / 0.08);
+  --shadow-lift:
+    inset 0 0 0 0.5px oklch(0 0 0 / 0.1),
+    inset 0 -10px 12px -8px oklch(0 0 0 / 0.03),
+    0 0.5px 1px oklch(0 0 0 / 0.08), 0 2px 4px -2px oklch(0 0 0 / 0.08);
+  --shadow-key-pressed:
+    inset 0 0 0 0.5px oklch(0 0 0 / 0.12), inset 0 1px 2px oklch(0 0 0 / 0.07);
+
 
   /* The mdxcn graph frame (`src/components/graph`) is vendored from its shadcn
      registry and asks for its own token names. They are not a third ramp: each

@@ -1,8 +1,9 @@
 import { useEffect, useRef, useState } from "react";
+import { REMOVE_LOOK, removeClass, type RemoveLook } from "./buttons";
 import type { Ref } from "./export";
 import { LINK_UNDERLINED } from "@/components/link";
 import { openOverlay, SHOP_OVERLAY } from "@/lib/exclusive-overlay";
-import { ACCENT_PROSE, ANNOTATION, PROSE } from "@/lib/type";
+import { ACCENT_PROSE, PROSE } from "@/lib/type";
 
 const still = () =>
   window.matchMedia("(prefers-reduced-motion: reduce)").matches;
@@ -28,8 +29,6 @@ const INTRO =
 const LEAVES =
   "mt-0 opacity-0 transition-[opacity,margin] duration-(--motion-exit) ease-out-strong";
 
-const REMOVE = `relative ml-2 inline-flex rounded-sm px-1.5 py-1 text-graphite-700 ${ANNOTATION} leading-none transition-[background-color,color,opacity,scale] duration-(--motion-quick) ease-out-strong after:absolute after:-inset-2 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-graphite-900/50 motion-safe:enabled:active:scale-[0.96] active:duration-(--press) can-hover:opacity-0 can-hover:group-hover:opacity-100 can-hover:group-has-focus-visible:opacity-100 can-hover:hover:bg-graphite-100 can-hover:hover:text-graphite-900`;
-
 function focusAfter(item: HTMLElement) {
   const sibling = (from: Element | null, next: boolean): HTMLElement | null => {
     let at = from;
@@ -48,10 +47,12 @@ function focusAfter(item: HTMLElement) {
 function Item({
   link: { slug, title, url, tag, by },
   late,
+  look,
   onRemove,
 }: {
   link: Ref;
   late: boolean;
+  look: RemoveLook;
   onRemove?: (slug: string) => void;
 }) {
   const [goes, setGoes] = useState(false);
@@ -96,9 +97,9 @@ function Item({
               disabled={goes}
               onClick={(event) => remove(event.currentTarget)}
               aria-label={`Remove ${title}`}
-              className={REMOVE}
+              className={removeClass(look)}
             >
-              Remove
+              {look.label}
             </button>
           ) : null}
         </div>
@@ -111,11 +112,13 @@ export function Selection({
   refs,
   all,
   rushing,
+  remove = REMOVE_LOOK,
   onRemove,
 }: {
   refs: Ref[];
   all: boolean;
   rushing: boolean;
+  remove?: RemoveLook;
   onRemove?: (slug: string) => void;
 }) {
   const seen = useRef(refs.length);
@@ -196,6 +199,7 @@ export function Selection({
                 key={link.slug}
                 link={link}
                 late={leaving}
+                look={remove}
                 onRemove={onRemove}
               />
             ))}

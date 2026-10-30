@@ -14,6 +14,8 @@ import {
   usePicked,
 } from "./picked";
 import { randomIndex, wrap } from "./roll";
+import { buttonClass, KEY_LOOK } from "./buttons";
+import { MorphLabel, Reveal } from "./morph";
 import { Selection } from "./selection";
 import type { SheetLink } from "./sheet";
 import { land, quiet, tick, unlockTicks } from "./sound";
@@ -21,14 +23,8 @@ import { shelve } from "./total";
 import { paint, useRoll } from "./use-roll";
 import { openOverlay, SHOP_OVERLAY } from "@/lib/exclusive-overlay";
 import { useSound } from "@/lib/sound";
-import { ANNOTATION } from "@/lib/type";
 
-const KEY = [
-  "flex items-center rounded-lg border border-transparent bg-graphite-50 px-2.5 py-2 shadow-chip",
-  `${ANNOTATION} leading-none text-graphite-700`,
-  "transition-[background-color,scale] duration-(--motion-quick) ease-out-strong",
-  "can-hover:hover:bg-graphite-100 focus-visible:bg-graphite-100 motion-safe:active:scale-[0.96] active:duration-(--press)",
-].join(" ");
+const KEY = buttonClass(KEY_LOOK);
 
 const RUSH_MS_PER_CARD = 8;
 const SHORTEST_RUSH_MS = 300;
@@ -198,25 +194,27 @@ export function Rolodex({ links }: { links: SheetLink[] }) {
           controls={
             <>
               <button type="button" onClick={rollAll} className={KEY}>
-                {rolled ? "Roll it back up" : "Roll all"}
+                <MorphLabel>
+                  {rolled ? "Roll it back up" : "Roll all"}
+                </MorphLabel>
               </button>
               <button
                 type="button"
                 onClick={() => toIndex(randomIndex(count))}
                 className={`${KEY} max-sm:hidden`}
               >
-                Roll random
+                Get random
               </button>
-              {picked.length > 0 ? (
+              <Reveal shown={picked.length > 0} className="max-sm:hidden">
                 <button
                   type="button"
                   onClick={() => openOverlay(SHOP_OVERLAY)}
                   aria-haspopup="dialog"
-                  className={`${KEY} max-sm:hidden`}
+                  className={KEY}
                 >
                   Export
                 </button>
-              ) : null}
+              </Reveal>
             </>
           }
         />
