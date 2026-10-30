@@ -66,9 +66,9 @@ export const number = (index: number) => String(index + 1).padStart(3, "0");
 
 const along = (letter: string) =>
   ({
-    "--along": Math.min(
-      1,
-      (letter.toLowerCase().codePointAt(0)! - A) / (ALPHABET - 1),
+    "--along": Math.max(
+      0,
+      Math.min(1, (letter.toLowerCase().codePointAt(0)! - A) / (ALPHABET - 1)),
     ),
   }) as CSSProperties;
 
