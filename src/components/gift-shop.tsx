@@ -6,6 +6,7 @@ import { type RefObject, useEffect, useRef } from "react";
 import { GiftShopNotes } from "./gift-shop-notes";
 import { GiftShopSign, shelfSeat, shopContents } from "./gift-shop-sign";
 import { GiftShopRow } from "./gift-shop-row";
+import { ShelfCount } from "@/links/gift-shop-picked";
 import { GiftShopPlaque } from "./gift-shop-plaque";
 import { GiftShopEdge, useEdgePeek } from "./gift-shop-edge";
 import { useFocusRestored, useRememberedFocus } from "./gift-shop-focus";
@@ -125,6 +126,7 @@ const Shelves = ({ shelves, full }: Pick<Contents, "shelves" | "full">) =>
       {section.title ? (
         <h3 className={`px-3 ${ANNOTATION} text-cadmium-900`}>
           {section.title}
+          {section.counted ? <ShelfCount of={section.counted} /> : null}
         </h3>
       ) : null}
       <ul className={section.title ? "mt-2 space-y-0.5" : "space-y-0.5"}>

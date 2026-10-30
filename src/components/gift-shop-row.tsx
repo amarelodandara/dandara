@@ -72,8 +72,20 @@ export function GiftShopRow({ item }: { item: GiftShopItem }) {
     );
   }
 
+  if (item.kind === "copy-file") {
+    return (
+      <CopyRow title={item.title} meta={item.meta} text={fetched(item.href)} />
+    );
+  }
+
   return <CopyRow title={item.title} meta={item.meta} text={item.text} />;
 }
+
+const fetched = (href: string) => async () => {
+  const response = await fetch(href);
+  if (!response.ok) throw new Error(`${href} answered ${response.status}`);
+  return response.text();
+};
 
 export const SAVED_NOTE: Record<Settled, string> = {
   done: "Saved",
@@ -146,7 +158,7 @@ function CopyRow({
 }: {
   title: string;
   meta: string;
-  text: string;
+  text: string | (() => Promise<string>);
 }) {
   const [outcome, copy] = useCopy(text);
   const copied = outcome === "done";

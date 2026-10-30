@@ -1,6 +1,13 @@
 "use client";
 
-import { Announcement, useOutcome, Verb } from "@/components/copy";
+import {
+  Announcement,
+  COPIED_ANNOUNCEMENT,
+  COPIED_NOTE,
+  useCopy,
+  useOutcome,
+  Verb,
+} from "@/components/copy";
 import {
   Label,
   SAVED_ANNOUNCEMENT,
@@ -9,6 +16,7 @@ import {
 import { ROW } from "@/lib/pressable";
 import { EXPORTS, type Format } from "./export";
 import { usePicked } from "./picked";
+import { useTotal } from "./total";
 
 const FOLDER = "Picked at adandara.com/links";
 
@@ -21,6 +29,14 @@ function save(file: string, type: string, body: string) {
   setTimeout(() => URL.revokeObjectURL(url));
 }
 
+export function ShelfCount({ of }: { of: "picked" | "all" }) {
+  const { length } = usePicked();
+  const total = useTotal();
+  const count = of === "picked" ? length : total;
+  if (count === 0) return null;
+  return ` (${count} ${count === 1 ? "reference" : "references"})`;
+}
+
 export function PickedRow({
   title,
   meta,
@@ -31,13 +47,17 @@ export function PickedRow({
   format: Format;
 }) {
   const picked = usePicked();
-  const [outcome, report] = useOutcome();
+  const [saved, report] = useOutcome();
   const { file, type, render } = EXPORTS[format];
+  const body = render(picked, FOLDER);
+  const [copied, copy] = useCopy(body);
+  const copies = format === "markdown";
+  const outcome = copies ? copied : saved;
   const empty = picked.length === 0;
 
   function download() {
     try {
-      save(`picked-${file}`, type, render(picked, FOLDER));
+      save(`picked-${file}`, type, body);
       report("done");
     } catch {
       report("failed");
@@ -45,26 +65,29 @@ export function PickedRow({
   }
 
   const note = (() => {
-    if (outcome) return SAVED_NOTE[outcome];
+    if (outcome) return (copies ? COPIED_NOTE : SAVED_NOTE)[outcome];
     if (empty) return "Select a sheet first";
-    return `${picked.length} ${picked.length === 1 ? "sheet" : "sheets"} · ${meta}`;
+    return meta;
   })();
+  const announced = copies ? COPIED_ANNOUNCEMENT : SAVED_ANNOUNCEMENT;
 
   return (
     <>
       <button
         type="button"
-        onClick={download}
+        onClick={copies ? copy : download}
         disabled={empty}
         data-pressable
         className={`${ROW} w-full items-center gap-3 disabled:cursor-default disabled:text-cadmium-900`}
       >
         <Label title={title} meta={note} />
-        <Verb idle="Download" done="✓" shown={outcome === "done"} />
+        <Verb
+          idle={copies ? "Copy" : "Download"}
+          done="✓"
+          shown={outcome === "done"}
+        />
       </button>
-      <Announcement>
-        {outcome ? SAVED_ANNOUNCEMENT[outcome](title) : ""}
-      </Announcement>
+      <Announcement>{outcome ? announced[outcome](title) : ""}</Announcement>
     </>
   );
 }

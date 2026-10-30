@@ -16,6 +16,7 @@ export type GiftShopItem = Common &
         preview?: { src: string; width: number; height: number; alt: string };
       }
     | { kind: "copy"; meta: string; text: string }
+    | { kind: "copy-file"; meta: string; href: string }
     | { kind: "swatch"; hex: string; fill: string }
     | { kind: "badge"; slug: string }
     | { kind: "picked"; meta: string; format: Format }
@@ -24,6 +25,7 @@ export type GiftShopItem = Common &
 export type GiftShopSection = {
   id: string;
   title?: string;
+  counted?: "picked" | "all";
   items: GiftShopItem[];
 };
 
@@ -66,26 +68,27 @@ export const linksSections: GiftShopSection[] = [
   {
     id: "links-hung",
     title: "Your selection",
+    counted: "picked",
     items: [
       {
         kind: "picked",
         id: "hung-checklist",
-        title: "Reading list",
-        meta: "Markdown · Notion, Obsidian, Todoist",
+        title: "Markdown",
+        meta: "Good for Notion, Obsidian, Todoist",
         format: "markdown",
       },
       {
         kind: "picked",
         id: "hung-bookmarks",
-        title: "Bookmarks",
-        meta: "HTML · Shiori, Raindrop, any browser",
+        title: "HTML",
+        meta: "Good for Shiori, Raindrop, any browser",
         format: "bookmarks",
       },
       {
         kind: "picked",
         id: "hung-csv",
-        title: "Spreadsheet",
-        meta: "CSV · Notion, Capacities",
+        title: "CSV",
+        meta: "Good for Notion, Capacities",
         format: "csv",
       },
     ],
@@ -93,35 +96,28 @@ export const linksSections: GiftShopSection[] = [
   {
     id: "links-all",
     title: "The whole rolodex",
+    counted: "all",
     items: [
       {
-        kind: "copy",
-        id: "links-rss",
-        title: "RSS feed",
-        meta: "New references arrive in your reader",
-        text: `${SITE_URL}/links/feed.xml`,
-      },
-      {
-        kind: "file",
+        kind: "copy-file",
         id: "links-md",
-        title: "Reading list",
-        meta: "Markdown · Notion, Obsidian, Todoist",
+        title: "Markdown",
+        meta: "Good for Notion, Obsidian, Todoist",
         href: "/links/links.md",
-        download: "dandara-links.md",
       },
       {
         kind: "file",
         id: "links-bookmarks",
-        title: "Bookmarks",
-        meta: "HTML · Shiori, Raindrop, any browser",
+        title: "HTML",
+        meta: "Good for Shiori, Raindrop, any browser",
         href: "/links/bookmarks.html",
         download: "dandara-bookmarks.html",
       },
       {
         kind: "file",
         id: "links-csv",
-        title: "Spreadsheet",
-        meta: "CSV · Notion, Capacities",
+        title: "CSV",
+        meta: "Good for Notion, Capacities",
         href: "/links/links.csv",
         download: "dandara-links.csv",
       },

@@ -52,12 +52,25 @@ export function useOutcome() {
   return [outcome, report] as const;
 }
 
-export function useCopy(text: string) {
+type Copied = string | (() => Promise<string>);
+
+const write = (text: Copied) =>
+  typeof text === "string"
+    ? navigator.clipboard.writeText(text)
+    : navigator.clipboard.write([
+        new ClipboardItem({
+          "text/plain": text().then(
+            (body) => new Blob([body], { type: "text/plain" }),
+          ),
+        }),
+      ]);
+
+export function useCopy(text: Copied) {
   const [outcome, report] = useOutcome();
 
   const copy = useCallback(async () => {
     try {
-      await navigator.clipboard.writeText(text);
+      await write(text);
     } catch {
       report("failed");
       return;
