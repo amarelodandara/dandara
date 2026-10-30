@@ -2,6 +2,8 @@ import { BADGES } from "@/badges/data";
 import type { Badge } from "@/badges/shape";
 import type { Sign } from "@/components/signposts";
 import type { Tile } from "@/lib/exhibition";
+import type { Ref } from "@/links/export";
+import { rolodexFor, type RolodexSheet } from "./links-fixtures";
 
 export type Dataset = "demo" | "worst" | "empty" | "one";
 
@@ -33,6 +35,8 @@ const like = (slug: string, title: string, words: number): Badge => ({
 });
 
 export type Fixture = {
+  sheets: RolodexSheet[];
+  refs: Ref[];
   badges: { note: string; badge: Badge }[];
   tiles: Tile[];
   signs: Sign[];
@@ -90,6 +94,7 @@ const worstTiles = (tiles: Tile[]): Tile[] => {
 export function fixtureFor(dataset: Dataset, tiles: Tile[]): Fixture {
   if (dataset === "worst") {
     return {
+      ...rolodexFor("worst"),
       badges: [
         {
           note: "63 characters on a 180-word note",
@@ -150,6 +155,7 @@ export function fixtureFor(dataset: Dataset, tiles: Tile[]): Fixture {
 
   if (dataset === "empty") {
     return {
+      ...rolodexFor("empty"),
       badges: [],
       tiles: [],
       signs: [],
@@ -160,6 +166,7 @@ export function fixtureFor(dataset: Dataset, tiles: Tile[]): Fixture {
 
   if (dataset === "one") {
     return {
+      ...rolodexFor("one"),
       badges: [{ note: "one badge", badge: BADGES.obsidian }],
       tiles: tiles.slice(0, 1),
       signs: [{ href: "/writing", name: "Writing", area: "blog" }],
@@ -172,6 +179,7 @@ export function fixtureFor(dataset: Dataset, tiles: Tile[]): Fixture {
   }
 
   return {
+    ...rolodexFor("demo"),
     badges: Object.entries(BADGES).map(([slug, badge]) => ({
       note: `${slug}, ${badge.words} words`,
       badge,
