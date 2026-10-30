@@ -4,7 +4,7 @@ import { ANNOTATION } from "@/lib/type";
 
 const ACTION = [
   PRESS_BASE,
-  "relative inline-flex items-center rounded-sm px-2 py-1",
+  "relative inline-flex items-center rounded-sm px-2 py-1 max-sm:min-h-11 max-sm:px-3",
   `${ANNOTATION} leading-none`,
   "can-hover:hover:bg-graphite-100 focus-visible:bg-graphite-100",
 ].join(" ");

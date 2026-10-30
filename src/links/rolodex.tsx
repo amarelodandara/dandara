@@ -193,7 +193,7 @@ export function Rolodex({ links }: { links: SheetLink[] }) {
             <button
               type="button"
               onClick={() => toIndex(randomIndex(count))}
-              className={KEY}
+              className={`${KEY} max-sm:hidden`}
             >
               Random
             </button>
@@ -202,7 +202,7 @@ export function Rolodex({ links }: { links: SheetLink[] }) {
                 type="button"
                 onClick={() => openOverlay(SHOP_OVERLAY)}
                 aria-haspopup="dialog"
-                className={KEY}
+                className={`${KEY} max-sm:hidden`}
               >
                 Export
               </button>

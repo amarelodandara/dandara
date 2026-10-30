@@ -963,6 +963,12 @@ body[data-shop-open] [data-shop-panel] {
   pointer-events: none;
 }
 
+@media (width < 40rem) {
+  [data-fall] {
+    border-radius: 1.4% / 1.75%;
+  }
+}
+
 [data-falling] > [data-fall] {
   display: block;
 }

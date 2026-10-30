@@ -8,7 +8,7 @@ const BEHIND = 3;
 const AHEAD = 10;
 const DEPTH_LAYERS = 5;
 
-export const DRUM_HEIGHT = "h-[min(26rem,50vh)]";
+export const DRUM_HEIGHT = "h-[44vh] sm:h-[min(26rem,50vh)]";
 
 export const SLOT =
   "absolute inset-0 origin-[50%_calc(100%+3.5rem)] backface-hidden will-change-transform";
@@ -64,9 +64,9 @@ export function Drum({
     >
       <div
         ref={stage}
-        className="pointer-events-auto relative w-[min(24rem,76vw)] cursor-grab touch-none select-none active:cursor-grabbing"
+        className="pointer-events-auto relative w-[86vw] cursor-grab touch-none select-none active:cursor-grabbing max-sm:translate-y-1/6 sm:w-[min(24rem,76vw)]"
       >
-        <div className="relative aspect-16/9 -rotate-x-12 transform-3d">
+        <div className="relative aspect-video -rotate-x-12 transform-3d max-sm:aspect-5/4">
           {slots.map((k) => {
             const at = wrap(k, count);
             if (at === 0) {
@@ -106,9 +106,10 @@ export function Drum({
                   letter={letters.get(link.slug)}
                   picked={selected.has(link.slug)}
                   onPick={() => onSelect(k)}
+                  corner={link.url ? <Visit link={link} /> : null}
                 >
                   {link.url ? (
-                    <div className="relative -mx-2 mt-2 flex">
+                    <div className="relative -mx-2 mt-2 flex max-sm:hidden">
                       <Visit link={link} />
                     </div>
                   ) : null}

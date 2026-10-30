@@ -1,7 +1,7 @@
 import type { CSSProperties, ReactNode } from "react";
 import type { Link } from "./link";
 import { BG, look, ROLES, SHEET_LOOK, TEXT, type SheetLook } from "./look";
-import { SECTION_HEADING } from "@/lib/type";
+import { ANNOTATION, SECTION_HEADING } from "@/lib/type";
 
 export type SheetLink = Pick<
   Link,
@@ -11,12 +11,56 @@ export type SheetLink = Pick<
 const ALPHABET = 26;
 const A = 97;
 
-export const FACE = `relative flex w-full flex-col justify-between overflow-hidden px-4 py-4 text-graphite-900 sm:px-6 sm:py-6 border border-transparent shadow-label`;
+export const FACE = `relative flex w-full flex-col justify-between overflow-hidden px-4 py-4 text-graphite-900 max-sm:justify-start max-sm:gap-6 sm:px-6 sm:py-6 border border-transparent shadow-label`;
 
-export const CARD_SHAPE = "aspect-16/9 rounded-[1.4%/2.5%]";
+export const CARD_SHAPE =
+  "aspect-16/9 rounded-[1.4%/2.5%] max-sm:aspect-5/4 max-sm:rounded-[1.4%/1.75%]";
 
 const SPOT =
-  "absolute top-[8%] right-[5%] aspect-square w-[10%] -rotate-12 rounded-full";
+  "absolute top-[8%] right-[5%] aspect-square w-[10%] -rotate-12 rounded-full max-sm:hidden";
+
+const PRESS =
+  "cursor-pointer transition-[scale,background-color] duration-(--motion-quick) ease-out-strong focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-graphite-900/50";
+
+const HOLLOW = "shadow-hollow can-hover:hover:bg-cadmium-200";
+
+function Corner({
+  title,
+  picked,
+  onPick,
+  children,
+}: {
+  title: string;
+  picked: boolean;
+  onPick?: () => void;
+  children?: ReactNode;
+}) {
+  const dot = "size-7 -rotate-12 rounded-full";
+  return (
+    <div className="absolute top-1 right-1 z-10 flex items-center sm:hidden">
+      {children}
+      {onPick ? (
+        <button
+          type="button"
+          onClick={onPick}
+          aria-pressed={picked}
+          aria-label={`Select ${title}`}
+          className={`group flex size-11 items-center justify-center rounded-full ${PRESS}`}
+        >
+          <span
+            data-sticker={picked || undefined}
+            className={`${dot} transition-[scale,background-color] duration-(--motion-quick) ease-out-strong group-active:scale-90 ${picked ? "" : HOLLOW}`}
+          />
+        </button>
+      ) : null}
+      {!onPick && picked ? (
+        <span aria-hidden className="flex size-11 items-center justify-center">
+          <span data-sticker className={dot} />
+        </span>
+      ) : null}
+    </div>
+  );
+}
 
 export const number = (index: number) => String(index + 1).padStart(3, "0");
 
@@ -52,6 +96,7 @@ export function Sheet({
   letter,
   large = false,
   children,
+  corner,
   picked = false,
   onPick,
   parts = SHEET_LOOK,
@@ -61,6 +106,7 @@ export function Sheet({
   letter?: string;
   large?: boolean;
   children?: ReactNode;
+  corner?: ReactNode;
   picked?: boolean;
   onPick?: () => void;
   parts?: SheetLook;
@@ -78,8 +124,13 @@ export function Sheet({
             aria-pressed={picked}
             aria-label={`Select ${link.title}`}
             data-sticker={picked || undefined}
-            className={`${SPOT} z-10 cursor-pointer transition-[scale,background-color] duration-(--motion-quick) ease-out-strong focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-graphite-900/50 active:scale-90 ${picked ? "" : "shadow-hollow can-hover:hover:bg-cadmium-200"}`}
+            className={`${SPOT} z-10 ${PRESS} active:scale-90 ${picked ? "" : HOLLOW}`}
           />
+        ) : null}
+        {onPick || picked || corner ? (
+          <Corner title={link.title} picked={picked} onPick={onPick}>
+            {corner}
+          </Corner>
         ) : null}
         {!onPick && picked ? (
           <span aria-hidden data-sticker className={SPOT} />
@@ -88,14 +139,21 @@ export function Sheet({
 
         <div className="min-w-0">
           <p
-            className={`${large ? SECTION_HEADING : ROLES[parts.title.role]} ${TEXT[parts.title.colour]} ${large ? "" : "line-clamp-3"} wrap-break-word`}
+            className={`${large ? SECTION_HEADING : ROLES[parts.title.role]} ${TEXT[parts.title.colour]} wrap-break-word`}
           >
             {link.tag === "quote" ? `“${link.title}”` : link.title}
           </p>
           {link.by ? (
-            <p className={`mt-1 truncate ${look(parts.by)}`}>{link.by}</p>
+            <p className={`mt-1 ${look(parts.by)}`}>{link.by}</p>
           ) : null}
           {children}
+          {link.note && !large ? (
+            <p
+              className={`mt-2 leading-normal text-graphite-700 ${ANNOTATION}`}
+            >
+              {link.note}
+            </p>
+          ) : null}
         </div>
       </div>
     </div>
