@@ -6,7 +6,7 @@ const MOTION =
 const FOCUS =
   "focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-graphite-900/50";
 
-const PRESSED = "active:scale-[0.99] active:duration-(--press)";
+const PRESSED = "motion-safe:active:scale-[0.99] active:duration-(--press)";
 
 export const PRESS_BASE = `${MOTION} ${FOCUS} ${PRESSED}`;
 

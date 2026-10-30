@@ -129,7 +129,7 @@ export type SheetLook = {
 
 export const SHEET_LOOK: SheetLook = {
   background: "cadmium-100",
-  number: { role: "MICRO", colour: "graphite-500" },
+  number: { role: "MICRO", colour: "graphite-700" },
   title: { role: "TITLE", colour: "graphite-900" },
   by: { role: "ANNOTATION", colour: "graphite-700" },
   tabBackground: "cadmium-50",

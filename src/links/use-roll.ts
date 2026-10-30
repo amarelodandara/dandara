@@ -129,6 +129,7 @@ export function useRoll(
     const element = stage.current;
     if (!live || !element) return;
     let down: {
+      pointer: number;
       y: number;
       dragging: boolean;
       samples: [number, number][];
@@ -136,15 +137,16 @@ export function useRoll(
     let justDragged = false;
 
     const onDown = (event: PointerEvent) => {
-      if (event.button !== 0) return;
+      if (event.button !== 0 || down?.dragging) return;
       down = {
+        pointer: event.pointerId,
         y: event.clientY,
         dragging: false,
         samples: [[event.timeStamp, event.clientY]],
       };
     };
     const onMove = (event: PointerEvent) => {
-      if (!down) return;
+      if (event.pointerId !== down?.pointer) return;
       const moved = event.clientY - down.y;
       if (!down.dragging && Math.abs(moved) < DRAG_FROM_PX) return;
       if (!down.dragging) element.setPointerCapture(event.pointerId);
@@ -157,7 +159,7 @@ export function useRoll(
       );
     };
     const onUp = (event: PointerEvent) => {
-      if (!down) return;
+      if (!down || event.pointerId !== down.pointer) return;
       const { dragging, samples } = down;
       down = null;
       justDragged = dragging;
@@ -167,7 +169,7 @@ export function useRoll(
         return;
       }
       if (still()) {
-        roll.rest();
+        roll.jump(Math.round(roll.position));
         return;
       }
       const [firstT, firstY] = samples[0];

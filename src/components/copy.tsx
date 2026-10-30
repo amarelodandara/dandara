@@ -54,16 +54,18 @@ export function useOutcome() {
 
 type Copied = string | (() => Promise<string>);
 
-const write = (text: Copied) =>
-  typeof text === "string"
-    ? navigator.clipboard.writeText(text)
-    : navigator.clipboard.write([
-        new ClipboardItem({
-          "text/plain": text().then(
-            (body) => new Blob([body], { type: "text/plain" }),
-          ),
-        }),
-      ]);
+async function write(text: Copied) {
+  if (typeof text === "string") return navigator.clipboard.writeText(text);
+  if (typeof ClipboardItem === "undefined")
+    return navigator.clipboard.writeText(await text());
+  return navigator.clipboard.write([
+    new ClipboardItem({
+      "text/plain": text().then(
+        (body) => new Blob([body], { type: "text/plain" }),
+      ),
+    }),
+  ]);
+}
 
 export function useCopy(text: Copied) {
   const [outcome, report] = useOutcome();

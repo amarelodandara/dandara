@@ -49,7 +49,7 @@ function Corner({
         >
           <span
             data-sticker={picked || undefined}
-            className={`${dot} transition-[scale,background-color] duration-(--motion-quick) ease-out-strong group-active:scale-90 ${picked ? "" : HOLLOW}`}
+            className={`${dot} transition-[scale,background-color] duration-(--motion-quick) ease-out-strong motion-safe:group-active:scale-[0.96] ${picked ? "" : HOLLOW}`}
           />
         </button>
       ) : null}
@@ -124,7 +124,7 @@ export function Sheet({
             aria-pressed={picked}
             aria-label={`Select ${link.title}`}
             data-sticker={picked || undefined}
-            className={`${SPOT} z-10 ${PRESS} active:scale-90 ${picked ? "" : HOLLOW}`}
+            className={`${SPOT} z-10 ${PRESS} motion-safe:active:scale-[0.96] ${picked ? "" : HOLLOW}`}
           />
         ) : null}
         {onPick || picked || corner ? (

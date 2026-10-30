@@ -29,12 +29,18 @@ function save(file: string, type: string, body: string) {
   setTimeout(() => URL.revokeObjectURL(url));
 }
 
+const PLURAL = new Intl.PluralRules("en");
+
+const REFERENCES: Partial<Record<Intl.LDMLPluralRule, string>> = {
+  one: "reference",
+};
+
 export function ShelfCount({ of }: { of: "picked" | "all" }) {
   const { length } = usePicked();
   const total = useTotal();
   const count = of === "picked" ? length : total;
   if (count === 0) return null;
-  return ` (${count} ${count === 1 ? "reference" : "references"})`;
+  return ` (${count} ${REFERENCES[PLURAL.select(count)] ?? "references"})`;
 }
 
 export function PickedRow({

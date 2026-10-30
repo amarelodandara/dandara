@@ -27,7 +27,7 @@ const KEY = [
   "flex items-center rounded-lg border border-transparent bg-graphite-50 px-2.5 py-2 shadow-chip",
   `${ANNOTATION} leading-none text-graphite-700`,
   "transition-[background-color,scale] duration-(--motion-quick) ease-out-strong",
-  "can-hover:hover:bg-graphite-100 focus-visible:bg-graphite-100 active:scale-[0.97] active:duration-(--press)",
+  "can-hover:hover:bg-graphite-100 focus-visible:bg-graphite-100 motion-safe:active:scale-[0.96] active:duration-(--press)",
 ].join(" ");
 
 const RUSH_MS_PER_CARD = 8;
@@ -205,7 +205,7 @@ export function Rolodex({ links }: { links: SheetLink[] }) {
                 onClick={() => toIndex(randomIndex(count))}
                 className={`${KEY} max-sm:hidden`}
               >
-                Random
+                Roll random
               </button>
               {picked.length > 0 ? (
                 <button

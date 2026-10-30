@@ -8,7 +8,7 @@ const still = () =>
   window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
 const ARRIVES =
-  "transition-[opacity,translate] duration-(--motion-enter) ease-out-strong starting:translate-y-2 starting:opacity-0 motion-reduce:transition-none";
+  "transition-[opacity,translate,filter] duration-(--motion-enter) ease-out-strong starting:translate-y-3 starting:opacity-0 starting:blur-[4px] motion-reduce:transition-opacity";
 
 const ENTERS =
   "transition-[opacity,translate] duration-(--motion-quick) ease-out-strong starting:translate-y-1 starting:opacity-0 motion-reduce:transition-none";
@@ -18,17 +18,17 @@ const STAYS = `mt-3 first:mt-0 ${ENTERS}`;
 const LATE = "delay-(--motion-quick)";
 
 const RISES_AWAY =
-  "-translate-y-3 opacity-0 blur-sm transition-[opacity,translate,filter] duration-(--motion-exit) ease-out-strong";
+  "-translate-y-3 opacity-0 blur-[4px] transition-[opacity,translate,filter] duration-(--motion-quick) ease-out-strong";
 
 const SLOT = "col-start-1 row-start-1";
 
 const INTRO =
-  "Consume all or select the references you want to export into your PKM.";
+  "Consume all or select the references you want to export into your notes.";
 
 const LEAVES =
   "mt-0 opacity-0 transition-[opacity,margin] duration-(--motion-exit) ease-out-strong";
 
-const REMOVE = `relative ml-2 inline-flex rounded-sm px-1.5 py-1 text-graphite-500 ${ANNOTATION} leading-none transition-[background-color,color,opacity,scale] duration-(--motion-quick) ease-out-strong after:absolute after:-inset-2 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-graphite-900/50 active:scale-[0.97] active:duration-(--press) can-hover:opacity-0 can-hover:group-hover:opacity-100 can-hover:group-has-focus-visible:opacity-100 can-hover:hover:bg-graphite-100 can-hover:hover:text-graphite-900`;
+const REMOVE = `relative ml-2 inline-flex rounded-sm px-1.5 py-1 text-graphite-700 ${ANNOTATION} leading-none transition-[background-color,color,opacity,scale] duration-(--motion-quick) ease-out-strong after:absolute after:-inset-2 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-graphite-900/50 motion-safe:enabled:active:scale-[0.96] active:duration-(--press) can-hover:opacity-0 can-hover:group-hover:opacity-100 can-hover:group-has-focus-visible:opacity-100 can-hover:hover:bg-graphite-100 can-hover:hover:text-graphite-900`;
 
 function focusAfter(item: HTMLElement) {
   const sibling = (from: Element | null, next: boolean): HTMLElement | null => {
@@ -180,7 +180,9 @@ export function Selection({
                 >
                   Export
                 </button>{" "}
-                {all ? "all my references." : "your curation of my references."}
+                {all
+                  ? "all my references."
+                  : "your selection of my references."}
               </p>
             </header>
           )}

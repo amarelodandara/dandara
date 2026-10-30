@@ -1096,3 +1096,22 @@ body:has([data-links]) [data-page] {
 body:has([data-links]) [data-page] {
   min-height: 100dvh;
 }
+
+/* The sticky drum covers the bottom of the window, so a row of the picked list
+   focused from the keyboard would scroll in behind it. The padding keeps it
+   above the drum: 44vh on a phone, min(26rem, 50vh) from sm, as in drum.tsx. */
+html:has([data-links]) {
+  scroll-padding-bottom: 44vh;
+}
+
+@media (width >= 40rem) {
+  html:has([data-links]) {
+    scroll-padding-bottom: min(26rem, 50vh);
+  }
+}
+
+/* Every control on /links draws its own pressed state, so the iOS tap flash
+   would only double it. */
+[data-links] {
+  -webkit-tap-highlight-color: transparent;
+}

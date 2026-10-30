@@ -70,7 +70,7 @@ export function Drum({
                   key={k}
                   data-k={k}
                   aria-hidden={k !== centre || undefined}
-                  inert={k !== centre || undefined}
+                  inert={k < centre || undefined}
                   className={SLOT}
                 >
                   {intro}
@@ -82,7 +82,13 @@ export function Drum({
             const link = links[index];
             if (k !== centre) {
               return (
-                <div key={k} data-k={k} aria-hidden inert className={SLOT}>
+                <div
+                  key={k}
+                  data-k={k}
+                  aria-hidden
+                  inert={k < centre || undefined}
+                  className={SLOT}
+                >
                   <Sheet
                     link={link}
                     index={index}
