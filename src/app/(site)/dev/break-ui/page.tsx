@@ -13,6 +13,7 @@ import {
   SECTION_HEADING,
 } from "@/lib/type";
 import { DATASETS, fixtureFor, type Dataset } from "./fixtures";
+import { Picked, Sheets } from "./links";
 
 const BADGE_SIZE = 195;
 
@@ -114,6 +115,22 @@ export default async function BreakUi({
           tiles={fixture.tiles}
           columns={deal(fixture.tiles, false)}
         />
+      </div>
+
+      <h2 className={`mt-16 ${SECTION_HEADING}`}>Rolodex sheets</h2>
+      <p className={`mt-2 ${LABEL} text-graphite-500`}>
+        {fixture.sheets.length} sheets, at the drum’s width
+      </p>
+      <div className="mt-12">
+        <Sheets key={dataset} sheets={fixture.sheets} />
+      </div>
+
+      <h2 className={`mt-16 ${SECTION_HEADING}`}>Picked list</h2>
+      <p className={`mt-2 ${LABEL} text-graphite-500`}>
+        {fixture.refs.length} picked
+      </p>
+      <div className="mt-6">
+        <Picked refs={fixture.refs} />
       </div>
 
       <Toggle current={dataset} />

@@ -45,6 +45,7 @@ const PAGES: Sign[] = [
   { href: "/", name: "Home", area: "home" },
   { href: "/work", name: "Work", area: "work" },
   { href: "/writing", name: "Writing", area: "blog" },
+  { href: "/links", name: "Links", area: "site" },
 ];
 
 const ELSEWHERE: Sign[] = [

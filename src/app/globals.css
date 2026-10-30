@@ -129,6 +129,29 @@
     inset 0 0 0 1px oklch(0.55 0.12 92 / 0.18),
     inset 0 2px 5px oklch(0.45 0.1 92 / 0.16);
 
+  /* The seventh, eighth and ninth, and the only notes with a pressed state: a
+     small key you push. No hairline outside it and no tint: the edge is a
+     half-pixel ring drawn inward, and the face is shaded by a short inset
+     throw along its bottom, so a white key reads as a slab lit from above
+     without a drawn gradient. Everything is half a pixel because these are
+     interface-sized buttons; a full pixel reads as a frame at that size.
+     `lift` is the same key under the pointer. Only the shade changes, lighter,
+     so the face brightens; the ring and the drop stay put, because a longer
+     drop reads as the key growing taller.
+     Pressed, the drop goes and the shade turns to the top: the key is down
+     in the wall rather than standing on it. */
+  --shadow-key:
+    inset 0 0 0 0.5px oklch(0 0 0 / 0.1),
+    inset 0 -10px 12px -8px oklch(0 0 0 / 0.08),
+    0 0.5px 1px oklch(0 0 0 / 0.08), 0 2px 4px -2px oklch(0 0 0 / 0.08);
+  --shadow-lift:
+    inset 0 0 0 0.5px oklch(0 0 0 / 0.1),
+    inset 0 -10px 12px -8px oklch(0 0 0 / 0.03),
+    0 0.5px 1px oklch(0 0 0 / 0.08), 0 2px 4px -2px oklch(0 0 0 / 0.08);
+  --shadow-key-pressed:
+    inset 0 0 0 0.5px oklch(0 0 0 / 0.12), inset 0 1px 2px oklch(0 0 0 / 0.07);
+
+
   /* The mdxcn graph frame (`src/components/graph`) is vendored from its shadcn
      registry and asks for its own token names. They are not a third ramp: each
      one is aliased to the step of graphite or cadmium that plays that part
@@ -946,4 +969,171 @@ body[data-shop-open] [data-shop-panel] {
     width: 75%;
     margin-inline: auto;
   }
+}
+
+/* /links: a sheet rolling forward off the drum goes out of sight the way a
+   card laid down on a table does, bottom first. Three layers blur what is
+   under them, each a step stronger and a step lower, and a mask carries
+   them up the sheet as it falls (--fall-reach, set per frame by
+   src/links/use-roll.ts). Rolling back runs the same numbers backwards, so
+   the bottom is the last part to come clear. Only the mask's alpha counts. */
+[data-fall] {
+  position: absolute;
+  inset: 0;
+  display: none;
+  border-radius: 1.4% / 2.5%;
+  pointer-events: none;
+}
+
+@media (width < 40rem) {
+  [data-fall] {
+    border-radius: 1.4% / 1.75%;
+  }
+}
+
+[data-falling] > [data-fall] {
+  display: block;
+}
+
+[data-fall="0"] {
+  -webkit-backdrop-filter: blur(calc(var(--fall-blur) / 4));
+  backdrop-filter: blur(calc(var(--fall-blur) / 4));
+  mask-image: linear-gradient(
+    to top,
+    black var(--fall-reach),
+    transparent calc(var(--fall-reach) + var(--fall-feather))
+  );
+}
+
+[data-fall="1"] {
+  -webkit-backdrop-filter: blur(calc(var(--fall-blur) / 2));
+  backdrop-filter: blur(calc(var(--fall-blur) / 2));
+  mask-image: linear-gradient(
+    to top,
+    black calc(var(--fall-reach) - var(--fall-feather)),
+    transparent var(--fall-reach)
+  );
+}
+
+[data-fall="2"] {
+  -webkit-backdrop-filter: blur(var(--fall-blur));
+  backdrop-filter: blur(var(--fall-blur));
+  mask-image: linear-gradient(
+    to top,
+    black calc(var(--fall-reach) - 2 * var(--fall-feather)),
+    transparent calc(var(--fall-reach) - var(--fall-feather))
+  );
+}
+
+/* /links: the list of picked references scrolls up behind the rolodex, and
+   whatever passes behind it goes out of focus and fades into the wall, so the
+   drum reads as standing in front of the page rather than pasted on it
+   (Rauno Freiberg, "Designing Depth": blur the background to lower it on
+   the Z axis, fade the bottom edge so the boundary stops reading as one).
+   Five backdrop blurs, each double the last and each faded in a little lower
+   down, so the blur thickens towards the bottom of the window in steps too
+   small to see; a single blur behind a gradient mask would show its edge.
+   Over them a wash of the wall's own colour. The drum sits above it all
+   (src/links/drum.tsx, Depth). */
+[data-depth] {
+  position: absolute;
+  inset: 0;
+}
+
+[data-depth="0"] {
+  backdrop-filter: blur(1px);
+  -webkit-backdrop-filter: blur(1px);
+  mask-image: linear-gradient(to bottom, transparent 0%, black 20%);
+}
+
+[data-depth="1"] {
+  backdrop-filter: blur(2px);
+  -webkit-backdrop-filter: blur(2px);
+  mask-image: linear-gradient(to bottom, transparent 10%, black 35%);
+}
+
+[data-depth="2"] {
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+  mask-image: linear-gradient(to bottom, transparent 25%, black 55%);
+}
+
+[data-depth="3"] {
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  mask-image: linear-gradient(to bottom, transparent 40%, black 75%);
+}
+
+[data-depth="4"] {
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  mask-image: linear-gradient(to bottom, transparent 55%, black 95%);
+}
+
+[data-depth="wash"] {
+  background: linear-gradient(
+    to bottom,
+    transparent 15%,
+    color-mix(in oklch, var(--color-graphite-50) 75%, transparent) 100%
+  );
+}
+
+/* /links: a picked sheet wears a sticker, the site's own icon (the sun in
+   public/icon.svg: orange at the middle running out to yellow, the middle
+   set a little high). One soft wash of light from the top left is all the
+   gloss it gets; anything harder reads as a plastic button. The chip shadow
+   lifts it off the card, and a thin ring in the orange's darker step keeps
+   the edge on a yellow sheet. */
+[data-sticker] {
+  background:
+    radial-gradient(
+      circle at 30% 25%,
+      color-mix(in oklch, var(--color-graphite-50) 35%, transparent),
+      transparent 60%
+    ),
+    radial-gradient(
+      circle at 50% 44%,
+      var(--color-cadmium-500),
+      var(--color-cadmium-400)
+    );
+  box-shadow:
+    var(--shadow-chip),
+    inset 0 0 0 1px
+      color-mix(in oklch, var(--color-cadmium-700) 25%, transparent);
+}
+
+/* /links sits on a white wall, edge to edge: the body under the
+   page plane is yellow everywhere else, and it shows wherever the plane runs
+   short, so both turn white. */
+body:has([data-links]),
+body:has([data-links]) [data-page] {
+  background: var(--color-graphite-50);
+}
+
+/* The drum is sticky to the bottom of the window, not fixed: opening the gift
+   shop translates the page plane, which re-anchors anything fixed inside it to
+   the plane. Sticky only holds at the window's bottom edge if the plane
+   reaches it, and `min-h-full` on the plane resolves to nothing under a body
+   whose own height is auto, so /links states the window's height outright. */
+body:has([data-links]) [data-page] {
+  min-height: 100dvh;
+}
+
+/* The sticky drum covers the bottom of the window, so a row of the picked list
+   focused from the keyboard would scroll in behind it. The padding keeps it
+   above the drum: 44vh on a phone, min(26rem, 50vh) from sm, as in drum.tsx. */
+html:has([data-links]) {
+  scroll-padding-bottom: 44vh;
+}
+
+@media (width >= 40rem) {
+  html:has([data-links]) {
+    scroll-padding-bottom: min(26rem, 50vh);
+  }
+}
+
+/* Every control on /links draws its own pressed state, so the iOS tap flash
+   would only double it. */
+[data-links] {
+  -webkit-tap-highlight-color: transparent;
 }

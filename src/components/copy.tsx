@@ -52,12 +52,27 @@ export function useOutcome() {
   return [outcome, report] as const;
 }
 
-export function useCopy(text: string) {
+type Copied = string | (() => Promise<string>);
+
+async function write(text: Copied) {
+  if (typeof text === "string") return navigator.clipboard.writeText(text);
+  if (typeof ClipboardItem === "undefined")
+    return navigator.clipboard.writeText(await text());
+  return navigator.clipboard.write([
+    new ClipboardItem({
+      "text/plain": text().then(
+        (body) => new Blob([body], { type: "text/plain" }),
+      ),
+    }),
+  ]);
+}
+
+export function useCopy(text: Copied) {
   const [outcome, report] = useOutcome();
 
   const copy = useCallback(async () => {
     try {
-      await navigator.clipboard.writeText(text);
+      await write(text);
     } catch {
       report("failed");
       return;

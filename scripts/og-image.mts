@@ -17,12 +17,14 @@ import {
   type Badge,
 } from "../src/badges/shape.ts";
 import { readPosts } from "../src/lib/writing/meta-source.ts";
+import { LINKS } from "../src/links/data.ts";
 import { hash, seeded } from "../src/badges/seeded.ts";
 import { scatter, STICKERS } from "../src/badges/scatter.ts";
 
 const ROOT = process.cwd();
 const OUT = path.join(ROOT, "public", "og.png");
 const POST_DIR = path.join(ROOT, "public", "writing", "og");
+const LINKS_OUT = path.join(ROOT, "public", "links", "og.png");
 const FONT = path.join(ROOT, "src", "fonts", "InterVariable.woff2");
 const VIDEO_HASHES = path.join(ROOT, "scripts", "og-videos.json");
 
@@ -46,6 +48,14 @@ const CARD = { left: 33, top: 40, width: 293, height: 550, radius: 14 };
 const STICKER_OVERHANG = 0.5;
 const TEXT_LEFT = 378;
 const HOME_DECK = "Product design, design engineering and relentless curation";
+const LINKS_DECK =
+  "References I keep recommending and reaching for creatively.";
+
+const SHEET = { width: 236, height: 133, top: 340, lift: 24, shrink: 0.06 };
+const SHEETS_BEHIND = 3;
+const SHEET_RING = "0 0 0 1px rgba(0, 0, 0, 0.09)";
+const SHEET_DROP = "0 6px 18px rgba(58, 42, 0, 0.18)";
+const FRONT_SHADOW = `${SHEET_RING}, ${SHEET_DROP}`;
 
 export const PEEL = {
   loopMs: 5600,
@@ -200,7 +210,7 @@ function shell(font: string, sizes: string, text: string, card = "") {
     </style>
   </head>
   <body>
-    <div class="card"${card ? "" : " data-sun"}>${card}</div>
+    <div class="card"${card.includes("data-peel") ? "" : " data-sun"}>${card}</div>
     <div class="text">${text}</div>
   </body>
 </html>`;
@@ -224,6 +234,33 @@ export const postCard = (
     `<div class="title">${escape(meta.title)}</div>
      <div class="deck">${escape(meta.deck)}</div>`,
     stickers(slug, badgeOf(slug)),
+  );
+
+function sheet(depth: number, face = "") {
+  const scale = 1 - depth * SHEET.shrink;
+  return `<div style="position:absolute;left:${(CARD.width - SHEET.width) / 2}px;top:${SHEET.top}px;width:${SHEET.width}px;height:${SHEET.height}px;border-radius:3px;background:${CREAM};box-shadow:${depth === 0 ? FRONT_SHADOW : SHEET_RING};transform:translateY(${-depth * SHEET.lift}px) scale(${scale});transform-origin:50% 100%;opacity:${1 - depth * 0.12}">${face}</div>`;
+}
+
+function stack(count: number) {
+  const face = `<div style="position:absolute;left:14px;top:-18px;width:34px;height:18px;border-radius:5px 5px 0 0;background:${CREAM};box-shadow:${SHEET_RING};font-size:11px;font-weight:600;line-height:18px;text-align:center;color:${SOFT}">A</div>
+    <div style="position:absolute;inset:0;background:${CREAM};border-radius:3px"></div>
+    <div style="position:absolute;left:16px;top:14px;font-size:12px;letter-spacing:0.02em;color:${SOFT};font-variant-numeric:tabular-nums">000 — ${String(count).padStart(3, "0")}</div>
+    <div style="position:absolute;left:16px;bottom:14px;font-size:19px;font-weight:600;letter-spacing:-0.01em;color:${INK}">Filed A to Z</div>`;
+  return [
+    ...Array.from({ length: SHEETS_BEHIND }, (_, at) =>
+      sheet(SHEETS_BEHIND - at),
+    ),
+    sheet(0, face),
+  ].join("");
+}
+
+export const linksCard = (font: string, count: number) =>
+  shell(
+    font,
+    `.title { font-size: 123px; line-height: 0.95; }`,
+    `<div class="title">Links</div>
+     <div class="deck">${escape(LINKS_DECK)}</div>`,
+    stack(count),
   );
 
 function badgeOf(slug: string) {
@@ -531,8 +568,12 @@ async function main() {
   const font = await readFont();
   const posts = await readPosts();
   await mkdir(POST_DIR, { recursive: true });
+  await mkdir(path.dirname(LINKS_OUT), { recursive: true });
 
-  const cards = new Map<string, string>([[OUT, homeCard(font)]]);
+  const cards = new Map<string, string>([
+    [OUT, homeCard(font)],
+    [LINKS_OUT, linksCard(font, LINKS.length)],
+  ]);
   for (const { slug, meta } of posts) {
     cards.set(
       path.join(POST_DIR, `${slug}.png`),

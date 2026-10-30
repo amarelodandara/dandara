@@ -16,7 +16,8 @@
     "cv:base": "node scripts/cv-pdf.mts --variant base --lang en --out public/gift-shop/cv-en.pdf && node scripts/cv-pdf.mts --variant base --lang pt --out public/gift-shop/cv-pt.pdf",
     "og:image": "node scripts/og-image.mts",
     "smoke": "node scripts/smoke.mts",
-    "badges": "node scripts/badges.mts"
+    "badges": "node scripts/badges.mts",
+    "links": "node --disable-warning=MODULE_TYPELESS_PACKAGE_JSON scripts/links.mts"
   },
   "dependencies": {
     "@base-ui/react": "^1.8.0",

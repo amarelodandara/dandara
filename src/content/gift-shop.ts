@@ -1,3 +1,4 @@
+import type { Format } from "@/links/export";
 import { SITE_URL } from "@/lib/site";
 
 type Common = {
@@ -15,13 +16,16 @@ export type GiftShopItem = Common &
         preview?: { src: string; width: number; height: number; alt: string };
       }
     | { kind: "copy"; meta: string; text: string }
+    | { kind: "copy-file"; meta: string; href: string }
     | { kind: "swatch"; hex: string; fill: string }
     | { kind: "badge"; slug: string }
+    | { kind: "picked"; meta: string; format: Format }
   );
 
 export type GiftShopSection = {
   id: string;
   title?: string;
+  counted?: "picked" | "all";
   items: GiftShopItem[];
 };
 
@@ -59,6 +63,67 @@ export const feedSection: GiftShopSection = {
     },
   ],
 };
+
+export const linksSections: GiftShopSection[] = [
+  {
+    id: "links-hung",
+    title: "Your selection",
+    counted: "picked",
+    items: [
+      {
+        kind: "picked",
+        id: "hung-checklist",
+        title: "Markdown",
+        meta: "Good for Notion, Obsidian, Todoist",
+        format: "markdown",
+      },
+      {
+        kind: "picked",
+        id: "hung-bookmarks",
+        title: "HTML",
+        meta: "Good for Shiori, Raindrop, any browser",
+        format: "bookmarks",
+      },
+      {
+        kind: "picked",
+        id: "hung-csv",
+        title: "CSV",
+        meta: "Good for Notion, Capacities",
+        format: "csv",
+      },
+    ],
+  },
+  {
+    id: "links-all",
+    title: "The whole rolodex",
+    counted: "all",
+    items: [
+      {
+        kind: "copy-file",
+        id: "links-md",
+        title: "Markdown",
+        meta: "Good for Notion, Obsidian, Todoist",
+        href: "/links/links.md",
+      },
+      {
+        kind: "file",
+        id: "links-bookmarks",
+        title: "HTML",
+        meta: "Good for Shiori, Raindrop, any browser",
+        href: "/links/bookmarks.html",
+        download: "dandara-bookmarks.html",
+      },
+      {
+        kind: "file",
+        id: "links-csv",
+        title: "CSV",
+        meta: "Good for Notion, Capacities",
+        href: "/links/links.csv",
+        download: "dandara-links.csv",
+      },
+    ],
+  },
+];
 
 export const giftShopSections: GiftShopSection[] = [
   {

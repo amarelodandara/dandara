@@ -6,6 +6,7 @@ import { type RefObject, useEffect, useRef } from "react";
 import { GiftShopNotes } from "./gift-shop-notes";
 import { GiftShopSign, shelfSeat, shopContents } from "./gift-shop-sign";
 import { GiftShopRow } from "./gift-shop-row";
+import { ShelfCount } from "@/links/gift-shop-picked";
 import { GiftShopPlaque } from "./gift-shop-plaque";
 import { GiftShopEdge, useEdgePeek } from "./gift-shop-edge";
 import { useFocusRestored, useRememberedFocus } from "./gift-shop-focus";
@@ -22,18 +23,9 @@ import {
   SHOP_OVERLAY,
   useActiveOverlay,
 } from "@/lib/exclusive-overlay";
-import { useKeydown } from "@/lib/keydown";
+import { isBrowserChord, isTypingTarget, useKeydown } from "@/lib/keydown";
 
 const ID = SHOP_OVERLAY;
-
-const isBrowserChord = (event: KeyboardEvent) =>
-  event.metaKey || event.ctrlKey || event.altKey;
-
-const isTypingTarget = (target: EventTarget | null) => {
-  if (!(target instanceof HTMLElement)) return false;
-  if (target.isContentEditable) return true;
-  return /^(input|textarea|select)$/i.test(target.tagName);
-};
 
 const Tailored =
   process.env.NODE_ENV === "development"
@@ -92,12 +84,16 @@ const isShopKey = (event: KeyboardEvent) =>
   !isBrowserChord(event) &&
   !isTypingTarget(event.target);
 
+const LETTERED_PAGES = new Set(["/links"]);
+
 const useShopKeys = ({
   active,
   endPeek,
+  lettered,
 }: {
   active: string | null;
   endPeek: () => void;
+  lettered: boolean;
 }) => {
   useKeydown((event) => {
     if (event.key === "Escape") {
@@ -106,7 +102,7 @@ const useShopKeys = ({
       return;
     }
 
-    if (!isShopKey(event)) return;
+    if (lettered || !isShopKey(event)) return;
 
     if (active === ID) {
       event.preventDefault();
@@ -130,6 +126,7 @@ const Shelves = ({ shelves, full }: Pick<Contents, "shelves" | "full">) =>
       {section.title ? (
         <h3 className={`px-3 ${ANNOTATION} text-cadmium-900`}>
           {section.title}
+          {section.counted ? <ShelfCount of={section.counted} /> : null}
         </h3>
       ) : null}
       <ul className={section.title ? "mt-2 space-y-0.5" : "space-y-0.5"}>
@@ -182,7 +179,8 @@ export function GiftShop() {
   const open = active === ID;
   const requested = useRequestedNote();
   const article = useArticle();
-  const contents = shopContents(article, usePathname());
+  const pathname = usePathname();
+  const contents = shopContents(article, pathname);
   const { peeking, endPeek } = useEdgePeek(active === null);
   const plaqueWanted = usePlaqueWanted(article !== null);
   const plaqueVisible = active === null && !peeking && plaqueWanted;
@@ -192,7 +190,7 @@ export function GiftShop() {
 
   useClosedByLeaving();
   usePageHeldAside(open, requested);
-  useShopKeys({ active, endPeek });
+  useShopKeys({ active, endPeek, lettered: LETTERED_PAGES.has(pathname) });
   useFocusRestored({
     open,
     requested,

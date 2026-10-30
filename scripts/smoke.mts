@@ -150,6 +150,7 @@ async function browsePages(posts: Posts) {
   const image = await visit(browser, { path: "/", contains: [TITLE] });
   await visit(browser, { path: "/writing", contains: titles });
   await visit(browser, { path: "/work", contains: ["Work"] });
+  await visit(browser, { path: "/links", contains: ["Links"] });
   await visit(browser, {
     path: "/work/sketchbook",
     contains: ["Sketchbook"],
@@ -172,6 +173,7 @@ async function checkSitemap(base: string, posts: Posts) {
 
   check(response.status === OK, `/sitemap.xml answered ${response.status}`);
   check(body.includes("/work<"), "/sitemap.xml does not list /work");
+  check(body.includes("/links<"), "/sitemap.xml does not list /links");
   for (const post of posts) {
     check(
       body.includes(`/writing/${post.slug}`),

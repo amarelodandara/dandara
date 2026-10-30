@@ -183,6 +183,43 @@ in `src/badges/`. The rest of the site only mounts them (`BadgeHover`,
   same way as the OG card but kept inside the frame, for every article
   tagged design or engineering. `scatter.ts` places the copies for both.
 
+# Links
+
+`/links` is a rolodex of references, filed A to Z. Everything it needs lives
+in `src/links/`.
+
+- **Data** is `src/links/data.ts`, and the site never reads the vault.
+  New references arrive as a JSON list Nicoly hands over, entries shaped
+  like `Link` (`title`, `url`, `tag`, and optionally `by`, `note`,
+  `slug`). `npm run links -- path/to/list.json` (`scripts/links.mts`)
+  checks each one, skips any already on the rolodex (same slug, or the
+  same URL give or take the protocol, `www.` and a trailing slash) and
+  names it, then adds the rest. Only quotes may go without a `url`. Do
+  not edit `data.ts` by hand; commit what the script writes.
+- **Order** is alphabetical by title and is the array order of `LINKS`.
+  Everything (the drum, the list, every export) reads that order.
+- **Kinds** are link, book, quote, movie and person (`kinds.ts`). Every
+  sheet is the same cream card (`cadmium-100`); the kind is data, not
+  colour. Only sheet 000, the introduction, is yellow. The first sheet of
+  each letter carries an index tab, placed along the top edge by its
+  place in the alphabet.
+- **Radius** is a percentage of the card (`CARD_SHAPE`), so the corners
+  shrink and grow with the card instead of staying a fixed size.
+- **Selecting** a sheet (the round button in the front sheet's corner;
+  there is no key for it) puts a sticker in that spot: the site's icon as a
+  round of foil. Every picked sheet is listed above the drum in the article
+  measure, title as a link and who made it, in the order they were picked,
+  and the page follows the newest one down while the drum stays fixed to the
+  bottom of the window. Roll all picks every sheet; Roll it back up restores
+  the selection from before. Export opens the gift shop.
+- **Motion:** `roll.ts` is the physics (fling, drag, travel whose
+  duration grows with the square root of the distance), `use-roll.ts`
+  paints the drum and wires the pointer (the wheel is left to the page, so
+  the list above can always be scrolled), `sound.ts` makes the ticks
+  with Web Audio.
+- **What you picked** is kept in localStorage (`picked.ts`), whole entries,
+  so the gift shop can export them without loading `LINKS` on every page.
+
 # Content limits
 
 What the components hold before they break. Found by stress-testing them
@@ -208,6 +245,13 @@ content, add its worst case there and look at 320px, 768px and 1440px.
 - **Post titles and decks** also set the OG card, which grows upward from
   the bottom with nothing to stop it. Keep titles under about 90
   characters and decks under about 80, an estimate from the card's CSS.
+- **Rolodex sheets** never truncate or clamp: the text is written to fit a
+  320px phone, and the same text shows on every screen. `src/links/fit.ts`
+  estimates the wrap (about 28 characters a title line, 39 a note line):
+  title and note together take at most 6 lines on a phone and 5 on a wide
+  screen, and `by` stays under 39 characters, one line. `npm run links`
+  refuses an entry that does not fit, and `npm run links -- --check` lists
+  the sheets already on the rolodex that do not.
 - **Headings and signposts** break a single word too long for the line
   mid-word rather than overflowing, so a long Portuguese compound survives
   at 320px. It will not look good; prefer ordinary words in names.

@@ -170,6 +170,13 @@ const eslintConfig = defineConfig([
     },
   },
   {
+    files: ["src/links/**"],
+    rules: {
+      "react/forbid-dom-props": "off",
+      "react/forbid-component-props": "off",
+    },
+  },
+  {
     files: ["src/lib/cv/load.ts"],
     rules: { "security/detect-non-literal-fs-filename": "off" },
   },
