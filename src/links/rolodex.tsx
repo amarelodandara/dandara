@@ -1,6 +1,12 @@
 "use client";
 
-import { useEffect, useLayoutEffect, useRef, useState } from "react";
+import {
+  useEffect,
+  useEffectEvent,
+  useLayoutEffect,
+  useRef,
+  useState,
+} from "react";
 import type { Ref } from "./export";
 import { Depth, DRUM_HEIGHT, Drum } from "./drum";
 import { Intro } from "./intro";
@@ -35,6 +41,8 @@ const rushMs = (cards: number) =>
 
 type Rush = { to: "all" | "back"; keep: Ref[] };
 
+const SHARED = "sheet";
+
 const still = () =>
   window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
@@ -59,6 +67,11 @@ export function Rolodex({ links }: { links: SheetLink[] }) {
   const [landed, setLanded] = useState<number | null>(null);
   const [rush, setRush] = useState<Rush | null>(null);
   const picked = usePicked();
+  const [shared] = useState(() =>
+    typeof window === "undefined"
+      ? null
+      : new URLSearchParams(window.location.search).get(SHARED),
+  );
   const soundOn = useSound();
 
   const isIntro = (k: number) => wrap(k, sheets) === 0;
@@ -108,6 +121,19 @@ export function Rolodex({ links }: { links: SheetLink[] }) {
 
   const toIndex = (index: number) =>
     go(roll.heading + index + 1 - wrap(roll.heading, sheets));
+
+  const arrive = useEffectEvent(() => {
+    if (shared === null) return;
+    const url = new URL(window.location.href);
+    if (url.searchParams.has(SHARED)) {
+      url.searchParams.delete(SHARED);
+      window.history.replaceState(null, "", url);
+    }
+    const index = links.findIndex((link) => link.slug === shared);
+    if (index !== -1) toIndex(index);
+  });
+
+  useEffect(() => arrive(), []);
 
   const passed = (index: number) => index < wrap(centre, sheets);
   const kept = new Set(rush?.keep.map((ref) => ref.slug));
